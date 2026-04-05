@@ -1,0 +1,434 @@
+'use client';
+
+import Link from 'next/link';
+import { useEffect, useMemo, useState } from 'react';
+import MasteryFlowSteps from '@/app/app/_components/MasteryFlowSteps';
+import MethodDropdown from '../practice/_components/MethodDropdown';
+import {
+  estimatePassProbability,
+  getBankMasterySummary,
+  getCategoryCumulative,
+  getMasterySummary,
+  readAttempts,
+} from '@/lib/progressStore';
+
+const BANKS = ['qbank1', 'qbank2', 'qbank3'] as const;
+
+function labelForBank(setId: string) {
+  return setId.toUpperCase().replace('QBANK', 'QBank ');
+}
+
+function currentStep(
+  summary: ReturnType<typeof getMasterySummary>,
+  currentBank: ReturnType<typeof getBankMasterySummary>
+) {
+  const currentMiniStatus = currentBank.miniStatus[String(currentBank.currentMini)];
+  if (summary.flashRemaining > 0) return 2 as const;
+  if (summary.practiceRemaining > 0) return 3 as const;
+  if (currentMiniStatus?.attempts) return 4 as const;
+  return 1 as const;
+}
+
+function ctaForStep(
+  step: 1 | 2 | 3 | 4,
+  currentBank: ReturnType<typeof getBankMasterySummary>
+) {
+  if (step === 2) {
+    return {
+      label: 'Continue RTT Mastery Method',
+      href: `/app/flashcards?set=${currentBank.setId}&mode=missed&cat=all&flow=mastery&mini=${currentBank.currentMini}`,
+    };
+  }
+
+  if (step === 3) {
+    return {
+      label: 'Continue RTT Mastery Method',
+      href: `/app/practice/${currentBank.setId}?mode=missed&cat=all&flow=mastery&mini=${currentBank.currentMini}`,
+    };
+  }
+
+  if (step === 4) {
+    return {
+      label: 'Continue RTT Mastery Method',
+      href: `/app/mock-exam?qbank=${currentBank.setId}&scope=mini&mini=${currentBank.currentMini}`,
+    };
+  }
+
+  return {
+    label: 'Begin RTT Mastery Method',
+    href: `/app/mock-exam?qbank=${currentBank.setId}&scope=mini&mini=${currentBank.currentMini}`,
+  };
+}
+
+type Attempts = ReturnType<typeof readAttempts>;
+type Summary = ReturnType<typeof getMasterySummary>;
+type Probability = ReturnType<typeof estimatePassProbability>;
+type Cumulative = ReturnType<typeof getCategoryCumulative>;
+type BankSummary = ReturnType<typeof getBankMasterySummary>;
+
+export default function DashboardPage() {
+  const [isPro, setIsPro] = useState(false);
+  const [attempts, setAttempts] = useState<Attempts>([]);
+  const [summary, setSummary] = useState<Summary>(getMasterySummary('qbank1'));
+  const [probability, setProbability] = useState<Probability>(estimatePassProbability());
+  const [cumulative, setCumulative] = useState<Cumulative>(getCategoryCumulative());
+  const [bankSummaries, setBankSummaries] = useState<BankSummary[]>(
+    BANKS.map((setId) => getBankMasterySummary(setId))
+  );
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const refresh = () => {
+      try {
+        const raw = window.localStorage.getItem('rtt_is_pro');
+        setIsPro(raw === '1' || raw === 'true');
+      } catch {}
+
+      setAttempts(readAttempts());
+      setSummary(getMasterySummary());
+      setProbability(estimatePassProbability());
+      setCumulative(getCategoryCumulative());
+      setBankSummaries(BANKS.map((setId) => getBankMasterySummary(setId)));
+    };
+
+    refresh();
+    setMounted(true);
+    window.addEventListener('storage', refresh);
+    window.addEventListener('rtt-progress-updated', refresh as EventListener);
+
+    return () => {
+      window.removeEventListener('storage', refresh);
+      window.removeEventListener('rtt-progress-updated', refresh as EventListener);
+    };
+  }, []);
+
+  const currentBank =
+    bankSummaries.find((item) => !item.bankMastered) ||
+    bankSummaries[bankSummaries.length - 1];
+
+  const latest = attempts.length ? attempts[attempts.length - 1] : null;
+  const step = currentStep(summary, currentBank);
+  const primary = ctaForStep(step, currentBank);
+
+  const nextHeadline =
+    step === 1
+      ? `Take Mini Mock ${currentBank.currentMini}`
+      : step === 2
+        ? `Clear ${summary.flashRemaining} flashcards`
+        : step === 3
+          ? `Clear ${summary.practiceRemaining} practice questions`
+          : `Retake Mini Mock ${currentBank.currentMini}`;
+
+  const nextLine =
+    step === 1
+      ? `Start with Mini Mock ${currentBank.currentMini} in ${labelForBank(currentBank.setId)}.`
+      : step === 2
+        ? `Next: clear ${summary.flashRemaining} assigned flashcards.`
+        : step === 3
+          ? `Next: clear ${summary.practiceRemaining} assigned practice questions.`
+          : `Next: retake Mini Mock ${currentBank.currentMini} and aim for 90%+.`;
+
+  const weakestCategory = useMemo(() => {
+    const entries = Object.entries(cumulative.latest).filter(
+      ([, value]) => typeof value === 'number'
+    ) as Array<[string, number]>;
+
+    if (!entries.length) {
+      return { name: 'Not enough data yet', score: null as number | null };
+    }
+
+    return entries.reduce((lowest, curr) => (curr[1] < lowest[1] ? curr : lowest)).length
+      ? {
+          name: entries.reduce((lowest, curr) => (curr[1] < lowest[1] ? curr : lowest))[0],
+          score: entries.reduce((lowest, curr) => (curr[1] < lowest[1] ? curr : lowest))[1],
+        }
+      : { name: 'Not enough data yet', score: null as number | null };
+  }, [cumulative.latest]);
+
+  if (!mounted) {
+    return <div className="max-w-6xl" />;
+  }
+
+  return (
+    <div className="max-w-6xl">
+      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div>
+          <div className="inline-flex items-center rounded-full rtt-card px-3 py-1 text-xs text-white/70">
+            DASHBOARD
+          </div>
+          <h1 className="mt-3 text-3xl font-semibold tracking-tight">
+            The Rad Tech Tutor Mastery Method
+          </h1>
+          <p className="mt-2 max-w-3xl text-sm text-white/70">
+            Follow the Rad Tech Tutor Mastery Method and go from overwhelmed to registry ready in as little as one month.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          {!isPro ? (
+            <Link
+              href="/app/upgrade"
+              className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
+            >
+              Get Pro
+            </Link>
+          ) : null}
+        </div>
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-100">
+        {nextLine}
+      </div>
+
+      <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="rounded-2xl rtt-card p-5">
+          <div className="text-xs text-white/60">Estimated pass probability</div>
+          <div className="mt-2 text-3xl font-semibold">
+            {probability.probability == null ? '—' : `${probability.probability}%`}
+          </div>
+          <div className="mt-1 text-sm text-white/65">
+            {probability.probability == null
+              ? 'Complete your first mastery run to unlock readiness tracking.'
+              : probability.readiness}
+          </div>
+        </div>
+
+        <div className="rounded-2xl rtt-card p-5">
+          <div className="text-xs text-white/60">Banks mastered</div>
+          <div className="mt-2 text-3xl font-semibold">{probability.banksMastered} / 3</div>
+          <div className="mt-1 text-sm text-white/65">
+            More exposure raises your max pass probability.
+          </div>
+        </div>
+
+        <div className="rounded-2xl rtt-card p-5">
+          <div className="text-xs text-white/60">Current bank</div>
+          <div className="mt-2 text-3xl font-semibold">{labelForBank(currentBank.setId)}</div>
+          <div className="mt-1 text-sm text-white/65">
+            {step === 1
+              ? `Take Mini Mock ${currentBank.currentMini}`
+              : `Mini Mock ${currentBank.currentMini} is your active checkpoint.`}
+          </div>
+        </div>
+
+        <div className="rounded-2xl rtt-card p-5">
+          <div className="text-xs text-white/60">Current flow step</div>
+          <div className="mt-2 text-3xl font-semibold">
+            {step === 1
+              ? 'Take Mini Mock'
+              : step === 2
+                ? 'Flashcards'
+                : step === 3
+                  ? 'Practice Questions'
+                  : 'Retake Mini Mock'}
+          </div>
+          <div className="mt-1 text-sm text-white/65">
+            {summary.flashRemaining} flashcards left • {summary.practiceRemaining} practice questions left
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 rounded-3xl border border-emerald-400/30 bg-gradient-to-b from-emerald-400/10 to-white/4 p-6 shadow-[0_20px_60px_rgba(16,185,129,0.16)] ring-1 ring-emerald-400/20">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            <div className="text-sm font-semibold text-white">RTT Mastery Method</div>
+            <div className="mt-1 text-sm text-white/70">
+              If you follow the method below step by step, you will be ready for the ARRT.
+            </div>
+          </div>
+
+          <Link
+            href={primary.href}
+            className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
+          >
+            {primary.label}
+          </Link>
+        </div>
+
+        <div className="mt-5">
+          <MasteryFlowSteps
+            currentStep={step}
+            currentBankLabel={labelForBank(currentBank.setId)}
+            currentMini={currentBank.currentMini}
+            showIntro={false}
+            showUpgrade={false}
+          />
+        </div>
+
+        <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-5">
+          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/45">
+            Your next step
+          </div>
+          <div className="mt-2 text-2xl font-semibold tracking-tight text-white">
+            {nextHeadline}
+          </div>
+          <div className="mt-2 text-sm text-white/70">{nextLine}</div>
+
+          <div className="mt-4">
+            <Link
+              href={primary.href}
+              className="inline-flex rounded-2xl bg-yellow-400 px-5 py-3 text-sm font-semibold text-black hover:brightness-95"
+            >
+              {primary.label}
+            </Link>
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-2 text-xs text-white/65">
+            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
+              Last Mock:{' '}
+              <span className="font-semibold text-white">
+                {latest?.score != null ? `${latest.score}%` : '—'}
+              </span>
+            </span>
+            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
+              Flashcards left: <span className="font-semibold text-white">{summary.flashRemaining}</span>
+            </span>
+            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
+              Practice left: <span className="font-semibold text-white">{summary.practiceRemaining}</span>
+            </span>
+            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
+              Total missed on latest loop: <span className="font-semibold text-white">{summary.totalMissed}</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 grid gap-4 xl:grid-cols-[1.15fr_1fr]">
+        <div className="rounded-2xl rtt-card p-5">
+          <div className="text-sm font-semibold">Running cumulative score</div>
+          <div className="mt-2 text-3xl font-semibold">
+            {cumulative.cumulative == null ? '—' : `${cumulative.cumulative}%`}
+          </div>
+          <div className="mt-1 text-sm text-white/65">
+            Based on your latest category mock in each of the 4 ARRT categories.
+          </div>
+
+          <div className="mt-4 grid gap-2 text-sm">
+            {Object.entries(cumulative.latest).map(([label, value]) => (
+              <div
+                key={label}
+                className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-3 py-2"
+              >
+                <span>{label}</span>
+                <span className="font-semibold text-white">
+                  {typeof value === 'number' ? `${value}%` : 'Take category mock'}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-2xl rtt-card p-5">
+          <div className="text-sm font-semibold">Weakest Category</div>
+          <div className="mt-2 text-3xl font-semibold">{weakestCategory.name}</div>
+          <div className="mt-2 text-sm text-white/65">
+            Current Avg: {weakestCategory.score == null ? '—' : `${weakestCategory.score}%`}
+          </div>
+          <div className="mt-1 text-sm text-white/65">Goal: 85%+</div>
+          <div className="mt-2 text-xs text-white/55">
+            {weakestCategory.score == null
+              ? 'Take category mocks to reveal your weakest area.'
+              : 'Focus here to raise your ARRT readiness score.'}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 grid gap-4 lg:grid-cols-3">
+        {bankSummaries.map((bank) => {
+          const locked = !isPro && bank.setId !== 'qbank1';
+
+          return (
+            <div key={bank.setId} className="relative overflow-hidden rounded-2xl rtt-card p-5">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <div className="text-lg font-semibold">{labelForBank(bank.setId)}</div>
+                  <div className="mt-1 text-sm text-white/65">
+                    {bank.completedMiniMocks} / {bank.totalMiniMocks} mini mocks completed
+                  </div>
+                </div>
+
+                <div className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-white/70">
+                  {bank.bankMastered
+                    ? 'Bank Mastered'
+                    : bank.miniStatus[String(bank.currentMini)]?.attempts
+                      ? `Retake ${bank.currentMini}`
+                      : `Start ${bank.currentMini}`}
+                </div>
+              </div>
+
+              <div className="mt-4 grid grid-cols-5 gap-2">
+                {Array.from({ length: 10 }, (_, i) => i + 1).map((mini) => {
+                  const status = bank.miniStatus[String(mini)];
+                  const done = !!status?.completed;
+
+                  return (
+                    <div
+                      key={mini}
+                      className={`rounded-xl border px-2 py-3 text-center text-sm ${
+                        done
+                          ? 'border-emerald-400/40 bg-emerald-500/10 text-emerald-100'
+                          : 'border-white/10 bg-black/20 text-white/75'
+                      }`}
+                    >
+                      <div className="font-semibold">{mini}</div>
+                      <div className="mt-1 text-[11px]">{status?.bestScore ? `${status.bestScore}%` : '—'}</div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Link
+                  href={`/app/mock-exam?qbank=${bank.setId}&scope=mini&mini=${bank.currentMini}`}
+                  className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
+                >
+                  {bank.miniStatus[String(bank.currentMini)]?.attempts
+                    ? `Mini Mock ${bank.currentMini}`
+                    : `Take Mini Mock ${bank.currentMini}`}
+                </Link>
+
+                <Link
+                  href={`/app/mock-exam?qbank=${bank.setId}&scope=full`}
+                  className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"
+                >
+                  Full Mock
+                </Link>
+              </div>
+
+              <div className="mt-3 flex flex-wrap gap-2">
+                {['patient care', 'safety', 'image production', 'procedures'].map((cat) => (
+                  <Link
+                    key={cat}
+                    href={`/app/mock-exam?qbank=${bank.setId}&scope=category&category=${encodeURIComponent(cat)}`}
+                    className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-white/70 hover:bg-white/10"
+                  >
+                    {cat}
+                  </Link>
+                ))}
+              </div>
+
+              {locked ? (
+                <div className="absolute inset-0 flex items-center justify-center bg-[rgba(7,12,19,0.72)] backdrop-blur-[2px]">
+                  <div className="rounded-3xl border border-yellow-400/20 bg-black/55 px-6 py-5 text-center">
+                    <div className="text-sm font-semibold text-white">Get Pro to unlock</div>
+                    <div className="mt-1 text-xs text-white/65">
+                      Upgrade to unlock QBank 2 and QBank 3.
+                    </div>
+                    <Link
+                      href="/app/upgrade"
+                      className="mt-4 inline-flex rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
+                    >
+                      Get Pro
+                    </Link>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          );
+        })}
+      </div>
+
+      <MethodDropdown />
+    </div>
+  );
+}

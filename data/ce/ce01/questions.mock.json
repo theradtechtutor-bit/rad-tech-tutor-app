@@ -1,0 +1,271 @@
+{
+  "courseId": "optimizing-patient-dose",
+  "totalQuestions": 24,
+  "passPct": 80,
+  "questions": [
+    {
+      "id": "ce01-q1",
+      "prompt": "Mock question 1: In digital radiography, the primary goal of ALARA is to:",
+      "choices": {
+        "A": "Increase image contrast",
+        "B": "Reduce patient dose while maintaining diagnostic quality",
+        "C": "Eliminate repeats by increasing exposure",
+        "D": "Standardize EI across all vendors"
+      },
+      "correct": "B"
+    },
+    {
+      "id": "ce01-q2",
+      "prompt": "Mock question 2: A common cause of misleading EI/DI values is:",
+      "choices": {
+        "A": "Tight collimation and correct anatomy recognition",
+        "B": "Incorrect collimation/field recognition affecting histogram analysis",
+        "C": "Using correct SID",
+        "D": "Using a grid appropriately"
+      },
+      "correct": "B"
+    },
+    {
+      "id": "ce01-q3",
+      "prompt": "Mock question 3: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q4",
+      "prompt": "Mock question 4: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q5",
+      "prompt": "Mock question 5: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q6",
+      "prompt": "Mock question 6: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q7",
+      "prompt": "Mock question 7: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q8",
+      "prompt": "Mock question 8: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q9",
+      "prompt": "Mock question 9: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q10",
+      "prompt": "Mock question 10: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q11",
+      "prompt": "Mock question 11: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q12",
+      "prompt": "Mock question 12: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q13",
+      "prompt": "Mock question 13: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q14",
+      "prompt": "Mock question 14: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q15",
+      "prompt": "Mock question 15: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q16",
+      "prompt": "Mock question 16: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q17",
+      "prompt": "Mock question 17: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q18",
+      "prompt": "Mock question 18: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q19",
+      "prompt": "Mock question 19: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q20",
+      "prompt": "Mock question 20: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q21",
+      "prompt": "Mock question 21: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q22",
+      "prompt": "Mock question 22: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q23",
+      "prompt": "Mock question 23: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    },
+    {
+      "id": "ce01-q24",
+      "prompt": "Mock question 24: Placeholder prompt for CE01.",
+      "choices": {
+        "A": "Choice A",
+        "B": "Choice B",
+        "C": "Choice C",
+        "D": "Choice D"
+      },
+      "correct": "A"
+    }
+  ]
+}

@@ -1,0 +1,191 @@
+[
+  {
+    "id": "SAFE-ATTN-001",
+    "category": "Safety",
+    "subcategory": "Attenuation",
+    "question": "Attenuation in diagnostic imaging refers to which of the following processes?",
+    "choices": {
+      "A": "Radiation exiting the patient toward the image receptor",
+      "B": "Changes in beam intensity caused by absorption and scatter within the patient",
+      "C": "Production of scatter radiation only",
+      "D": "High-dose exposure during radiation therapy"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Changes in beam intensity caused by absorption and scatter within the patient is correct for this question.",
+      "whyIncorrect": {
+        "A": "Radiation exiting the patient toward the image receptor is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Production of scatter radiation only is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "High-dose exposure during radiation therapy is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "SAFE-INT-002",
+    "category": "Safety",
+    "subcategory": "Photon Interactions",
+    "question": "Which x-ray interaction is most responsible for creating subject contrast in radiography?",
+    "choices": {
+      "A": "Compton scattering",
+      "B": "Coherent scattering",
+      "C": "Photoelectric absorption",
+      "D": "Pair production"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Photoelectric absorption occurs when the photon gives up all of its energy to an inner-shell electron and is completely absorbed, which strongly contributes to image contrast.",
+      "whyIncorrect": {
+        "A": "Compton scattering occurs when a photon ejects an outer-shell electron and changes direction, which mainly adds scatter and occupational exposure.",
+        "B": "Coherent scattering is low-energy scattering without ionization and has little value in forming the radiographic image.",
+        "D": "Pair production is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "SAFE-INT-003",
+    "category": "Safety",
+    "subcategory": "Scatter Radiation",
+    "question": "Which interaction produces scattered photons that may travel in new directions and increase exposure to staff during fluoroscopy?",
+    "choices": {
+      "A": "Compton interaction",
+      "B": "Coherent interaction",
+      "C": "Photoelectric effect",
+      "D": "Pair production"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Compton interaction is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "B": "Coherent interaction is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Photoelectric effect is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Pair production is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "SAFE-DOSE-004",
+    "category": "Safety",
+    "subcategory": "Dose Units",
+    "question": "The unit used to describe absorbed dose in air is:",
+    "choices": {
+      "A": "Sievert (Sv)",
+      "B": "Gray-air (Gyₐ)",
+      "C": "Becquerel (Bq)",
+      "D": "Coulomb per kilogram (C/kg)"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Gray-air (Gyₐ) describes radiation energy absorbed in air.",
+      "whyIncorrect": {
+        "A": "Sievert (Sv) is the SI unit used for equivalent dose and effective dose because it reflects biologic effect.",
+        "C": "Becquerel (Bq) is the SI unit of radioactivity and represents one nuclear disintegration per second.",
+        "D": "Coulomb per kilogram (C/kg) is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "SAFE-DOSE-005",
+    "category": "Safety",
+    "subcategory": "Radioactivity Units",
+    "question": "Which unit measures radioactivity (the rate of nuclear disintegrations)?",
+    "choices": {
+      "A": "Becquerel (Bq)",
+      "B": "Gray (Gy)",
+      "C": "Sievert (Sv)",
+      "D": "Gray-air (Gyₐ)"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Becquerel (Bq) is the SI unit of radioactivity and represents one nuclear disintegration per second.",
+      "whyIncorrect": {
+        "B": "Gray (Gy) is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Sievert (Sv) is the SI unit used for equivalent dose and effective dose because it reflects biologic effect.",
+        "D": "Gray-air (Gyₐ) describes radiation energy absorbed in air."
+      }
+    }
+  },
+  {
+    "id": "SAFE-DOSE-006",
+    "category": "Safety",
+    "subcategory": "Effective Dose",
+    "question": "The unit of effective dose is:",
+    "choices": {
+      "A": "Becquerel (Bq)",
+      "B": "Gray (Gy)",
+      "C": "Sievert (Sv)",
+      "D": "Coulomb per kilogram (C/kg)"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Sievert (Sv) is the SI unit used for equivalent dose and effective dose because it reflects biologic effect.",
+      "whyIncorrect": {
+        "A": "Becquerel (Bq) is the SI unit of radioactivity and represents one nuclear disintegration per second.",
+        "B": "Gray (Gy) is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Coulomb per kilogram (C/kg) is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "SAFE-LET-007",
+    "category": "Safety",
+    "subcategory": "Linear Energy Transfer",
+    "question": "Linear energy transfer (LET) varies among radiation types primarily because different radiations:",
+    "choices": {
+      "A": "produce the same amount of ionization per unit path length",
+      "B": "differ in how densely they deposit energy along their tracks",
+      "C": "occur only during x-ray and gamma-ray procedures",
+      "D": "are unrelated to biologic effects"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "differ in how densely they deposit energy along their tracks is correct for this question.",
+      "whyIncorrect": {
+        "A": "produce the same amount of ionization per unit path length is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "occur only during x-ray and gamma-ray procedures is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "are unrelated to biologic effects is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "SAFE-NUC-008",
+    "category": "Safety",
+    "subcategory": "Nuclear Medicine Basics",
+    "question": "The unit becquerel (Bq) would most commonly be used to describe:",
+    "choices": {
+      "A": "the absorbed dose delivered to a patient",
+      "B": "the amount of radioactive material administered",
+      "C": "the effective dose from an exposure",
+      "D": "the exposure in air"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "the amount of radioactive material administered is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "the absorbed dose delivered to a patient is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "the effective dose from an exposure is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "the exposure in air is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "SAFE-BIO-009",
+    "category": "Safety",
+    "subcategory": "Dose-Response Relationships",
+    "question": "Graphs that show the relationship between radiation dose and an organism’s biologic response are called:",
+    "choices": {
+      "A": "response curves",
+      "B": "exposure curves",
+      "C": "dose-response curves",
+      "D": "radiation-threshold curves"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "dose-response curves is correct for this question.",
+      "whyIncorrect": {
+        "A": "response curves is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "exposure curves is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "radiation-threshold curves is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  }
+]

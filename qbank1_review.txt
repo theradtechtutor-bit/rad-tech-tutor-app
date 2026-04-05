@@ -1,0 +1,2576 @@
+====================================================================================================
+QUESTION #2
+Question: Which photon–tissue interaction is primarily responsible for producing contrast on a diagnostic radiograph?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Photoelectric is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Compton is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Coherent is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Pair production is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #3
+Question: During fluoroscopy, which interaction produces scattered photons that may expose personnel in the room?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Compton is correct for this question.', 'whyIncorrect': {'B': 'Coherent is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Photoelectric is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Pair production is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #7
+Question: Which statement correctly describes linear energy transfer (LET)?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'It differs for different types of radiation is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'It is identical for all radiation types is not the best answer because it refers to a different concept than the one tested here.', 'B': 'It is the same for x-rays and particles used clinically is not the best answer because it refers to a different concept than the one tested here.', 'C': 'It occurs only during x-ray procedures is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #9
+Question: A graph that plots radiation dose against the organism's biological response is called a:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Dose-response curve is correct for this question.', 'whyIncorrect': {'A': 'Response curve is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Exposure curve is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Radiation-threshold curve is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #11
+Question: Radiation-induced cataracts do not occur below a certain dose. This relationship is best described as:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Threshold is correct for this question.', 'whyIncorrect': {'B': 'Nonthreshold is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Low dose is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Occupational dose is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #12
+Question: Greater dose equals greater probability of an effect. This best describes:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Stochastic effects is correct for this question.', 'whyIncorrect': {'B': 'Deterministic effects is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Direct effect is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Indirect effect is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #13
+Question: The cumulative occupational effective dose limit for a 22-year-old radiographer is:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': '220 mSv is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': '22 mSv is not the best answer because it refers to a different concept than the one tested here.', 'C': '11 mSv is not the best answer because it refers to a different concept than the one tested here.', 'D': '110 mSv is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #14
+Question: The annual effective dose limit for the general public assuming frequent exposure is:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': '1.0 mSv is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': '0.5 mSv is not the best answer because it refers to a different concept than the one tested here.', 'B': '500 mSv is not the best answer because it refers to a different concept than the one tested here.', 'C': '0.05 mSv is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #15
+Question: The secondary protective barrier used in room shielding must be at least how thick?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': '1/32-inch Pb equivalent is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': '1/32-inch Al equivalent is not the best answer because it refers to a different concept than the one tested here.', 'B': '1/16-inch Al equivalent is not the best answer because it refers to a different concept than the one tested here.', 'C': '1/16-inch Pb equivalent is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #16
+Question: At a 90-degree angle and 1 meter from the patient, scattered beam intensity is what fraction of the primary beam?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': '1/1000 is correct for this question.', 'whyIncorrect': {'A': '1/100 is not the best answer because it refers to a different concept than the one tested here.', 'B': '1/500 is not the best answer because it refers to a different concept than the one tested here.', 'D': '1/10 is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #17
+Question: If air kerma is 5 Gya at 6 feet from the x-ray table, what will it be at 3 feet?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': '20 Gya is correct for this question.', 'whyIncorrect': {'B': '10 Gya is not the best answer because it refers to a different concept than the one tested here.', 'C': '1.25 Gya is not the best answer because it refers to a different concept than the one tested here.', 'D': '2.5 Gya is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #18
+Question: The minimum source-to-skin distance for a fixed fluoroscopic unit is:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': '15 inches is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': '12 inches is not the best answer because it refers to a different concept than the one tested here.', 'C': '10 inches is not the best answer because it refers to a different concept than the one tested here.', 'D': '18 inches is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #19
+Question: Gonadal shielding placed on a female patient may reduce gonadal dose by approximately:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': '50% is correct for this question.', 'whyIncorrect': {'B': '75% is not the best answer because it refers to a different concept than the one tested here.', 'C': '85% is not the best answer because it refers to a different concept than the one tested here.', 'D': '95% is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #20
+Question: The phenomenon by which oxygenated cells sustain greater radiation damage than hypoxic cells is called the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Oxygen enhancement ratio is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Target theory is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Direct effect is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Doubling dose is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #21
+Question: A measurable depression of the blood count occurs after a whole-body dose equivalent of at least:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': '0.25 Sv is correct for this question.', 'whyIncorrect': {'A': '10 Sv is not the best answer because it refers to a different concept than the one tested here.', 'C': '5 Sv is not the best answer because it refers to a different concept than the one tested here.', 'D': '0.01 Sv is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #22
+Question: Highly reactive chemical species with unpaired electrons in their outer shells are called:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Free radicals is correct for this question.', 'whyIncorrect': {'A': 'Electrified ions is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Radiolytic products is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Hydrogen peroxide is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #23
+Question: The macromolecule that controls all cellular activities and is considered the primary radiation target is:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'DNA is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'RNA is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Hydrogen peroxide is not the best answer because it refers to a different concept than the one tested here.', 'C': 'A free radical is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #24
+Question: Division of somatic (body) cells is accomplished by which process?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Mitosis is correct for this question.', 'whyIncorrect': {'B': 'Spermatogenesis is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Organogenesis is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Cytogenesis is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #25
+Question: The most common result when ionizing radiation interacts with atoms in the human body is:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'No observable effect is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Mutations is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Ionization visible to the cell is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Cell death is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #26
+Question: Most radiation-induced damage to cells occurs at:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Radiation doses far exceeding diagnostic levels is correct for this question.', 'whyIncorrect': {'A': 'Diagnostic radiation levels is not the best answer because it refers to a different concept than the one tested here.', 'B': 'During fluoroscopy is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Background radiation levels is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #27
+Question: Radiation doses up to which level are considered relatively low risk to the embryo and fetus?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': '0.20 mSv is correct for this question.', 'whyIncorrect': {'A': '5 mSv is not the best answer because it refers to a different concept than the one tested here.', 'B': '10 mSv is not the best answer because it refers to a different concept than the one tested here.', 'C': '0.01 mSv is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #28
+Question: Which radiologic practice concept encourages keeping radiation doses to patients and personnel at minimum levels?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'ALARA is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'LET is not the best answer because it refers to a different concept than the one tested here.', 'B': 'RBE is not the best answer because it refers to a different concept than the one tested here.', 'C': 'MPD is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #29
+Question: Which of the following tissues is relatively insensitive to ionizing radiation?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Nerve tissue is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': 'Reproductive cells is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Epithelial tissue is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Immature sperm cells is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #30
+Question: Somatic effects of radiation are best described as:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Caused by large doses of high-LET radiation to a large body area is correct for this question.', 'whyIncorrect': {'A': 'Common at diagnostic doses is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Caused by DNA exposure alone is not the best answer because it refers to a different concept than the one tested here.', 'D': 'The same as genetic mutations is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #31
+Question: The most effective way to minimize radiation dose to the patient is:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Avoiding repeat exposures is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Increasing distance is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Shielding the patient is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Reducing exposure time is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #33
+Question: When ionization occurs inside the body, the result may be:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Formation of unstable atoms is correct for this question.', 'whyIncorrect': {'A': 'Formation of stable atoms is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Production of high-energy x-rays is not the best answer because it refers to a different concept than the one tested here.', 'C': 'New molecules beneficial to the cell is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #34
+Question: Radiation-induced cell damage may be expressed as:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Loss or abnormal cellular function is correct for this question.', 'whyIncorrect': {'B': 'No detectable change is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Enhanced cellular function is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Increased metabolic rate is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #35
+Question: Damage occurring in the cell that was directly irradiated is classified as a:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Somatic effect is correct for this question.', 'whyIncorrect': {'A': 'Genetic effect is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Exposed-cell effect is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Molecular effect is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #36
+Question: Radiation-induced effects that appear in future offspring are classified as:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Genetic effects is correct for this question.', 'whyIncorrect': {'B': 'Exposed-cell effects is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Somatic effects is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Molecular effects is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #37
+Question: Radiation that exists naturally in the environment is called:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Natural background radiation is correct for this question.', 'whyIncorrect': {'A': 'Man-made radiation is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Artificial radiation is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Artificial background radiation is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #38
+Question: Natural background radiation accounts for approximately what percentage of total human radiation exposure?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': '50% is correct for this question.', 'whyIncorrect': {'A': '95% is not the best answer because it refers to a different concept than the one tested here.', 'B': '82% is not the best answer because it refers to a different concept than the one tested here.', 'D': '35% is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #39
+Question: The approximate annual effective dose per person from natural background radiation is:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': '3.0 mSv is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': '1.0 mSv is not the best answer because it refers to a different concept than the one tested here.', 'C': '50 mSv is not the best answer because it refers to a different concept than the one tested here.', 'D': '9.0 mSv is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #40
+Question: Which single source contributes the greatest amount of natural background radiation to humans?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Radon is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'X-rays is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Delta rays is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Radium is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #42
+Question: Which protective barrier must be at least 1/16-inch lead equivalent?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Primary protective barrier is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Lead apron is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Bucky slot cover is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Secondary protective barrier is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #43
+Question: According to NCRP Report #160, CT accounts for approximately what percentage of dose to the U.S. population?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': '24% is correct for this question.', 'whyIncorrect': {'B': '50% is not the best answer because it refers to a different concept than the one tested here.', 'C': '15% is not the best answer because it refers to a different concept than the one tested here.', 'D': '80% is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #44
+Question: Meiosis describes the process of division of which type of cell?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Germ cells is correct for this question.', 'whyIncorrect': {'A': 'Somatic cells is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Cancer cells is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Muscle cells is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #45
+Question: The most important reason for using beam restriction and gonadal shielding is to:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Prevent mutations in the human population is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': 'Prevent water molecule ionization is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Control somatic radiation effects is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Improve radiographic contrast is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #46
+Question: The term for the total radiation dose accumulated over a lifetime of occupational exposure is:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Cumulative effective dose is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Annual accumulated effective dose is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Common effective dose is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Common medical effective dose is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #47
+Question: Fluoroscopic exposure times exceeding how many minutes may lead to radiation-induced skin effects?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': '30 is correct for this question.', 'whyIncorrect': {'A': '5 is not the best answer because it refers to a different concept than the one tested here.', 'B': '10 is not the best answer because it refers to a different concept than the one tested here.', 'C': '20 is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #48
+Question: Which measurement best represents the approximate skin dose at the point the x-ray beam enters the patient?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Air kerma is correct because it fits the structure, term, or function described in the stem.', 'whyIncorrect': {'A': 'Sievert is the SI unit used for equivalent dose and effective dose because it reflects biologic effect.', 'B': 'Becquerel is the SI unit of radioactivity and represents one nuclear disintegration per second.', 'D': 'Effective dose accounts for both the amount of radiation and the sensitivity of the tissues exposed.'}}
+
+====================================================================================================
+QUESTION #49
+Question: Two of the following are sources of natural background radiation. Which two?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Radon and cosmic radiation during air travel is correct for this question.', 'whyIncorrect': {'A': 'Medical x-rays and dental x-rays is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Certain consumer products and microwave ovens is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Dental x-rays and consumer products is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #50
+Question: The preferred current term for radiation exposure measured in air is:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Air kerma is correct because it fits the structure, term, or function described in the stem.', 'whyIncorrect': {'A': 'Coulombs per kilogram is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Gray is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Sievert is the SI unit used for equivalent dose and effective dose because it reflects biologic effect.'}}
+
+====================================================================================================
+QUESTION #51
+Question: Effective dose limits for radiation workers can be found in which published resource?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'NCRP reports is correct for this question.', 'whyIncorrect': {'A': 'Dose limit reports is not the best answer because it refers to a different concept than the one tested here.', 'C': 'EPA reports is not the best answer because it refers to a different concept than the one tested here.', 'D': 'HHS reports is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #52
+Question: Photon-cell interactions occur:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'By chance is correct for this question.', 'whyIncorrect': {'A': 'Predictably and consistently is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Seldom is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Only at high radiation doses is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #53
+Question: Calipers are used in radiography primarily to measure:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Patient part thickness is correct for this question.', 'whyIncorrect': {'A': 'Radiation dose is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Patient BMI is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Patient overall body weight IMAGE PRODUCTION Questions 54–103 is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #59
+Question: Modern electronic timers used in x-ray equipment can produce exposure times as short as:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': '1/1000 second is correct for this question.', 'whyIncorrect': {'A': '1/100 second is not the best answer because it refers to a different concept than the one tested here.', 'C': '1 microsecond is not the best answer because it refers to a different concept than the one tested here.', 'D': 'No practical minimum limit is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #64
+Question: The component in the x-ray circuit that converts alternating current to direct current is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Rectifier is correct because it fits the structure, term, or function described in the stem.', 'whyIncorrect': {'A': 'Autotransformer works by self-induction and is used to select and adjust kVp before the high-voltage transformer stage.', 'B': 'Step-up transformer raises voltage in the high-voltage section of the x-ray circuit so electrons can be accelerated across the tube.', 'D': 'Falling load generator changes mA during a long exposure so the highest safe tube loading is used efficiently.'}}
+
+====================================================================================================
+QUESTION #65
+Question: Proper operation of the x-ray tube requires which type of electrical current?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Direct current is correct for this question.', 'whyIncorrect': {'B': 'Falling load current is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Alternating current is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Fluctuating current is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #66
+Question: The process of thermionic emission at the cathode produces a(n):
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Electron cloud is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Recoil electron is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Scattered photon is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Characteristic photon is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #67
+Question: The focusing cup that shapes and directs the electron beam is located at the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Cathode is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': 'Anode is not the best answer because it refers to a different concept than the one tested here.', 'C': 'X-ray tube window is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Control panel is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #68
+Question: An anode interaction in which outer-shell electrons fill K-shell vacancies and emit x-rays is called:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Characteristic radiation is correct for this question.', 'whyIncorrect': {'B': 'Photoelectric effect is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Compton interaction is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Bremsstrahlung is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #69
+Question: In digital fluoroscopy, images should be viewed on which device to fully utilize the digital capabilities?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'High-resolution diagnostic monitor is correct for this question.', 'whyIncorrect': {'A': 'Digital viewbox is not the best answer because it refers to a different concept than the one tested here.', 'C': 'High-definition television is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Plasma display is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #70
+Question: A key advantage of digital fluoroscopy over conventional fluoroscopy is:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Post-acquisition image manipulation is correct for this question.', 'whyIncorrect': {'B': 'Zero radiation dose to the patient is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Elimination of the need for a fluoroscopist is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Lower equipment cost is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #71
+Question: In digital fluoroscopy and computed radiography, the analog signal must be converted to digital form by a(n):
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Analog-to-digital converter is correct for this question.', 'whyIncorrect': {'A': 'Digital-to-analog converter is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Flux capacitor is not the best answer because it refers to a different concept than the one tested here.', 'D': 'DVD-ROM is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #72
+Question: In digital imaging, the mathematical formula used to reconstruct the image is called a(n):
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Algorithm is correct for this question.', 'whyIncorrect': {'A': 'Mathematical hypothesis is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Advanced imaging procedure is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Mathematical basis for film-screen is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #73
+Question: In computed radiography, each pixel corresponds to a volume of tissue in the patient known as a(n):
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Voxel is correct for this question.', 'whyIncorrect': {'A': 'Pathology is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Density is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Artifact is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #74
+Question: Overall image brightness in computed radiography is adjusted by changing the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Window level is correct for this question.', 'whyIncorrect': {'A': 'kVp setting is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Window width is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Digital fluoroscopy settings is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #75
+Question: In computed radiography, window level refers to the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Midpoint of the displayed density range is correct for this question.', 'whyIncorrect': {'A': 'Area of the patient being imaged is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Amount of radiation needed to produce the image is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Upper boundary of displayed densities is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #76
+Question: Radiographic contrast in a computed radiography image is adjusted by changing the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Window width is correct for this question.', 'whyIncorrect': {'A': 'Window level is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Area of patient being irradiated is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Imaging plate sensitivity is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #77
+Question: The quantity of radiation reaching the image receptor is primarily controlled by:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'mAs is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'kVp is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Focal spot size is not the best answer because it refers to a different concept than the one tested here.', 'C': 'AEC selection is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #78
+Question: The image that becomes visible after processing or display is also called the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Manifest image is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': 'Image-in-waiting is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Preprocessed image is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Latent image is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #79
+Question: Which exposure factor directly controls the quantity of x-rays produced?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'mAs is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'kVp is not the best answer because it refers to a different concept than the one tested here.', 'B': 'OID is not the best answer because it refers to a different concept than the one tested here.', 'C': 'SID is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #80
+Question: The rule governing technique adjustments when changing kVp is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': '15% rule is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Inverse square law is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Density maintenance law is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Reciprocity law is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #81
+Question: If SID is reduced by half, what happens to receptor exposure?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Quadruples is correct for this question.', 'whyIncorrect': {'A': 'Doubles is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Reduces by half is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Reduces by half the mAs is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #82
+Question: Distortion that affects the apparent size of a structure on the radiograph is called:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Magnification is correct for this question.', 'whyIncorrect': {'A': 'Minification is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Foreshortening is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Elongation is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #83
+Question: Shape distortion of the radiographic image may take the form of:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Elongation and foreshortening is correct for this question.', 'whyIncorrect': {'A': 'Magnification and minification is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Size and shape distortion is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Magnification and elongation is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #84
+Question: An OID that is greater than usual may cause:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Magnification is correct for this question.', 'whyIncorrect': {'A': 'Elongation is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Foreshortening is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Minification is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #86
+Question: The equation H/D is used to calculate:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Grid ratio is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Grid radius is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Image contrast is not the best answer because it refers to a different concept than the one tested here.', 'D': 'The reciprocity law is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #87
+Question: If the exposure field is not accurately recognized by a digital imaging system, the histogram will:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Widen is correct for this question.', 'whyIncorrect': {'A': 'Narrow is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Remain unchanged is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Invert is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #88
+Question: Image noise increases when which of the following is increased?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Speed class is correct for this question.', 'whyIncorrect': {'A': 'mAs is not the best answer because it refers to a different concept than the one tested here.', 'C': 'SID is not the best answer because it refers to a different concept than the one tested here.', 'D': 'OID is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #89
+Question: Edge enhancement in digital imaging creates an artificial increase in:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Display contrast at image edges is correct for this question.', 'whyIncorrect': {'B': 'Display brightness at image edges is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Spatial resolution at image edges is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Signal-to-noise ratio is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #90
+Question: Which grid error produces normal exposure in the center but decreased exposure on both sides, and may follow removal and replacement of a focused grid?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Upside down is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': 'Off-level is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Lateral decentering is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Grid-focus decentering is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #91
+Question: Grid frequency is defined as the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Number of lead strips per unit length is correct for this question.', 'whyIncorrect': {'A': 'Height of lead strips divided by distance between them is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Distance between strips divided by height of strips is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Range of SIDs at which the grid can be used is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #92
+Question: Compared with film-screen systems, CR and DR systems are ________ to scatter radiation.
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Very sensitive is correct for this question.', 'whyIncorrect': {'B': 'Minimally sensitive is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Equally sensitive is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Not sensitive does not match the concept the question is asking about.'}}
+
+====================================================================================================
+QUESTION #93
+Question: Images displayed on radiologists' diagnostic monitors appear:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': "In greater detail than those on technologists' monitors is correct for this question.", 'whyIncorrect': {'A': "Identical to those on technologists' monitors is not the best answer because it refers to a different concept than the one tested here.", 'C': "In less detail than those on technologists' monitors is not the best answer because it refers to a different concept than the one tested here.", 'D': 'At lower resolution than standard PACS workstations is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #94
+Question: A histogram analysis error in digital imaging may be caused by:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Inappropriate collimation is correct for this question.', 'whyIncorrect': {'A': 'Excessive mAs is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Pixel unresponsiveness is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Excessive kVp is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #95
+Question: The digital processing technique called smoothing provides:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Uniform overall brightness is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Higher spatial resolution is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Equalization is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Higher contrast resolution is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #96
+Question: Consistency of image appearance from examination to examination is best achieved through:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Uniform processing codes is correct for this question.', 'whyIncorrect': {'A': 'Higher speed class is not the best answer because it refers to a different concept than the one tested here.', 'C': 'More aggressive postprocessing is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Lower exposure index numbers is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #97
+Question: Which set of exposure factors would produce an image with the poorest spatial resolution?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': '120 mAs, 92 kVp, 20-inch SID, 4-inch OID is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': '60 mAs, 80 kVp, 40-inch SID, 4-inch OID is not the best answer because it refers to a different concept than the one tested here.', 'B': '30 mAs, 92 kVp, 40-inch SID, 4-inch OID is not the best answer because it refers to a different concept than the one tested here.', 'D': '15 mAs, 100 kVp, 40-inch SID, 4-inch OID is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #98
+Question: Which set of exposure factors would produce an image with the best spatial resolution?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': '60 mAs, 80 kVp, 72-inch SID, 4-inch OID is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': '30 mAs, 92 kVp, 40-inch SID, 4-inch OID is not the best answer because it refers to a different concept than the one tested here.', 'C': '120 mAs, 92 kVp, 20-inch SID, 4-inch OID is not the best answer because it refers to a different concept than the one tested here.', 'D': '15 mAs, 100 kVp, 40-inch SID, 4-inch OID is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #99
+Question: Beam restriction (collimation) has what effect on radiographic contrast?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Produces a shorter scale of contrast is correct for this question.', 'whyIncorrect': {'A': 'Decreases contrast is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Produces a longer scale of contrast is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Has no effect on contrast is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #100
+Question: As kVp increases, x-ray production shifts toward:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Shorter wavelengths is correct for this question.', 'whyIncorrect': {'A': 'Longer wavelengths is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Lower-energy photons is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Increased electron production is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #101
+Question: The relationship between kVp and image receptor exposure is best described as:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Direct but not proportional is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Indirect is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Directly proportional is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Inverse is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #102
+Question: Grids with lead strips angled to match the divergence of the x-ray beam are called:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Focused grids is correct for this question.', 'whyIncorrect': {'A': 'Parallel grids is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Crosshatch grids is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Rhombic grids is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #103
+Question: In digital imaging, the radiographer must understand that the primary factor controlling image density is:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'The total exposure received by the detector is correct for this question.', 'whyIncorrect': {'A': 'mAs alone is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Speed class is not the best answer because it refers to a different concept than the one tested here.', 'D': 'kVp is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #114
+Question: The rounded superior dome of the stomach that lies above the gastroesophageal junction is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Fundus is correct because it fits the structure, term, or function described in the stem.', 'whyIncorrect': {'A': 'Rugae are the longitudinal mucosal folds within the stomach.', 'C': 'Pylorus is the distal outlet of the stomach leading into the duodenum.', 'D': 'Incisura angularis is the notch along the lesser curvature of the stomach.'}}
+
+====================================================================================================
+QUESTION #118
+Question: Which posterolateral vertebral projection serves as a primary site for muscle attachment?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Transverse process is correct because it fits the structure, term, or function described in the stem.', 'whyIncorrect': {'A': 'Pedicle connects the vertebral body to the posterior elements.', 'B': 'Spinous process projects posteriorly from the vertebral arch.', 'D': 'Lamina is the flat plate of bone that extends from the pedicle to the spinous process.'}}
+
+====================================================================================================
+QUESTION #119
+Question: On an oblique cervical spine radiograph, the oval openings through which nerve roots exit the spine are the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Intervertebral foramina is correct for this question.', 'whyIncorrect': {'B': 'Spinous processes is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Pedicles is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Laminae is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #121
+Question: The cup-shaped socket on the lateral pelvis that receives the femoral head is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Lesser trochanter is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Acetabulum is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Ischial tuberosity is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Greater trochanter is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #122
+Question: The large bony prominence at the upper lateral aspect of the proximal femur is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Greater trochanter is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Obturator foramen is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Ischial tuberosity is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Lesser trochanter is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #123
+Question: The small, cone-shaped bony prominence on the posteromedial surface of the proximal femur is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Ischial tuberosity is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Acetabulum is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Greater trochanter is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Lesser trochanter is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #124
+Question: Which femoral condyle is positioned on the lateral side of the knee joint?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Lateral epicondyle is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Medial condyle is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Lateral condyle is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Lateral plateau is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #125
+Question: The broad, flat superior surface of the tibia that articulates with the femoral condyles is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Lateral condyle is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Medial condyle is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Lateral epicondyle is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Tibial plateau is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #126
+Question: The anterior bony projection of the proximal tibia where the patellar tendon attaches is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Tibial tuberosity is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Tibial condyle is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Lateral epicondyle is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Lateral condyle is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #127
+Question: The femoral condyle located on the medial side of the knee joint is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Medial condyle is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': 'Lateral epicondyle is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Lateral condyle is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Tibial plateau is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #128
+Question: The joint between the first metacarpal and the trapezium is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'First carpometacarpal joint is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'First proximal interphalangeal joint is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Second distal interphalangeal joint is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Second metacarpophalangeal joint is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #129
+Question: The joint between the second metacarpal and the proximal phalanx of the index finger is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Second metacarpophalangeal joint is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Second proximal interphalangeal joint is not the best answer because it refers to a different concept than the one tested here.', 'B': 'First carpometacarpal joint is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Second distal interphalangeal joint is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #130
+Question: The joint between the proximal and middle phalanges of the index finger is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Second proximal interphalangeal joint is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': 'First carpometacarpal joint is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Second distal interphalangeal joint is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Second metacarpophalangeal joint is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #131
+Question: The joint between the middle and distal phalanges of the index finger is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Second distal interphalangeal joint is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Second proximal interphalangeal joint is not the best answer because it refers to a different concept than the one tested here.', 'B': 'First carpometacarpal joint is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Second metacarpophalangeal joint is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #132
+Question: Which carpal bone lies on the radial side of the proximal row and is the most commonly fractured carpal?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Scaphoid is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Pisiform is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Hamate is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Triquetral is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #133
+Question: Which crescent-shaped carpal bone occupies the center of the proximal row?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Lunate is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Hamate is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Triquetral is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Scaphoid is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #134
+Question: Which carpal bone is the most medial in the proximal row, lying adjacent to the lunate?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Triquetral is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Pisiform is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Lunate is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Trapezium is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #135
+Question: Which small, pea-shaped carpal bone sits on the palmar surface of the triquetral?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Pisiform is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': 'Lunate is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Triquetral is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Hamate is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #136
+Question: Which distal row carpal bone articulates with the base of the first (thumb) metacarpal?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Trapezium is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Hamate is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Trapezoid is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Capitate is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #137
+Question: Which distal row carpal bone lies between the trapezium and the capitate?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Trapezoid is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Hamate is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Trapezium is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Capitate is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #138
+Question: Which is the largest carpal bone, located at the center of the distal row?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Capitate is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Hamate is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Trapezium is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Trapezoid is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #139
+Question: Which distal carpal bone is characterized by a hook-like hamulus on its palmar surface?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Hamate is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': 'Trapezium is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Trapezoid is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Capitate is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #140
+Question: The shallow, pear-shaped articular cavity on the lateral scapula that receives the humeral head is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Greater tubercle is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Surgical neck is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Glenoid fossa is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Anatomic neck is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #141
+Question: The smaller of the two bony projections on the proximal humerus, located anteriorly, is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Lesser tubercle is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Surgical neck is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Scapula is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Greater tubercle is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #142
+Question: The larger bony projection on the lateral aspect of the proximal humerus is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Anatomic neck is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Surgical neck is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Lesser tubercle is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Greater tubercle is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #143
+Question: The constriction of the humerus just below the anatomic neck — the most common humeral fracture site — is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Surgical neck is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': 'Semilunar notch does not match the concept the question is asking about.', 'C': 'Anatomic neck is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Greater tubercle is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #144
+Question: Which tarsal bone transmits body weight from the tibia to other tarsal bones?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Second cuneiform is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Talus is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Navicular is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Cuboid is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #145
+Question: The tarsal bone on the medial midfoot that articulates with all three cuneiforms is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Navicular is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Talus is not the best answer because it refers to a different concept than the one tested here.', 'C': 'First cuneiform is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Second cuneiform is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #146
+Question: Which tarsal bone supports most body weight and forms the heel?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Talus is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': 'Navicular is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Tuberosity is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Second cuneiform is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #147
+Question: The large posterior projection of the calcaneus is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Tuberosity of the calcaneus is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Talus is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Cuboid is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Second cuneiform is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #148
+Question: The small lateral tarsal bone lying alongside the fifth metatarsal base is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Cuboid is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Fifth metatarsophalangeal joint is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Navicular is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Second cuneiform is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #149
+Question: The articulation between the fifth metatarsal and the proximal phalanx of the small toe is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Fifth metatarsophalangeal joint is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Talus is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Navicular is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Cuboid is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #150
+Question: The bony prominence on the medial side of the distal humerus above the elbow is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Medial epicondyle is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Lateral epicondyle is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Olecranon process is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Radial head is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #151
+Question: The circular proximal end of the radius that articulates with the capitulum is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Radial head is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Capitulum is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Olecranon process is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Ulnar head is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #152
+Question: The rounded articular eminence on the lateral distal humerus that articulates with the radial head is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Capitulum is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': 'Olecranon process is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Radial head is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Medial epicondyle is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #153
+Question: The posterior bony point of the proximal ulna that fits into the olecranon fossa of the humerus is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Olecranon process is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Ulnar head is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Radial head is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Medial epicondyle is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #154
+Question: The large opening at the base of the skull through which the brainstem passes is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Occipital bone is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Body of sphenoid is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Foramen magnum is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Anterior clinoid process is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #155
+Question: The posterior wall of the sella turcica is called the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Dorsum sellae is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Body of sphenoid is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Occipital bone is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Sella turcica is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #156
+Question: The saddle-shaped bony depression in the sphenoid that houses the pituitary gland is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Anterior clinoid process is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Sella turcica is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Occipital bone is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Dorsum sellae is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #157
+Question: The air-filled cavities within the body of the sphenoid bone are the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Body of sphenoid (sphenoid sinuses) is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': 'Occipital bone is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Dorsum sellae is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Anterior clinoid process is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #158
+Question: The paired bones forming the upper jaw and containing the upper teeth are the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Body of maxilla is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Zygomatic arch is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Foramen magnum is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Bony nasal septum is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #159
+Question: The bony partition separating the nasal cavities, formed by the ethmoid and vomer, is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Bony nasal septum is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Zygomatic arch is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Foramen magnum is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Body of maxilla is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #160
+Question: The horizontal bar of bone connecting the zygoma to the temporal bone is the:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Anterior nasal spine is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Zygomatic arch is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Bony nasal septum is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Angle of mandible is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #161
+Question: Which structure forms the zygomatic arch connecting the cheekbone to the temporal bone?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Zygomatic arch is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': 'Foramen magnum is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Bony nasal septum is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Body of maxilla is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #162
+Question: Proper alignment of the x-ray beam, anatomic part, and image receptor is critical to providing:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'A distortion-free image is correct for this question.', 'whyIncorrect': {'B': 'Lower patient dose is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Higher overall contrast is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Lower spatial resolution is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #163
+Question: BMI stands for:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Body mass index is correct for this question.', 'whyIncorrect': {'A': 'Below measurable index is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Body mass in imaging is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Body measurement index is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #165
+Question: Ulnar deviation of the wrist is synonymous with:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Ulnar flexion is correct for this question.', 'whyIncorrect': {'A': 'Radial flexion is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Radial deviation is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Dorsiflexion is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #166
+Question: Which segment of the large intestine is most distal, just proximal to the rectum?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Sigmoid colon is correct because it fits the structure, term, or function described in the stem.', 'whyIncorrect': {'A': 'Ascending colon travels superiorly on the right side of the abdomen toward the hepatic flexure.', 'B': 'Cecum is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Descending colon travels inferiorly down the left side of the abdomen from the splenic flexure.'}}
+
+====================================================================================================
+QUESTION #167
+Question: Rugae are mucosal folds characteristic of which digestive organ?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Stomach is correct for this question.', 'whyIncorrect': {'A': 'Esophagus is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Small intestine is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Large intestine PATIENT CARE Questions 168–200 is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #168
+Question: An image receptor can be a vehicle of infection through which mode of transmission?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Indirect contact is correct for this question.', 'whyIncorrect': {'A': 'Droplet transmission is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Direct contact is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Airborne transmission is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #169
+Question: In infection control, the term 'reservoir of infection' refers to:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Any location where pathogenic organisms can survive and multiply is correct for this question.', 'whyIncorrect': {'A': 'An infection control protocol is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Infectious waste material is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Universal contamination is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #172
+Question: The prefix meaning 'above' or 'excessive' is:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Hyper- is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Hypo- is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Ex- is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Ect- is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #173
+Question: Infectious waste must be placed in containers that are:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Properly labeled identifying the type of waste is correct for this question.', 'whyIncorrect': {'A': 'Made of lead is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Always incinerated on-site is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Made of plastic only is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #175
+Question: Making a patient fearful of being physically harmed is legally defined as:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Assault is correct for this question.', 'whyIncorrect': {'B': 'Battery is not the best answer because it refers to a different concept than the one tested here.', 'C': 'False imprisonment is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Invasion of privacy is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #176
+Question: Unauthorized disclosure of a patient's private health information defines:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Invasion of privacy is correct for this question.', 'whyIncorrect': {'A': 'Assault is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Battery is not the best answer because it refers to a different concept than the one tested here.', 'C': 'False imprisonment is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #177
+Question: Neglect or omission of the reasonable care expected of a professional is defined as:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Negligence is correct for this question.', 'whyIncorrect': {'A': 'Respondeat superior is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Res ipsa loquitur is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Gross negligence is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #178
+Question: Bradycardia is indicated by a pulse rate of:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Fewer than 60 beats per minute is correct for this question.', 'whyIncorrect': {'A': 'More than 100 beats per minute is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Greater than 90 beats per minute is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Less than 50 beats per minute is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #179
+Question: Which item contains all drugs and supplies needed during a respiratory or cardiac arrest?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Crash cart is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': 'Suction unit is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Defibrillator is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Sphygmomanometer is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #180
+Question: Which device is used to measure a patient's blood pressure?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Sphygmomanometer is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Crash cart is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Suction unit is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Defibrillator is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #181
+Question: A water-soluble positive contrast agent used when barium sulfate is contraindicated is a(n):
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Aqueous iodine compound is correct for this question.', 'whyIncorrect': {'A': 'Barium thiosulfate is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Iodine is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Air is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #182
+Question: Flushing, urticaria, and nausea following contrast administration are symptoms of which reaction type?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Anaphylactic shock is correct for this question.', 'whyIncorrect': {'A': 'Local irritation is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Cardiovascular shock is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Psychogenic shock is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #183
+Question: The type of infection control that reduces microorganisms using water and chemical disinfectants is:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Medical asepsis is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': 'Surgical asepsis is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Standard precautions is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Gas sterilization is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #185
+Question: Which medical abbreviation represents a heart attack (myocardial infarction)?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'MI is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'hx is not the best answer because it refers to a different concept than the one tested here.', 'B': 'HA is not the best answer because it refers to a different concept than the one tested here.', 'C': 'CVA is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #186
+Question: When scheduling multiple radiographic examinations, barium studies should be:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Scheduled last is correct for this question.', 'whyIncorrect': {'A': 'Scheduled first to get them over with is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Scheduled for the afternoon is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Always preceded by a scout CT is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #187
+Question: Infectious waste must be handled in accordance with guidelines from which organization?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'CDC guidelines is correct for this question.', 'whyIncorrect': {'A': 'Radiation protection guidelines is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Radiology department rules is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Patient condition is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #188
+Question: Normal adult respiratory rate is assessed by:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': 'Counting breaths per minute is correct for this question.', 'whyIncorrect': {'B': 'Using a thermometer is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Using a sphygmomanometer is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Using a digital BP cuff is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #189
+Question: Which device delivers supplemental oxygen directly into the patient's nasal passages?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Nasal cannula is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Crash cart is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Suction unit is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Defibrillator is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #190
+Question: Transmission of infection through contaminated food, water, or inanimate objects is called:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Common vehicle transmission is correct for this question.', 'whyIncorrect': {'A': 'Contact transmission is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Airborne transmission is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Droplet transmission is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #191
+Question: Which device is used to restore a normal cardiac rhythm in a patient with ventricular fibrillation?
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  C
+
+Current explanation:
+  {'whyCorrect': 'Defibrillator is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Crash cart is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Suction unit is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Sphygmomanometer is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #192
+Question: A shock state is indicated when diastolic blood pressure falls below:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Less than 50 mm Hg is correct for this question.', 'whyIncorrect': {'A': 'Greater than 100 mm Hg is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Less than 60 mm Hg is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Greater than 90 mm Hg is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #193
+Question: The federal law governing patient health information confidentiality is abbreviated:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'HIPAA is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'CDC is not the best answer because it refers to a different concept than the one tested here.', 'B': 'HHS is not the best answer because it refers to a different concept than the one tested here.', 'C': 'ALARA is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #194
+Question: The type of shock that occurs secondary to heart failure is called:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  D
+
+Current explanation:
+  {'whyCorrect': 'Cardiogenic shock is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': 'Hypovolemic shock is not the best answer because it refers to a different concept than the one tested here.', 'B': 'Septic shock is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Neurogenic shock is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #196
+Question: Used bandages and wound dressings must be placed into:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Waterproof sealed bags is correct for this question.', 'whyIncorrect': {'A': 'Lead containers is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Plastic bags is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Metal pans is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #198
+Question: Toxic chemicals used in radiology:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': 'Must never be poured down the drain is correct for this question.', 'whyIncorrect': {'A': 'Can be poured down the drain if not entering public water does not match the concept the question is asking about.', 'C': 'Can be poured down the same drain as processing water is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Can be poured down a restroom drain only is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #199
+Question: The suffix meaning 'pain' is:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  B
+
+Current explanation:
+  {'whyCorrect': '-algia is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'A': '-itis is not the best answer because it refers to a different concept than the one tested here.', 'C': '-ectomy is not the best answer because it refers to a different concept than the one tested here.', 'D': '-megaly is not the best answer because it refers to a different concept than the one tested here.'}}
+
+====================================================================================================
+QUESTION #200
+Question: The suffix meaning 'surgical puncture to remove fluid' is:
+
+Choices:
+  A. A
+  B. B
+  C. C
+  D. D
+
+Correct Answer:
+  A
+
+Current explanation:
+  {'whyCorrect': '-centesis is correct because it is the best match for the concept being asked about in the stem.', 'whyIncorrect': {'B': '-otomy is not the best answer because it refers to a different concept than the one tested here.', 'C': '-genic is not the best answer because it refers to a different concept than the one tested here.', 'D': '-osis is not the best answer because it refers to a different concept than the one tested here.'}}
+

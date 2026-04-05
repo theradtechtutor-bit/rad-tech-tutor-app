@@ -1,0 +1,260 @@
+
+===== EXPLANATIONS (SOURCE CHECK) =====
+app/upgrade/page.tsx:26:              <div className="mt-1">Targeted practice by subtopic + deeper explanations.</div>
+app/app/bank/page.tsx:28:              explanations, and your precision 250Q bank.
+app/app/diagnostic/_mockFreeDiagnostic.ts:15:  shortExplanation: string;
+app/app/diagnostic/_mockFreeDiagnostic.ts:35:    shortExplanation: "Lower mAs lowers the number of x-ray photons produced → lower dose."
+app/app/diagnostic/_mockFreeDiagnostic.ts:48:    shortExplanation: "Higher kVp increases beam penetration → more exposure at the receptor."
+app/app/diagnostic/_mockFreeDiagnostic.ts:61:    shortExplanation: "A prior contrast reaction or allergy risk is a critical safety check."
+app/app/diagnostic/_mockFreeDiagnostic.ts:74:    shortExplanation: "PA chest is centered to T7 (inferior angle of scapula)."
+app/app/diagnostic/_mockFreeDiagnostic.ts:91:    shortExplanation: "Replace this explanation with your real short explanation."
+app/app/courses/page.tsx:74:              Paid unlocks deeper lessons, full explanations, mastery tracking,
+app/app/(main)/flashcards/page.tsx.bak.20260314_025104:291:                {flipped && card.explanation ? <div className="mt-5 text-sm text-white/70">{card.explanation}</div> : null}
+app/app/(main)/flashcards/page.tsx:370:                {flipped && card.explanation ? <div className="mt-5 text-sm text-white/70">{card.explanation}</div> : null}
+app/app/(main)/mock-exam/page.tsx.bak.20260314_025104:24:  explanation?: string;
+app/app/(main)/mock-exam/page.tsx:28:  explanation?: string;
+app/app/(main)/mock-exam/page.tsx:448:                    const explanation =
+app/app/(main)/mock-exam/page.tsx:449:                      typeof item.explanation === 'string'
+app/app/(main)/mock-exam/page.tsx:450:                        ? item.explanation
+app/app/(main)/mock-exam/page.tsx:458:                        {explanation ? <div className="mt-3 text-sm text-white/70">{explanation}</div> : null}
+app/app/practice/[setId]/page.tsx:468:              <div className="font-semibold text-white/85">Explanation</div>
+lib/masteryContent.ts:216:      q?.explanation?.whyCorrect ||
+lib/masteryContent.ts:219:      q?.explanation ||
+lib/mastery/flashcards.ts:13:  explanation?: string;
+lib/mastery/flashcards.ts:138:    explanation: buildRationale(q),
+lib/questions.ts:5:export type QuestionExplanation = {
+lib/questions.ts:22:  explanation?: QuestionExplanation;
+lib/question-schema.ts:5:  QuestionExplanation
+lib/load-questions.ts:21:  if (next.explanation) {
+lib/load-questions.ts:22:    if (typeof next.explanation === 'string') next.explanation = stripGarbage(next.explanation);
+lib/load-questions.ts:23:    else if (typeof next.explanation === 'object') {
+lib/load-questions.ts:24:      next.explanation = Object.fromEntries(
+lib/load-questions.ts:25:        Object.entries(next.explanation).map(([k, v]) => [k, typeof v === 'string' ? stripGarbage(v) : v])
+
+===== EXPLANATION FALLBACK CHECK =====
+app/app/diagnostic/free/results/page.tsx:31:function safeParse<T>(raw: string | null, fallback: T): T {
+app/app/diagnostic/free/results/page.tsx:32:  if (!raw) return fallback;
+app/app/diagnostic/free/results/page.tsx:36:    return fallback;
+app/app/(main)/upgrade/success/page.tsx:6:    <Suspense fallback={
+app/app/(main)/flashcards/page.tsx.bak.20260314_025104:314:    <Suspense fallback={<div className="mx-auto max-w-6xl text-sm text-white/70">Loading…</div>}>
+app/app/(main)/flashcards/page.tsx:393:    <Suspense fallback={<div className="mx-auto max-w-6xl text-sm text-white/70">Loading…</div>}>
+app/app/(main)/mock-exam/results/page.tsx:7:      fallback={
+app/app/(main)/mock-exam/page.tsx.bak.20260314_025104:468:    <Suspense fallback={<div className="mx-auto max-w-4xl text-sm text-white/70">Loading…</div>}>
+app/app/(main)/mock-exam/page.tsx:569:    <Suspense fallback={<div className="mx-auto max-w-4xl text-sm text-white/70">Loading…</div>}>
+app/app/(main)/practice/_components/ContinueCard.tsx:21:function readNumber(key: string, fallback = 0) {
+app/app/(main)/practice/_components/ContinueCard.tsx:22:  if (typeof window === 'undefined') return fallback;
+app/app/(main)/practice/_components/ContinueCard.tsx:24:  if (!raw) return fallback;
+app/app/(main)/practice/_components/ContinueCard.tsx:26:  return Number.isFinite(n) ? n : fallback;
+lib/progressStore.ts.bak.20260311_021908:66:export function readJson<T>(key: string, fallback: T): T {
+lib/progressStore.ts.bak.20260311_021908:67:  if (typeof window === 'undefined') return fallback;
+lib/progressStore.ts.bak.20260311_021908:70:    if (!raw) return fallback;
+lib/progressStore.ts.bak.20260311_021908:73:    return fallback;
+lib/mastery/flashcards.ts:126: * Fallback: generate a simple cloze using correct choice text.
+lib/progressStore.ts:68:export function readJson<T>(key: string, fallback: T): T {
+lib/progressStore.ts:69:  if (typeof window === 'undefined') return fallback;
+lib/progressStore.ts:72:    if (!raw) return fallback;
+lib/progressStore.ts:75:    return fallback;
+
+===== HOMEPAGE (TOP) =====
+'use client';
+
+import Link from 'next/link';
+import { useEffect, useMemo, useState } from 'react';
+import { useSupabaseSession } from '@/app/app/_hooks/useSupabaseSession';
+import { getBankMasterySummary } from '@/lib/progressStore';
+
+
+function getResumeHref() {
+  const bank = getBankMasterySummary('qbank1');
+  const nextMini = Math.max(1, Math.min(10, Number(bank.currentMini || 1)));
+  return `/app/practice/qbank1?mode=all&cat=all&flow=mastery&mini=${nextMini}`;
+}
+
+function SectionHeading({
+  eyebrow,
+  title,
+  desc,
+}: {
+  eyebrow?: string;
+  title: string;
+  desc?: string;
+}) {
+  return (
+    <div className="mx-auto max-w-3xl text-center">
+      {eyebrow ? (
+        <div className="mb-3 inline-flex rounded-full border border-teal-400/20 bg-teal-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-teal-300">
+          {eyebrow}
+        </div>
+      ) : null}
+      <h2 className="text-3xl font-bold tracking-tight md:text-4xl">{title}</h2>
+      {desc ? (
+        <p className="mt-4 text-sm leading-7 text-[color:var(--rtt-muted)] md:text-base">
+          {desc}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+function FeatureCard({ title, desc }: { title: string; desc: string }) {
+  return (
+    <div className="rtt-card rounded-3xl p-6">
+      <div className="text-base font-semibold text-white">{title}</div>
+      <p className="mt-3 text-sm leading-7 text-[color:var(--rtt-muted)]">
+        {desc}
+      </p>
+    </div>
+  );
+}
+
+function TestimonialCard({ quote, name }: { quote: string; name: string }) {
+  return (
+    <div className="rtt-card rounded-3xl p-6">
+      <div className="text-sm leading-7 text-white/90">“{quote}”</div>
+      <div className="mt-5 text-xs font-medium uppercase tracking-[0.14em] text-white/45">
+        {name}
+      </div>
+    </div>
+  );
+}
+
+export default function HomePage() {
+  const { session, loading } = useSupabaseSession();
+  const [resumeHref, setResumeHref] = useState('/app/practice/qbank1?mode=all&cat=all&flow=mastery&mini=1');
+  const [hasResumeProgress, setHasResumeProgress] = useState(false);
+
+  useEffect(() => {
+    try {
+      const href = getResumeHref();
+      setResumeHref(href);
+      setHasResumeProgress(!href.endsWith('mini=1'));
+    } catch {}
+  }, []);
+
+  const isReturning = !!session && hasResumeProgress;
+  const primaryCta = isReturning ? 'Continue RTT Mastery Method' : 'Start Free — RTT Mastery Method';
+  const primaryHref = isReturning ? resumeHref : '/app/practice/qbank1?mode=all&cat=all&flow=mastery&mini=1';
+
+  return (
+    <div className="min-h-screen bg-[color:var(--rtt-bg)] text-[color:var(--rtt-text)]">
+      {/* HERO */}
+      <section className="relative overflow-hidden">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(700px circle at 18% 18%, rgba(20,184,166,0.20), transparent 42%), radial-gradient(700px circle at 82% 20%, rgba(250,204,21,0.10), transparent 38%), radial-gradient(900px circle at 50% 100%, rgba(20,184,166,0.10), transparent 45%)',
+          }}
+        />
+
+        <div className="relative mx-auto grid max-w-6xl grid-cols-1 gap-12 px-5 pb-16 pt-12 md:grid-cols-2 md:items-start md:pb-24 md:pt-16">
+          <div>
+            <div className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
+              ARRT® Radiography Exam Prep
+            </div>
+
+            <h1 className="mt-6 text-5xl font-bold leading-[1.02] tracking-tight md:text-6xl">
+              Study smarter.
+              <br />
+              Pass the ARRT® on your first try.
+            </h1>
+
+            {/* <h1 className="mt-6 text-5xl font-bold leading-[1.02] tracking-tight md:text-6xl">
+              Practice Questions, Flashcards, and Mock Exams
+              <br />
+              to Help You Pass
+              <br />
+              the ARRT.
+            </h1> */}
+
+            <p className="mt-6 max-w-xl text-base leading-8 text-[color:var(--rtt-muted)] md:text-lg">
+              Start free with 100 questions, practice tests, flashcards, and mock exams built around the real
+              ARRT® exam categories.
+            </p>
+
+            <p className="mt-4 max-w-xl text-sm font-medium text-white/75 md:text-base">
+              Go from overwhelmed to registry-ready in as little as
+              <span className="font-semibold text-white"> one month.</span>
+            </p>
+
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Link
+                href={primaryHref}
+                className="rtt-btn rtt-btn-cta px-6 py-3 text-base"
+              >
+                {primaryCta}
+              </Link>
+              <Link
+                href="/app/practice"
+                className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/85 transition hover:bg-white/10"
+              >
+                Practice Freely
+              </Link>
+              <a
+                href="#what-you-get"
+                className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/85 transition hover:bg-white/10"
+              >
+                View Content
+              </a>
+            </div>
+            <div className="mt-3 text-sm text-white/70">
+              Practice freely without an account. Create a free account when you want your progress saved and resumed later.
+            </div>
+            {isReturning ? (
+              <div className="mt-2 text-xs text-emerald-200/80">
+                You're already in progress — we'll pick you up where you left off.
+              </div>
+            ) : null}
+
+            {/* <div className="mt-6 flex flex-wrap gap-3 text-xs text-white/50">
+              <div className="rounded-full border border-white/10 bg-white/5 px-3 py-2">
+                Diagnostic practice
+              </div>
+              <div className="rounded-full border border-white/10 bg-white/5 px-3 py-2">
+                Weak-spot training
+              </div>
+              <div className="rounded-full border border-white/10 bg-white/5 px-3 py-2">
+                Mock exams
+              </div>
+            </div> */}
+
+            <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <div className="rtt-card rounded-2xl p-4">
+                <div className="text-xs font-semibold uppercase tracking-[0.14em] text-white/45">
+                  Step 01
+                </div>
+                <div className="mt-2 text-sm font-semibold text-white">
+                  Diagnostic Test
+                </div>
+                <div className="mt-2 text-sm text-white/65">
+                  Take a short diagnostic test to uncover your weak areas.
+                </div>
+              </div>
+
+              <div className="rtt-card rounded-2xl p-4">
+                <div className="text-xs font-semibold uppercase tracking-[0.14em] text-white/45">
+                  Step 02
+                </div>
+                <div className="mt-2 text-sm font-semibold text-white">
+                  Weak-Point Flashcards
+                </div>
+                <div className="mt-2 text-sm text-white/65">
+                  Missed questions automatically become flashcards so you can
+                  master the concepts you struggled with.
+                </div>
+              </div>
+
+              <div className="rtt-card rounded-2xl p-4">
+                <div className="text-xs font-semibold uppercase tracking-[0.14em] text-white/45">
+                  Step 03
+                </div>
+                <div className="mt-2 text-sm font-semibold text-white">
+                  Mock Exams
+                </div>
+                <div className="mt-2 text-sm text-white/65">
+                  Take a mock exam to test what you’ve learned and confirm the
+                  concepts are truly understood.
+                </div>
+
+===== HOMEPAGE ROUTING =====

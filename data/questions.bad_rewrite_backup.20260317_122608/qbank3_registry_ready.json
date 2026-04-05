@@ -1,0 +1,4202 @@
+[
+  {
+    "id": "qbank3-1",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Radiation produced at the anode of the x-ray tube that then travels toward the patient and image receptor is called:",
+    "choices": {
+      "A": "Remnant radiation",
+      "B": "Gamma radiation",
+      "C": "Nonionizing radiation",
+      "D": "Primary radiation"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Primary radiation is the useful beam that leaves the x-ray tube and travels toward the patient and image receptor.",
+      "whyIncorrect": {
+        "A": "Remnant radiation is the radiation that exits the patient and reaches the image receptor after attenuation.",
+        "B": "Gamma radiation comes from the nucleus of unstable atoms rather than from the x-ray tube.",
+        "C": "Nonionizing radiation does not have enough energy to remove orbital electrons."
+      }
+    }
+  },
+  {
+    "id": "qbank3-2",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Which photon-tissue interaction in diagnostic radiography results in complete absorption of the incident photon and is primarily responsible for producing radiographic contrast?",
+    "choices": {
+      "A": "Compton scatter",
+      "B": "Coherent scatter",
+      "C": "Photoelectric effect",
+      "D": "Pair production"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Photoelectric effect is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Compton scatter is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Coherent scatter is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Pair production is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-3",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Which photon-tissue interaction produces both a recoil electron and a scattered photon traveling in a new direction?",
+    "choices": {
+      "A": "Compton interaction",
+      "B": "Coherent scatter",
+      "C": "Photoelectric effect",
+      "D": "Pair production"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Compton interaction is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "B": "Coherent scatter is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Photoelectric effect is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Pair production is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-4",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The SI unit used to quantify radiation exposure in air is the:",
+    "choices": {
+      "A": "Air kerma",
+      "B": "Gray-tissue",
+      "C": "Becquerel",
+      "D": "Sievert"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Air kerma is correct because it fits the structure, term, or function described in the stem.",
+      "whyIncorrect": {
+        "B": "Gray-tissue describes radiation energy absorbed in tissue.",
+        "C": "Becquerel is the SI unit of radioactivity and represents one nuclear disintegration per second.",
+        "D": "Sievert is the SI unit used for equivalent dose and effective dose because it reflects biologic effect."
+      }
+    }
+  },
+  {
+    "id": "qbank3-5",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The SI unit used to express the amount of energy deposited (absorbed dose) in any material is the:",
+    "choices": {
+      "A": "LET",
+      "B": "Gray",
+      "C": "Curie",
+      "D": "Sievert"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Gray is correct because it fits the structure, term, or function described in the stem.",
+      "whyIncorrect": {
+        "A": "LET is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Curie is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Sievert is the SI unit used for equivalent dose and effective dose because it reflects biologic effect."
+      }
+    }
+  },
+  {
+    "id": "qbank3-6",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The SI unit used to express equivalent dose — absorbed dose adjusted for the biological effectiveness of the radiation type — is the:",
+    "choices": {
+      "A": "Sievert",
+      "B": "Gray",
+      "C": "Radiation weighting factor",
+      "D": "LET"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Sievert is the SI unit used for equivalent dose and effective dose because it reflects biologic effect.",
+      "whyIncorrect": {
+        "B": "Gray is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Radiation weighting factor is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "LET is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-7",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The SI unit used to express effective dose — which accounts for both radiation type and tissue sensitivity — is the:",
+    "choices": {
+      "A": "Sievert",
+      "B": "Gray",
+      "C": "Radiation weighting factor",
+      "D": "LET"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Sievert is the SI unit used for equivalent dose and effective dose because it reflects biologic effect.",
+      "whyIncorrect": {
+        "B": "Gray is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Radiation weighting factor is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "LET is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-8",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The SI unit used to express the rate of radioactive decay (radioactivity) is the:",
+    "choices": {
+      "A": "Becquerel",
+      "B": "Gray",
+      "C": "Quality factor",
+      "D": "Curie"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Becquerel is the SI unit of radioactivity and represents one nuclear disintegration per second.",
+      "whyIncorrect": {
+        "B": "Gray is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Quality factor is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Curie is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-9",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Which term refers specifically to the energy absorbed per unit mass of tissue?",
+    "choices": {
+      "A": "Becquerel (Bq)",
+      "B": "Gray-air (Gya)",
+      "C": "Radiation weighting factor (WR)",
+      "D": "Gray-tissue (Gyt)"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Gray-tissue (Gyt) describes radiation energy absorbed in tissue.",
+      "whyIncorrect": {
+        "A": "Becquerel (Bq) is the SI unit of radioactivity and represents one nuclear disintegration per second.",
+        "B": "Gray-air (Gya) describes radiation energy absorbed in air.",
+        "C": "Radiation weighting factor (WR) is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-10",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The quantity describing the amount of radiation energy deposited per unit path length as photons travel through tissue is the:",
+    "choices": {
+      "A": "REM",
+      "B": "RAD",
+      "C": "Linear energy transfer (LET)",
+      "D": "RPU"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Linear energy transfer (LET) describes how much energy ionizing radiation deposits along its path through tissue.",
+      "whyIncorrect": {
+        "A": "REM is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "RAD is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "RPU is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-11",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The tissue weighting factor (WT) accounts for which of the following in calculating effective dose?",
+    "choices": {
+      "A": "Radiation type only",
+      "B": "Exposure in air",
+      "C": "Absorbed dose in tissue",
+      "D": "The relative sensitivity of specific organs and tissues to radiation"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Radiation type only is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "B": "Exposure in air is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Absorbed dose in tissue is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "The relative sensitivity of specific organs and tissues to radiation is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-12",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Compton scatter in diagnostic radiography has which effect on the radiographic image?",
+    "choices": {
+      "A": "Reduces recorded detail",
+      "B": "Results in complete photon absorption",
+      "C": "Increases radiographic contrast",
+      "D": "Produces a gray fog over the image, reducing contrast"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Produces a gray fog over the image, reducing contrast is correct for this question.",
+      "whyIncorrect": {
+        "A": "Reduces recorded detail is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Results in complete photon absorption is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Increases radiographic contrast is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-13",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The radiation weighting factor (WR) assigned to diagnostic x-rays is:",
+    "choices": {
+      "A": "10",
+      "B": "1",
+      "C": "20",
+      "D": "5"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "1 is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "10 is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "20 is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "5 is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-14",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Mutations that are passed on to future generations are classified as:",
+    "choices": {
+      "A": "Short-term somatic effects",
+      "B": "Genetic effects",
+      "C": "Acute radiation syndrome responses",
+      "D": "Long-term somatic effects"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Genetic effects is correct for this question.",
+      "whyIncorrect": {
+        "A": "Short-term somatic effects is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Acute radiation syndrome responses is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Long-term somatic effects is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-15",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The annual effective dose limit for occupationally exposed radiographers is:",
+    "choices": {
+      "A": "The dose at which cancer formation begins",
+      "B": "Age × 1 mSv per year for occupational workers",
+      "C": "50 mSv per month",
+      "D": "50 mSv per year"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "50 mSv per year is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "The dose at which cancer formation begins is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Age × 1 mSv per year for occupational workers is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "50 mSv per month is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-16",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Which organization publishes the radiation protection recommendations most widely used in the United States?",
+    "choices": {
+      "A": "ICRP (International Commission on Radiological Protection)",
+      "B": "NCRP (National Council on Radiation Protection and Measurements)",
+      "C": "NRC (Nuclear Regulatory Commission)",
+      "D": "ASRT (American Society of Radiologic Technologists)"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "NCRP (National Council on Radiation Protection and Measurements) is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "ICRP (International Commission on Radiological Protection) is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "NRC (Nuclear Regulatory Commission) is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "ASRT (American Society of Radiologic Technologists) is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-17",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The dose-response relationship assumed for radiation safety standards — that any dose carries some risk and there is no safe threshold — is:",
+    "choices": {
+      "A": "Linear-threshold",
+      "B": "Nonlinear-nonthreshold",
+      "C": "Linear-nonthreshold",
+      "D": "Nonlinear-threshold"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Linear-nonthreshold is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Linear-threshold is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Nonlinear-nonthreshold is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Nonlinear-threshold is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-18",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The principle stating that rapidly dividing, undifferentiated cells are most sensitive to radiation exposure is most applicable in which clinical field?",
+    "choices": {
+      "A": "Radiation protection",
+      "B": "Radiation therapy",
+      "C": "Diagnostic radiography",
+      "D": "Nuclear medicine"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Radiation therapy is correct because it fits the structure, term, or function described in the stem.",
+      "whyIncorrect": {
+        "A": "Radiation protection is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Diagnostic radiography is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Nuclear medicine uses radiopharmaceuticals, so radioactivity is measured with units such as the becquerel."
+      }
+    }
+  },
+  {
+    "id": "qbank3-19",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Approximately what percentage of all radiation-induced cellular damage occurs via the direct effect?",
+    "choices": {
+      "A": "5%",
+      "B": "25%",
+      "C": "50%",
+      "D": "95%"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "5% is correct for this question.",
+      "whyIncorrect": {
+        "B": "25% is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "50% is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "95% is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-20",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "When radiation strikes the cytoplasm of the cell rather than the nucleus, this is classified as:",
+    "choices": {
+      "A": "Direct effect",
+      "B": "Law of Bergonié and Tribondeau",
+      "C": "Target theory",
+      "D": "Indirect effect"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Indirect effect is correct for this question.",
+      "whyIncorrect": {
+        "A": "Direct effect is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Law of Bergonié and Tribondeau is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Target theory is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-21",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The equivalent dose limit for the embryo or fetus of a declared pregnant radiographer is:",
+    "choices": {
+      "A": "500 mSv over the entire pregnancy",
+      "B": "0.5 mSv per month during the gestational period",
+      "C": "0.05 rem per month",
+      "D": "0.5 mSv total for the entire gestational period"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "0.5 mSv per month during the gestational period is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "500 mSv over the entire pregnancy is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "0.05 rem per month is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "0.5 mSv total for the entire gestational period is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-22",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The annual effective dose limit for localized areas of skin for occupationally exposed workers is:",
+    "choices": {
+      "A": "50 mSv per year",
+      "B": "500 mSv per year",
+      "C": "0.5 mSv monthly",
+      "D": "10 mSv monthly"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "500 mSv per year is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "50 mSv per year is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "0.5 mSv monthly is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "10 mSv monthly is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-23",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The cumulative occupational effective dose limit for a 48-year-old radiographer is:",
+    "choices": {
+      "A": "48 mSv",
+      "B": "480 mSv",
+      "C": "24 mSv",
+      "D": "0.48 mSv"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "480 mSv is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "48 mSv is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "24 mSv is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "0.48 mSv is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-24",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The annual effective dose limit for members of the general public who are only infrequently exposed to radiation sources is:",
+    "choices": {
+      "A": "5 mSv",
+      "B": "500 mSv",
+      "C": "0.5 mSv",
+      "D": "50 mSv"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "5 mSv is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "B": "500 mSv is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "0.5 mSv is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "50 mSv is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-25",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The upper dose boundary that an individual can receive while still carrying negligible risk of somatic or genetic harm defines the:",
+    "choices": {
+      "A": "Maximum permissible dose (no longer used)",
+      "B": "ALARA principle",
+      "C": "Law of Bergonié and Tribondeau",
+      "D": "Effective dose limit"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Effective dose limit is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Maximum permissible dose (no longer used) is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "ALARA principle is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Law of Bergonié and Tribondeau is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-26",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Compared with OSL and TLD personnel dosimeters, film badges demonstrate:",
+    "choices": {
+      "A": "Greater sensitivity",
+      "B": "Lower sensitivity",
+      "C": "Equivalent sensitivity",
+      "D": "Greater energy discrimination"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Equivalent sensitivity is correct for this question.",
+      "whyIncorrect": {
+        "A": "Greater sensitivity is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Lower sensitivity is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Greater energy discrimination is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-27",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "On a portable x-ray machine, the exposure switch must be on a cord of at least what length, so the operator can stand at a safe distance?",
+    "choices": {
+      "A": "3 feet",
+      "B": "6 feet",
+      "C": "12 feet",
+      "D": "2 feet"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "6 feet is correct for this question.",
+      "whyIncorrect": {
+        "A": "3 feet is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "12 feet is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "2 feet is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-28",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Under which of the following circumstances is it acceptable for a radiographer to be exposed to the primary x-ray beam?",
+    "choices": {
+      "A": "During mobile radiography if exposures are kept low",
+      "B": "Under no circumstances whatsoever",
+      "C": "During cross-table projections when holding the cassette",
+      "D": "During fluoroscopic procedures"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Under no circumstances whatsoever is correct for this question.",
+      "whyIncorrect": {
+        "A": "During mobile radiography if exposures are kept low is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "During cross-table projections when holding the cassette is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "During fluoroscopic procedures is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-29",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "For radiation protection purposes, x-ray tubes operating above 70 kVp must have a minimum total filtration of:",
+    "choices": {
+      "A": "At least 0.25-mm aluminum equivalent",
+      "B": "At least 0.25-mm lead equivalent",
+      "C": "No more than 2.5-mm aluminum equivalent",
+      "D": "At least 2.5-mm aluminum equivalent"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "At least 2.5-mm aluminum equivalent is correct for this question.",
+      "whyIncorrect": {
+        "A": "At least 0.25-mm aluminum equivalent is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "At least 0.25-mm lead equivalent is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "No more than 2.5-mm aluminum equivalent is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-30",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Gonadal shielding should be applied:",
+    "choices": {
+      "A": "On every examination regardless of field location",
+      "B": "Whenever it will not obstruct the area of clinical interest",
+      "C": "Only for children and women of childbearing age",
+      "D": "Only during confirmed pregnancy"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Whenever it will not obstruct the area of clinical interest is correct for this question.",
+      "whyIncorrect": {
+        "A": "On every examination regardless of field location is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Only for children and women of childbearing age is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Only during confirmed pregnancy is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-31",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The secondary protective barrier must extend beyond and overlap the primary protective barrier by at least:",
+    "choices": {
+      "A": "1/10 inch",
+      "B": "1 inch",
+      "C": "1 foot",
+      "D": "1/2 inch"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "1/2 inch is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "1/10 inch is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "1 inch is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "1 foot is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-32",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "For radiation protection purposes, the x-ray control booth is classified as which type of barrier?",
+    "choices": {
+      "A": "Secondary protective barrier",
+      "B": "Primary protective barrier",
+      "C": "Mobile shielding barrier",
+      "D": "No barrier classification"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Secondary protective barrier is correct for this question.",
+      "whyIncorrect": {
+        "B": "Primary protective barrier is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Mobile shielding barrier is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "No barrier classification is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-33",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The design of the exposure switch cord in the x-ray control booth must ensure the radiographer is positioned behind which barrier to make an exposure?",
+    "choices": {
+      "A": "Primary protective barrier",
+      "B": "Secondary protective barrier",
+      "C": "The x-ray tube housing",
+      "D": "The exam room door"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Secondary protective barrier is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Primary protective barrier is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "The x-ray tube housing is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "The exam room door is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-34",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Waiting rooms, hallways, and stairways accessible to the general public are classified as:",
+    "choices": {
+      "A": "Controlled radiation areas",
+      "B": "Uncontrolled areas",
+      "C": "Restricted off-limits areas",
+      "D": "Monitored radiation areas"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Uncontrolled areas is correct for this question.",
+      "whyIncorrect": {
+        "A": "Controlled radiation areas is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Restricted off-limits areas is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Monitored radiation areas is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-35",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "To protect the general public, uncontrolled areas adjacent to x-ray rooms must be kept below what dose per week?",
+    "choices": {
+      "A": "5 µSv",
+      "B": "10 µSv",
+      "C": "15 µSv",
+      "D": "20 µSv"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "20 µSv is correct for this question.",
+      "whyIncorrect": {
+        "A": "5 µSv is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "10 µSv is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "15 µSv is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-36",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Areas occupied by personnel who have received radiation safety training and wear dosimeters are classified as:",
+    "choices": {
+      "A": "Controlled areas",
+      "B": "Uncontrolled areas",
+      "C": "Off-limits areas",
+      "D": "General radiation areas"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Controlled areas is correct for this question.",
+      "whyIncorrect": {
+        "B": "Uncontrolled areas is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Off-limits areas is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "General radiation areas is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-37",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Which shielding design factor accounts for the volume and types of radiographic examinations performed in a room per week?",
+    "choices": {
+      "A": "Use factor",
+      "B": "Shielding factor",
+      "C": "Volume factor",
+      "D": "Workload"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Workload is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Use factor is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Shielding factor is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Volume factor is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-38",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The workload factor used in room shielding calculations is measured in units of:",
+    "choices": {
+      "A": "Half-value layers",
+      "B": "Total beam-on time per week",
+      "C": "Milliampere-minutes per week (mA·min/wk)",
+      "D": "Average kVp per week"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Milliampere-minutes per week (mA·min/wk) is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Half-value layers is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Total beam-on time per week is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Average kVp per week is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-39",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The proportion of time the x-ray beam is directed at a specific wall or barrier is called the:",
+    "choices": {
+      "A": "Use factor",
+      "B": "Shielding factor",
+      "C": "Occupancy factor",
+      "D": "Workload"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Use factor is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "B": "Shielding factor is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Occupancy factor is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Workload is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-40",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Leakage radiation from a diagnostic x-ray tube housing must not exceed which limit?",
+    "choices": {
+      "A": "1 mGya per hour measured at the tube source",
+      "B": "10 mGya per hour anywhere",
+      "C": "1 mGya per hour measured at 1 meter from the housing",
+      "D": "100 mGya per hour at 1 meter from the housing"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "1 mGya per hour measured at 1 meter from the housing is correct for this question.",
+      "whyIncorrect": {
+        "A": "1 mGya per hour measured at the tube source is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "10 mGya per hour anywhere is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "100 mGya per hour at 1 meter from the housing is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-41",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The organelles — membrane-bound structures that perform specialized metabolic functions — are located within which part of the cell?",
+    "choices": {
+      "A": "DNA molecule",
+      "B": "Cytoplasm",
+      "C": "RNA strands",
+      "D": "Cell nucleus"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Cytoplasm is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "DNA molecule is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "RNA strands is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Cell nucleus is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-42",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Relative biological effectiveness (RBE) is a comparison that describes:",
+    "choices": {
+      "A": "The capacity of a given radiation type to produce biological damage relative to a reference radiation",
+      "B": "The therapeutic effectiveness of radiation therapy",
+      "C": "The sensitivity of DNA to radiation",
+      "D": "The radiosensitivity of cytoplasmic water"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "The capacity of a given radiation type to produce biological damage relative to a reference radiation is correct for this question.",
+      "whyIncorrect": {
+        "B": "The therapeutic effectiveness of radiation therapy is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "The sensitivity of DNA to radiation is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "The radiosensitivity of cytoplasmic water is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-43",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The principle that cells are most radiosensitive when they are undifferentiated, immature, and actively dividing is expressed by:",
+    "choices": {
+      "A": "The inverse square law",
+      "B": "The Law of Bergonié and Tribondeau",
+      "C": "Ohm's law",
+      "D": "The all-or-none law of radiation"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "The Law of Bergonié and Tribondeau is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "The inverse square law is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Ohm's law is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "The all-or-none law of radiation is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-44",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Among all cells in the human body, which type is considered the most radiosensitive?",
+    "choices": {
+      "A": "Muscle cells (least sensitive)",
+      "B": "Nerve cells",
+      "C": "Lymphocytes",
+      "D": "Mature bone cells"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Lymphocytes is correct for this question.",
+      "whyIncorrect": {
+        "A": "Muscle cells (least sensitive) is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Nerve cells is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Mature bone cells is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-45",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "During which stage of pregnancy are embryologic radiation effects least likely to cause significant harm?",
+    "choices": {
+      "A": "During the third (final) trimester",
+      "B": "During the second trimester",
+      "C": "During the first trimester",
+      "D": "At the moment of conception"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "During the third (final) trimester is correct for this question.",
+      "whyIncorrect": {
+        "B": "During the second trimester is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "During the first trimester is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "At the moment of conception is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-46",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "A lead apron should be worn by fluoroscopy personnel primarily to attenuate which photon-tissue interaction?",
+    "choices": {
+      "A": "Compton scatter radiation reaching personnel",
+      "B": "Coherent scatter",
+      "C": "Photoelectric interaction in the patient",
+      "D": "Pair production"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Compton scatter radiation reaching personnel is correct for this question.",
+      "whyIncorrect": {
+        "B": "Coherent scatter is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Photoelectric interaction in the patient is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Pair production is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-47",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "On a dose-response curve used in radiation biology, what quantity is plotted along the horizontal (x) axis?",
+    "choices": {
+      "A": "Radiation dose",
+      "B": "Biological response",
+      "C": "Receptor exposure index",
+      "D": "Radioactivity level"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Radiation dose is correct for this question.",
+      "whyIncorrect": {
+        "B": "Biological response is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Receptor exposure index is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Radioactivity level is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-48",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The preferred (recommended) minimum source-to-skin distance for C-arm fluoroscopic equipment is:",
+    "choices": {
+      "A": "12 inches",
+      "B": "10 inches",
+      "C": "20 inches",
+      "D": "15 inches"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "15 inches is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "12 inches is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "10 inches is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "20 inches is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-49",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Photoelectric interaction in the x-ray tube target and in patient tissue occurs primarily at which electron shell level?",
+    "choices": {
+      "A": "L-shell",
+      "B": "K-shell",
+      "C": "M-shell",
+      "D": "Outer valence shell"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "K-shell is correct for this question.",
+      "whyIncorrect": {
+        "A": "L-shell is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "M-shell is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Outer valence shell is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-50",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Radiation exiting the patient in widely divergent paths rather than straight-line trajectories is indicative of:",
+    "choices": {
+      "A": "Photoelectric rays",
+      "B": "Scatter radiation",
+      "C": "Coherent interaction products",
+      "D": "Patient motion during exposure"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Scatter radiation is correct for this question.",
+      "whyIncorrect": {
+        "A": "Photoelectric rays is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Coherent interaction products is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Patient motion during exposure is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-51",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The specialized membrane-enclosed structures found within the cell cytoplasm that perform specific metabolic functions are called:",
+    "choices": {
+      "A": "Free radicals",
+      "B": "Ions",
+      "C": "Organelles",
+      "D": "DNA strands"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Organelles is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Free radicals is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Ions is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "DNA strands is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-52",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Long-wavelength, low-energy x-ray photons that contribute to patient dose but not to image formation are removed from the primary beam by a(n):",
+    "choices": {
+      "A": "Collimator",
+      "B": "Aluminum filter",
+      "C": "Cylinder cone",
+      "D": "Gonadal shield"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Aluminum filter is correct for this question.",
+      "whyIncorrect": {
+        "A": "Collimator is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Cylinder cone is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Gonadal shield is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-53",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The primary goal of radiation safety practices in diagnostic imaging is to:",
+    "choices": {
+      "A": "Limit occupational dose to workers",
+      "B": "Minimize the introduction of heritable mutations into the human population",
+      "C": "Minimize long-term somatic effects on individual patients",
+      "D": "Reduce short-term somatic effects"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Minimize the introduction of heritable mutations into the human population is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Limit occupational dose to workers is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Minimize long-term somatic effects on individual patients is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Reduce short-term somatic effects is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-54",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Electrical devices in the x-ray circuit that raise or lower the voltage of the alternating current supply are called:",
+    "choices": {
+      "A": "Rectifiers",
+      "B": "Generators",
+      "C": "Timers",
+      "D": "Transformers"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Transformers is correct because it operate on mutual induction, transferring energy between primary and secondary coils.",
+      "whyIncorrect": {
+        "A": "Rectifiers change alternating current into direct current so electrons travel in one direction only.",
+        "B": "Generators supply the electrical waveform used to power the x-ray circuit, but the induction principle specifically describes transformers.",
+        "C": "Timers control exposure duration rather than electromagnetic induction between coils."
+      }
+    }
+  },
+  {
+    "id": "qbank3-55",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The low-voltage filament circuit of the x-ray machine uses which type of transformer to supply the cathode filament with a small, controlled current?",
+    "choices": {
+      "A": "Step-up transformer",
+      "B": "Autotransformer",
+      "C": "Step-down transformer",
+      "D": "Falling load generator"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Step-down transformer is correct because it lowers voltage and increases current, such as in the filament circuit.",
+      "whyIncorrect": {
+        "A": "Step-up transformer raises voltage in the high-voltage section of the x-ray circuit so electrons can be accelerated across the tube.",
+        "B": "Autotransformer works by self-induction and is used to select and adjust kVp before the high-voltage transformer stage.",
+        "D": "Falling load generator changes mA during a long exposure so the highest safe tube loading is used efficiently."
+      }
+    }
+  },
+  {
+    "id": "qbank3-56",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Because the x-ray tube requires direct current (DC) to function, which component of the x-ray circuit converts AC to DC?",
+    "choices": {
+      "A": "Autotransformer",
+      "B": "Step-up transformer",
+      "C": "Rectifier",
+      "D": "Falling load generator"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Rectifier matches the structure, term, or function described in the stem.",
+      "whyIncorrect": {
+        "A": "Autotransformer works by self-induction and is used to select and adjust kVp before the high-voltage transformer stage.",
+        "B": "Step-up transformer raises voltage in the high-voltage section of the x-ray circuit so electrons can be accelerated across the tube.",
+        "D": "Falling load generator changes mA during a long exposure so the highest safe tube loading is used efficiently."
+      }
+    }
+  },
+  {
+    "id": "qbank3-57",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "In the high-voltage x-ray circuit, the rectifier is positioned between the:",
+    "choices": {
+      "A": "Timer and the step-up transformer",
+      "B": "Step-up and step-down transformers",
+      "C": "Primary and secondary windings of the step-up transformer",
+      "D": "Step-up transformer and the x-ray tube"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Step-up transformer and the x-ray tube is correct for this question.",
+      "whyIncorrect": {
+        "A": "Timer and the step-up transformer is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Step-up and step-down transformers is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Primary and secondary windings of the step-up transformer is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-58",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Thermionic emission — the boiling-off of electrons to form an electron cloud — occurs at the:",
+    "choices": {
+      "A": "Anode target",
+      "B": "Control panel",
+      "C": "Rectifier circuit",
+      "D": "Cathode filament"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Cathode filament is correct for this question.",
+      "whyIncorrect": {
+        "A": "Anode target is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Control panel is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Rectifier circuit is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-59",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "During an x-ray exposure, the focusing cup at the cathode maintains a negative charge in order to:",
+    "choices": {
+      "A": "Attract electrons toward the anode",
+      "B": "Repel electrons to focus the beam toward the focal spot",
+      "C": "Alternate charge to stabilize the electron stream",
+      "D": "Remain electrically neutral"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Alternate charge to stabilize the electron stream is correct for this question.",
+      "whyIncorrect": {
+        "A": "Attract electrons toward the anode is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Repel electrons to focus the beam toward the focal spot is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Remain electrically neutral is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-60",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The interaction that occurs when a high-speed electron decelerates near an atomic nucleus, converting its kinetic energy into an x-ray photon, is called:",
+    "choices": {
+      "A": "Characteristic radiation",
+      "B": "Photoelectric effect",
+      "C": "Compton interaction",
+      "D": "Bremsstrahlung (braking radiation)"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Bremsstrahlung (braking radiation) is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Characteristic radiation is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Photoelectric effect is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Compton interaction is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-61",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "For a QC exposure linearity test, outputs from adjacent milliamperage stations must agree within:",
+    "choices": {
+      "A": "2% of SID",
+      "B": "4%",
+      "C": "10%",
+      "D": "5%"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "10% is correct for this question.",
+      "whyIncorrect": {
+        "A": "2% of SID is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "4% is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "5% is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-62",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "For a QC exposure reproducibility test, successive exposures at the same technique settings must agree within:",
+    "choices": {
+      "A": "2% of SID",
+      "B": "4%",
+      "C": "10%",
+      "D": "5%"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "5% is correct for this question.",
+      "whyIncorrect": {
+        "A": "2% of SID is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "4% is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "10% is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-63",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "For a QC collimator accuracy test, field size must match the indicated light field size within:",
+    "choices": {
+      "A": "2% of the SID",
+      "B": "4%",
+      "C": "10%",
+      "D": "5%"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "2% of the SID is correct for this question.",
+      "whyIncorrect": {
+        "B": "4% is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "10% is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "5% is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-64",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "For a QC test of kVp accuracy, the measured kVp must be within what tolerance of the control panel setting?",
+    "choices": {
+      "A": "2% of SID",
+      "B": "4%",
+      "C": "10%",
+      "D": "4 kVp"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "10% is correct for this question.",
+      "whyIncorrect": {
+        "A": "2% of SID is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "4% is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "4 kVp is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-65",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "At a 72-inch SID, the maximum allowable collimation inaccuracy is:",
+    "choices": {
+      "A": "± 1.44 inches (2% of 72)",
+      "B": "± 7.2 inches",
+      "C": "± 3.6 inches",
+      "D": "± 0.02 inch"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "± 1.44 inches (2% of 72) is correct for this question.",
+      "whyIncorrect": {
+        "B": "± 7.2 inches is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "± 3.6 inches is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "± 0.02 inch is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-66",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The image intensifier feature that automatically adjusts the radiation dose to maintain a constant brightness level at the input phosphor is the:",
+    "choices": {
+      "A": "Photocathode",
+      "B": "Electrostatic focusing lenses",
+      "C": "Automatic brightness control (ABC)",
+      "D": "Vidicon camera tube"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Automatic brightness control (ABC) is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Photocathode is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Electrostatic focusing lenses is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Vidicon camera tube is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-67",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Modern fluoroscopic television systems may use which solid-state device in place of traditional Vidicon or Plumbicon camera tubes?",
+    "choices": {
+      "A": "Charge-coupled device (CCD)",
+      "B": "C-arm image intensifier",
+      "C": "Automatic brightness control",
+      "D": "Output phosphor"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Charge-coupled device (CCD) is correct for this question.",
+      "whyIncorrect": {
+        "B": "C-arm image intensifier is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Automatic brightness control is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Output phosphor is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-68",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The electronic measuring instrument used for multiple QC tests on x-ray equipment — including exposure output, linearity, and reproducibility — is a:",
+    "choices": {
+      "A": "Automatic exposure control (AEC)",
+      "B": "Digital dosimeter",
+      "C": "Penetrometer",
+      "D": "Densitometer"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Digital dosimeter is correct because it fits the structure, term, or function described in the stem.",
+      "whyIncorrect": {
+        "A": "Automatic exposure control (AEC) terminates the exposure when enough radiation has reached the detector, helping produce consistent receptor exposure.",
+        "C": "Penetrometer is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Densitometer is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-69",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The smallest unit of a compound that still retains the chemical properties of that compound is a(n):",
+    "choices": {
+      "A": "Element",
+      "B": "Atom",
+      "C": "Molecule",
+      "D": "Neutron"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Molecule is two or more atoms chemically bonded together.",
+      "whyIncorrect": {
+        "A": "Element is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Atom is the smallest unit of an element that still retains that element",
+        "D": "Neutron is an uncharged particle in the nucleus and does not determine the chemical identity of an element."
+      }
+    }
+  },
+  {
+    "id": "qbank3-70",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Given a baseline technique of 20 mAs at 80 kVp, which of the following would produce exactly double the image receptor exposure?",
+    "choices": {
+      "A": "40 mAs, 90 kVp",
+      "B": "30 mAs, 92 kVp",
+      "C": "40 mAs, 80 kVp",
+      "D": "15 mAs, 92 kVp"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "40 mAs, 80 kVp is correct for this question.",
+      "whyIncorrect": {
+        "A": "40 mAs, 90 kVp is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "30 mAs, 92 kVp is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "15 mAs, 92 kVp is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-71",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The relationship between SID and image receptor exposure — where doubling the distance quarters the exposure — is governed by the:",
+    "choices": {
+      "A": "Reciprocity law",
+      "B": "15% rule",
+      "C": "Inverse square law",
+      "D": "Density maintenance rule"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Inverse square law is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Reciprocity law is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "15% rule is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Density maintenance rule is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-72",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Unwanted marks or patterns appearing on a radiographic image that do not represent true anatomy are called:",
+    "choices": {
+      "A": "Processing irregularities",
+      "B": "Processing artifacts",
+      "C": "Artifacts",
+      "D": "Plus-density marks"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Artifacts is correct for this question.",
+      "whyIncorrect": {
+        "A": "Processing irregularities is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Processing artifacts is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Plus-density marks is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-73",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The adjustment of image appearance — including brightness, contrast, and edge enhancement — performed on a digital image after it has been acquired is called:",
+    "choices": {
+      "A": "Digital coding",
+      "B": "Postprocessing",
+      "C": "Leveling",
+      "D": "Archiving"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Postprocessing is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Digital coding is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Leveling is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Archiving is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-74",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "As the speed class of an image receptor decreases (slower speed), the radiation dose required and therefore patient dose:",
+    "choices": {
+      "A": "Increases",
+      "B": "Decreases",
+      "C": "Remains unchanged",
+      "D": "Decreases by half"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Increases is correct for this question.",
+      "whyIncorrect": {
+        "B": "Decreases is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Remains unchanged is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Decreases by half is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-75",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Because image contrast in digital systems is controlled primarily by software processing, the kVp selected may be:",
+    "choices": {
+      "A": "Increased to optimize penetration and reduce patient dose",
+      "B": "Decreased to minimize receptor exposure",
+      "C": "Kept the same as for film-screen systems",
+      "D": "Set by the AEC without technologist adjustment"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Increased to optimize penetration and reduce patient dose is correct for this question.",
+      "whyIncorrect": {
+        "B": "Decreased to minimize receptor exposure is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Kept the same as for film-screen systems is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Set by the AEC without technologist adjustment is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-76",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Image acquisition, image display, and image storage and retrieval are the three primary functions of which system?",
+    "choices": {
+      "A": "DICOM communication standard",
+      "B": "CR/DR imaging hardware",
+      "C": "PACS (Picture Archiving and Communication System)",
+      "D": "HIS (Hospital Information System)"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "PACS (Picture Archiving and Communication System) is correct for this question.",
+      "whyIncorrect": {
+        "A": "DICOM communication standard is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "CR/DR imaging hardware is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "HIS (Hospital Information System) is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-77",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "PACS uses which standardized digital communication protocol as its 'language' for transmitting images?",
+    "choices": {
+      "A": "DICOM (Digital Imaging and Communications in Medicine)",
+      "B": "Base 10 numeric system",
+      "C": "HIS (Hospital Information System)",
+      "D": "RIS (Radiology Information System)"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "DICOM (Digital Imaging and Communications in Medicine) is correct for this question.",
+      "whyIncorrect": {
+        "B": "Base 10 numeric system is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "HIS (Hospital Information System) is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "RIS (Radiology Information System) is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-78",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Which exposure factor, when set too low, results in excessive image noise because too few photons contribute to image formation?",
+    "choices": {
+      "A": "kVp (too low creates excessive noise via insufficient quantum mottle)",
+      "B": "mAs",
+      "C": "AEC selection",
+      "D": "Exposure time"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "kVp (too low creates excessive noise via insufficient quantum mottle) is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "B": "mAs is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "AEC selection is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Exposure time is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-79",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Which of the following can be documented and used as a direct indicator of patient radiation dose in digital imaging?",
+    "choices": {
+      "A": "AEC chamber selection",
+      "B": "Exposure indicator (EI) number",
+      "C": "System speed class",
+      "D": "Histogram shape"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Exposure indicator (EI) number is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "AEC chamber selection is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "System speed class is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Histogram shape is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-80",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Using a touch-screen display to select the anatomy being imaged so the system automatically sets appropriate technique parameters is called:",
+    "choices": {
+      "A": "Phototiming",
+      "B": "Anatomically programmed radiography (APR)",
+      "C": "AEC imaging",
+      "D": "Automatic radiography"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Anatomically programmed radiography (APR) is correct for this question.",
+      "whyIncorrect": {
+        "A": "Phototiming is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "AEC imaging is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Automatic radiography is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-81",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Limiting the size of the x-ray field to the anatomy of interest reduces both patient dose and scatter production through the technique of:",
+    "choices": {
+      "A": "Grids",
+      "B": "High-speed image receptors",
+      "C": "Collimation (beam restriction)",
+      "D": "Beam filtration"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Collimation (beam restriction) is correct for this question.",
+      "whyIncorrect": {
+        "A": "Grids is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "High-speed image receptors is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Beam filtration is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-82",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Radiographic artifacts are most commonly classified as:",
+    "choices": {
+      "A": "Scatter-related artifacts",
+      "B": "Plus-density or minus-density artifacts",
+      "C": "Compton or photoelectric artifacts",
+      "D": "Patient-motion or equipment-related artifacts"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Plus-density or minus-density artifacts is correct for this question.",
+      "whyIncorrect": {
+        "A": "Scatter-related artifacts is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Compton or photoelectric artifacts is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Patient-motion or equipment-related artifacts is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-83",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Grid ratio is mathematically expressed as:",
+    "choices": {
+      "A": "Length of lead strips divided by the distance between them",
+      "B": "Height of aluminum interspacers divided by lead strip spacing",
+      "C": "Height of the interspacers divided by the lead strip height",
+      "D": "Height of the lead strips divided by the distance between them (H/D)"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Height of the lead strips divided by the distance between them (H/D) is correct for this question.",
+      "whyIncorrect": {
+        "A": "Length of lead strips divided by the distance between them is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Height of aluminum interspacers divided by lead strip spacing is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Height of the interspacers divided by the lead strip height is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-84",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The most commonly used type of radiographic grid in diagnostic imaging is the:",
+    "choices": {
+      "A": "Crosshatch grid",
+      "B": "Parallel grid",
+      "C": "Rhombic grid",
+      "D": "Focused grid"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Focused grid is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Crosshatch grid is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Parallel grid is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Rhombic grid is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-85",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Which of the following does NOT belong in the definition of matter?",
+    "choices": {
+      "A": "Travels at the speed of light",
+      "B": "Has shape or form",
+      "C": "Has a defined structure",
+      "D": "Occupies space"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Travels at the speed of light is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "B": "Has shape or form is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Has a defined structure is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Occupies space is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-86",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "At a 60-inch SID, the maximum allowable total collimator field size error is:",
+    "choices": {
+      "A": "± 6 inches",
+      "B": "± 3 inches",
+      "C": "± 2 inches",
+      "D": "± 1.2 inches (2% of 60)"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "± 1.2 inches (2% of 60) is correct for this question.",
+      "whyIncorrect": {
+        "A": "± 6 inches is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "± 3 inches is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "± 2 inches is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-87",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The relationship between wavelength and frequency in electromagnetic radiation is best described as:",
+    "choices": {
+      "A": "Directly proportional — as frequency rises, wavelength increases",
+      "B": "Frequency and wavelength are independent of each other",
+      "C": "Inversely proportional to the square of the distance between wave crests",
+      "D": "Inversely proportional — as frequency increases, wavelength decreases"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Inversely proportional — as frequency increases, wavelength decreases is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Directly proportional — as frequency rises, wavelength increases is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Frequency and wavelength are independent of each other is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Inversely proportional to the square of the distance between wave crests is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-88",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Beam restrictors (collimators) reduce scatter reaching the image receptor by decreasing the volume of patient tissue irradiated, thereby reducing:",
+    "choices": {
+      "A": "Characteristic x-ray production",
+      "B": "Photoelectric interactions",
+      "C": "Compton interactions",
+      "D": "Pair production"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Compton interactions is correct for this question.",
+      "whyIncorrect": {
+        "A": "Characteristic x-ray production is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Photoelectric interactions is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Pair production is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-89",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "When beam filtration is increased, what effect does it have on image contrast?",
+    "choices": {
+      "A": "Increases contrast by hardening the beam",
+      "B": "Decreases contrast because the higher average energy beam produces more Compton scatter",
+      "C": "No effect on contrast",
+      "D": "A variable, unpredictable effect"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Decreases contrast because the higher average energy beam produces more Compton scatter is correct for this question.",
+      "whyIncorrect": {
+        "A": "Increases contrast by hardening the beam is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "No effect on contrast is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "A variable, unpredictable effect is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-90",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Reducing the source-to-image receptor distance (SID) while all other factors remain constant causes which image quality change?",
+    "choices": {
+      "A": "Minification of the image",
+      "B": "Foreshortening of anatomic structures",
+      "C": "Elongation of anatomic structures",
+      "D": "Magnification of the image"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Magnification of the image is correct for this question.",
+      "whyIncorrect": {
+        "A": "Minification of the image is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Foreshortening of anatomic structures is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Elongation of anatomic structures is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-91",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Improper use of a radiographic grid — such as incorrect focal distance or tilting — may cause repeat exposures because of:",
+    "choices": {
+      "A": "Image overexposure",
+      "B": "Grid histogram analysis error",
+      "C": "Image underexposure",
+      "D": "Grid cutoff"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Grid cutoff is correct for this question.",
+      "whyIncorrect": {
+        "A": "Image overexposure is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Grid histogram analysis error is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Image underexposure is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-92",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The numerical measure of a grid's ability to improve image contrast by selectively absorbing scatter radiation is the:",
+    "choices": {
+      "A": "Grid ratio",
+      "B": "Grid selectivity",
+      "C": "Grid speed",
+      "D": "Contrast improvement factor"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Contrast improvement factor is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Grid ratio is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Grid selectivity is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Grid speed is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-93",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Which grid positioning error results in normal exposure at the image center but progressively decreasing exposure toward both sides, occurring when a focused grid is accidentally reversed?",
+    "choices": {
+      "A": "Upside-down grid (reversed)",
+      "B": "Off-level tilt",
+      "C": "Lateral decentering",
+      "D": "Grid-focus decentering"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Grid-focus decentering is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Upside-down grid (reversed) is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Off-level tilt is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Lateral decentering is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-94",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Which grid error produces an image with decreased density more pronounced on one side than the other?",
+    "choices": {
+      "A": "Upside-down grid",
+      "B": "Off-level tilt",
+      "C": "Lateral decentering",
+      "D": "Grid-focus decentering"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Off-level tilt is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Upside-down grid is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Lateral decentering is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Grid-focus decentering is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-95",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The mathematical formula H/D (height divided by distance) is used to calculate:",
+    "choices": {
+      "A": "H&D; curve (characteristic curve)",
+      "B": "Grid ratio",
+      "C": "mAs reciprocity",
+      "D": "15% rule factor"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Grid ratio is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "H&D; curve (characteristic curve) is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "mAs reciprocity is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "15% rule factor is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-96",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "In a focused grid, the range of source-to-image receptor distances at which the grid can be used without significant cutoff is called the:",
+    "choices": {
+      "A": "Grid ratio (H/D)",
+      "B": "Distance between lead strips divided by their height",
+      "C": "Number of lead strips per unit length",
+      "D": "Grid radius (focal range)"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Grid radius (focal range) is correct for this question.",
+      "whyIncorrect": {
+        "A": "Grid ratio (H/D) is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Distance between lead strips divided by their height is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Number of lead strips per unit length is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-97",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Structures appearing outside the collimated field border on a radiograph — caused by extrafocal (off-focus) radiation — result from:",
+    "choices": {
+      "A": "Electron interactions occurring at areas of the anode other than the focal spot",
+      "B": "Scatter radiation from the patient or tabletop",
+      "C": "Using an SID outside the grid focal range",
+      "D": "The x-ray tube being positioned off-center to the grid"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Electron interactions occurring at areas of the anode other than the focal spot is correct for this question.",
+      "whyIncorrect": {
+        "B": "Scatter radiation from the patient or tabletop is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Using an SID outside the grid focal range is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "The x-ray tube being positioned off-center to the grid is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-98",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Geometric unsharpness (penumbra) in a radiographic image can be minimized by simultaneously using which combination of factors?",
+    "choices": {
+      "A": "Smallest focal spot and shortest OID",
+      "B": "Smallest focal spot and longest SID",
+      "C": "Shortest OID and longest SID",
+      "D": "All three: smallest focal spot, shortest OID, and longest SID"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "All three: smallest focal spot, shortest OID, and longest SID is correct for this question.",
+      "whyIncorrect": {
+        "A": "Smallest focal spot and shortest OID is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Smallest focal spot and longest SID is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Shortest OID and longest SID is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-99",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "An undistorted (true-shape) image results when the plane of the object and the plane of the image receptor are:",
+    "choices": {
+      "A": "At oblique angles relative to each other",
+      "B": "At right angles to each other",
+      "C": "Parallel to each other",
+      "D": "Perpendicular to each other"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Parallel to each other is correct for this question.",
+      "whyIncorrect": {
+        "A": "At oblique angles relative to each other is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "At right angles to each other is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Perpendicular to each other is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-100",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "A radiographic grid should be used when which combination of conditions is present?",
+    "choices": {
+      "A": "Body part >10 cm, field size >10–12 inches",
+      "B": "Body part >10 cm and >60 kVp required",
+      "C": "Field size >10–12 inches and >60 kVp required",
+      "D": "All three: body part >10 cm, field size >10–12 inches, and >60 kVp required"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "All three: body part >10 cm, field size >10–12 inches, and >60 kVp required is correct for this question.",
+      "whyIncorrect": {
+        "A": "Body part >10 cm, field size >10–12 inches is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Body part >10 cm and >60 kVp required is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Field size >10–12 inches and >60 kVp required is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-101",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "When mAs is doubled, the number of electrons striking the anode target and therefore x-ray output:",
+    "choices": {
+      "A": "Stays the same — kVp controls electron quantity",
+      "B": "Doubles — direct proportional relationship",
+      "C": "Quadruples",
+      "D": "Halves"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Doubles — direct proportional relationship is correct for this question.",
+      "whyIncorrect": {
+        "A": "Stays the same — kVp controls electron quantity is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Quadruples is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Halves is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-102",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Reducing the size of the collimated field (beam restriction) results in which effect on radiographic contrast?",
+    "choices": {
+      "A": "Decreases contrast — fewer photons reach the detector",
+      "B": "Produces a longer (lower) scale of contrast",
+      "C": "Produces a shorter (higher) scale of contrast — fewer Compton interactions occur",
+      "D": "No measurable effect on contrast"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Produces a shorter (higher) scale of contrast — fewer Compton interactions occur is correct for this question.",
+      "whyIncorrect": {
+        "A": "Decreases contrast — fewer photons reach the detector is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Produces a longer (lower) scale of contrast is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "No measurable effect on contrast is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-103",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The grid conversion factor (Bucky factor) is defined as the:",
+    "choices": {
+      "A": "Height of lead strips divided by interspacer distance",
+      "B": "Distance between strips divided by strip height",
+      "C": "Number of lead strips per unit length",
+      "D": "Exposure increase factor required to compensate for radiation absorbed by the grid"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Exposure increase factor required to compensate for radiation absorbed by the grid is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Height of lead strips divided by interspacer distance is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Distance between strips divided by strip height is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Number of lead strips per unit length is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-104",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "A rounded, expanded enlargement at the end of a long bone is called a:",
+    "choices": {
+      "A": "Prominence",
+      "B": "Sharp prominence",
+      "C": "Tubercle",
+      "D": "Head"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Head is correct for this question.",
+      "whyIncorrect": {
+        "A": "Prominence is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Sharp prominence is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Tubercle is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-105",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "A rounded bony projection of moderate size is called a:",
+    "choices": {
+      "A": "Prominence",
+      "B": "Sharp prominence",
+      "C": "Tubercle",
+      "D": "Tuberosity"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Tubercle is correct for this question.",
+      "whyIncorrect": {
+        "A": "Prominence is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Sharp prominence is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Tuberosity is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-106",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "A thin, sharp bony projection is described as a:",
+    "choices": {
+      "A": "Prominence",
+      "B": "Spine",
+      "C": "Tubercle",
+      "D": "Tuberosity"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Spine is correct for this question.",
+      "whyIncorrect": {
+        "A": "Prominence is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Tubercle is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Tuberosity is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-107",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "A shallow, bowl-shaped bony depression is described as a:",
+    "choices": {
+      "A": "Fossa",
+      "B": "Groove",
+      "C": "Sulcus",
+      "D": "Sinus"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Fossa is correct for this question.",
+      "whyIncorrect": {
+        "B": "Groove is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Sulcus is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Sinus is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-108",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "A long, narrow channel or groove on a bone is described as a:",
+    "choices": {
+      "A": "Fossa",
+      "B": "Groove (or sulcus)",
+      "C": "Sulcus",
+      "D": "Sinus"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Groove (or sulcus) is correct for this question.",
+      "whyIncorrect": {
+        "A": "Fossa is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Sulcus is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Sinus is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-109",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "An average-shaped skull — neither long and narrow nor short and wide — is classified as:",
+    "choices": {
+      "A": "Synarthroses",
+      "B": "Amphiarthroses",
+      "C": "Diarthroses",
+      "D": "Mesocephalic"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Mesocephalic is correct for this question.",
+      "whyIncorrect": {
+        "A": "Synarthroses is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Amphiarthroses is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Diarthroses is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-110",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "Freely movable synovial joints that allow a wide range of motion are classified as:",
+    "choices": {
+      "A": "Synarthroses",
+      "B": "Amphiarthroses",
+      "C": "Diarthroses",
+      "D": "Mesocephalic"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Diarthroses is correct for this question.",
+      "whyIncorrect": {
+        "A": "Synarthroses is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Amphiarthroses is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Mesocephalic is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-111",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "Immovable fibrous joints held together by fibrous connective tissue are classified as:",
+    "choices": {
+      "A": "Synarthroses",
+      "B": "Amphiarthroses",
+      "C": "Diarthroses",
+      "D": "Mesocephalic"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Synarthroses is correct for this question.",
+      "whyIncorrect": {
+        "B": "Amphiarthroses is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Diarthroses is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Mesocephalic is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-112",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The radiocarpal (wrist) joint allows which type of motion?",
+    "choices": {
+      "A": "Hinge motion",
+      "B": "Pivot motion",
+      "C": "Saddle motion",
+      "D": "Condyloid motion"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Condyloid motion is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Hinge motion is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Pivot motion is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Saddle motion is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-113",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The proximal radioulnar joint, where the radial head rotates within the radial notch of the ulna, permits which type of motion?",
+    "choices": {
+      "A": "Hinge motion",
+      "B": "Pivot motion",
+      "C": "Saddle motion",
+      "D": "Gliding motion"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Pivot motion is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Hinge motion is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Saddle motion is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Gliding motion is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-114",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "Which facial bone has a temporal process that extends posteriorly to meet the zygomatic process of the temporal bone, forming the zygomatic arch?",
+    "choices": {
+      "A": "Sphenoid bone",
+      "B": "Ethmoid bone",
+      "C": "Mandible",
+      "D": "Zygomatic bone"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Zygomatic bone is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Sphenoid bone is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Ethmoid bone is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Mandible is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-115",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "Which facial bone contains the alveolar process that forms the sockets for the upper teeth?",
+    "choices": {
+      "A": "Sphenoid bone",
+      "B": "Ethmoid bone",
+      "C": "Mandible",
+      "D": "Maxilla"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Maxilla is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Sphenoid bone is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Ethmoid bone is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Mandible is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-116",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "Which cranial bone has greater and lesser wings that form part of the floor and lateral walls of the cranial cavity?",
+    "choices": {
+      "A": "Sphenoid bone",
+      "B": "Ethmoid bone",
+      "C": "Mandible",
+      "D": "Maxilla"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Sphenoid bone is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "B": "Ethmoid bone is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Mandible is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Maxilla is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-117",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The coronal suture — the immovable articulation between the frontal bone and the parietal bones — forms which skull boundary?",
+    "choices": {
+      "A": "Frontal-parietal junction",
+      "B": "Temporal-parietal junction",
+      "C": "Occipital-parietal junction",
+      "D": "Parietal-parietal junction"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Parietal-parietal junction is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Frontal-parietal junction is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Temporal-parietal junction is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Occipital-parietal junction is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-118",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The external occipital protuberance (inion) — the most prominent bony landmark on the posterior skull surface — is a feature of the:",
+    "choices": {
+      "A": "Frontal bone",
+      "B": "Temporal bone",
+      "C": "Occipital bone",
+      "D": "Mandible"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Occipital bone is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Frontal bone is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Temporal bone is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Mandible is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-119",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "Which structure of the axial skeleton is formed by five fused vertebral segments?",
+    "choices": {
+      "A": "Sacrum",
+      "B": "Axis (C2)",
+      "C": "Thoracic vertebra",
+      "D": "Lumbar vertebra"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Sacrum is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "B": "Axis (C2) is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Thoracic vertebra is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Lumbar vertebra is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-120",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The dens (odontoid process) — the toothlike projection around which the atlas rotates — is a distinctive feature of which vertebra?",
+    "choices": {
+      "A": "Atlas (C1)",
+      "B": "Axis (C2)",
+      "C": "Thoracic vertebra",
+      "D": "Lumbar vertebra"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Axis (C2) is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Atlas (C1) is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Thoracic vertebra is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Lumbar vertebra is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-121",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "Which individual vertebra is the largest and heaviest, reflecting its role in supporting the weight of the upper body?",
+    "choices": {
+      "A": "Atlas (C1)",
+      "B": "Axis (C2)",
+      "C": "Thoracic vertebra",
+      "D": "Lumbar vertebra"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Lumbar vertebra is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Atlas (C1) is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Axis (C2) is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Thoracic vertebra is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-122",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The eleventh and twelfth pairs of ribs, which do not attach to the sternum or costal cartilage anteriorly, are called:",
+    "choices": {
+      "A": "True ribs",
+      "B": "Floating ribs",
+      "C": "False ribs",
+      "D": "Costal ribs"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Floating ribs is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "True ribs is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "False ribs is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Costal ribs is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-123",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The blunt, inferior cartilaginous tip at the lower end of the sternum is the:",
+    "choices": {
+      "A": "Manubrium",
+      "B": "Jugular notch",
+      "C": "Xiphoid process",
+      "D": "Sternal angle"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Xiphoid process is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Manubrium is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Jugular notch does not match the concept the question is asking about.",
+        "D": "Sternal angle is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-124",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The shallow groove on the anterior surface of the proximal humerus running between the greater and lesser tubercles, through which the long head of the biceps tendon passes, is the:",
+    "choices": {
+      "A": "Greater and lesser tubercles",
+      "B": "Bicipital (intertubercular) groove",
+      "C": "Capitulum",
+      "D": "Trochlea"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Bicipital (intertubercular) groove is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Greater and lesser tubercles is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Capitulum is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Trochlea is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-125",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The constricted region of the proximal humerus just distal to the tubercles — the most common site of humeral fractures — is the:",
+    "choices": {
+      "A": "Greater and lesser tubercles",
+      "B": "Bicipital groove",
+      "C": "Capitulum",
+      "D": "Surgical neck"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Surgical neck is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Greater and lesser tubercles is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Bicipital groove is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Capitulum is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-126",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The pulley-shaped medial articular surface of the distal humerus that articulates with the trochlear notch of the ulna is the:",
+    "choices": {
+      "A": "Greater and lesser tubercles",
+      "B": "Bicipital groove",
+      "C": "Capitulum",
+      "D": "Trochlea"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Trochlea is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Greater and lesser tubercles is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Bicipital groove is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Capitulum is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-127",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "Which carpal bone is located in the distal row between the trapezoid (medially) and the hamate (laterally)?",
+    "choices": {
+      "A": "Scaphoid",
+      "B": "Hamate",
+      "C": "Pisiform",
+      "D": "Capitate"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Capitate is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Scaphoid is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Hamate is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Pisiform is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-128",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "Which carpal bone occupies the proximal row between the lunate medially and the pisiform?",
+    "choices": {
+      "A": "Scaphoid",
+      "B": "Hamate",
+      "C": "Pisiform",
+      "D": "Triquetrum"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Triquetrum is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Scaphoid is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Hamate is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Pisiform is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-129",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "Which tarsal bone sits atop the calcaneus and serves as the primary weight-transfer link between the leg and the foot, distributing body weight from the tibia to the other tarsal bones?",
+    "choices": {
+      "A": "Navicular",
+      "B": "Calcaneus",
+      "C": "Talus",
+      "D": "Cuboid"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Talus is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Navicular is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Calcaneus is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Cuboid is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-130",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "Which tarsal bone is located on the lateral side of the foot, adjacent to the base of the fifth metatarsal, between the calcaneus and the fourth and fifth metatarsals?",
+    "choices": {
+      "A": "Navicular",
+      "B": "Calcaneus",
+      "C": "Talus",
+      "D": "Cuboid"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Cuboid is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Navicular is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Calcaneus is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Talus is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-131",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "Which tarsal bones articulate with the bases of the first, second, and third metatarsal bones?",
+    "choices": {
+      "A": "Navicular",
+      "B": "Calcaneus",
+      "C": "Talus",
+      "D": "Three cuneiforms"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Three cuneiforms is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Navicular is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Calcaneus is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Talus is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-132",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "Which pulmonary structure has three lobes — superior, middle, and inferior?",
+    "choices": {
+      "A": "Trachea",
+      "B": "Left lung (two lobes)",
+      "C": "Right lung",
+      "D": "Hilum"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Right lung is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Trachea is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Left lung (two lobes) is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Hilum is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-133",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "Which respiratory structure is approximately 12 cm in length, located anterior to the esophagus, and extends from the larynx to the carina?",
+    "choices": {
+      "A": "Trachea",
+      "B": "Left lung",
+      "C": "Right lung",
+      "D": "Hilum"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Trachea is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "B": "Left lung is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Right lung is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Hilum is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-134",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The narrow distal portion of the stomach that leads into the duodenum through the pyloric sphincter is called the:",
+    "choices": {
+      "A": "Rugae",
+      "B": "Pylorus",
+      "C": "Fundus",
+      "D": "Greater curvature"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Pylorus is the distal outlet of the stomach leading into the duodenum.",
+      "whyIncorrect": {
+        "A": "Rugae are the longitudinal mucosal folds within the stomach.",
+        "C": "Fundus is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Greater curvature is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-135",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The region of the stomach surrounding the gastroesophageal junction — where the esophagus enters the stomach — is called the:",
+    "choices": {
+      "A": "Rugae",
+      "B": "Pyloric antrum",
+      "C": "Fundus",
+      "D": "Cardiac portion (cardia)"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Cardiac portion (cardia) is correct because it fits the structure, term, or function described in the stem.",
+      "whyIncorrect": {
+        "A": "Rugae are the longitudinal mucosal folds within the stomach.",
+        "B": "Pyloric antrum is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Fundus is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-136",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The lateral convex surface of the stomach, which forms the outer curve of the organ, is called the:",
+    "choices": {
+      "A": "Rugae",
+      "B": "Pylorus",
+      "C": "Fundus",
+      "D": "Greater curvature"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Greater curvature is correct because it fits the structure, term, or function described in the stem.",
+      "whyIncorrect": {
+        "A": "Rugae are the longitudinal mucosal folds within the stomach.",
+        "B": "Pylorus is the distal outlet of the stomach leading into the duodenum.",
+        "C": "Fundus is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-137",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The segment of the large intestine that descends on the left side of the abdomen, connecting the splenic flexure above to the sigmoid colon below, is the:",
+    "choices": {
+      "A": "Duodenum",
+      "B": "Descending colon",
+      "C": "Ileum",
+      "D": "Ascending colon"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Descending colon is correct because the descending colon continues inferiorly down the left side of the abdomen after the splenic flexure.",
+      "whyIncorrect": {
+        "A": "Duodenum is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Ileum is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Ascending colon travels superiorly on the right side of the abdomen toward the hepatic flexure."
+      }
+    }
+  },
+  {
+    "id": "qbank3-138",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The distal segment of the small intestine that connects with the large intestine at the ileocecal valve is the:",
+    "choices": {
+      "A": "Duodenum",
+      "B": "Jejunum",
+      "C": "Ileum",
+      "D": "Cecum"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Ileum is correct because it fits the structure, term, or function described in the stem.",
+      "whyIncorrect": {
+        "A": "Duodenum is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Jejunum is part of the small intestine, not a segment of the colon.",
+        "D": "Cecum is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-139",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The proximal segment of the small intestine that begins at the pylorus and receives secretions from the liver and pancreas is the:",
+    "choices": {
+      "A": "Duodenum",
+      "B": "Jejunum",
+      "C": "Ileum",
+      "D": "Cecum"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Duodenum is correct because it fits the structure, term, or function described in the stem.",
+      "whyIncorrect": {
+        "B": "Jejunum is part of the small intestine, not a segment of the colon.",
+        "C": "Ileum is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Cecum is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-140",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The outer region of the kidney, which contains the glomeruli and portions of the renal tubules, is called the:",
+    "choices": {
+      "A": "Cortex",
+      "B": "Medulla",
+      "C": "Nephron unit",
+      "D": "Glomeruli"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Cortex is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "B": "Medulla is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Nephron unit is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Glomeruli is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-141",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The microscopic filtering unit of the kidney where blood is initially filtered through a specialized capillary tuft is the:",
+    "choices": {
+      "A": "Cortex",
+      "B": "Medulla",
+      "C": "Nephron",
+      "D": "Glomerulus"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Glomerulus is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Cortex is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Medulla is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Nephron is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-142",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "For radiography of the fingers, the central ray should be directed:",
+    "choices": {
+      "A": "Perpendicular to the distal interphalangeal joint",
+      "B": "Parallel to the distal interphalangeal joint",
+      "C": "Parallel to the proximal interphalangeal joint",
+      "D": "Perpendicular to the proximal interphalangeal joint"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Perpendicular to the proximal interphalangeal joint is correct for this question.",
+      "whyIncorrect": {
+        "A": "Perpendicular to the distal interphalangeal joint is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Parallel to the distal interphalangeal joint is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Parallel to the proximal interphalangeal joint is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-143",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "For a PA projection of the hand, the central ray is centered perpendicular to the:",
+    "choices": {
+      "A": "First metacarpophalangeal joint",
+      "B": "Third metatarsophalangeal joint",
+      "C": "Third metacarpophalangeal joint at an oblique angle",
+      "D": "Third metacarpophalangeal joint"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Third metacarpophalangeal joint is correct for this question.",
+      "whyIncorrect": {
+        "A": "First metacarpophalangeal joint is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Third metatarsophalangeal joint is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Third metacarpophalangeal joint at an oblique angle is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-144",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "For a true lateral projection of the wrist, the elbow must be flexed to approximately:",
+    "choices": {
+      "A": "45 degrees",
+      "B": "90 degrees",
+      "C": "Minimally — just slightly bent",
+      "D": "25 degrees"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "90 degrees is correct for this question.",
+      "whyIncorrect": {
+        "A": "45 degrees is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Minimally — just slightly bent is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "25 degrees is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-145",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "For a PA axial projection of the clavicle, the central ray is angled:",
+    "choices": {
+      "A": "25 to 30 degrees caudad",
+      "B": "25 to 30 degrees cephalad",
+      "C": "20 degrees caudad",
+      "D": "20 degrees cephalad"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "25 to 30 degrees caudad is correct for this question.",
+      "whyIncorrect": {
+        "B": "25 to 30 degrees cephalad is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "20 degrees caudad is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "20 degrees cephalad is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-146",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "For an AP projection of the toes, the central ray is centered at the:",
+    "choices": {
+      "A": "Third metatarsophalangeal joint",
+      "B": "Second metacarpophalangeal joint",
+      "C": "First metatarsophalangeal joint",
+      "D": "Second metatarsophalangeal joint"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Second metatarsophalangeal joint is correct for this question.",
+      "whyIncorrect": {
+        "A": "Third metatarsophalangeal joint is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Second metacarpophalangeal joint is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "First metatarsophalangeal joint is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-147",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "For an AP projection of the foot, the central ray is directed perpendicular to the:",
+    "choices": {
+      "A": "Head of the third metatarsal",
+      "B": "Head of the second metatarsal",
+      "C": "Base of the first metatarsal",
+      "D": "Base of the third metatarsal"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Base of the third metatarsal is correct for this question.",
+      "whyIncorrect": {
+        "A": "Head of the third metatarsal is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Head of the second metatarsal is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Base of the first metatarsal is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-148",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "For an axial (plantodorsal) projection of the calcaneus, the central ray is angled how many degrees cephalad to the long axis of the foot?",
+    "choices": {
+      "A": "25 degrees",
+      "B": "15 degrees",
+      "C": "10 degrees",
+      "D": "40 degrees"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "40 degrees is correct for this question.",
+      "whyIncorrect": {
+        "A": "25 degrees is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "15 degrees is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "10 degrees is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-149",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "For an AP projection of the ankle, the central ray is directed perpendicular to the:",
+    "choices": {
+      "A": "Lateral malleolus alone",
+      "B": "Ankle joint at the midpoint between the malleoli",
+      "C": "Medial malleolus alone",
+      "D": "Midshaft tibia"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Ankle joint at the midpoint between the malleoli is correct for this question.",
+      "whyIncorrect": {
+        "A": "Lateral malleolus alone is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Medial malleolus alone is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Midshaft tibia is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-150",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "For an AP projection of the knee, to open the joint space the central ray is angled:",
+    "choices": {
+      "A": "5 to 7 degrees cephalad",
+      "B": "5 to 7 degrees caudad",
+      "C": "10 degrees cephalad",
+      "D": "10 degrees caudad"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "5 to 7 degrees cephalad is correct for this question.",
+      "whyIncorrect": {
+        "B": "5 to 7 degrees caudad is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "10 degrees cephalad is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "10 degrees caudad is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-151",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "For an AP projection of the cervical spine, the central ray is directed:",
+    "choices": {
+      "A": "10 degrees cephalad",
+      "B": "Parallel to C4",
+      "C": "15 to 20 degrees caudad",
+      "D": "15 to 20 degrees cephalad"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "15 to 20 degrees cephalad is correct for this question.",
+      "whyIncorrect": {
+        "A": "10 degrees cephalad is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Parallel to C4 is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "15 to 20 degrees caudad is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-152",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "For a lateral projection of the cervical spine, the central ray is directed:",
+    "choices": {
+      "A": "Perpendicular to C4",
+      "B": "Horizontal and perpendicular to C4",
+      "C": "15 to 20 degrees caudad",
+      "D": "20 to 25 degrees cephalad"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Perpendicular to C4 is correct for this question.",
+      "whyIncorrect": {
+        "B": "Horizontal and perpendicular to C4 is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "15 to 20 degrees caudad is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "20 to 25 degrees cephalad is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-153",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "For an AP projection of the thoracic spine, the central ray is directed:",
+    "choices": {
+      "A": "5 degrees cephalad",
+      "B": "Parallel to T7",
+      "C": "3 to 4 degrees caudad",
+      "D": "Perpendicular to T7"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Perpendicular to T7 is correct for this question.",
+      "whyIncorrect": {
+        "A": "5 degrees cephalad is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Parallel to T7 is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "3 to 4 degrees caudad is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-154",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "For an AP projection of the lumbar spine, the central ray is directed:",
+    "choices": {
+      "A": "Parallel to the midline at iliac crest level",
+      "B": "Perpendicular to L2",
+      "C": "Perpendicular to the midline at the level of the iliac crests (L4-L5)",
+      "D": "Perpendicular to L4"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Perpendicular to the midline at the level of the iliac crests (L4-L5) is correct for this question.",
+      "whyIncorrect": {
+        "A": "Parallel to the midline at iliac crest level is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Perpendicular to L2 is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Perpendicular to L4 is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-155",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "For AP oblique projections of the sacroiliac joints, the central ray is directed to a point:",
+    "choices": {
+      "A": "1 inch lateral to the elevated ASIS",
+      "B": "1 inch medial to the elevated ASIS",
+      "C": "1 inch lateral to the dependent (down-side) ASIS",
+      "D": "1 inch medial to the dependent ASIS"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "1 inch medial to the elevated ASIS is correct for this question.",
+      "whyIncorrect": {
+        "A": "1 inch lateral to the elevated ASIS is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "1 inch lateral to the dependent (down-side) ASIS is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "1 inch medial to the dependent ASIS is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-156",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "For a PA projection of the chest, the central ray is directed:",
+    "choices": {
+      "A": "Perpendicular to T10",
+      "B": "Parallel to the thoracic spine",
+      "C": "Perpendicular to T7 (center of the thorax)",
+      "D": "Perpendicular to the posterior rib cage"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Perpendicular to T7 (center of the thorax) is correct for this question.",
+      "whyIncorrect": {
+        "A": "Perpendicular to T10 is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Parallel to the thoracic spine is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Perpendicular to the posterior rib cage is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-157",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "For an AP projection of the lower ribs (below the diaphragm), the central ray is directed perpendicular to:",
+    "choices": {
+      "A": "T10",
+      "B": "T5",
+      "C": "T7",
+      "D": "T12"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "T12 is correct for this question.",
+      "whyIncorrect": {
+        "A": "T10 is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "T5 is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "T7 is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-158",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "For the AP axial (Towne) projection of the skull, the central ray is directed:",
+    "choices": {
+      "A": "30 degrees caudad to the IOML",
+      "B": "37 degrees caudad to the OML",
+      "C": "25 degrees caudad to the IOML",
+      "D": "30 degrees caudad to the OML"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "30 degrees caudad to the OML is correct for this question.",
+      "whyIncorrect": {
+        "A": "30 degrees caudad to the IOML is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "37 degrees caudad to the OML is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "25 degrees caudad to the IOML is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-159",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "For a lateral projection of the facial bones, the central ray is centered at the:",
+    "choices": {
+      "A": "Glabella",
+      "B": "Medial surface of the zygomatic bone",
+      "C": "Medial surface of the nasal bone",
+      "D": "Lateral surface of the zygomatic bone"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Lateral surface of the zygomatic bone is correct for this question.",
+      "whyIncorrect": {
+        "A": "Glabella is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Medial surface of the zygomatic bone is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Medial surface of the nasal bone is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-160",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The fluoroscopic contrast examination used to evaluate the uterine cavity and fallopian tube patency is called a(n):",
+    "choices": {
+      "A": "Uterogram",
+      "B": "Hysterosalpingogram (HSG)",
+      "C": "Intravenous urogram",
+      "D": "Obstetric ultrasound"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Hysterosalpingogram (HSG) is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Uterogram is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Intravenous urogram is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Obstetric ultrasound is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-161",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The contrast examination used to evaluate the spinal canal and intervertebral discs for possible herniation or stenosis is a(n):",
+    "choices": {
+      "A": "Arthrogram",
+      "B": "Spinal angiogram",
+      "C": "Myelogram",
+      "D": "Discogram"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Myelogram is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Arthrogram is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Spinal angiogram is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Discogram is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-162",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "Which of the following procedures can serve both as a diagnostic examination and a therapeutic intervention?",
+    "choices": {
+      "A": "Hysterosalpingogram — may open blocked tubes",
+      "B": "Myelogram",
+      "C": "Arthrogram",
+      "D": "Barium enema"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Hysterosalpingogram — may open blocked tubes is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "B": "Myelogram is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Arthrogram is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Barium enema is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-163",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The preferred spinal injection site for a lumbar myelogram is:",
+    "choices": {
+      "A": "C6–C7 interspace",
+      "B": "L5–S1 interspace",
+      "C": "L3–L4 interspace",
+      "D": "L1–L2 interspace"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "L3–L4 interspace is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "C6–C7 interspace is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "L5–S1 interspace is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "L1–L2 interspace is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-164",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "A contrast examination that evaluates joint structures — including cartilage, ligaments, and menisci — by injecting contrast into the joint space is a(n):",
+    "choices": {
+      "A": "Myelogram",
+      "B": "Arthrogram",
+      "C": "Joint manipulation study",
+      "D": "Sports medicine imaging"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Arthrogram is correct for this question.",
+      "whyIncorrect": {
+        "A": "Myelogram is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Joint manipulation study is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Sports medicine imaging is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-165",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The imaging modality that has largely replaced conventional arthrography for evaluating meniscal tears and soft tissue injuries is:",
+    "choices": {
+      "A": "CT",
+      "B": "Diagnostic ultrasound",
+      "C": "PET scanning",
+      "D": "MRI"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "MRI is correct because it uses magnetic fields and radiofrequency pulses rather than ionizing radiation.",
+      "whyIncorrect": {
+        "A": "CT uses x-rays and computer processing rather than radiopharmaceutical activity measurements.",
+        "B": "Diagnostic ultrasound is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "PET scanning is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-166",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "The ilium — the large, wing-shaped bone forming the upper portion of the pelvic girdle — is part of the:",
+    "choices": {
+      "A": "Hip (os coxae / innominate bone)",
+      "B": "Shoulder girdle",
+      "C": "Skull",
+      "D": "Small intestine attachment"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Hip (os coxae / innominate bone) is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "B": "Shoulder girdle is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Skull is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Small intestine attachment is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-167",
+    "category": "Procedures",
+    "subcategory": "General",
+    "question": "An AP lordotic chest projection — where the patient leans backward or the CR is angled cephalad — best demonstrates which thoracic structures?",
+    "choices": {
+      "A": "Apices of the lungs",
+      "B": "Lung bases",
+      "C": "Mediastinal structures",
+      "D": "Position of the hemidiaphragms"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Apices of the lungs is correct for this question.",
+      "whyIncorrect": {
+        "B": "Lung bases is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Mediastinal structures is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Position of the hemidiaphragms is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-168",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "The primary clinical advantage of nonionic iodinated contrast media over ionic agents is that nonionic agents:",
+    "choices": {
+      "A": "Cost significantly less per dose",
+      "B": "Carry a lower risk of causing an adverse patient reaction",
+      "C": "Produce better radiographic image contrast",
+      "D": "Require lower kVp and mAs technique settings"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Carry a lower risk of causing an adverse patient reaction is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Cost significantly less per dose is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Produce better radiographic image contrast is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Require lower kVp and mAs technique settings is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-169",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "When a patient is choking and unable to cough or speak because of a foreign body obstruction, the correct intervention is the:",
+    "choices": {
+      "A": "Heimlich maneuver (abdominal thrusts)",
+      "B": "Modified Valsalva maneuver",
+      "C": "Valsalva maneuver",
+      "D": "Toe-touch maneuver"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Heimlich maneuver (abdominal thrusts) is correct for this question.",
+      "whyIncorrect": {
+        "B": "Modified Valsalva maneuver is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Valsalva maneuver is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Toe-touch maneuver is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-170",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "During an intravenous contrast injection, extravasation (leakage of contrast into surrounding tissue) is detected. The proper response is to:",
+    "choices": {
+      "A": "Continue the injection and reassure the patient",
+      "B": "Stop the injection, remove the needle, and apply pressure to the site",
+      "C": "Remove the needle, re-puncture the same vein, and continue",
+      "D": "Place a warm compress above the site and continue the injection"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Stop the injection, remove the needle, and apply pressure to the site is correct for this question.",
+      "whyIncorrect": {
+        "A": "Continue the injection and reassure the patient is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Remove the needle, re-puncture the same vein, and continue is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Place a warm compress above the site and continue the injection is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-171",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "Prior to any examination requiring iodinated contrast media, which assessment must be performed?",
+    "choices": {
+      "A": "PA chest radiograph",
+      "B": "Nephrotoxicity assessment (kidney function evaluation)",
+      "C": "NPO status for at least 8 hours",
+      "D": "Mandatory pregnancy test"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Nephrotoxicity assessment (kidney function evaluation) is correct for this question.",
+      "whyIncorrect": {
+        "A": "PA chest radiograph is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "NPO status for at least 8 hours is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Mandatory pregnancy test is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-172",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "To minimize the risk of hypoglycemia from fasting requirements, diabetic patients requiring contrast studies should be scheduled:",
+    "choices": {
+      "A": "Later in the day to allow insulin dosing",
+      "B": "Early in the day so fasting is as brief as possible",
+      "C": "Just before their scheduled mealtime",
+      "D": "Just after their scheduled mealtime"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Early in the day so fasting is as brief as possible is correct for this question.",
+      "whyIncorrect": {
+        "A": "Later in the day to allow insulin dosing is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Just before their scheduled mealtime is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Just after their scheduled mealtime is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-173",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "During an intravenous urogram (IVU/IVP), the pelvocalyceal system and renal collecting structures reach their peak opacification approximately how many minutes after injection?",
+    "choices": {
+      "A": "1 to 2 minutes",
+      "B": "2 to 5 minutes",
+      "C": "2 to 8 minutes",
+      "D": "15 to 20 minutes"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "2 to 5 minutes is correct for this question.",
+      "whyIncorrect": {
+        "A": "1 to 2 minutes is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "2 to 8 minutes is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "15 to 20 minutes is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-174",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "The ARRT Rules of Ethics and Code of Ethics for radiographers are contained within which official document?",
+    "choices": {
+      "A": "Standards of Ethics",
+      "B": "Practice Standards for Medical Imaging",
+      "C": "Mission Statement of the ARRT",
+      "D": "Scope of Practice document"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Standards of Ethics is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "B": "Practice Standards for Medical Imaging is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Mission Statement of the ARRT is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Scope of Practice document is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-175",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "Violations of civil law — wrongful acts committed by one person against another — are legally termed:",
+    "choices": {
+      "A": "Criminal assault",
+      "B": "Battery",
+      "C": "False imprisonment",
+      "D": "Torts"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Torts is correct for this question.",
+      "whyIncorrect": {
+        "A": "Criminal assault is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Battery is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "False imprisonment is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-176",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "The unjustified restraint or confinement of a patient — preventing them from leaving — is legally defined as:",
+    "choices": {
+      "A": "Assault",
+      "B": "Battery",
+      "C": "False imprisonment",
+      "D": "Invasion of privacy"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "False imprisonment is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Assault is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Battery is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Invasion of privacy is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-177",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "The suffix '-oid' means:",
+    "choices": {
+      "A": "Tumor or mass",
+      "B": "Like or resembling",
+      "C": "Condition or state",
+      "D": "Disease process"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Like or resembling is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Tumor or mass is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Condition or state is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Disease process is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-178",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "The suffix '-oma' means:",
+    "choices": {
+      "A": "Like or resembling",
+      "B": "Disease process",
+      "C": "Tumor or mass",
+      "D": "Pain"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Tumor or mass is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Like or resembling is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Disease process is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Pain is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-179",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "The legal doctrine stating that negligence is self-evident from the circumstances — that the cause of harm is obvious without expert testimony — is:",
+    "choices": {
+      "A": "Respondeat superior",
+      "B": "Res ipsa loquitur",
+      "C": "Gross negligence",
+      "D": "Slander"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Res ipsa loquitur is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Respondeat superior is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Gross negligence is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Slander is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-180",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "Tachycardia is defined as a heart rate of:",
+    "choices": {
+      "A": "Greater than 100 beats per minute",
+      "B": "Less than 60 beats per minute",
+      "C": "Greater than 90 beats per minute",
+      "D": "Less than 50 beats per minute"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Greater than 100 beats per minute is correct for this question.",
+      "whyIncorrect": {
+        "B": "Less than 60 beats per minute is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Greater than 90 beats per minute is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Less than 50 beats per minute is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-181",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "Elevated diastolic blood pressure — indicating some degree of hypertension — is indicated when diastolic pressure exceeds:",
+    "choices": {
+      "A": "Greater than 100 mm Hg",
+      "B": "Less than 60 mm Hg",
+      "C": "Greater than 90 mm Hg",
+      "D": "Less than 50 mm Hg"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Greater than 90 mm Hg is correct for this question.",
+      "whyIncorrect": {
+        "A": "Greater than 100 mm Hg is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Less than 60 mm Hg is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Less than 50 mm Hg is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-182",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "When supplemental oxygen is administered to a patient via nasal cannula or mask, the standard prescribed flow rate is:",
+    "choices": {
+      "A": "3 to 5 L/second (dangerously high)",
+      "B": "5 L/hour (inadequate)",
+      "C": "1 to 3 L/minute (sometimes used)",
+      "D": "3 to 5 L/minute"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "3 to 5 L/minute is correct for this question.",
+      "whyIncorrect": {
+        "A": "3 to 5 L/second (dangerously high) is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "5 L/hour (inadequate) is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "1 to 3 L/minute (sometimes used) is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-183",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "Which piece of equipment is specifically used to remove secretions and clear an obstructed airway?",
+    "choices": {
+      "A": "Crash cart",
+      "B": "Suction unit",
+      "C": "Defibrillator",
+      "D": "Sphygmomanometer"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Suction unit is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Crash cart is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Defibrillator is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Sphygmomanometer is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-184",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "Which device delivers a controlled electrical shock to the heart in order to convert a life-threatening dysrhythmia back to normal sinus rhythm?",
+    "choices": {
+      "A": "Crash cart",
+      "B": "Suction unit",
+      "C": "Defibrillator",
+      "D": "Sphygmomanometer"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Defibrillator is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Crash cart is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Suction unit is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Sphygmomanometer is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-185",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "A type of shock triggered by a severe systemic allergic reaction, causing massive histamine release and circulatory collapse, is called:",
+    "choices": {
+      "A": "Hypovolemic shock",
+      "B": "Septic shock",
+      "C": "Neurogenic shock",
+      "D": "Anaphylactic shock"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Anaphylactic shock is correct for this question.",
+      "whyIncorrect": {
+        "A": "Hypovolemic shock is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Septic shock is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Neurogenic shock is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-186",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "A tube passed through the nose into the stomach, used for enteral feeding or removing gastric contents, is a:",
+    "choices": {
+      "A": "Ventilator tube",
+      "B": "Nasogastric (NG) tube",
+      "C": "Chest tube",
+      "D": "Venous catheter"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Nasogastric (NG) tube is correct for this question.",
+      "whyIncorrect": {
+        "A": "Ventilator tube is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Chest tube is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Venous catheter is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-187",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "An indwelling urinary catheter drainage bag must never be positioned above the level of the bladder because:",
+    "choices": {
+      "A": "Backflow of urine causes ascending infection",
+      "B": "Air in the tubing can cause embolism",
+      "C": "Gravity drainage is not possible",
+      "D": "The bag will overflow"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "The bag will overflow is correct for this question.",
+      "whyIncorrect": {
+        "A": "Backflow of urine causes ascending infection is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Air in the tubing can cause embolism is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Gravity drainage is not possible does not match the concept the question is asking about."
+      }
+    }
+  },
+  {
+    "id": "qbank3-188",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "A mechanical device that assists or controls breathing by delivering positive-pressure ventilation to a patient's airway is a:",
+    "choices": {
+      "A": "Ventilator (mechanical respirator)",
+      "B": "Nasogastric tube",
+      "C": "Chest tube",
+      "D": "Venous catheter"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Ventilator (mechanical respirator) is correct for this question.",
+      "whyIncorrect": {
+        "B": "Nasogastric tube is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Chest tube is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Venous catheter is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-189",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "When preparing a barium sulfate suspension for a barium enema, the water temperature should be approximately:",
+    "choices": {
+      "A": "100°C (boiling — never use)",
+      "B": "75°F (too cold)",
+      "C": "85°C (scalding — never use)",
+      "D": "100°F (comfortable, near body temperature)"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "100°F (comfortable, near body temperature) is correct for this question.",
+      "whyIncorrect": {
+        "A": "100°C (boiling — never use) is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "75°F (too cold) is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "85°C (scalding — never use) is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-190",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "Barium sulfate, administered as an inert salt suspension that is not absorbed by the body, is classified as a:",
+    "choices": {
+      "A": "Positive contrast agent",
+      "B": "Negative contrast agent",
+      "C": "Water-soluble iodine compound",
+      "D": "Osmotic agent"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Positive contrast agent is correct for this question.",
+      "whyIncorrect": {
+        "B": "Negative contrast agent is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Water-soluble iodine compound is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Osmotic agent is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-191",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "The single most effective measure to prevent the spread of infection in a health care setting is:",
+    "choices": {
+      "A": "Wearing gloves for all patient contact",
+      "B": "Wearing gowns for all patient contact",
+      "C": "Time, distance, and shielding",
+      "D": "Handwashing with soap and water"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Handwashing with soap and water is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Wearing gloves for all patient contact is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Wearing gowns for all patient contact is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Time, distance, and shielding is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-192",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "When there is any doubt about whether an item or surface is contaminated, the correct assumption is:",
+    "choices": {
+      "A": "Treat it as contaminated and handle accordingly",
+      "B": "Use it immediately to avoid waste",
+      "C": "Assume it is not contaminated unless visibly soiled",
+      "D": "Sterilize your hands only, then handle normally"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Treat it as contaminated and handle accordingly is correct for this question.",
+      "whyIncorrect": {
+        "B": "Use it immediately to avoid waste is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Assume it is not contaminated unless visibly soiled does not match the concept the question is asking about.",
+        "D": "Sterilize your hands only, then handle normally is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-193",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "Adverse reactions to contrast media that are triggered by patient anxiety and the power of suggestion — rather than direct physiological effects — are classified as:",
+    "choices": {
+      "A": "Local irritation reactions",
+      "B": "Cardiovascular reactions",
+      "C": "Anaphylactic reactions",
+      "D": "Psychogenic reactions"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Psychogenic reactions is correct for this question.",
+      "whyIncorrect": {
+        "A": "Local irritation reactions is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Cardiovascular reactions is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Anaphylactic reactions is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-194",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "Inflammation of the vein at the injection site following intravenous contrast administration is called:",
+    "choices": {
+      "A": "Local irritation",
+      "B": "Cardiovascular reaction",
+      "C": "Anaphylactic reaction",
+      "D": "Phlebitis"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Phlebitis is correct for this question.",
+      "whyIncorrect": {
+        "A": "Local irritation is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Cardiovascular reaction is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Anaphylactic reaction is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-195",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "Infection transmission via an intermediate animal host that carries and transfers a pathogen to humans — such as tick-borne Lyme disease — is called:",
+    "choices": {
+      "A": "Contact transmission",
+      "B": "Airborne transmission",
+      "C": "Droplet transmission",
+      "D": "Vectorborne transmission"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Vectorborne transmission is correct for this question.",
+      "whyIncorrect": {
+        "A": "Contact transmission is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Airborne transmission is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Droplet transmission is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-196",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "Infection transmission that occurs when an infected person produces respiratory droplets through coughing or sneezing is called:",
+    "choices": {
+      "A": "Contact transmission",
+      "B": "Airborne transmission",
+      "C": "Droplet transmission",
+      "D": "Common vehicle transmission"
+    },
+    "correctAnswer": "C",
+    "explanation": {
+      "whyCorrect": "Droplet transmission is correct for this question.",
+      "whyIncorrect": {
+        "A": "Contact transmission is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Airborne transmission is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Common vehicle transmission is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-197",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "Infection transmission that occurs when a contaminated person or object directly touches a susceptible host is classified as:",
+    "choices": {
+      "A": "Contact transmission",
+      "B": "Airborne transmission",
+      "C": "Droplet transmission",
+      "D": "Common vehicle transmission"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Contact transmission is correct for this question.",
+      "whyIncorrect": {
+        "B": "Airborne transmission is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Droplet transmission is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Common vehicle transmission is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-198",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "The process that completely eliminates all living microorganisms — including spores — from equipment and the patient care environment is called:",
+    "choices": {
+      "A": "Medical asepsis",
+      "B": "Surgical asepsis",
+      "C": "Standard precautions",
+      "D": "Gas sterilization"
+    },
+    "correctAnswer": "B",
+    "explanation": {
+      "whyCorrect": "Surgical asepsis is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Medical asepsis is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Standard precautions is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Gas sterilization is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-199",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "The word part 'viscer-' (as in visceral) refers to:",
+    "choices": {
+      "A": "Organ (internal organ)",
+      "B": "Enlargement",
+      "C": "Across or through",
+      "D": "Blood condition"
+    },
+    "correctAnswer": "A",
+    "explanation": {
+      "whyCorrect": "Organ (internal organ) is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "B": "Enlargement is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Across or through is not the best answer because it refers to a different concept than the one tested here.",
+        "D": "Blood condition is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  },
+  {
+    "id": "qbank3-200",
+    "category": "Patient Care",
+    "subcategory": "General",
+    "question": "The word part 'nephr-' (as in nephrology) refers to:",
+    "choices": {
+      "A": "Internal organ",
+      "B": "Enlargement",
+      "C": "Across or through",
+      "D": "Kidney"
+    },
+    "correctAnswer": "D",
+    "explanation": {
+      "whyCorrect": "Kidney is correct because it is the best match for the concept being asked about in the stem.",
+      "whyIncorrect": {
+        "A": "Internal organ is not the best answer because it refers to a different concept than the one tested here.",
+        "B": "Enlargement is not the best answer because it refers to a different concept than the one tested here.",
+        "C": "Across or through is not the best answer because it refers to a different concept than the one tested here."
+      }
+    }
+  }
+]

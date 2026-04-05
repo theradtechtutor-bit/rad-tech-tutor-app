@@ -1,0 +1,480 @@
+'use client';
+
+import { useEffect, useMemo, useRef, useState } from 'react';
+import Link from 'next/link';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
+import type { Question } from '@/lib/questions';
+import { normalizeChoices, type ChoiceLetter } from '@/lib/normalizeChoices';
+import { appendAttempt, clearPracticeSession, getPracticeRemainingIds, markPracticeCleared, markWrongFromPractice, readPracticeSession, savePracticeSession } from '@/lib/progressStore';
+import { buildRationale, cleanStudyText } from '@/lib/masteryContent';
+import MasteryFlowSteps from '@/app/app/_components/MasteryFlowSteps';
+import StartHereTour from '@/app/app/_components/StartHereTour';
+import SaveProgressPrompt from '@/app/app/_components/SaveProgressPrompt';
+import { useSupabaseSession } from '@/app/app/_hooks/useSupabaseSession';
+import { selectQuestionsForScope } from '@/lib/mockPlan';
+
+function apiForSetId(setId: string) {
+  const s = (setId || '').toLowerCase();
+  if (s === 'qbank1') return '/api/questions/qbank1';
+  if (s === 'qbank2') return '/api/questions/qbank2';
+  if (s === 'qbank3') return '/api/questions/qbank3';
+  return '/api/questions/qbank1';
+}
+
+function titleForSetId(setId: string) {
+  const s = (setId || '').toLowerCase();
+  if (s === 'qbank1') return 'QBank 1 — Core Skills';
+  if (s === 'qbank2') return 'QBank 2 — Advanced';
+  if (s === 'qbank3') return 'QBank 3 — Registry Ready';
+  return 'Practice Set';
+}
+
+function isPaidSet(setId: string) {
+  const s = (setId || '').toLowerCase();
+  return s === 'qbank2' || s === 'qbank3';
+}
+
+function shuffle<T>(arr: T[]): T[] {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function mapToArrtMajorCategory(raw: string): string {
+  const v = (raw || '').toLowerCase().trim();
+  if (!v) return 'Other';
+  if (v.includes('patient care') || v.includes('patient interaction') || v.includes('patient assessment') || v.includes('patient education') || v.includes('infection') || v.includes('consent') || v.includes('patient')) return 'Patient Care';
+  if (v.includes('radiobiology') || v.includes('radiation physics') || v.includes('radiation protection') || v.includes('safety') || v.includes('dose') || v.includes('physics') || v.includes('technique') || v.includes('kvp') || v.includes('mas') || v.includes('grid') || v.includes('beam') || v.includes('filtration') || v.includes('collimation') || v.includes('scatter')) return 'Safety';
+  if (v.includes('image production') || v.includes('image evaluation') || v.includes('quality') || v.includes('artifact') || v.includes('exposure') || v.includes('processing') || v.includes('digital') || v.includes('detector') || v.includes('image') || v.includes('ei') || v.includes('di')) return 'Image Production';
+  if (v.includes('position') || v.includes('positioning') || v.includes('procedure') || v.includes('exam') || v.includes('trauma') || v.includes('portable') || v.includes('c-arm') || v.includes('fluoro') || v.includes('contrast') || v.includes('anatomy') || v.includes('pathology') || v.includes('skeletal') || v.includes('respiratory') || v.includes('gi') || v.includes('cardiac')) return 'Procedures';
+  return 'Other';
+}
+
+
+export default function PracticeSetPage() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const params = useParams<{ setId: string }>();
+  const searchParams = useSearchParams();
+  const setId = (params?.setId || 'qbank1').toLowerCase();
+  const questionAnchorRef = useRef<HTMLDivElement | null>(null);
+
+  const { session } = useSupabaseSession();
+
+  const rawMode = (searchParams?.get('mode') || 'all').toLowerCase();
+  const mode = rawMode === 'mastery' || rawMode === 'missed' ? 'missed' : 'all';
+  const cat = (searchParams?.get('cat') || 'all').toLowerCase();
+  const masteryMode = (searchParams?.get('flow') || '').toLowerCase() === 'mastery';
+  const rawMini = (searchParams?.get('mini') || 'all').toLowerCase();
+  const miniFilter = rawMini === 'all' ? 'all' : Math.max(1, Number(rawMini || '1'));
+  const mini = masteryMode ? Math.max(1, Number(searchParams?.get('mini') || '1')) : miniFilter;
+const miniNumber = typeof mini === 'number' ? mini : Number(mini) || undefined;
+
+  useEffect(() => {
+    if (rawMode === 'flashcards') router.replace(`/app/flashcards?set=${setId}&mode=all`);
+  }, [rawMode, router, setId]);
+
+  const api = useMemo(() => apiForSetId(setId), [setId]);
+  const title = useMemo(() => titleForSetId(setId), [setId]);
+
+  const [isPro, setIsPro] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [totalCount, setTotalCount] = useState(0);
+  const [allCategories, setAllCategories] = useState<Array<{ key: string; label: string }>>([{ key: 'all', label: 'All categories' }]);
+  const [questionsById, setQuestionsById] = useState<Record<string, Question>>({});
+  const [queueIds, setQueueIds] = useState<string[]>([]);
+  const [currentId, setCurrentId] = useState<string | null>(null);
+  const [picked, setPicked] = useState<ChoiceLetter | null>(null);
+  const [revealed, setRevealed] = useState(false);
+  const [answeredCount, setAnsweredCount] = useState(0);
+  const [correctCount, setCorrectCount] = useState(0);
+  const [missedCount, setMissedCount] = useState(0);
+
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem('rtt_is_pro');
+      setIsPro(raw === '1' || raw === 'true');
+    } catch {
+      setIsPro(false);
+    }
+  }, []);
+
+  const locked = isPaidSet(setId) && !isPro;
+
+  async function initBank() {
+    setLoading(true);
+    try {
+      const res = await fetch(api, { cache: 'no-store' });
+      const data = await res.json();
+      const originalQuestions = (data.questions || []) as Question[];
+      const byId = Object.fromEntries(originalQuestions.map((q) => [q.id, q]));
+      setQuestionsById(byId);
+
+      const catSet = new Set<string>();
+      for (const item of originalQuestions) {
+        const label = mapToArrtMajorCategory(String((item as any).category || ''));
+        if (label) catSet.add(label);
+      }
+      const categoryOptions = Array.from(catSet).sort((a, b) => a.localeCompare(b)).map((label) => ({ key: label.toLowerCase(), label }));
+      setAllCategories([{ key: 'all', label: 'All categories' }, ...categoryOptions]);
+
+      let workingQuestions = originalQuestions;
+
+      if (masteryMode) {
+        workingQuestions = selectQuestionsForScope(originalQuestions, 'mini', { miniId: Number(mini), category: cat });
+      } else if (miniFilter !== 'all') {
+        workingQuestions = selectQuestionsForScope(originalQuestions, 'mini', { miniId: Number(miniFilter), category: 'all' });
+      }
+
+      let ids = workingQuestions.map((q) => q.id);
+      if (cat !== 'all' && !masteryMode) {
+        ids = ids.filter((id) => mapToArrtMajorCategory(String((byId[id] as any)?.category || '')).toLowerCase() === cat);
+      }
+      if (mode === 'missed') ids = ids.filter((id) => getPracticeRemainingIds(setId, cat).includes(id));
+      ids = mode === 'missed' ? ids : shuffle(ids);
+
+      const saved = readPracticeSession(setId);
+      if (saved && saved.setId === setId && saved.mode === mode && saved.cat === cat && (saved.mini ?? 'all') === miniFilter && saved.queueIds?.length) {
+        setQueueIds(saved.queueIds.filter((id) => byId[id]));
+        setCurrentId(saved.currentId && byId[saved.currentId] ? saved.currentId : saved.queueIds[0] || null);
+        setAnsweredCount(saved.answeredCount || 0);
+        setCorrectCount(saved.correctCount || 0);
+        setMissedCount(saved.missedCount || 0);
+        setTotalCount(saved.totalCount || ids.length);
+      } else {
+        setQueueIds(ids);
+        setCurrentId(ids[0] || null);
+        setAnsweredCount(0);
+        setCorrectCount(0);
+        setMissedCount(0);
+        clearPracticeSession(setId);
+        setTotalCount(ids.length);
+      }
+      setPicked(null);
+      setRevealed(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    if (!currentId || loading) return;
+    const t = window.setTimeout(() => {
+      questionAnchorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 250);
+    return () => window.clearTimeout(t);
+  }, [currentId, loading]);
+
+  useEffect(() => {
+    if (locked) return;
+    void initBank();
+  }, [setId, mode, cat, locked]);
+
+  useEffect(() => {
+    if (locked) return;
+    savePracticeSession(setId, {
+      setId,
+      mode: mode as 'all' | 'missed',
+      cat,
+      mini: miniFilter,
+      queueIds,
+      currentId,
+      answeredCount,
+      correctCount,
+      missedCount,
+      totalCount,
+      savedAt: Date.now(),
+    });
+  }, [setId, mode, cat, queueIds, currentId, answeredCount, correctCount, missedCount, totalCount, locked]);
+
+  useEffect(() => {
+    setPicked(null);
+    setRevealed(false);
+  }, [currentId]);
+
+  useEffect(() => {
+    if (session || answeredCount === 0) return;
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+    window.addEventListener('beforeunload', onBeforeUnload);
+    return () => window.removeEventListener('beforeunload', onBeforeUnload);
+  }, [session, answeredCount]);
+
+  const q = currentId ? questionsById[currentId] : null;
+  const choiceList = q ? normalizeChoices((q as any).choices) : [];
+  const correctKey = String((q as any)?.correctAnswer || (q as any)?.correct || (q as any)?.answer || '').trim().toUpperCase() as ChoiceLetter;
+  const isCorrect = picked ? picked === correctKey : false;
+
+  function pick(letter: ChoiceLetter) {
+    if (!q || revealed) return;
+    setPicked(letter);
+    setRevealed(true);
+  }
+
+  function goNext() {
+    if (!q || !picked) return;
+    const nextQueue = [...queueIds];
+
+    const answeredNext = answeredCount + 1;
+    const correctNext = correctCount + (isCorrect ? 1 : 0);
+    const missedNext = missedCount + (isCorrect ? 0 : 1);
+
+    setAnsweredCount(answeredNext);
+
+    const idx = nextQueue.indexOf(q.id);
+    if (idx >= 0) nextQueue.splice(idx, 1);
+
+    if (isCorrect) {
+      setCorrectCount(correctNext);
+      markPracticeCleared(setId, q.id);
+    } else {
+      setMissedCount(missedNext);
+      markWrongFromPractice(setId, q.id, mapToArrtMajorCategory(String((q as any).category || '')));
+    }
+
+    if (masteryMode && nextQueue.length === 0) {
+      const total = totalCount || answeredNext;
+      const pct = total ? Math.round((correctNext / total) * 100) : 0;
+
+      appendAttempt({
+        bankId: Number((setId.match(/qbank(\d+)/i) || [])[1] || 1),
+        score: pct,
+        correct: correctNext,
+        total,
+        category: `Mini Mock ${mini} Practice Test`,
+        type: 'practice',
+        miniId: miniNumber,
+        questionsTaken: total,
+        timeSpentSeconds: 0,
+        label: `Mini Mock ${mini} Practice Test`,
+      });
+    }
+
+    setQueueIds(nextQueue);
+    setCurrentId(nextQueue[0] || null);
+    setPicked(null);
+    setRevealed(false);
+  }
+
+  function restartDeck() {
+    void initBank();
+  }
+
+  useEffect(() => {
+    if (locked) return;
+    function onKey(e: KeyboardEvent) {
+      const key = e.key.toLowerCase();
+      const t = e.target as HTMLElement | null;
+      const tag = t?.tagName?.toLowerCase();
+      if (tag === 'input' || tag === 'textarea' || (t as any)?.isContentEditable) return;
+
+      if (!revealed && q) {
+        if (key === 'a' || key === '1') return void pick('A');
+        if (key === 'b' || key === '2') return void pick('B');
+        if (key === 'c' || key === '3') return void pick('C');
+        if (key === 'd' || key === '4') return void pick('D');
+      }
+      if (revealed && picked && (key === 'enter' || key === ' ')) {
+        e.preventDefault();
+        return void goNext();
+      }
+      if (key === 'f') {
+        e.preventDefault();
+        router.push(`/app/flashcards?set=${setId}&mode=missed&cat=${cat}&mini=${miniFilter}`);
+      }
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [revealed, q, locked, router, picked, setId, cat, isCorrect, queueIds]);
+
+  if (locked) {
+    return (
+      <div className="mx-auto max-w-4xl">
+        <div className="text-sm text-white/70">{title}</div>
+        <h1 className="mt-1 text-2xl font-semibold">Locked</h1>
+        {masteryMode ? <div className="mt-4"><MasteryFlowSteps currentStep={3} currentBankLabel={title} currentMini={miniNumber} /></div> : null}
+      <div className="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 text-sm text-white/70">
+          This set is locked. Upgrade to unlock QBank 2–3.
+          <div className="mt-4 flex gap-2">
+            <Link href="/app/upgrade" className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95">Get Pro</Link>
+            <Link href="/app/practice" className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold hover:bg-white/15">Back</Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return <div className="mx-auto max-w-4xl"><div className="text-sm text-white/70">{title}</div><div className="mt-4 text-sm text-white/70">Loading…</div></div>;
+  }
+
+  if (!q) {
+    return (
+      <div className="mx-auto max-w-4xl">
+        <div className="text-sm text-white/70">{title}</div>
+        <div className="mt-4 rounded-3xl border border-white/10 bg-gradient-to-b from-white/8 to-white/4 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.22)]">
+          {masteryMode ? (
+            <>
+              <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/45">Practice Test Results</div>
+              <div className="mt-4 grid gap-4 md:grid-cols-[1.2fr_1fr]">
+                <div className="rounded-2xl border border-yellow-400/20 bg-yellow-400/10 p-5">
+                  <div className="text-sm text-white/70">Score</div>
+                  <div className="mt-2 text-4xl font-bold text-yellow-300">{totalCount ? Math.round((correctCount / totalCount) * 100) : 0}%</div>
+                  <div className="mt-2 text-sm text-white/65">This is your baseline before flashcards and the Mini Mock Exam.</div>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-1">
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <div className="text-xs text-white/55">Correct</div>
+                    <div className="mt-1 text-2xl font-semibold text-white">{correctCount} / {totalCount}</div>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <div className="text-xs text-white/55">Missed</div>
+                    <div className="mt-1 text-2xl font-semibold text-white">{missedCount}</div>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/70">
+                Next step: review your flashcards, then take the <span className="font-semibold text-white">Mini Mock Exam</span>.
+              </div>
+              <div className="mt-5 flex flex-wrap gap-2">
+                <Link href={`/app/flashcards?set=${setId}&mode=missed&cat=all&flow=mastery&mini=${mini}`} className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95">Continue to Flashcards</Link>
+                <Link href={`/app/mock-exam?qbank=${setId}&scope=mini&mini=${mini}`} className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15">Skip to Mini Mock Exam</Link>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="text-sm text-white/70">{mode === 'missed' ? 'No missed-question practice deck yet. Miss questions in the mock exam first, then come back here.' : 'No questions found for this filter.'}</div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <button onClick={restartDeck} className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold hover:bg-white/15">Restart Deck</button>
+                <Link href={`/app/flashcards?set=${setId}&mode=missed&cat=${cat}&mini=${miniFilter}`} className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95">Go to Flashcards</Link>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mx-auto max-w-5xl">
+      <StartHereTour
+        storageKey="rtt_tour_practice"
+        steps={[
+          {
+            selector: '[data-tour="practice-flow"]',
+            title: 'Your study path',
+            body: 'Start here. This page is your pre-test. You answer questions first, then move to flashcards, then the mini mock exam.'
+          },
+          {
+            selector: '[data-tour="practice-question"]',
+            title: 'Answer questions here',
+            body: 'This is the main question area. Just start answering. Wrong answers are tracked automatically.'
+          },
+          {
+            selector: '[data-tour="practice-info"]',
+            title: 'Why this matters',
+            body: 'This section reminds users that missed questions turn into flashcards, then the mini mock checks improvement.'
+          }
+        ]}
+      />
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <div className="text-sm text-white/60">{title}</div>
+          <h1 className="mt-1 text-3xl font-semibold tracking-tight text-white">{mode === 'missed' ? 'Practice Questions' : 'Practice Questions'}</h1>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
+            <select className="bg-transparent text-sm text-white/80 outline-none" value={cat} onChange={(e) => {
+              const params = new URLSearchParams(searchParams?.toString());
+              params.set('cat', e.target.value);
+              router.replace(`/app/practice/${setId}?${params.toString()}`);
+            }}>
+              {allCategories.map((option) => <option key={option.key} value={option.key}>{option.label}</option>)}
+            </select>
+          </div>
+          <button onClick={restartDeck} className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold hover:bg-white/15">Pause</button>
+          {masteryMode ? null : <Link href={`/app/flashcards?set=${setId}&mode=missed&cat=${cat}&mini=${miniFilter}`} className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95">Flashcards</Link>}
+        </div>
+      </div>
+
+      {masteryMode ? <div data-tour="practice-flow" className="mt-6"><MasteryFlowSteps currentStep={1} currentBankLabel={title} currentMini={miniNumber} /></div> : null}
+      <div className="mt-4 text-xs text-white/55">Progress saves on this device now. Sign in to save your study progress across devices later.</div>
+      {!session && answeredCount >= 10 ? (
+        <div className="mt-4">
+          <SaveProgressPrompt
+            nextPath={`${pathname}?${searchParams?.toString() || ''}`}
+            title="Create a free account to save this session"
+            body="Keep practicing for free right now. Create a free account when you want your progress saved and you want to continue where you left off later."
+          />
+        </div>
+      ) : null}
+
+      <div data-tour="practice-info" className="mt-6 rounded-3xl border border-white/10 bg-white/5 p-5">
+        <div className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">How practice works</div>
+        <div className="mt-3 text-sm text-white/70">
+          This is your <span className="font-semibold text-white">pre-test</span>. Answer questions with instant feedback so the system can find your weak areas.
+        </div>
+        <div className="mt-2 text-sm text-white/60">
+          Wrong answers turn into flashcards. After that, take the <span className="font-semibold text-white">Mini Mock Exam</span> to measure improvement.
+        </div>
+      </div>
+
+      <div data-tour="practice-question" ref={questionAnchorRef} className="mt-6 rounded-3xl border border-white/10 bg-gradient-to-b from-white/8 to-white/4 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
+        <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-white/55">
+          <div className="w-full md:w-auto">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-white/10 md:w-64">
+              <div
+                className="h-full rounded-full bg-yellow-400 transition-all"
+                style={{ width: `${totalCount ? Math.min(100, Math.round((answeredCount / totalCount) * 100)) : 0}%` }}
+              />
+            </div>
+            <div className="mt-3 space-y-1">
+              <div>Progress: {answeredCount} / {totalCount}</div>
+              <div>Correct: {correctCount}</div>
+              <div>Missed: {missedCount}</div>
+            </div>
+          </div>
+          <div>Keyboard: 1-4 or A-D • Enter = next</div>
+        </div>
+
+        <div className="mt-5 text-sm font-semibold uppercase tracking-[0.2em] text-white/45">{mapToArrtMajorCategory(String((q as any).category || ''))}</div>
+        <div className="mt-3 text-xl font-semibold text-white whitespace-pre-wrap">{String((q as any).stem || (q as any).question || (q as any).prompt || '')}</div>
+
+        <div className="mt-5 grid gap-2">
+          {choiceList.map(({ key, text }) => {
+            const chosen = picked === key;
+            const isAnswer = correctKey === key;
+            const cls = [
+              'w-full rounded-2xl px-4 py-3 text-left text-sm transition',
+              !revealed && chosen ? 'bg-white/15 ring-2 ring-white/30' : 'bg-white/5 hover:bg-white/10',
+              revealed && isAnswer ? 'bg-emerald-500/20 ring-2 ring-emerald-400/60' : '',
+              revealed && chosen && !isAnswer ? 'bg-red-500/20 ring-2 ring-red-400/60' : '',
+            ].join(' ');
+            return <button key={key} onClick={() => pick(key)} disabled={revealed} className={cls}>{key}. {text}</button>;
+          })}
+        </div>
+
+        {revealed ? (
+          <div className="mt-4 rounded-2xl border border-white/10 bg-black/10 p-4 text-sm text-white/75">
+            {isCorrect ? <div className="font-semibold text-emerald-300">Correct</div> : <div className="font-semibold text-red-300">Incorrect</div>}
+            <div className="mt-3">
+              <div className="font-semibold text-white/85">Explanation</div>
+              <div className="mt-1">{buildRationale(q)}</div>
+            </div>
+            <div className="mt-4 flex items-center justify-between">
+              <div className="text-xs text-white/55">{isCorrect ? 'Nice work — lock in why this was right.' : 'Saved to your Missed Deck and flashcards for review.'}</div>
+              <button onClick={goNext} className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95">Next Question →</button>
+            </div>
+          </div>
+        ) : (
+          <div className="mt-4 text-xs text-white/55">Pick an answer. Keyboard: 1-4 or A-D.</div>
+        )}
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,353 @@
+export type QuestionProgress = {
+  questionId: string;
+  category?: string;
+  mockMissed: boolean;
+  flashcardCleared: boolean;
+  practiceCleared: boolean;
+  updatedAt?: string;
+};
+
+export type ProgressMap = Record<string, QuestionProgress>;
+
+export type ExamAttempt = {
+  attempt: number;
+  label: string;
+  score: number;
+  correct: number;
+  total: number;
+  dateISO: string;
+  registryReady?: boolean;
+  bankId?: number;
+  category?: string;
+  type?: 'practice' | 'mini' | 'full' | 'category';
+  miniId?: number;
+  questionsTaken?: number;
+  timeSpentSeconds?: number;
+};
+
+export type FlashSession = {
+  setId: string;
+  mode: 'all' | 'missed';
+  cat: string;
+  mini?: number | 'all';
+  cursor: number;
+  deck: any[];
+  mastered: any[];
+  savedAt: number;
+};
+
+export type PracticeSession = {
+  setId: string;
+  mode: 'all' | 'missed';
+  cat: string;
+  mini?: number | 'all';
+  queueIds: string[];
+  currentId: string | null;
+  answeredCount?: number;
+  correctCount?: number;
+  missedCount?: number;
+  totalCount?: number;
+  savedAt: number;
+};
+
+const ATTEMPTS_KEY = 'rtt_mock_attempts';
+const EXAM_DATE_KEY = 'rtt_exam_date';
+
+function progressKey(setId: string) {
+  return `rtt_progress_${(setId || 'qbank1').toLowerCase()}`;
+}
+
+function flashSessionKey(setId: string) {
+  return `rtt_flash_session_${(setId || 'qbank1').toLowerCase()}`;
+}
+
+function practiceSessionKey(setId: string) {
+  return `rtt_practice_session_${(setId || 'qbank1').toLowerCase()}`;
+}
+
+export function readJson<T>(key: string, fallback: T): T {
+  if (typeof window === 'undefined') return fallback;
+  try {
+    const raw = window.localStorage.getItem(key);
+    if (!raw) return fallback;
+    return JSON.parse(raw) as T;
+  } catch {
+    return fallback;
+  }
+}
+
+export function writeJson(key: string, value: unknown) {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+    window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+  } catch {}
+}
+
+export function readAttempts(): ExamAttempt[] {
+  const parsed = readJson<any[]>(ATTEMPTS_KEY, []);
+  return Array.isArray(parsed) ? parsed : [];
+}
+
+export function appendAttempt(attempt: Omit<ExamAttempt, 'attempt' | 'label' | 'dateISO' | 'registryReady'> & { dateISO?: string; label?: string }) {
+  const prev = readAttempts();
+  const next: ExamAttempt = {
+    attempt: prev.length + 1,
+    label: attempt.label || (prev.length === 0 ? 'Baseline Mock' : `Retest ${prev.length}`),
+    dateISO: attempt.dateISO || new Date().toISOString(),
+    registryReady: attempt.score >= 85,
+    ...attempt,
+  };
+  writeJson(ATTEMPTS_KEY, [...prev, next]);
+}
+
+export function readExamDate(): string {
+  if (typeof window === 'undefined') return '';
+  try {
+    return window.localStorage.getItem(EXAM_DATE_KEY) || '';
+  } catch {
+    return '';
+  }
+}
+
+export function writeExamDate(value: string) {
+  if (typeof window === 'undefined') return;
+  try {
+    if (value) window.localStorage.setItem(EXAM_DATE_KEY, value);
+    else window.localStorage.removeItem(EXAM_DATE_KEY);
+    window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+  } catch {}
+}
+
+export function readProgress(setId: string): ProgressMap {
+  const parsed = readJson<ProgressMap>(progressKey(setId), {});
+  return parsed && typeof parsed === 'object' ? parsed : {};
+}
+
+export function writeProgress(setId: string, value: ProgressMap) {
+  writeJson(progressKey(setId), value);
+}
+
+export function syncMockResult(setId: string, questions: Array<{ id: string; category?: string }>, missedIds: string[]) {
+  const current = readProgress(setId);
+  const missed = new Set(missedIds);
+  const next: ProgressMap = { ...current };
+  for (const q of questions) {
+    const prev = current[q.id] || {
+      questionId: q.id,
+      category: q.category,
+      mockMissed: false,
+      flashcardCleared: true,
+      practiceCleared: true,
+    };
+    const isMissed = missed.has(q.id);
+    next[q.id] = {
+      questionId: q.id,
+      category: q.category || prev.category,
+      mockMissed: isMissed,
+      flashcardCleared: isMissed ? false : prev.flashcardCleared,
+      practiceCleared: isMissed ? false : prev.practiceCleared,
+      updatedAt: new Date().toISOString(),
+    };
+  }
+  writeProgress(setId, next);
+  writeJson(`rtt_mock_wrong_ids_${setId}`, Array.from(missed));
+}
+
+export function markFlashcardCleared(setId: string, qid: string) {
+  const current = readProgress(setId);
+  const prev = current[qid];
+  if (!prev) return;
+  current[qid] = { ...prev, flashcardCleared: true, updatedAt: new Date().toISOString() };
+  writeProgress(setId, current);
+}
+
+export function markPracticeCleared(setId: string, qid: string) {
+  const current = readProgress(setId);
+  const prev = current[qid];
+  if (!prev) return;
+  current[qid] = { ...prev, practiceCleared: true, updatedAt: new Date().toISOString() };
+  writeProgress(setId, current);
+}
+
+export function markWrongFromPractice(setId: string, qid: string, category?: string) {
+  const current = readProgress(setId);
+  const prev = current[qid] || {
+    questionId: qid,
+    category,
+    mockMissed: false,
+    flashcardCleared: false,
+    practiceCleared: false,
+  };
+  current[qid] = {
+    ...prev,
+    category: category || prev.category,
+    mockMissed: true,
+    flashcardCleared: false,
+    practiceCleared: false,
+    updatedAt: new Date().toISOString(),
+  };
+  writeProgress(setId, current);
+}
+
+export function getFlashcardRemainingIds(setId: string, cat = 'all'): string[] {
+  const entries = Object.values(readProgress(setId)).filter((item) => item.mockMissed && !item.flashcardCleared);
+  return entries
+    .filter((item) => cat === 'all' || String(item.category || '').toLowerCase() === cat)
+    .map((item) => item.questionId);
+}
+
+export function getPracticeRemainingIds(setId: string, cat = 'all'): string[] {
+  const entries = Object.values(readProgress(setId)).filter((item) => item.mockMissed && !item.practiceCleared);
+  return entries
+    .filter((item) => cat === 'all' || String(item.category || '').toLowerCase() === cat)
+    .map((item) => item.questionId);
+}
+
+export function getMasterySummary(setId?: string) {
+  const attempts = readAttempts();
+  const ids = setId ? [setId] : ['qbank1', 'qbank2', 'qbank3'];
+  let flashRemaining = 0;
+  let practiceRemaining = 0;
+  let totalMissed = 0;
+  for (const id of ids) {
+    const values = Object.values(readProgress(id));
+    totalMissed += values.filter((v) => v.mockMissed).length;
+    flashRemaining += values.filter((v) => v.mockMissed && !v.flashcardCleared).length;
+    practiceRemaining += values.filter((v) => v.mockMissed && !v.practiceCleared).length;
+  }
+  return {
+    attempts,
+    hasBaseline: attempts.length > 0,
+    totalMissed,
+    flashRemaining,
+    practiceRemaining,
+  };
+}
+
+export function readFlashSession(setId: string): FlashSession | null {
+  return readJson<FlashSession | null>(flashSessionKey(setId), null);
+}
+
+export function saveFlashSession(setId: string, value: FlashSession) {
+  writeJson(flashSessionKey(setId), value);
+}
+
+export function clearFlashSession(setId: string) {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.removeItem(flashSessionKey(setId));
+  } catch {}
+}
+
+export function readPracticeSession(setId: string): PracticeSession | null {
+  return readJson<PracticeSession | null>(practiceSessionKey(setId), null);
+}
+
+export function savePracticeSession(setId: string, value: PracticeSession) {
+  writeJson(practiceSessionKey(setId), value);
+}
+
+export function clearPracticeSession(setId: string) {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.removeItem(practiceSessionKey(setId));
+  } catch {}
+}
+
+
+export type MiniMockStatus = {
+  miniId: number;
+  bestScore: number;
+  lastScore: number;
+  attempts: number;
+  completed: boolean;
+  completedAt?: string;
+};
+
+export type BankMastery = {
+  setId: string;
+  miniStatus: Record<string, MiniMockStatus>;
+};
+
+function masteryKey(setId: string) {
+  return `rtt_bank_mastery_${(setId || 'qbank1').toLowerCase()}`;
+}
+
+export function readBankMastery(setId: string): BankMastery {
+  return readJson<BankMastery>(masteryKey(setId), { setId, miniStatus: {} });
+}
+
+export function recordMiniMockResult(setId: string, miniId: number, score: number) {
+  const current = readBankMastery(setId);
+  const prev = current.miniStatus[String(miniId)] || { miniId, bestScore: 0, lastScore: 0, attempts: 0, completed: false };
+  const next: MiniMockStatus = {
+    miniId,
+    attempts: prev.attempts + 1,
+    lastScore: score,
+    bestScore: Math.max(prev.bestScore, score),
+    completed: prev.completed || score >= 90,
+    completedAt: prev.completedAt || (score >= 90 ? new Date().toISOString() : undefined),
+  };
+  writeJson(masteryKey(setId), { setId, miniStatus: { ...current.miniStatus, [String(miniId)]: next } });
+}
+
+export function getBankMasterySummary(setId: string) {
+  const current = readBankMastery(setId);
+  const values = Object.values(current.miniStatus);
+  const completed = values.filter((v) => v.completed).length;
+  const currentMini = (() => {
+    for (let i = 1; i <= 10; i += 1) {
+      if (!current.miniStatus[String(i)]?.completed) return i;
+    }
+    return 10;
+  })();
+  return {
+    setId,
+    completedMiniMocks: completed,
+    totalMiniMocks: 10,
+    currentMini,
+    bankMastered: completed >= 10,
+    miniStatus: current.miniStatus,
+  };
+}
+
+export function getBanksMasteredCount() {
+  return ['qbank1', 'qbank2', 'qbank3'].filter((id) => getBankMasterySummary(id).bankMastered).length;
+}
+
+export function estimatePassProbability() {
+  const banksMastered = getBanksMasteredCount();
+  const attempts = readAttempts().slice(-6);
+  if (!attempts.length || banksMastered === 0) {
+    return { probability: null as number | null, readiness: 'Not enough data yet', banksMastered };
+  }
+  const caps = [0, 70, 85, 95];
+  const floor = [0, 55, 70, 85];
+  const avgRecent = attempts.reduce((sum, item) => sum + Number(item.score || 0), 0) / attempts.length;
+  const values = attempts.map((item) => Number(item.score || 0));
+  const mean = avgRecent || 0;
+  const variance = values.length ? values.reduce((sum, v) => sum + (v - mean) ** 2, 0) / values.length : 0;
+  const consistency = Math.max(0, 1 - Math.min(variance ** 0.5 / 20, 1));
+  const perfComponent = Math.max(0, Math.min(1, (avgRecent - 50) / 45));
+  const raw = floor[banksMastered] + (caps[banksMastered] - floor[banksMastered]) * (0.7 * perfComponent + 0.3 * consistency);
+  const probability = Math.max(floor[banksMastered], Math.min(caps[banksMastered], Math.round(raw)));
+  const readiness = probability >= 93 ? 'Strong Pass Range' : probability >= 85 ? 'Test Ready' : probability >= 75 ? 'Near Ready' : probability >= 65 ? 'Developing' : 'Not Ready Yet';
+  return { probability, readiness, banksMastered };
+}
+
+export function getCategoryCumulative() {
+  const wanted = ['Patient Care', 'Safety', 'Image Production', 'Procedures'];
+  const attempts = readAttempts();
+  const latest: Record<string, number | null> = { 'Patient Care': null, 'Safety': null, 'Image Production': null, 'Procedures': null };
+  for (const category of wanted) {
+    const hit = [...attempts].reverse().find((item) => item.type === 'category' && item.category === category);
+    latest[category] = hit ? Number(hit.score || 0) : null;
+  }
+  const values = wanted.map((k) => latest[k]).filter((v): v is number => typeof v === 'number');
+  return {
+    latest,
+    complete: values.length === wanted.length,
+    cumulative: values.length === wanted.length ? Math.round(values.reduce((a, b) => a + b, 0) / values.length) : null,
+  };
+}

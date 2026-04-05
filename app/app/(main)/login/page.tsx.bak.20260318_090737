@@ -1,0 +1,251 @@
+'use client';
+
+import { useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import supabase from '@/lib/supabaseClient';
+
+type AuthMode = 'signin' | 'signup' | 'magic';
+
+export default function LoginPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [authMode, setAuthMode] = useState<AuthMode>('signin');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+
+  const nextParam = searchParams.get('next') || '/app/roadmap';
+
+  const redirectTo = useMemo(() => {
+    if (typeof window === 'undefined') return '';
+    return `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextParam)}`;
+  }, [nextParam]);
+
+  const [vUser, setVUser] = useState('');
+  const [vPass, setVPass] = useState('');
+  const [vLoading, setVLoading] = useState(false);
+  const [vError, setVError] = useState('');
+
+  async function onEmailPasswordSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setMessage('');
+
+    try {
+      if (authMode === 'signup') {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: redirectTo,
+          },
+        });
+
+        if (error) {
+          setError(error.message);
+          return;
+        }
+
+        const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+
+        if (signInError) {
+          setMessage('Account created. You can now sign in.');
+          return;
+        }
+
+        if (signInData?.session) {
+          router.push(nextParam);
+          router.refresh();
+          return;
+        }
+
+        setMessage('Account created. You can now sign in.');
+        return;
+      }
+
+      if (authMode === 'magic') {
+        const { error } = await supabase.auth.signInWithOtp({
+          email,
+          options: {
+            emailRedirectTo: redirectTo,
+          },
+        });
+
+        if (error) {
+          setError(error.message);
+          return;
+        }
+
+        setMessage('Magic link sent. Check your email.');
+        return;
+      }
+
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+router.push(nextParam);
+      router.refresh();
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function onGoogleLogin() {
+    setGoogleLoading(true);
+    setError('');
+    setMessage('');
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo,
+      },
+    });
+
+    setGoogleLoading(false);
+
+    if (error) {
+      setError(error.message);
+    }
+  }
+
+  async function onValidatorSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setVError('');
+    setVLoading(true);
+
+    try {
+      const res = await fetch('/api/validator/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: vUser, password: vPass }),
+      });
+
+      if (res.ok) {
+        window.location.href = '/app/ce';
+        return;
+      }
+
+      setVError('Invalid credentials');
+    } catch {
+      setVError('Login failed');
+    } finally {
+      setVLoading(false);
+    }
+  }
+
+  return (
+    <div className="mx-auto mt-16 max-w-md rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-2xl shadow-black/20">
+      <h1 className="text-2xl font-semibold">Sign in</h1>
+      <p className="mt-2 text-sm text-white/70">
+        Continue with Google, or use email and password. Magic link is still available if you want it.
+      </p>
+
+      <button
+        type="button"
+        onClick={onGoogleLogin}
+        disabled={googleLoading}
+        className="mt-6 w-full rounded-xl bg-yellow-400 px-4 py-3 text-sm font-semibold text-black hover:brightness-95 disabled:opacity-60"
+      >
+        {googleLoading ? 'Redirecting…' : 'Continue with Google'}
+      </button>
+
+      <div className="mt-6 grid grid-cols-3 gap-2 rounded-2xl border border-white/10 bg-black/20 p-1 text-xs font-semibold">
+        <button
+          type="button"
+          onClick={() => setAuthMode('signin')}
+          className={authMode === 'signin' ? 'rounded-xl bg-white/10 px-3 py-2 text-white' : 'rounded-xl px-3 py-2 text-white/65'}
+        >
+          Sign in
+        </button>
+        <button
+          type="button"
+          onClick={() => setAuthMode('signup')}
+          className={authMode === 'signup' ? 'rounded-xl bg-white/10 px-3 py-2 text-white' : 'rounded-xl px-3 py-2 text-white/65'}
+        >
+          Create account
+        </button>
+        <button
+          type="button"
+          onClick={() => setAuthMode('magic')}
+          className={authMode === 'magic' ? 'rounded-xl bg-white/10 px-3 py-2 text-white' : 'rounded-xl px-3 py-2 text-white/65'}
+        >
+          Magic link
+        </button>
+      </div>
+
+      <form onSubmit={onEmailPasswordSubmit} className="mt-5 space-y-3">
+        <input
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@email.com"
+          className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm outline-none"
+        />
+
+        {authMode !== 'magic' ? (
+          <input
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder={authMode === 'signup' ? 'Create a password' : 'Password'}
+            className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm outline-none"
+          />
+        ) : null}
+
+        <button type="submit" disabled={loading} className="w-full rounded-xl bg-white/10 px-4 py-3 text-sm font-semibold text-white hover:bg-white/15 disabled:opacity-60">
+          {loading
+            ? authMode === 'magic'
+              ? 'Sending…'
+              : authMode === 'signup'
+                ? 'Creating account…'
+                : 'Signing in…'
+            : authMode === 'magic'
+              ? 'Send Magic Link'
+              : authMode === 'signup'
+                ? 'Create Account'
+                : 'Sign In'}
+        </button>
+      </form>
+
+      {message ? <div className="mt-3 rounded-xl border border-green-500/20 bg-green-500/10 px-3 py-2 text-sm text-green-300">{message}</div> : null}
+      {error ? <div className="mt-3 rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</div> : null}
+
+      <div className="my-7 border-t border-white/10" />
+
+      <div className="text-sm font-semibold">ASRT Reviewer Login</div>
+      <p className="mt-1 text-sm text-white/60">
+        Use this only for CE reviewer access.
+      </p>
+
+      <form onSubmit={onValidatorSubmit} className="mt-4 space-y-3">
+        <input
+          value={vUser}
+          onChange={(e) => setVUser(e.target.value)}
+          placeholder="Username"
+          className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-2 text-sm"
+        />
+        <input
+          value={vPass}
+          onChange={(e) => setVPass(e.target.value)}
+          placeholder="Password"
+          type="password"
+          className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-2 text-sm"
+        />
+        <button type="submit" disabled={vLoading} className="w-full rounded-xl bg-yellow-400 px-4 py-3 text-sm font-semibold text-black hover:brightness-95 disabled:opacity-60">
+          {vLoading ? 'Signing in…' : 'Sign In (Reviewer)'}
+        </button>
+        {vError ? <div className="text-sm text-red-400">{vError}</div> : null}
+      </form>
+    </div>
+  );
+}

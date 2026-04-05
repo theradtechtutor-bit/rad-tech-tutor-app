@@ -1,0 +1,27 @@
+'use client';
+
+import { usePro } from '@/app/app/_lib/usePro';
+
+export default function DashboardPage() {
+  const isPro = usePro();
+
+  if (isPro === null) {
+    return <div className="p-6">Loading...</div>;
+  }
+
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+
+      {!isPro && (
+        <div className="p-4 border rounded bg-yellow-50 mb-6">
+          Upgrade to Pro to unlock full access.
+        </div>
+      )}
+
+      <div>
+        {isPro ? 'All features unlocked ✅' : 'Free version (limited access)'}
+      </div>
+    </div>
+  );
+}

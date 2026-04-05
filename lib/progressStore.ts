@@ -1,0 +1,657 @@
+export type QuestionProgress = {
+  questionId: string;
+  category?: string;
+  mockMissed: boolean;
+  practiceMissed: boolean;
+  flashcardCleared: boolean;
+  practiceCleared: boolean;
+  updatedAt?: string;
+};
+
+export type ProgressMap = Record<string, QuestionProgress>;
+
+export type ExamAttempt = {
+  attempt: number;
+  label: string;
+  score: number;
+  correct: number;
+  total: number;
+  dateISO: string;
+  registryReady?: boolean;
+  categoryBreakdown?: Record<string, number>;bankId?: number;
+  category?: string;
+  type?: 'practice' | 'mini' | 'full' | 'category';
+  miniId?: number;
+  questionsTaken?: number;
+  timeSpentSeconds?: number;
+};
+
+export type FlashSession = {
+  setId: string;
+  mode: 'all' | 'missed';
+  cat: string;
+  mini?: number | 'all';
+  cursor: number;
+  deck: any[];
+  mastered: any[];
+  savedAt: number;
+};
+
+export type PracticeSession = {
+  setId: string;
+  mode: 'all' | 'missed';
+  cat: string;
+  mini: number | 'all';
+  queueIds: string[];
+  currentId: string | null;
+  answeredCount: number;
+  correctCount: number;
+  missedCount: number;
+  totalCount: number;
+  savedAt: number;
+};
+
+const ATTEMPTS_KEY = 'rtt_mock_attempts';
+const EXAM_DATE_KEY = 'rtt_exam_date';
+
+function progressKey(setId: string) {
+  return `rtt_progress_${(setId || 'qbank1').toLowerCase()}`;
+}
+
+function flashSessionKey(scopeKey: string) {
+  return `rtt_flash_session_${String(scopeKey || 'qbank1').toLowerCase()}`;
+}
+
+function practiceSessionKey(scopeKey: string) {
+  return `rtt_practice_session_${String(scopeKey || 'qbank1').toLowerCase()}`;
+}
+
+function hasAuthToken() {
+  if (typeof window === 'undefined') return false;
+  try {
+    const hasIn = (store: Storage) =>
+      Object.keys(store).some(
+        (key) => /^sb-.*-auth-token$/i.test(key) && !!store.getItem(key),
+      );
+    return hasIn(window.localStorage) || hasIn(window.sessionStorage);
+  } catch {
+    return false;
+  }
+}
+
+export function getClientStorage() {
+  if (typeof window === 'undefined') return null;
+  try {
+    return hasAuthToken() ? window.localStorage : window.sessionStorage;
+  } catch {
+    return null;
+  }
+}
+
+function removeKeyFromBoth(key: string) {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.removeItem(key);
+  } catch {}
+  try {
+    window.sessionStorage.removeItem(key);
+  } catch {}
+}
+
+export function clearRttClientState() {
+  if (typeof window === 'undefined') return;
+  try {
+    const shouldClear = (key: string) =>
+      key.startsWith('rtt_') ||
+      key.startsWith('sb-') ||
+      key.startsWith('supabase.');
+
+    for (const key of Object.keys(window.localStorage)) {
+      if (shouldClear(key)) window.localStorage.removeItem(key);
+    }
+
+    for (const key of Object.keys(window.sessionStorage)) {
+      if (shouldClear(key)) window.sessionStorage.removeItem(key);
+    }
+
+    window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+  } catch {}
+}
+
+export function readJson<T>(key: string, fallback: T): T {
+  if (typeof window === 'undefined') return fallback;
+  try {
+    const active = getClientStorage();
+    const raw = active?.getItem(key);
+    if (!raw) return fallback;
+    return JSON.parse(raw) as T;
+  } catch {
+    return fallback;
+  }
+}
+
+export function writeJson(key: string, value: unknown) {
+  if (typeof window === 'undefined') return;
+  try {
+    const active = getClientStorage();
+    active?.setItem(key, JSON.stringify(value));
+    window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+  } catch {}
+}
+
+export function readAttempts(): ExamAttempt[] {
+  const parsed = readJson<any[]>(ATTEMPTS_KEY, []);
+  return Array.isArray(parsed) ? parsed : [];
+}
+
+export function appendAttempt(
+  attempt: Omit<
+    ExamAttempt,
+    'attempt' | 'label' | 'dateISO' | 'registryReady'
+  > & { dateISO?: string; label?: string },
+) {
+  const prev = readAttempts();
+  const next: ExamAttempt = {
+    attempt: prev.length + 1,
+    label:
+      attempt.label ||
+      (prev.length === 0 ? 'Baseline Mock' : `Retest ${prev.length}`),
+    dateISO: attempt.dateISO || new Date().toISOString(),
+    registryReady: attempt.score >= 85,
+    ...attempt,
+  };
+  writeJson(ATTEMPTS_KEY, [...prev, next]);
+}
+
+export function readExamDate(): string {
+  if (typeof window === 'undefined') return '';
+  try {
+    return getClientStorage()?.getItem(EXAM_DATE_KEY) || '';
+  } catch {
+    return '';
+  }
+}
+
+export function writeExamDate(value: string) {
+  if (typeof window === 'undefined') return;
+  try {
+    const active = getClientStorage();
+    if (value) active?.setItem(EXAM_DATE_KEY, value);
+    else removeKeyFromBoth(EXAM_DATE_KEY);
+    window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+  } catch {}
+}
+
+export function readProgress(setId: string): ProgressMap {
+  const parsed = readJson<ProgressMap>(progressKey(setId), {});
+  return parsed && typeof parsed === 'object' ? parsed : {};
+}
+
+export function writeProgress(setId: string, value: ProgressMap) {
+  writeJson(progressKey(setId), value);
+}
+
+export function syncMockResult(
+  setId: string,
+  questions: Array<{ id: string; category?: string }>,
+  missedIds: string[],
+) {
+  const current = readProgress(setId);
+  const missed = new Set(missedIds);
+  const next: ProgressMap = { ...current };
+
+  for (const q of questions) {
+    const prev = current[q.id] || {
+      questionId: q.id,
+      category: q.category,
+      mockMissed: false,
+      practiceMissed: false,
+      flashcardCleared: true,
+      practiceCleared: true,
+    };
+    const isMissed = missed.has(q.id);
+    next[q.id] = {
+      questionId: q.id,
+      category: q.category || prev.category,
+      mockMissed: isMissed,
+      practiceMissed: prev.practiceMissed,
+      flashcardCleared: isMissed ? false : prev.flashcardCleared,
+      practiceCleared: isMissed ? false : prev.practiceCleared,
+      updatedAt: new Date().toISOString(),
+    };
+  }
+
+  writeProgress(setId, next);
+  writeJson(`rtt_mock_wrong_ids_${setId}`, Array.from(missed));
+}
+
+export function markFlashcardCleared(setId: string, qid: string) {
+  const current = readProgress(setId);
+  const prev = current[qid];
+  if (!prev) return;
+  current[qid] = {
+    ...prev,
+    flashcardCleared: true,
+    updatedAt: new Date().toISOString(),
+  };
+  writeProgress(setId, current);
+}
+
+export function markPracticeCleared(setId: string, qid: string) {
+  const current = readProgress(setId);
+  const prev = current[qid];
+  if (!prev) return;
+  current[qid] = {
+    ...prev,
+    practiceCleared: true,
+    updatedAt: new Date().toISOString(),
+  };
+  writeProgress(setId, current);
+}
+
+export function markWrongFromPractice(
+  setId: string,
+  qid: string,
+  category?: string,
+) {
+  const current = readProgress(setId);
+  const prev = current[qid] || {
+    questionId: qid,
+    category,
+    mockMissed: false,
+    practiceMissed: false,
+    flashcardCleared: false,
+    practiceCleared: false,
+  };
+
+  current[qid] = {
+    ...prev,
+    questionId: qid,
+    category: category || prev.category,
+    mockMissed: prev.mockMissed ?? false,
+    practiceMissed: true,
+    flashcardCleared: false,
+    practiceCleared: false,
+    updatedAt: new Date().toISOString(),
+  };
+
+  writeProgress(setId, current);
+}
+
+export function getFlashcardRemainingIds(setId: string, cat = 'all'): string[] {
+  const entries = Object.values(readProgress(setId)).filter(
+    (item) => item.practiceMissed && !item.flashcardCleared,
+  );
+  return entries
+    .filter(
+      (item) =>
+        cat === 'all' || String(item.category || '').toLowerCase() === cat,
+    )
+    .map((item) => item.questionId);
+}
+
+export function getPracticeRemainingIds(setId: string, cat = 'all'): string[] {
+  const entries = Object.values(readProgress(setId)).filter(
+    (item) => item.practiceMissed && !item.practiceCleared,
+  );
+  return entries
+    .filter(
+      (item) =>
+        cat === 'all' || String(item.category || '').toLowerCase() === cat,
+    )
+    .map((item) => item.questionId);
+}
+
+export function getMasterySummary(setId?: string) {
+  const attempts = readAttempts();
+  const ids = setId ? [setId] : ['qbank1', 'qbank2', 'qbank3'];
+  let flashRemaining = 0;
+  let practiceRemaining = 0;
+  let totalMissed = 0;
+
+  for (const id of ids) {
+    const values = Object.values(readProgress(id));
+    totalMissed += values.filter((v) => v.practiceMissed).length;
+    flashRemaining += values.filter(
+      (v) => v.practiceMissed && !v.flashcardCleared,
+    ).length;
+    practiceRemaining += values.filter(
+      (v) => v.practiceMissed && !v.practiceCleared,
+    ).length;
+  }
+
+  return {
+    attempts,
+    hasBaseline: attempts.length > 0,
+    totalMissed,
+    flashRemaining,
+    practiceRemaining,
+  };
+}
+
+export function readFlashSession(scopeKey: string): FlashSession | null {
+  if (typeof window === 'undefined') return null;
+  const key = flashSessionKey(scopeKey);
+
+  try {
+    const local = window.localStorage.getItem(key);
+    if (local) return JSON.parse(local);
+
+    const session = window.sessionStorage.getItem(key);
+    if (session) return JSON.parse(session);
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+export function saveFlashSession(scopeKey: string, value: FlashSession) {
+  if (typeof window === 'undefined') return;
+  const key = flashSessionKey(scopeKey);
+
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+    window.sessionStorage.setItem(key, JSON.stringify(value));
+    window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+  } catch {}
+}
+
+export function clearFlashSession(scopeKey: string) {
+  if (typeof window === 'undefined') return;
+  const key = flashSessionKey(scopeKey);
+
+  try {
+    window.localStorage.removeItem(key);
+  } catch {}
+
+  try {
+    window.sessionStorage.removeItem(key);
+  } catch {}
+
+  window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+}
+
+export function readPracticeSession(scopeKey: string): PracticeSession | null {
+  return readJson<PracticeSession | null>(practiceSessionKey(scopeKey), null);
+}
+
+export function savePracticeSession(scopeKey: string, value: PracticeSession) {
+  writeJson(practiceSessionKey(scopeKey), value);
+}
+
+export function clearPracticeSession(scopeKey: string) {
+  if (typeof window === 'undefined') return;
+  removeKeyFromBoth(practiceSessionKey(scopeKey));
+}
+
+export type MiniMockStatus = {
+  miniId: number;
+  bestScore: number;
+  lastScore: number;
+  attempts: number;
+  completed: boolean;
+  completedAt?: string;
+};
+
+export type BankMastery = {
+  setId: string;
+  miniStatus: Record<string, MiniMockStatus>;
+};
+
+function masteryKey(setId: string) {
+  return `rtt_bank_mastery_${(setId || 'qbank1').toLowerCase()}`;
+}
+
+export function readBankMastery(setId: string): BankMastery {
+  return readJson<BankMastery>(masteryKey(setId), {
+    setId,
+    miniStatus: {},
+  });
+}
+
+export function recordMiniMockResult(
+  setId: string,
+  miniId: number,
+  score: number,
+) {
+  const current = readBankMastery(setId);
+  const prev = current.miniStatus[String(miniId)] || {
+    miniId,
+    bestScore: 0,
+    lastScore: 0,
+    attempts: 0,
+    completed: false,
+  };
+
+  const next: MiniMockStatus = {
+    miniId,
+    attempts: prev.attempts + 1,
+    lastScore: score,
+    bestScore: Math.max(prev.bestScore, score),
+    completed: true,
+    completedAt: prev.completedAt || new Date().toISOString(),
+  };
+
+  writeJson(masteryKey(setId), {
+    setId,
+    miniStatus: { ...current.miniStatus, [String(miniId)]: next },
+  });
+}
+
+export function getBankMasterySummary(setId: string) {
+  const current = readBankMastery(setId);
+  const values = Object.values(current.miniStatus);
+  const completed = values.filter((v) => v.completed).length;
+
+  const currentMini = (() => {
+    for (let i = 1; i <= 10; i += 1) {
+      if (!current.miniStatus[String(i)]?.completed) return i;
+    }
+    return 10;
+  })();
+
+  return {
+    setId,
+    completedMiniMocks: completed,
+    totalMiniMocks: 10,
+    currentMini,
+    bankMastered: completed >= 10,
+    miniStatus: current.miniStatus,
+  };
+}
+
+export function getBanksMasteredCount() {
+  return ['qbank1', 'qbank2', 'qbank3'].filter(
+    (id) => getBankMasterySummary(id).bankMastered,
+  ).length;
+}
+
+export function estimatePassProbability() {
+  const banksMastered = getBanksMasteredCount();
+  const attempts = readAttempts().slice(-6);
+
+  if (!attempts.length || banksMastered === 0) {
+    return {
+      probability: null as number | null,
+      readiness: 'Not enough data yet',
+      banksMastered,
+    };
+  }
+
+  const caps = [0, 70, 85, 95];
+  const floor = [0, 55, 70, 85];
+  const avgRecent =
+    attempts.reduce((sum, item) => sum + Number(item.score || 0), 0) /
+    attempts.length;
+
+  const values = attempts.map((item) => Number(item.score || 0));
+  const mean = avgRecent || 0;
+  const variance = values.length
+    ? values.reduce((sum, v) => sum + (v - mean) ** 2, 0) / values.length
+    : 0;
+
+  const consistency = Math.max(0, 1 - Math.min(variance ** 0.5 / 20, 1));
+  const perfComponent = Math.max(0, Math.min(1, (avgRecent - 50) / 45));
+  const raw =
+    floor[banksMastered] +
+    (caps[banksMastered] - floor[banksMastered]) *
+      (0.7 * perfComponent + 0.3 * consistency);
+
+  const probability = Math.max(
+    floor[banksMastered],
+    Math.min(caps[banksMastered], Math.round(raw)),
+  );
+
+  const readiness =
+    probability >= 93
+      ? 'Strong Pass Range'
+      : probability >= 85
+        ? 'Test Ready'
+        : probability >= 75
+          ? 'Near Ready'
+          : probability >= 65
+            ? 'Developing'
+            : 'Not Ready Yet';
+
+  return { probability, readiness, banksMastered };
+}
+
+export function getCategoryCumulative() {
+  const wanted = ['Patient Care', 'Safety', 'Image Production', 'Procedures'];
+  const attempts = readAttempts();
+
+  const latest: Record<string, number | null> = {
+    'Patient Care': null,
+    Safety: null,
+    'Image Production': null,
+    Procedures: null,
+  };
+
+  for (const category of wanted) {
+    const miniValues = attempts
+      .filter(
+        (item) =>
+          item.type === 'mini' &&
+          item.categoryBreakdown &&
+          typeof item.categoryBreakdown[category] === 'number',
+      )
+      .map((item) => Number(item.categoryBreakdown?.[category]));
+
+    if (miniValues.length > 0) {
+      latest[category] = Math.round(
+        miniValues.reduce((a, b) => a + b, 0) / miniValues.length,
+      );
+      continue;
+    }
+
+    const hit = [...attempts]
+      .reverse()
+      .find((item) => item.type === 'category' && item.category === category);
+
+    latest[category] = hit ? Number(hit.score || 0) : null;
+  }
+
+  const values = wanted
+    .map((k) => latest[k])
+    .filter((v): v is number => typeof v === 'number');
+
+  return {
+    latest,
+    complete: values.length === wanted.length,
+    cumulative:
+      values.length === wanted.length
+        ? Math.round(values.reduce((a, b) => a + b, 0) / values.length)
+        : null,
+  };
+}
+
+export function resetMiniMock(setId: string, miniId: number) {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const storageSources = [window.localStorage, window.sessionStorage];
+
+    for (const storage of storageSources) {
+      for (let i = storage.length - 1; i >= 0; i -= 1) {
+        const key = storage.key(i);
+        if (!key) continue;
+
+        if (key.startsWith(`rtt_practice_session_${setId}__all__all__${miniId}`)) {
+          storage.removeItem(key);
+          continue;
+        }
+
+        if (key.startsWith(`rtt_flash_session_${setId}__missed__all__${miniId}`)) {
+          storage.removeItem(key);
+          continue;
+        }
+
+        if (key.startsWith(`rtt_mock_session_${setId}_mini_${miniId}`)) {
+          storage.removeItem(key);
+          continue;
+        }
+      }
+    }
+
+    const mastery = readBankMastery(setId);
+
+    if (mastery.miniStatus[String(miniId)]) {
+      delete mastery.miniStatus[String(miniId)];
+    }
+
+    writeJson(masteryKey(setId), mastery);
+    clearMasteryMiniStep(setId, miniId);
+
+    window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+  } catch {}
+}
+
+
+
+
+
+
+
+
+
+export function saveMasteryMiniStep(
+  setId: string,
+  miniId: number,
+  step: 'practice' | 'flashcards' | 'exam',
+) {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(
+      `rtt_mastery_step_${setId}_${miniId}`,
+      step
+    );
+    window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+  } catch {}
+}
+
+export function readMasteryMiniStep(
+  setId: string,
+  miniId: number,
+): 'practice' | 'flashcards' | 'exam' | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.localStorage.getItem(
+      `rtt_mastery_step_${setId}_${miniId}`
+    );
+    return raw === 'practice' || raw === 'flashcards' || raw === 'exam'
+      ? raw
+      : null;
+  } catch {}
+  return null;
+}
+
+export function clearMasteryMiniStep(setId: string, miniId: number) {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.removeItem(
+      `rtt_mastery_step_${setId}_${miniId}`
+    );
+    window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+  } catch {}
+}

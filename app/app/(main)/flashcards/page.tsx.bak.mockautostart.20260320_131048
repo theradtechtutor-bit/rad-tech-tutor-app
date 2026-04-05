@@ -1,0 +1,412 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import type { Question } from '@/lib/questions';
+import { stageAfterAnswer, stageBorderClass, toFlashcard, type FlashcardState } from '@/lib/mastery/flashcards';
+import MasteryFlowSteps from '@/app/app/_components/MasteryFlowSteps';
+import StartHereTour from '@/app/app/_components/StartHereTour';
+import SaveProgressPrompt from '@/app/app/_components/SaveProgressPrompt';
+import { useSupabaseSession } from '@/app/app/_hooks/useSupabaseSession';
+import { selectQuestionsForScope } from '@/lib/mockPlan';
+import { clearFlashSession, getFlashcardRemainingIds, markFlashcardCleared, readFlashSession, saveFlashSession } from '@/lib/progressStore';
+
+function mapToArrtMajorCategory(raw: string): string {
+  const v = (raw || '').toLowerCase().trim();
+  if (!v) return 'Other';
+  if (v.includes('patient care') || v.includes('patient interaction') || v.includes('patient assessment') || v.includes('infection') || v.includes('consent') || v.includes('patient')) return 'Patient Care';
+  if (v.includes('radiobiology') || v.includes('radiation physics') || v.includes('radiation protection') || v.includes('safety') || v.includes('dose') || v.includes('physics') || v.includes('grid') || v.includes('beam') || v.includes('collimation') || v.includes('scatter')) return 'Safety';
+  if (v.includes('image production') || v.includes('image evaluation') || v.includes('quality') || v.includes('artifact') || v.includes('processing') || v.includes('digital') || v.includes('detector') || v.includes('image') || v.includes('ei') || v.includes('di')) return 'Image Production';
+  if (v.includes('position') || v.includes('positioning') || v.includes('procedure') || v.includes('exam') || v.includes('trauma') || v.includes('portable') || v.includes('c-arm') || v.includes('fluoro') || v.includes('contrast') || v.includes('anatomy') || v.includes('pathology')) return 'Procedures';
+  return 'Other';
+}
+
+function apiForSetId(setId: string) {
+  const s = (setId || '').toLowerCase();
+  if (s === 'qbank1') return '/api/questions/qbank1';
+  if (s === 'qbank2') return '/api/questions/qbank2';
+  if (s === 'qbank3') return '/api/questions/qbank3';
+  return '/api/questions/qbank1';
+}
+
+function titleForSetId(setId: string) {
+  const s = (setId || '').toLowerCase();
+  if (s === 'qbank1') return 'QBank 1';
+  if (s === 'qbank2') return 'QBank 2';
+  if (s === 'qbank3') return 'QBank 3';
+  return 'Set';
+}
+
+function cardCategory(card: FlashcardState) {
+  return mapToArrtMajorCategory(String(card.category || '').trim());
+}
+
+function stackTileClass(kind: 'missed' | 'yellow' | 'green' | 'gold') {
+  if (kind === 'missed') return 'border-red-500/40 bg-red-500/10 text-red-200';
+  if (kind === 'yellow') return 'border-yellow-400/40 bg-yellow-400/10 text-yellow-100';
+  if (kind === 'green') return 'border-emerald-400/40 bg-emerald-400/10 text-emerald-100';
+  return 'border-violet-400/40 bg-violet-400/10 text-violet-100';
+}
+
+function FlashcardsPageInner() {
+  const sp = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const { session } = useSupabaseSession();
+  const setId = (sp?.get('set') || 'qbank1').toLowerCase();
+  const mode = ((sp?.get('mode') || 'missed').toLowerCase() === 'all' ? 'all' : 'missed') as 'all' | 'missed';
+  const masteryMode = (sp?.get('flow') || '').toLowerCase() === 'mastery';
+
+  const filterValue = (sp?.get('filter') || 'all').toLowerCase();
+  const filterIsMini = /^mini-\d+$/.test(filterValue);
+  const selectedMini = filterIsMini ? Number(filterValue.replace('mini-', '')) : 'all';
+  const selectedCategory = !filterIsMini && filterValue !== 'all' ? filterValue : 'all';
+
+  const rawMini = (sp?.get('mini') || 'all').toLowerCase();
+  const miniFilter = masteryMode ? Math.max(1, Number(sp?.get('mini') || '1')) : (rawMini === 'all' ? 'all' : Math.max(1, Number(rawMini || '1')));
+  const mini = Math.max(1, Number(sp?.get('mini') || '1'));
+  const flashSessionScopeKey = `${setId}__${mode}__${filterValue}__${String(selectedMini)}`;
+
+  const [loading, setLoading] = useState(false);
+  const [questionById, setQuestionById] = useState<Record<string, Question>>({});
+  const [allCards, setAllCards] = useState<FlashcardState[]>([]);
+  const [filterOptions, setFilterOptions] = useState<Array<{ key: string; label: string }>>([{ key: 'all', label: 'All' }]);
+  const [deck, setDeck] = useState<FlashcardState[]>([]);
+  const [mastered, setMastered] = useState<FlashcardState[]>([]);
+  const deckAnchorRef = useRef<HTMLDivElement | null>(null);
+  const [cursor, setCursor] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+
+  useEffect(() => {
+    if (!deck.length) return;
+    const t = window.setTimeout(() => {
+      deckAnchorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 250);
+    return () => window.clearTimeout(t);
+  }, [deck.length]);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(apiForSetId(setId), { cache: 'no-store' });
+        const data = await res.json();
+        const questions = ((data?.questions || []) as Question[]);
+        if (cancelled) return;
+        const byId = Object.fromEntries(questions.map((q) => [q.id, q]));
+        setQuestionById(byId);
+
+        const categorySet = new Set<string>();
+        for (const q of questions) {
+          const raw = mapToArrtMajorCategory(String((q as any).category || ''));
+          if (raw && raw !== 'Other') categorySet.add(raw);
+        }
+        const fullFilterOptions = [
+          { key: 'all', label: 'All' },
+          ...Array.from(categorySet).sort((a, b) => a.localeCompare(b)).map((label) => ({
+            key: label.toLowerCase(),
+            label,
+          })),
+          ...Array.from({ length: 10 }, (_, idx) => ({
+            key: `mini-${idx + 1}`,
+            label: `Mini Mock ${idx + 1}`,
+          })),
+        ];
+        setFilterOptions(fullFilterOptions);
+        let filteredQuestions = questions;
+        if (masteryMode) {
+          filteredQuestions = selectQuestionsForScope(questions, 'mini', { miniId: Number(mini), category: 'all' });
+        } else if (selectedMini !== 'all') {
+          filteredQuestions = selectQuestionsForScope(questions, 'mini', { miniId: Number(selectedMini), category: 'all' });
+        }
+
+        let cards = filteredQuestions.map((q) => toFlashcard({ ...q, category: mapToArrtMajorCategory(String((q as any).category || '')) } as any));
+        if (!masteryMode && selectedCategory !== 'all') {
+          cards = cards.filter((card) => cardCategory(card).toLowerCase() === selectedCategory);
+        }
+        setAllCards(cards);
+
+        const remainingMissedIds = getFlashcardRemainingIds(setId, selectedCategory === 'all' ? 'all' : selectedCategory);
+        let initialDeck = (mode === 'missed' || masteryMode)
+          ? cards.filter((card) => remainingMissedIds.includes(card.id))
+          : cards.slice();
+
+        const saved = readFlashSession(flashSessionScopeKey);
+        const allowedIds = new Set(initialDeck.map((card) => card.id));
+        const savedDeck = (saved?.deck || []).filter((card) => allowedIds.has(card.id));
+        const savedMastered = (saved?.mastered || []).filter((card) => allowedIds.has(card.id));
+        const savedLooksFresh =
+          !!saved &&
+          saved.setId === setId &&
+          saved.mode === mode &&
+          saved.cat === filterValue &&
+          String(saved.mini ?? 'all') === String(selectedMini) &&
+          (initialDeck.length === 0 || savedDeck.length + savedMastered.length > 0);
+
+        if (savedLooksFresh) {
+          setDeck(savedDeck);
+          setMastered(savedMastered);
+          setCursor(Math.min(saved?.cursor || 0, Math.max(0, savedDeck.length - 1)));
+          setFlipped(false);
+          setLoading(false);
+          return;
+        }
+
+        setDeck(initialDeck);
+        setMastered([]);
+        setCursor(0);
+        setFlipped(false);
+        clearFlashSession(flashSessionScopeKey);
+      } catch {
+        if (!cancelled) {
+          setDeck([]);
+          setMastered([]);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [flashSessionScopeKey, setId, mode, filterValue, selectedMini, selectedCategory]);
+
+  useEffect(() => {
+    saveFlashSession(flashSessionScopeKey, {
+      setId,
+      mode,
+      cat: filterValue,
+      mini: selectedMini,
+      cursor,
+      deck,
+      mastered,
+      savedAt: Date.now(),
+    });
+  }, [flashSessionScopeKey, setId, mode, filterValue, selectedMini, cursor, deck, mastered]);
+
+  const categories = useMemo(() => filterOptions, [filterOptions]);
+
+  const counts = useMemo(() => {
+    let missed = 0;
+    let yellow = 0;
+    let green = 0;
+    for (const c of deck) {
+      if (c.stage === 1) missed += 1;
+      else if (c.stage === 2) yellow += 1;
+      else if (c.stage === 3) green += 1;
+    }
+    return { missed, yellow, green, gold: mastered.length };
+  }, [deck, mastered]);
+
+  useEffect(() => {
+    if (!deck.length) setCursor(0);
+    else if (cursor >= deck.length) setCursor(0);
+  }, [deck.length, cursor]);
+
+  useEffect(() => {
+    setFlipped(false);
+  }, [cursor, deck.length]);
+
+  const reviewedCount = mastered.length + Math.min(cursor, deck.length);
+
+  useEffect(() => {
+    if (session || reviewedCount === 0) return;
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+    window.addEventListener('beforeunload', onBeforeUnload);
+    return () => window.removeEventListener('beforeunload', onBeforeUnload);
+  }, [session, reviewedCount]);
+
+  const card = deck[cursor] || null;
+
+  function handleGrade(correct: boolean) {
+    if (!card) return;
+    const outcome = stageAfterAnswer(card.stage as any, correct);
+    const remaining = deck.filter((item) => item.id !== card.id);
+
+    if (outcome.mastered) {
+      const masteredCard = { ...card, stage: 3 as const };
+      setDeck(remaining);
+      setMastered((prev) => [...prev, masteredCard]);
+      if (mode === 'missed') markFlashcardCleared(setId, card.id);
+      setFlipped(false);
+      return;
+    }
+
+    setDeck([...remaining, { ...card, stage: outcome.stage as any }]);
+    setFlipped(false);
+  }
+
+  function restartDeck() {
+    const cards = (mode === 'missed' || masteryMode)
+      ? allCards.filter((c) => getFlashcardRemainingIds(setId, selectedCategory === 'all' ? 'all' : selectedCategory).includes(c.id))
+      : allCards.filter((c) => selectedCategory === 'all' || cardCategory(c).toLowerCase() === selectedCategory);
+    setDeck(cards);
+    setMastered([]);
+    setCursor(0);
+    setFlipped(false);
+  }
+
+  const emptyText = masteryMode
+      ? 'Flashcards Complete. Your next step is the associated Mini Mock Exam in the RTT Mastery Method.'
+      : mode === 'missed'
+      ? 'No missed-question flashcards yet. Missed questions from mini mocks, full mocks, and category mocks will show up here.'
+      : 'No flashcards found.';
+
+
+  return (
+    <div className="mx-auto max-w-6xl">
+      <StartHereTour
+        storageKey="rtt_tour_flashcards"
+        steps={[
+          {
+            selector: '[data-tour="flash-actions"]',
+            title: 'What to do here',
+            body: 'This page focuses only on what you missed. Clear these cards before taking the mini mock exam.'
+          },
+          {
+            selector: '[data-tour="flash-deck"]',
+            title: 'Study this card',
+            body: 'Flip the card, review the answer, then mark Got It or Missed It. That tells the system what still needs work.'
+          }
+        ]}
+      />
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <div className="text-sm text-white/60">Flashcards • {titleForSetId(setId)}</div>
+          <h1 className="mt-1 text-3xl font-semibold tracking-tight text-white">{masteryMode ? 'RTT Mastery Flashcards' : mode === 'missed' ? 'Missed Deck Flashcards' : 'All Flashcards'}</h1>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          {masteryMode ? null : (
+            <>
+              <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
+                <select
+                  className="bg-transparent text-sm text-white/80 outline-none"
+                  value={filterValue}
+                  onChange={(e) => {
+                    const params = new URLSearchParams(sp?.toString());
+                    params.set('filter', e.target.value);
+                    params.delete('cat');
+                    params.delete('mini');
+                    router.replace(`/app/flashcards?${params.toString()}`);
+                  }}
+                >
+                  {categories.map((option) => (
+                    <option key={option.key} value={option.key}>{option.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              <Link href={`/app/flashcards?set=${setId}&mode=missed&filter=${filterValue}`} className={mode === 'missed' ? 'rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black' : 'rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold hover:bg-white/15'}>Missed Deck</Link>
+              <Link href={`/app/flashcards?set=${setId}&mode=all&filter=${filterValue}`} className={mode === 'all' ? 'rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black' : 'rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold hover:bg-white/15'}>All Flashcards</Link>
+            </>
+          )}
+        </div>
+      </div>
+
+      {masteryMode ? <div className="mt-6"><MasteryFlowSteps currentStep={2} currentBankLabel={titleForSetId(setId)} currentMini={mini} /></div> : null}
+
+      {!session && reviewedCount >= 8 ? (
+        <div className="mt-4">
+          <SaveProgressPrompt
+            nextPath={`${pathname}?${sp?.toString() || ''}`}
+            title="Create a free account to save your flashcard progress"
+            body="Keep reviewing for free now. Create a free account when you want this deck and your place in the RTT Mastery Method saved for later."
+          />
+        </div>
+      ) : null}
+      <div className="mt-4 text-xs text-white/55">Progress saves on this device now. Sign in to save your study progress across devices later.</div>
+      <div className="mt-6 grid gap-4 md:grid-cols-[300px_1fr]">
+        <div className="space-y-4">
+          <div data-tour="flash-actions" className="rounded-3xl border border-white/10 bg-white/5 p-5">
+            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">How flashcards work</div>
+            <div className="mt-3 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/70">
+              Miss a concept and it starts in <span className="font-semibold text-red-200">Needs Work</span>. Each time you get it right, it moves forward:
+              <div className="mt-2 text-white/60">Needs Work → Getting Better → Almost Locked In → Mastered</div>
+            </div>
+            <div className="mt-4 grid gap-2">
+              <div className={`rounded-2xl border px-3 py-3 text-sm ${stackTileClass('missed')}`}>Needs Work <span className="float-right font-semibold">{counts.missed}</span></div>
+              <div className={`rounded-2xl border px-3 py-3 text-sm ${stackTileClass('yellow')}`}>Getting Better <span className="float-right font-semibold">{counts.yellow}</span></div>
+              <div className={`rounded-2xl border px-3 py-3 text-sm ${stackTileClass('green')}`}>Almost Locked In <span className="float-right font-semibold">{counts.green}</span></div>
+              <div className={`rounded-2xl border px-3 py-3 text-sm ${stackTileClass('gold')}`}>Mastered <span className="float-right font-semibold">{counts.gold}</span></div>
+            </div>
+            <div className="mt-4 text-xs text-white/50">Pause & Save works automatically while you move through the deck.</div>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+            <div className="text-sm font-semibold text-white">Quick actions</div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {masteryMode ? (
+                <div className="text-sm text-white/65">Clear this assigned flashcard deck, then continue directly to the associated Mini Mock Exam.</div>
+              ) : (
+                <>
+                  <button onClick={restartDeck} className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15">Restart Deck</button>
+                  <Link href={`/app/practice/${setId}?mode=missed&filter=${filterValue}`} className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95">Go to Practice</Link>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div data-tour="flash-deck" ref={deckAnchorRef} className="rounded-3xl border border-white/10 bg-gradient-to-b from-white/8 to-white/4 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
+          {loading ? (
+            <div className="text-sm text-white/70">Loading…</div>
+          ) : !card ? (
+            <div className="rounded-2xl border border-dashed border-white/10 bg-black/20 p-8 text-sm text-white/60">
+              <div>{emptyText}</div>
+              {masteryMode ? <div className="mt-4"><Link href={`/app/mock-exam?qbank=${setId}&scope=mini&mini=${mini}`} className="inline-flex rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95">Continue to Mini Mock Exam</Link></div> : null}
+            </div>
+          ) : (
+            <>
+              <div className="flex items-center justify-between gap-3">
+                <div className="text-sm text-white/60">Card {cursor + 1} of {deck.length}</div>
+                <div className="text-xs text-white/50">{cardCategory(card)}</div>
+              </div>
+              <div className="mt-3">
+                <div className="text-xs text-white/55">Tap card or press Flip to reveal answer</div>
+              </div>
+
+              <button onClick={() => setFlipped((v) => !v)} className={`mt-4 min-h-[280px] w-full rounded-3xl bg-black/20 p-6 text-left transition hover:bg-black/25 ${stageBorderClass(card.stage)}`}>
+                <div className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">{flipped ? 'Answer' : 'Question'}</div>
+                <div className="mt-5 text-2xl font-semibold tracking-tight text-white whitespace-pre-wrap">{flipped ? card.back : card.front}</div>
+                {flipped && card.explanation ? <div className="mt-5 whitespace-pre-line text-sm text-white/70 leading-relaxed">{card.explanation}</div> : null}
+              </button>
+
+              <div className="mt-4 flex justify-center">
+                <button
+                  onClick={() => setFlipped((v) => !v)}
+                  className="rounded-2xl bg-white/10 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/15"
+                >
+                  {flipped ? 'Show Question' : 'Flip Card'}
+                </button>
+              </div>
+
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                <div className="flex gap-2">
+                  <button onClick={() => setCursor((i) => (deck.length ? (i - 1 + deck.length) % deck.length : 0))} className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15">Prev</button>
+                  <button onClick={() => setCursor((i) => (deck.length ? (i + 1) % deck.length : 0))} className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15">Next</button>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => handleGrade(false)} className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15">Missed It</button>
+                  <button onClick={() => handleGrade(true)} className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95">Got It</button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function FlashcardsPage() {
+  return (
+    <Suspense fallback={<div className="mx-auto max-w-6xl text-sm text-white/70">Loading…</div>}>
+      <FlashcardsPageInner />
+    </Suspense>
+  );
+}

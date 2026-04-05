@@ -1,0 +1,665 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { buildRationale } from '@/lib/masteryContent';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { normalizeChoices } from '@/lib/normalizeChoices';
+import { appendAttempt, getClientStorage, recordMiniMockResult, syncMockResult } from '@/lib/progressStore';
+import MasteryFlowSteps from '@/app/app/_components/MasteryFlowSteps';
+import StartHereTour from '@/app/app/_components/StartHereTour';
+import SaveProgressPrompt from '@/app/app/_components/SaveProgressPrompt';
+import { useSupabaseSession } from '@/app/app/_hooks/useSupabaseSession';
+import { mapToArrtMajorCategory, selectQuestionsForScope, shuffleQuestionChoices, type MockScope } from '@/lib/mockPlan';
+
+type Choice = string | { key?: string; label?: string; text?: string; value?: string };
+
+type Question = {
+  id: string;
+  question?: string;
+  stem?: string;
+  prompt?: string;
+  choices: Choice[] | Record<string, string>;
+  answer?: string;
+  correct?: string;
+  correctKey?: string;
+  correctAnswer?: string;
+  rationale?: string;
+  explanation?: string;
+  whyCorrect?: string;
+  category?: string;
+  subcategory?: string;
+};
+
+type SavedMockSession = {
+  questions: Question[];
+  idx: number;
+  selected: string | null;
+  answers: Record<string, string>;
+  missed: string[];
+  savedAt: number;
+  categoryFilter: string;
+  answeredCount: number;
+  startedAt: number;
+  timeLeft: number | null;
+  scope: MockScope;
+  miniId: number;
+};
+
+function getStem(q: Question) {
+  return q.stem || q.question || q.prompt || '';
+}
+
+function getCorrectKey(q: Question & Record<string, any>) {
+  return (q.correctKey || q.correct || q.correctAnswer || q.answerKey || q.answer || '').toString().trim();
+}
+
+function bankIdFromSet(setId: string) {
+  const m = String(setId).match(/qbank(\d+)/i);
+  return m ? Number(m[1]) : 1;
+}
+
+function sessionKey(setId: string, scope: MockScope, miniId: number, category: string) {
+  return `rtt_mock_session_${setId}_${scope}_${miniId}_${category}`;
+}
+
+function loadSession(setId: string, scope: MockScope, miniId: number, category: string): SavedMockSession | null {
+  try {
+    const storage = getClientStorage();
+    const raw = storage?.getItem(sessionKey(setId, scope, miniId, category));
+    if (!raw) return null;
+    return JSON.parse(raw) as SavedMockSession;
+  } catch {
+    return null;
+  }
+}
+
+function saveSession(setId: string, scope: MockScope, miniId: number, category: string, payload: SavedMockSession) {
+  try {
+    const storage = getClientStorage();
+    storage?.setItem(sessionKey(setId, scope, miniId, category), JSON.stringify(payload));
+  } catch {}
+}
+
+function clearSession(setId: string, scope: MockScope, miniId: number, category: string) {
+  try {
+    window.localStorage.removeItem(sessionKey(setId, scope, miniId, category));
+  } catch {}
+  try {
+    window.sessionStorage.removeItem(sessionKey(setId, scope, miniId, category));
+  } catch {}
+}
+
+function scopeSummary(scope: MockScope, miniId: number, categoryLabel: string) {
+  if (scope === 'mini') return `Mini Mock Exam ${miniId} is your post-test after Practice Test and Flashcards.`;
+  if (scope === 'category') return `${categoryLabel} Category Mock includes every ${categoryLabel} question in this bank.`;
+  return 'Full Mock uses the whole bank in ARRT-style exam mode with no instant feedback.';
+}
+
+function MockExamPageInner() {
+  const sp = useSearchParams();
+  const pathname = usePathname();
+  const { session } = useSupabaseSession();
+  const setId = (sp.get('qbank') || 'qbank1').toLowerCase();
+  const scope = ((sp.get('scope') || 'mini').toLowerCase() as MockScope);
+  const miniId = Math.max(1, Math.min(10, Number(sp.get('mini') || 1)));
+  const autoStart = sp.get('autostart') === '1';
+
+  const [loading, setLoading] = useState(false);
+  const [questions, setQuestions] = useState<Question[] | null>(null);
+  const [allQuestions, setAllQuestions] = useState<Question[]>([]);
+  const [err, setErr] = useState<string | null>(null);
+  const [hasSaved, setHasSaved] = useState(false);
+  const [savedMeta, setSavedMeta] = useState<{ answeredCount: number; total: number } | null>(null);
+  const [categoryFilter, setCategoryFilter] = useState((sp.get('category') || 'patient care').toLowerCase());
+  const [allCategories, setAllCategories] = useState<Array<{ key: string; label: string }>>([{ key: 'patient care', label: 'Patient Care' }, { key: 'safety', label: 'Safety' }, { key: 'image production', label: 'Image Production' }, { key: 'procedures', label: 'Procedures' }]);
+  const [isPro, setIsPro] = useState(false);
+
+  const [idx, setIdx] = useState(0);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [missed, setMissed] = useState<Set<string>>(new Set());
+  const [done, setDone] = useState(false);
+  const [timeLeft, setTimeLeft] = useState<number | null>(null);
+  const examAnchorRef = useRef<HTMLDivElement | null>(null);
+  const [startedAt, setStartedAt] = useState<number>(Date.now());
+
+  const q = useMemo(() => (questions ? questions[idx] || null : null), [questions, idx]);
+  const activeCategoryKey = scope === 'category' ? categoryFilter : 'all';
+
+  useEffect(() => {
+    if (timeLeft === null || done || !questions) return;
+
+    if (timeLeft <= 0) {
+      if (q && selected != null) {
+        submit();
+      } else {
+        const uniq = Array.from(missed);
+        const total = questions.length;
+        const correct = total - uniq.length;
+        const pct = total ? Math.round((correct / total) * 100) : 0;
+        const categoryLabel = scope === 'category' ? allCategories.find((c) => c.key === categoryFilter)?.label || 'Category' : 'All Categories';
+        const label = scope === 'mini' ? `Mini Mock ${miniId}` : scope === 'full' ? 'Full Mock' : `${categoryLabel} Category Mock`;
+        syncMockResult(setId, questions.map((item) => ({ id: item.id, category: mapToArrtMajorCategory(String(item.category || '')) })), uniq);
+        appendAttempt({
+          bankId: bankIdFromSet(setId),
+          score: pct,
+          correct,
+          total,
+          category: scope === 'category' ? categoryLabel : label,
+          type: scope,
+          miniId: scope === 'mini' ? miniId : undefined,
+          questionsTaken: total,
+          timeSpentSeconds: Math.max(0, Math.round((Date.now() - startedAt) / 1000)),
+          label,
+        });
+        if (scope === 'mini') recordMiniMockResult(setId, miniId, pct);
+        clearSession(setId, scope, miniId, activeCategoryKey);
+        setDone(true);
+        setHasSaved(false);
+        setSavedMeta(null);
+      }
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setTimeLeft((t) => (t !== null ? t - 1 : t));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timeLeft, done, questions, q, selected, missed, scope, miniId, categoryFilter, allCategories, setId, activeCategoryKey, startedAt]);
+
+
+
+    if (!questions?.length || done) return;
+    const t = window.setTimeout(() => {
+      examAnchorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 250);
+    return () => window.clearTimeout(t);
+  }, [questions?.length, done]);
+
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem('rtt_is_pro');
+      setIsPro(raw === '1' || raw === 'true');
+    } catch {
+      setIsPro(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    (async () => {
+      try {
+        const res = await fetch(`/api/questions/${setId}`, { cache: 'no-store' });
+        const data = await res.json();
+        const originalQuestions = Array.isArray(data?.questions) ? (data.questions as Question[]) : [];
+        setAllQuestions(originalQuestions);
+        const catSet = new Set<string>();
+        for (const item of originalQuestions) catSet.add(mapToArrtMajorCategory(String(item.category || '')));
+        const options = Array.from(catSet).filter(Boolean).sort().map((label) => ({ key: label.toLowerCase(), label }));
+        setAllCategories(options);
+        if (scope === 'category' && options.length && !options.some((opt) => opt.key === (sp.get('category') || categoryFilter).toLowerCase())) {
+          setCategoryFilter(options[0].key);
+        }
+      } catch {}
+    })();
+  }, [setId]);
+
+  useEffect(() => {
+    const saved = loadSession(setId, scope, miniId, activeCategoryKey);
+    setHasSaved(!!saved);
+    setSavedMeta(saved ? { answeredCount: saved.answeredCount || Object.keys(saved.answers || {}).length, total: saved.questions.length } : null);
+    if (saved?.categoryFilter && scope === 'category') setCategoryFilter(saved.categoryFilter);
+  }, [setId, scope, miniId, activeCategoryKey]);
+
+  useEffect(() => {
+    if (!q) return;
+    setSelected(answers[q.id] || null);
+  }, [q?.id, answers]);
+
+  useEffect(() => {
+    if (session || Object.keys(answers).length === 0 || done) return;
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+    window.addEventListener('beforeunload', onBeforeUnload);
+    return () => window.removeEventListener('beforeunload', onBeforeUnload);
+  }, [session, answers, done]);
+
+  useEffect(() => {
+    if (!questions || done) return;
+    saveSession(setId, scope, miniId, activeCategoryKey, {
+      questions,
+      idx,
+      selected,
+      answers,
+      missed: Array.from(missed),
+      savedAt: Date.now(),
+      categoryFilter,
+      answeredCount: Object.keys(answers).length,
+      startedAt,
+      timeLeft,
+      scope,
+      miniId,
+    });
+    setHasSaved(true);
+    setSavedMeta({ answeredCount: Object.keys(answers).length, total: questions.length });
+  }, [setId, scope, miniId, activeCategoryKey, questions, idx, selected, answers, missed, done, categoryFilter, startedAt, timeLeft]);
+
+  async function startNew() {
+    setErr(null);
+    setLoading(true);
+    clearSession(setId, scope, miniId, activeCategoryKey);
+    try {
+      const res = await fetch(`/api/questions/${setId}`, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`Failed to load questions (${res.status})`);
+      const data = await res.json();
+      const originalQuestions = Array.isArray(data?.questions) ? (data.questions as Question[]) : [];
+      const selectedQuestions = selectQuestionsForScope(originalQuestions, scope, { miniId, category: categoryFilter });
+      if (!selectedQuestions.length) throw new Error('No questions found for that selection.');
+      const shuffled = shuffleQuestionChoices(selectedQuestions, Date.now());
+      setQuestions(shuffled);
+      setIdx(0);
+      setSelected(null);
+      setAnswers({});
+      setMissed(new Set());
+      setDone(false);
+      setHasSaved(false);
+      setSavedMeta(null);
+      setStartedAt(Date.now());
+      setTimeLeft(shuffled.length * 60);
+    } catch (e: any) {
+      setErr(e?.message || 'Failed to load.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function resumeSaved() {
+    const saved = loadSession(setId, scope, miniId, activeCategoryKey);
+    if (!saved) {
+      setHasSaved(false);
+      setSavedMeta(null);
+      return;
+    }
+    setQuestions(saved.questions || []);
+    setIdx(saved.idx || 0);
+    setSelected(saved.selected || null);
+    setAnswers(saved.answers || {});
+    setMissed(new Set(saved.missed || []));
+    setCategoryFilter(saved.categoryFilter || categoryFilter);
+    setDone(false);
+    setStartedAt(saved.startedAt || Date.now());
+    setTimeLeft(typeof saved.timeLeft === 'number' ? saved.timeLeft : ((saved.questions || []).length * 60));
+  }
+
+  function pauseAndSave() {
+    if (!questions) return;
+    saveSession(setId, scope, miniId, activeCategoryKey, {
+      questions,
+      idx,
+      selected,
+      answers,
+      missed: Array.from(missed),
+      savedAt: Date.now(),
+      categoryFilter,
+      answeredCount: Object.keys(answers).length,
+      startedAt,
+      timeLeft,
+      scope,
+      miniId,
+    });
+    setHasSaved(true);
+    setSavedMeta({ answeredCount: Object.keys(answers).length, total: questions.length });
+    setQuestions(null);
+    setSelected(null);
+  }
+
+  function submit() {
+    if (!q || selected == null) return;
+    const correctKey = getCorrectKey(q);
+    const normChoices = normalizeChoices((q as any).choices).map((c) => ({ key: c.key, text: c.text }));
+    const chosenText = normChoices.find((c) => c.key === selected)?.text?.trim() || '';
+    const isCorrect = correctKey.toUpperCase() === selected.toUpperCase() || (correctKey && chosenText && correctKey.trim().toLowerCase() === chosenText.toLowerCase());
+
+    const nextAnswers = { ...answers, [q.id]: selected };
+    const nextMissed = new Set(missed);
+    if (isCorrect) nextMissed.delete(q.id);
+    else nextMissed.add(q.id);
+
+    setAnswers(nextAnswers);
+    setMissed(nextMissed);
+    setSelected(null);
+
+    if (!questions) return;
+    if (idx + 1 >= questions.length) {
+      const uniq = Array.from(nextMissed);
+      const total = questions.length;
+      const correct = total - uniq.length;
+      const pct = total ? Math.round((correct / total) * 100) : 0;
+      const categoryLabel = scope === 'category' ? allCategories.find((c) => c.key === categoryFilter)?.label || 'Category' : 'All Categories';
+      const label = scope === 'mini' ? `Mini Mock ${miniId}` : scope === 'full' ? 'Full Mock' : `${categoryLabel} Category Mock`;
+      syncMockResult(setId, questions.map((item) => ({ id: item.id, category: mapToArrtMajorCategory(String(item.category || '')) })), uniq);
+      appendAttempt({
+        bankId: bankIdFromSet(setId),
+        score: pct,
+        correct,
+        total,
+        category: scope === 'category' ? categoryLabel : label,
+        type: scope,
+        miniId: scope === 'mini' ? miniId : undefined,
+        questionsTaken: total,
+        timeSpentSeconds: Math.max(0, Math.round((Date.now() - startedAt) / 1000)),
+        label,
+      });
+      if (scope === 'mini') recordMiniMockResult(setId, miniId, pct);
+      clearSession(setId, scope, miniId, activeCategoryKey);
+      setDone(true);
+      setHasSaved(false);
+      setSavedMeta(null);
+      return;
+    }
+    setIdx((n) => n + 1);
+  }
+
+  function restart() {
+    clearSession(setId, scope, miniId, activeCategoryKey);
+    setQuestions(null);
+    setIdx(0);
+    setSelected(null);
+    setAnswers({});
+    setMissed(new Set());
+    setDone(false);
+    setErr(null);
+    setHasSaved(false);
+    setSavedMeta(null);
+    setTimeLeft(null);
+  }
+
+
+  useEffect(() => {
+    if (!autoStart || questions || loading) return;
+
+    const saved = loadSession(setId, scope, miniId, activeCategoryKey);
+    if (saved) {
+      resumeSaved();
+      return;
+    }
+
+    startNew();
+  }, [autoStart, questions, loading, setId, scope, miniId, activeCategoryKey]);
+
+  
+  function formatTime(seconds: number | null) {
+    if (seconds === null) return '';
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  }
+
+  const total = questions?.length || 0;
+  const categoryLabel = allCategories.find((c) => c.key === categoryFilter)?.label || 'Category';
+
+  if (!questions) {
+    return (
+      <div className="mx-auto max-w-5xl">
+        <div className="rtt-card rounded-2xl p-5">
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h1 className="text-2xl font-semibold">Mock Exams</h1>
+              <div className="mt-1 text-sm text-white/70">Set: {setId.toUpperCase()}</div>
+            </div>
+            <div className="text-sm text-white/70">Use mini mocks to run the mastery loop, then full and category mocks for coverage.</div>
+          </div>
+
+          {scope === 'mini' ? (
+            <div className="mt-5 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-4 text-sm text-white/80">
+              <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200/70">Step 3 of the RTT Mastery Method</div>
+              <div className="mt-2 text-base font-semibold text-white">Mini Mock Exam {miniId}</div>
+              <div className="mt-1 text-white/70">Apply what you just reviewed in Flashcards.</div>
+            </div>
+          ) : (
+            <>
+              <div className="mt-5 grid gap-4 md:grid-cols-3">
+                <label className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/80">
+                  <div className="mb-2 text-xs font-semibold text-white/60">Mock Type</div>
+                  <select value={scope} onChange={(e) => window.location.assign(`/app/mock-exam?qbank=${setId}&scope=${e.target.value}${e.target.value === 'mini' ? `&mini=${miniId}` : ''}${e.target.value === 'category' ? `&category=${categoryFilter}` : ''}`)} className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white/85 outline-none">
+                    <option value="mini">Mini Mock</option>
+                    <option value="full">Full Mock</option>
+                    <option value="category">Category Mock</option>
+                  </select>
+                </label>
+
+                {scope === 'mini' ? (
+                  <label className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/80">
+                    <div className="mb-2 text-xs font-semibold text-white/60">Mini Mock</div>
+                    <select value={miniId} onChange={(e) => window.location.assign(`/app/mock-exam?qbank=${setId}&scope=mini&mini=${e.target.value}`)} className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white/85 outline-none">
+                      {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
+                        <option key={n} value={n} disabled={!isPro && setId === 'qbank1' && n > 5}>
+                          {!isPro && setId === 'qbank1' && n > 5 ? `Mini Mock ${n} (Pro)` : `Mini Mock ${n}`}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                ) : null}
+
+                {scope === 'category' ? (
+                  <label className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/80">
+                    <div className="mb-2 text-xs font-semibold text-white/60">Category</div>
+                    <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white/85 outline-none">
+                      {allCategories.map((opt) => <option key={opt.key} value={opt.key}>{opt.label}</option>)}
+                    </select>
+                  </label>
+                ) : (
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/70">
+                    {scopeSummary(scope, miniId, categoryLabel)}
+                  </div>
+                )}
+              </div>
+
+              {scope === 'category' ? <div className="mt-4 text-sm text-white/70">{scopeSummary(scope, miniId, categoryLabel)}</div> : null}
+            </>
+          )}
+
+          {savedMeta ? <div className="mt-4 rounded-2xl border border-yellow-400/20 bg-yellow-400/10 p-4 text-sm text-yellow-100">Saved mock found. You answered up to question {Math.max(1, Math.min(savedMeta.answeredCount, savedMeta.total))} of {savedMeta.total}.</div> : null}
+          {err ? <div className="mt-4 text-sm text-red-300">{err}</div> : null}
+
+          {scope === 'mini' ? <div className="mt-6"><MasteryFlowSteps currentStep={3} currentBankLabel={setId.toUpperCase()} currentMini={miniId} compact /></div> : null}
+
+          <div className="mt-6 flex flex-wrap gap-2">
+            {hasSaved ? <button onClick={resumeSaved} className="cursor-pointer rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95">Resume Saved {scope === 'mini' ? `Mini Mock ${miniId}` : 'Mock'}</button> : null}
+            <button onClick={startNew} disabled={loading} className="cursor-pointer rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15 disabled:opacity-60">{loading ? 'Loading…' : hasSaved ? (scope === 'mini' ? `Start New Mini Mock Exam ${miniId}` : 'Start New Mock') : (scope === 'mini' ? `Take Mini Mock Exam ${miniId}` : scope === 'category' ? 'Start Category Mock' : 'Start Full Mock')}</button>
+            <Link href="/app/dashboard" className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15">Go to Dashboard</Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (done) {
+    const missedCount = missed.size;
+    const correctCount = total - missedCount;
+    const pct = total ? Math.round((correctCount / total) * 100) : 0;
+
+    return (
+      <div className="mx-auto max-w-4xl">
+
+        <div className="rtt-card rounded-3xl p-6 shadow-[0_20px_60px_rgba(0,0,0,0.22)]">
+          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/45">Mock Exam Results</div>
+          <h1 className="mt-2 text-2xl font-semibold">Mock Complete</h1>
+          <div className="mt-2 text-sm text-white/70">{scope === 'mini' ? `Mini Mock Exam ${miniId}` : scope === 'category' ? `${categoryLabel} Category Mock` : 'Full Mock'} • {setId.toUpperCase()}</div>
+
+          <div className="mt-5 grid gap-4 md:grid-cols-[1.2fr_1fr]">
+            <div className="rounded-2xl border border-yellow-400/20 bg-yellow-400/10 p-5">
+              <div className="text-sm text-white/70">Score</div>
+              <div className="mt-2 text-4xl font-bold text-yellow-300">{pct}%</div>
+              <div className="mt-2 text-sm text-white/65">This is your post-test score after review.</div>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-1">
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div className="text-xs text-white/55">Correct</div>
+                <div className="mt-1 text-2xl font-semibold text-white">{correctCount} / {total}</div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div className="text-xs text-white/55">Missed</div>
+                <div className="mt-1 text-2xl font-semibold text-white">{missedCount}</div>
+              </div>
+            </div>
+          </div>
+
+          {scope === 'mini' ? <div className="mt-5"><MasteryFlowSteps currentStep={3} currentBankLabel={setId.toUpperCase()} currentMini={miniId} compact /></div> : null}
+
+          <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/70">
+            Flow: Practice Test → Flashcards → Mini Mock Exam. Finish all 10 mini mock sessions in the bank, then run full and category mocks for broader coverage.
+          </div>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+            <Link href={`/app/flashcards?set=${setId}&mode=missed&cat=all&flow=mastery&mini=${miniId}`} className="cursor-pointer rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95">Continue RTT Mastery Method</Link>
+            {scope === 'mini' ? <Link href={`/app/mock-exam?qbank=${setId}&scope=mini&mini=${miniId}`} className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15">Retake Mini Mock Exam</Link> : null}
+            <Link href="/app/dashboard" className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15">View Dashboard</Link>
+            <Link href="/app/roadmap" className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15">View Roadmap</Link>
+          </div>
+
+          {missedCount > 0 ? (
+            <div className="mt-6 rounded-2xl border border-red-500/20 bg-red-500/5 p-5">
+              <div className="text-xs font-semibold uppercase tracking-[0.18em] text-red-200/70">Review what you missed</div>
+              <div className="mt-2 text-lg font-semibold text-white">Missed Questions</div>
+              <div className="mt-4 space-y-4">
+                {questions
+                  .filter((item) => missed.has(item.id))
+                  .map((item, i) => {
+                    const answerIndex = questions.findIndex((x) => x.id === item.id);
+                    const userAnswer = answers[answerIndex] || '—';
+                    const explanation =
+                      typeof item.explanation === 'string'
+                        ? item.explanation
+                        : buildRationale(item);
+
+                    return (
+                      <div key={item.id} className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                        <div className="text-sm font-semibold text-white">#{i + 1} • {item.question}</div>
+                        <div className="mt-3 whitespace-pre-line text-sm text-white/70 leading-relaxed">Your answer: <span className="font-semibold text-red-300">{userAnswer}</span></div>
+                        <div className="mt-1 text-sm text-white/70">Correct answer: <span className="font-semibold text-emerald-300">{item.answer}</span></div>
+                        {explanation ? <div className="mt-3 whitespace-pre-line text-sm text-white/70 leading-relaxed">{explanation}</div> : null}
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    );
+  }
+
+  if (!q) return null;
+  const stem = getStem(q);
+  const choices = normalizeChoices((q as any).choices).map((c) => ({ key: c.key, text: c.text }));
+
+  return (
+    <div className="mx-auto max-w-4xl">
+      <StartHereTour
+        storageKey="rtt_tour_mock"
+        steps={[
+          {
+            selector: '[data-tour="mock-flow"]',
+            title: 'Where you are now',
+            body: 'This is your post-test. After practice questions and flashcards, you take the mini mock to measure improvement.'
+          },
+          {
+            selector: '[data-tour="mock-info"]',
+            title: 'How this page works',
+            body: 'There is no instant feedback here. You answer the mini mock first, then review results after.'
+          },
+          {
+            selector: '[data-tour="mock-question"]',
+            title: 'Answer here',
+            body: 'This is the live mock exam area. Pick an answer and submit to move through the test.'
+          }
+        ]}
+      />
+      <div className="flex items-end justify-between gap-4">
+        <div className="text-sm text-yellow-300 font-semibold">
+          Time Remaining: {formatTime(timeLeft)}
+        </div>
+        <div>
+          <h1 className="text-2xl font-semibold">{scope === 'mini' ? `Mini Mock Exam ${miniId}` : scope === 'category' ? `${categoryLabel} Category Mock` : 'Full Mock'}</h1>
+          <div className="mt-1 text-sm text-white/70">Question {idx + 1} / {total}</div>
+        </div>
+        <div className="text-sm text-white/70">{mapToArrtMajorCategory(String(q.category || '—'))}{q.subcategory ? ` / ${q.subcategory}` : ''}</div>
+      </div>
+
+      {scope === 'mini' ? <div data-tour="mock-flow" className="mt-4"><MasteryFlowSteps currentStep={3} currentBankLabel={setId.toUpperCase()} currentMini={miniId} compact /></div> : null}
+
+      {!session && Object.keys(answers).length >= 10 && !done ? (
+        <div className="mt-4">
+          <SaveProgressPrompt
+            nextPath={`${pathname}?${sp?.toString() || ''}`}
+            title="Create a free account to save this mock exam"
+            body="You can finish this mock for free right now. Create a free account if you want your score and progress saved so you can pick back up later."
+          />
+        </div>
+      ) : null}
+
+      {scope === 'mini' ? (
+        <div data-tour="mock-info" className="mt-4 rounded-3xl border border-white/10 bg-white/5 p-5">
+          <div className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">How mock exam works</div>
+          <div className="mt-3 whitespace-pre-line text-sm text-white/70 leading-relaxed">
+            This is your <span className="font-semibold text-white">post-test</span>. There is no instant feedback while you answer.
+          </div>
+          <div className="mt-2 text-sm text-white/60">
+            Use this after <span className="font-semibold text-white">Practice Test</span> and <span className="font-semibold text-white">Flashcards</span> to measure how much you improved.
+          </div>
+        </div>
+      ) : null}
+
+      <div data-tour="mock-question" ref={examAnchorRef} className="mt-4 rtt-card rounded-2xl p-5">
+        <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-white/55">
+          <div className="w-full md:w-auto">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-white/10 md:w-64">
+              <div
+                className="h-full rounded-full bg-yellow-400 transition-all"
+                style={{ width: `${total ? Math.min(100, Math.round((Object.keys(answers).length / total) * 100)) : 0}%` }}
+              />
+            </div>
+            <div className="mt-3 space-y-1">
+              <div>Progress: {Object.keys(answers).length} / {total}</div>
+              <div>Correct: {Object.keys(answers).length - missed.size}</div>
+              <div>Missed: {missed.size}</div>
+            </div>
+          </div>
+          <div>Keyboard: A-D • Enter = submit</div>
+        </div>
+
+        <div className="mt-6 text-sm text-white/85 whitespace-pre-wrap">{stem}</div>
+        <div className="mt-4 grid gap-2">
+          {choices.map((c) => (
+            <button key={c.key} onClick={() => setSelected(c.key)} className={['w-full rounded-2xl px-4 py-3 text-left text-sm transition', selected === c.key ? 'bg-white/15 ring-1 ring-white/25' : 'bg-white/5 hover:bg-white/10'].join(' ')}>
+              <span className="mr-2 inline-block w-5 text-white/70">{c.key}.</span>
+              <span className="text-white/90">{c.text}</span>
+            </button>
+          ))}
+        </div>
+        <div className="mt-5 flex items-center justify-between gap-3">
+          <div className="flex flex-wrap gap-2">
+            <button onClick={() => idx > 0 && setIdx((n) => n - 1)} className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15 disabled:opacity-50" disabled={idx === 0}>Back</button>
+            <button onClick={pauseAndSave} className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15">Pause & Save</button>
+          </div>
+          <button onClick={submit} disabled={selected == null} className="cursor-pointer rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95 disabled:opacity-60">Submit →</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function MockExamPage() {
+  const router = useRouter();
+  return (
+    <Suspense fallback={<div className="mx-auto max-w-4xl text-sm text-white/70">Loading…</div>}>
+      <MockExamPageInner />
+    </Suspense>
+  );
+}

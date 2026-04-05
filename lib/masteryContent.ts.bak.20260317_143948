@@ -1,0 +1,265 @@
+import type { Question } from '@/lib/questions';
+import { normalizeChoices } from '@/lib/normalizeChoices';
+
+export function cleanStudyText(text: string): string {
+  return String(text || '')
+    .replace(/My ARRT Challenge Test.*$/gim, '')
+    .replace(/Original content\s+—\s+not for resale.*$/gim, '')
+    .replace(/PROCEDURES Questions\s*\d+[–-]\d+/gim, '')
+    .replace(/PATIENT CARE Questions\s*\d+[–-]\d+/gim, '')
+    .replace(/\r\n/g, '\n')
+    .replace(/[ \t]+/g, ' ')
+    .replace(/ *\n */g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+export function getQuestionStem(q: any): string {
+  return cleanStudyText(String(q?.stem || q?.question || q?.prompt || ''));
+}
+
+export function getCorrectChoiceText(q: any): string {
+  const choices = normalizeChoices(q?.choices || []);
+  const correctKey = String(
+    q?.correctAnswer || q?.correct || q?.answer || q?.correctKey || q?.answerKey || ''
+  )
+    .trim()
+    .toUpperCase();
+
+  const choice = choices.find((c) => c.key === correctKey);
+  if (choice?.text) return cleanStudyText(choice.text);
+  return cleanStudyText(correctKey);
+}
+
+function normalizeTerm(term: string) {
+  return cleanStudyText(term)
+    .toLowerCase()
+    .replace(/^[a-d]\.?\s*/, '')
+    .replace(/\s*\([^)]*\)/g, '')
+    .replace(/[.,:;]+$/g, '')
+    .trim();
+}
+
+const TERM_GLOSSARY: Record<string, string> = {
+  'attenuation': 'describes the reduction in beam intensity as x-rays are absorbed or scattered while passing through matter.',
+  'transmission': 'means the beam passes through tissue without interacting.',
+  'ionization': 'is the removal of an orbital electron, which leaves the atom charged.',
+  'scatter production': 'refers to secondary radiation created when photons are deflected from their original path.',
+  'photoelectric absorption': 'occurs when the photon gives up all of its energy to an inner-shell electron and is completely absorbed, which strongly contributes to image contrast.',
+  'compton scattering': 'occurs when a photon ejects an outer-shell electron and changes direction, which mainly adds scatter and occupational exposure.',
+  'coherent scattering': 'is low-energy scattering without ionization and has little value in forming the radiographic image.',
+  'becquerel': 'is the SI unit of radioactivity and represents one nuclear disintegration per second.',
+  'sievert': 'is the SI unit used for equivalent dose and effective dose because it reflects biologic effect.',
+  'gray-air': 'describes radiation energy absorbed in air.',
+  'gray-tissue': 'describes radiation energy absorbed in tissue.',
+  'linear energy transfer': 'describes how much energy ionizing radiation deposits along its path through tissue.',
+  'effective dose': 'accounts for both the amount of radiation and the sensitivity of the tissues exposed.',
+  'equivalent dose': 'weights absorbed dose for the type of radiation involved.',
+  'autotransformer': 'works by self-induction and is used to select and adjust kVp before the high-voltage transformer stage.',
+  'step-up': 'raises voltage in the high-voltage section of the x-ray circuit so electrons can be accelerated across the tube.',
+  'step-up transformer': 'raises voltage in the high-voltage section of the x-ray circuit so electrons can be accelerated across the tube.',
+  'step-down': 'lowers voltage and increases current, such as in the filament circuit.',
+  'step-down transformer': 'lowers voltage and increases current, such as in the filament circuit.',
+  'automatic exposure control': 'terminates the exposure when enough radiation has reached the detector, helping produce consistent receptor exposure.',
+  'automatic exposure control aec': 'terminates the exposure when enough radiation has reached the detector, helping produce consistent receptor exposure.',
+  'aec': 'terminates the exposure when enough radiation has reached the detector, helping produce consistent receptor exposure.',
+  'electronic timer': 'controls how long the exposure lasts but does not automatically measure receptor exposure.',
+  'automatic collimation': 'adjusts field size to match the image receptor and reduce unnecessary exposure.',
+  'falling load generator': 'changes mA during a long exposure so the highest safe tube loading is used efficiently.',
+  'transformers': 'operate on mutual induction, transferring energy between primary and secondary coils.',
+  'rectifiers': 'change alternating current into direct current so electrons travel in one direction only.',
+  'generators': 'supply the electrical waveform used to power the x-ray circuit, but the induction principle specifically describes transformers.',
+  'timers': 'control exposure duration rather than electromagnetic induction between coils.',
+  'photon': 'is the discrete packet of electromagnetic energy that makes up x-radiation.',
+  'photons': 'are discrete packets of electromagnetic energy that make up x-radiation.',
+  'proton': 'is a positively charged particle in the atomic nucleus.',
+  'protons': 'are positively charged particles in the atomic nucleus.',
+  'neutron': 'is an uncharged particle in the nucleus and does not determine the chemical identity of an element.',
+  'electron': 'is a negatively charged orbital particle surrounding the nucleus.',
+  'electrons': 'are negatively charged orbital particles surrounding the nucleus.',
+  'atom': 'is the smallest unit of an element that still retains that element\'s chemical properties.',
+  'molecule': 'is two or more atoms chemically bonded together.',
+  'atomic mass': 'is the total number of protons and neutrons in the nucleus.',
+  'atomic number': 'is the number of protons in the nucleus.',
+  'amplitude': 'is the maximum height or displacement of a wave from its baseline.',
+  'wavelength': 'is the distance from one wave peak to the next.',
+  'frequency': 'is the number of wave cycles occurring each second.',
+  'primary radiation': 'is the useful beam that leaves the x-ray tube and travels toward the patient and image receptor.',
+  'remnant radiation': 'is the radiation that exits the patient and reaches the image receptor after attenuation.',
+  'nonionizing radiation': 'does not have enough energy to remove orbital electrons.',
+  'gamma radiation': 'comes from the nucleus of unstable atoms rather than from the x-ray tube.',
+  'cerebrovascular accident': 'means a stroke caused by interrupted blood flow to the brain.',
+  'cerebrovascular accident stroke': 'means a stroke caused by interrupted blood flow to the brain.',
+  'myocardial infarction': 'means heart muscle injury caused by loss of blood supply to the myocardium.',
+  'history': 'refers to the clinical history gathered from the patient.',
+  'biopsy': 'is the removal of tissue for microscopic examination.',
+  'pseudo-': 'means false or resembling something else.',
+  'retro-': 'means backward or behind.',
+  'endo-': 'means within or inside.',
+  'epi-': 'means upon, on, or above.',
+  'uncapped into sharps containers': 'is the safe way to discard needles and syringes so accidental needle-stick injuries are minimized.',
+  'capped': 'is unsafe for used needles because recapping increases the chance of a needle-stick injury.',
+  'weekly': 'describes a time interval, not a proper sharps-disposal method.',
+  'monthly': 'describes a time interval, not a proper sharps-disposal method.',
+  'radiography': 'uses x-rays to make projection images and does not primarily use radioactivity as a tracer source.',
+  'ct': 'uses x-rays and computer processing rather than radiopharmaceutical activity measurements.',
+  'mri': 'uses magnetic fields and radiofrequency pulses rather than ionizing radiation.',
+  'nuclear medicine': 'uses radiopharmaceuticals, so radioactivity is measured with units such as the becquerel.',
+  'ureter': 'carries urine from the kidney to the urinary bladder.',
+  'urethra': 'carries urine from the bladder to the outside of the body.',
+  'renal pelvis': 'is the funnel-shaped collecting region that receives urine from the major calyces before it enters the ureter.',
+  'minor calyces': 'receive urine from the collecting tubules and drain into the major calyces.',
+  'major calyces': 'collect urine from the minor calyces and drain into the renal pelvis.',
+  'transverse colon': 'crosses the abdomen horizontally between the hepatic flexure and splenic flexure.',
+  'descending colon': 'travels inferiorly down the left side of the abdomen from the splenic flexure.',
+  'ascending colon': 'travels superiorly on the right side of the abdomen toward the hepatic flexure.',
+  'hepatic flexure': 'is the right colic bend near the liver between the ascending and transverse colon.',
+  'splenic flexure': 'is the left colic bend near the spleen between the transverse and descending colon.',
+  'jejunum': 'is part of the small intestine, not a segment of the colon.',
+  'lamina': 'is the flat plate of bone that extends from the pedicle to the spinous process.',
+  'pedicle': 'connects the vertebral body to the posterior elements.',
+  'spinous process': 'projects posteriorly from the vertebral arch.',
+  'coracoid process': 'is a projection of the scapula, not part of a vertebra.',
+  'rugae': 'are the longitudinal mucosal folds within the stomach.',
+  'haustra': 'are the sacculations or pouches of the large intestine.',
+  'pylorus': 'is the distal outlet of the stomach leading into the duodenum.',
+  'incisura angularis': 'is the notch along the lesser curvature of the stomach.',
+  'sharps containers': 'are puncture-resistant containers used for disposal of needles and other sharp biohazard items.'
+};
+
+function titleCase(word: string) {
+  return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
+function lookupDefinition(term: string) {
+  const normalized = normalizeTerm(term);
+  return TERM_GLOSSARY[normalized] || TERM_GLOSSARY[normalized.replace(/-/g, '')] || '';
+}
+
+function splitStemIntoTarget(stem: string) {
+  return cleanStudyText(stem)
+    .replace(/^what term describes\s+/i, '')
+    .replace(/^which\s+/i, '')
+    .replace(/^the\s+/i, '')
+    .replace(/\s+is defined as:?$/i, '')
+    .replace(/\s+is:?$/i, '')
+    .replace(/\?$/, '')
+    .trim();
+}
+
+function conceptFromQuestion(stem: string, answer: string) {
+  const answerDef = lookupDefinition(answer);
+  const lower = stem.toLowerCase();
+
+  if (/unit of radioactivity/.test(lower) && /nuclear medicine/i.test(answer)) {
+    return 'Nuclear medicine is correct because it uses radiopharmaceuticals, so activity is measured with units such as the becquerel (Bq).';
+  }
+  if (/high-voltage section.*transformer/.test(lower) && /step-up/i.test(answer)) {
+    return 'A step-up transformer is correct because the high-voltage section must raise voltage dramatically so electrons can be accelerated from cathode to anode.';
+  }
+  if (/mutual induction/.test(lower) && /transformer/i.test(answer)) {
+    return 'Transformers are correct because mutual induction is the transfer of energy between primary and secondary coils, which is exactly how transformers operate.';
+  }
+  if (/consistency of radiographic exposure/.test(lower) && /(aec|automatic exposure control)/i.test(answer)) {
+    return 'Automatic exposure control (AEC) is correct because it stops the exposure once the receptor has received enough radiation, helping keep image receptor exposure consistent from exam to exam.';
+  }
+  if (/longitudinal mucosal folds.*stomach/.test(lower) && /rugae/i.test(answer)) {
+    return 'Rugae are correct because they are the normal longitudinal folds in the gastric mucosa seen inside the stomach.';
+  }
+  if (/needle-stick/.test(lower) && /uncapped into sharps containers/i.test(answer)) {
+    return 'Uncapped into sharps containers is correct because used sharps should go directly into a puncture-resistant sharps container without recapping.';
+  }
+  if (/smallest unit of an element/.test(lower) && /atom/i.test(answer)) {
+    return 'An atom is correct because it is the smallest unit that still keeps the chemical identity of an element.';
+  }
+  if (/atomic mass/.test(lower) && /sum of protons and neutrons/i.test(answer)) {
+    return 'Atomic mass is correct because it refers to the total number of protons and neutrons found in the nucleus.';
+  }
+  if (/becquerel/.test(lower) && /nuclear medicine/i.test(answer)) {
+    return 'Nuclear medicine is correct because radiopharmaceutical activity is measured in becquerels, the SI unit of radioactivity.';
+  }
+  if (/minor calyces/i.test(answer) && /collecting tubules|major calyces|urine/i.test(lower)) {
+    return 'Minor calyces are correct because they collect urine from the papillae and funnel it into the major calyces.';
+  }
+  if (answerDef) return `${titleCase(cleanStudyText(answer))} ${answerDef}`;
+
+  const target = splitStemIntoTarget(stem);
+  if (target && /^what term describes/i.test(stem)) return `${titleCase(cleanStudyText(answer))} describes ${target}.`;
+  if (target && /^which device/i.test(stem)) return `${titleCase(cleanStudyText(answer))} is the device that ${target}.`;
+  if (target && /^which structure/i.test(stem)) return `${titleCase(cleanStudyText(answer))} is the structure that ${target}.`;
+  if (target && /^which structures/i.test(stem)) return `${titleCase(cleanStudyText(answer))} are the structures that ${target}.`;
+  if (target && /^which segment/i.test(stem)) return `${titleCase(cleanStudyText(answer))} is the segment that ${target}.`;
+  if (target && /^the .* are called/i.test(lower)) return `${titleCase(cleanStudyText(answer))} is the correct term for ${target}.`;
+
+  return `${titleCase(cleanStudyText(answer))} is the correct answer.`;
+}
+
+function isGenericText(text: string) {
+  return /best matches the question stem|best answer here|directly matches the concept being tested|testing the standard definition or function of that term|review how this term fits|correct answer is .*question\.?$/i.test(text);
+}
+
+function buildWrongChoiceHelp(q: any) {
+  const choices = normalizeChoices(q?.choices || []);
+  const correctKey = String(q?.correctAnswer || q?.correct || q?.answer || '').trim().toUpperCase();
+  const pieces: string[] = [];
+  for (const choice of choices) {
+    if (choice.key === correctKey) continue;
+    const def = lookupDefinition(choice.text);
+    if (!def) continue;
+    pieces.push(`${choice.text} ${def}`);
+    if (pieces.length >= 3) break;
+  }
+  if (!pieces.length) return '';
+  return ` ${pieces.join(' ')}`;
+}
+
+export function buildRationale(q: any): string {
+  const rawExplanation = q?.flash_rationale || q?.explanation || q?.whyCorrect || q?.rationale || '';
+
+  if (typeof rawExplanation === 'string' && rawExplanation.trim()) {
+    return cleanStudyText(rawExplanation);
+  }
+
+  if (rawExplanation && typeof rawExplanation === 'object') {
+    const whyCorrect = cleanStudyText(String(rawExplanation?.whyCorrect || q?.whyCorrect || '').trim());
+    const whyIncorrect = rawExplanation?.whyIncorrect || {};
+    const correctLetter = String(q?.correctAnswer || q?.correct || q?.answer || '').trim().toUpperCase();
+    const choices = normalizeChoices(q?.choices || []);
+    const correctText = getCorrectChoiceText(q);
+
+    const incorrectLines: string[] = [];
+    for (const choice of choices) {
+      if (choice.key === correctLetter) continue;
+      const wrong = cleanStudyText(String(whyIncorrect?.[choice.key] || '').trim());
+      if (wrong) incorrectLines.push(`${choice.key}. ${wrong}`);
+    }
+
+    const parts = [
+      `Correct Answer: ${correctText}.`,
+      whyCorrect,
+      incorrectLines.length ? `Incorrect Answers:\n${incorrectLines.join('\n')}` : ''
+    ].filter(Boolean);
+
+    return cleanStudyText(parts.join('\n\n'));
+  }
+
+  const stem = getQuestionStem(q);
+  const answer = getCorrectChoiceText(q);
+
+  const correctPart = conceptFromQuestion(stem, answer);
+  const wrongChoicePart = buildWrongChoiceHelp(q);
+
+  return cleanStudyText(`${correctPart}${wrongChoicePart}`);
+}
+
+export function flashcardFrontForQuestion(q: Question): string {
+  const explicitFront = String((q as any).flash_front || '').trim();
+  if (explicitFront) return cleanStudyText(explicitFront);
+  return getQuestionStem(q);
+}
+
+export function flashcardBackForQuestion(q: Question): string {
+  const explicitBack = String((q as any).flash_back || '').trim();
+  if (explicitBack) return cleanStudyText(explicitBack);
+  return getCorrectChoiceText(q);
+}

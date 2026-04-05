@@ -1,0 +1,295 @@
+{
+  "courseId": "optimizing-patient-dose",
+  "totalQuestions": 24,
+  "passPct": 75,
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "[Module 1]  A radiologic technologist is reviewing a new digital radiography system's documentation. The system uses the IEC 62494-1 standard for Exposure Index. According to this standard, if the detector receives an air kerma of 2.0 \u03bcGy, what Exposure Index value would the system display?",
+      "choices": {
+        "A": "50",
+        "B": "100",
+        "C": "200",
+        "D": "400"
+      },
+      "correct": "C",
+      "rationale": "The IEC 62494-1 standard defines a reference air kerma of 1.0 \u03bcGy at the detector, which corresponds to an EI of 100. Because EI scales linearly with detector air kerma, a dose of 2.0 \u03bcGy \u2014 twice the reference \u2014 corresponds to an EI of 200."
+    },
+    {
+      "id": "q2",
+      "prompt": "[Module 1]  What does Exposure Index (EI) primarily reflect in digital radiography?",
+      "choices": {
+        "A": "Patient absorbed dose",
+        "B": "Scatter radiation within the field",
+        "C": "Detector exposure level",
+        "D": "Tube current setting (mA)"
+      },
+      "correct": "C",
+      "rationale": "Exposure Index (EI) primarily reflects detector exposure level \u2014 the radiation incident on the image receptor. EI is intended to describe the radiation that reached the detector, not the radiation absorbed by the patient's tissues."
+    },
+    {
+      "id": "q3",
+      "prompt": "[Module 1]  In digital radiography, why does visual image brightness alone not confirm that the patient received an appropriate radiation dose?",
+      "choices": {
+        "A": "The display monitor is always miscalibrated",
+        "B": "Brightness is normalized during post-processing",
+        "C": "Radiologists manually adjust brightness after review",
+        "D": "Images are always underexposed in digital systems"
+      },
+      "correct": "B",
+      "rationale": "Digital image brightness is normalized during post-processing; therefore, brightness alone does not confirm appropriate radiation exposure. Post-processing algorithms automatically adjust display appearance, making overexposed and correctly exposed images appear nearly identical."
+    },
+    {
+      "id": "q4",
+      "prompt": "[Module 1]  Which of the following does Exposure Index (EI) NOT directly represent?",
+      "choices": {
+        "A": "Signal level at the image receptor",
+        "B": "Radiation intensity reaching the detector",
+        "C": "Patient absorbed dose",
+        "D": "Detector exposure during the acquisition"
+      },
+      "correct": "C",
+      "rationale": "Exposure Index does not directly represent patient absorbed dose. Patient dose depends on beam quality (kVp and filtration), mAs, geometry (SID), patient thickness, and scatter conditions \u2014 factors that EI alone cannot capture. EI measures the end result at the detector, not what the patient absorbed."
+    },
+    {
+      "id": "q5",
+      "prompt": "[Module 1]  A large-framed adult abdomen and a thin adult patient both produce a DI of 0 on the same examination protocol. Which statement best describes their radiation dose comparison?",
+      "choices": {
+        "A": "Both patients received identical absorbed doses, because DI of 0 confirms that the detector received the same amount of radiation for both",
+        "B": "The thin patient received a higher absorbed dose, because lower tissue attenuation means more radiation reaches and is absorbed by superficial tissues",
+        "C": "The large-framed patient received a higher absorbed dose at the same recorded EI value",
+        "D": "DI of 0 guarantees equal absorbed dose for all patient sizes, regardless of body habitus or tissue attenuation"
+      },
+      "correct": "C",
+      "rationale": "A large-framed adult abdomen requires more radiation to achieve the same EI than smaller or thinner patients, and therefore receives a higher absorbed dose at the same recorded EI value. Greater tissue mass absorbs more radiation before it reaches the detector, so more tube output is required to achieve EI_T."
+    },
+    {
+      "id": "q6",
+      "prompt": "[Module 1]  What is the PRIMARY reason that digital radiography systems carry an increased risk of dose creep compared to film-screen systems?",
+      "choices": {
+        "A": "Digital detectors emit trace background radiation that accumulates in tissue and causes gradual technique escalation over time",
+        "B": "Increased image noise from patient motion forces technologists to raise mAs on repeat exposures, compounding dose over time",
+        "C": "Wide exposure latitude allows post-processing to maintain display appearance despite higher exposure",
+        "D": "Digital systems cannot display kVp or mAs settings to the technologist, making technique monitoring impossible"
+      },
+      "correct": "C",
+      "rationale": "Wide exposure latitude in digital systems increases risk of dose creep. Because post-processing can maintain display appearance despite higher exposure, gradual technique increases can occur unless controlled through technique charts, EI/DI monitoring, and QA feedback loops. The absence of visual feedback removes the natural deterrent to technique escalation."
+    },
+    {
+      "id": "q7",
+      "prompt": "[Module 1]  How should a department's protocol-specific target EI (EI_T) values be established?",
+      "choices": {
+        "A": "By copying EI_T values from a neighboring institution that uses the same manufacturer's equipment and similar patient demographics",
+        "B": "Through a formal medical physics consultation in which a qualified medical physicist evaluates image quality requirements",
+        "C": "Using the manufacturer's default EI_T settings without modification, since defaults are calibrated for standard clinical use",
+        "D": "Based on individual technologist preference and experience, adjusting EI_T until images appear visually acceptable"
+      },
+      "correct": "B",
+      "rationale": "Target EI values should be established through a formal medical physics consultation in which a qualified medical physicist evaluates image quality requirements for each protocol. This process involves phantom imaging and radiologist input to identify the minimum exposure that consistently produces diagnostically adequate images."
+    },
+    {
+      "id": "q8",
+      "prompt": "[Module 2]  A technologist completes a PA chest radiograph on a standard adult patient using the exact technique specified in the department protocol chart. The acquisition console displays EI = 310 and the protocol EI_T = 310. What does the displayed DI value indicate about this acquisition?",
+      "choices": {
+        "A": "The patient received twice the intended dose",
+        "B": "The detector was underexposed and the image may lack diagnostic quality",
+        "C": "Target exposure achieved \u2014 the acquisition matched the protocol target exactly",
+        "D": "The EI_T is incorrectly calibrated and should be adjusted"
+      },
+      "correct": "C",
+      "rationale": "A Deviation Index (DI) of 0 indicates target exposure achieved. When EI equals EI_T exactly (310 \u00f7 310 = 1.0), the DI formula (10 \u00d7 log\u2081\u2080(1.0)) yields 0, confirming optimal technique compliance."
+    },
+    {
+      "id": "q9",
+      "prompt": "[Module 2]  A department's monthly EI/DI audit shows that the mean DI for portable AP chest radiographs has been +2.1 for three consecutive months across multiple technologists. What does this pattern most likely indicate?",
+      "choices": {
+        "A": "Normal patient size variation",
+        "B": "Equipment malfunction requiring service",
+        "C": "Dose creep",
+        "D": "Appropriate ALARA compliance"
+      },
+      "correct": "C",
+      "rationale": "A consistent DI of +2 across exams may indicate dose creep. When a positive DI pattern is consistent across multiple examinations, multiple patients of varying habitus, and multiple technologists over time, it cannot be explained by clinical variability and points to a systemic technique problem."
+    },
+    {
+      "id": "q10",
+      "prompt": "[Module 2]  Over three months, a technologist consistently produces DI values of +1.2 to +1.8 for lumbar spine examinations. What is the MOST appropriate next step?",
+      "choices": {
+        "A": "Accept the values as within normal variation",
+        "B": "Replace the detector",
+        "C": "Technique chart and workflow review",
+        "D": "Reduce kVp by 20 for all future exams"
+      },
+      "correct": "C",
+      "rationale": "Repeated small positive DI values over time should prompt technique chart and workflow review. A persistent pattern of mildly elevated DI values \u2014 even below +2 \u2014 is an early indicator of dose creep and warrants technique review before the trend escalates further."
+    },
+    {
+      "id": "q11",
+      "prompt": "[Module 2]  An adult PA chest radiograph on a thin patient produces a DI of -0.9. The radiologist reviews the image and finds it diagnostically adequate. Which statement best applies?",
+      "choices": {
+        "A": "The image must be repeated due to the negative DI, since any deviation below zero indicates insufficient radiation reached the detector",
+        "B": "The EI_T is incorrectly calibrated and should be increased to account for the patient's thin body habitus",
+        "C": "A mildly negative DI value may be acceptable if image noise does not impair interpretation",
+        "D": "DI must equal 0 for ALARA compliance, and values below zero indicate the department's dose optimization program is failing"
+      },
+      "correct": "C",
+      "rationale": "A mildly negative DI value may be acceptable if image noise does not impair interpretation. ALARA requires the lowest dose consistent with diagnostic adequacy \u2014 not the absolute minimum regardless of image quality. A DI of -0.9 that produces a radiologist-approved diagnostic image represents effective dose optimization."
+    },
+    {
+      "id": "q12",
+      "prompt": "[Module 2]  A lateral knee radiograph produces a DI of -2.1. Which statement BEST describes this result?",
+      "choices": {
+        "A": "This indicates the patient received twice the target dose, since DI of -2 represents double the radiation absorbed compared to DI of 0",
+        "B": "A DI of -2 suggests underexposure relative to target; underexposure may increase quantum noise",
+        "C": "This is the optimal DI target, since values below zero confirm that ALARA principles are being applied correctly",
+        "D": "The EI_T is set too high and should be increased to bring future DI values into a positive range"
+      },
+      "correct": "B",
+      "rationale": "A DI of -2 suggests underexposure relative to target. Underexposure may increase quantum noise; whether that affects diagnostic acceptability depends on the exam and anatomy. At 63% of target detector exposure, image noise increases meaningfully and diagnostic adequacy should be confirmed by clinical review."
+    },
+    {
+      "id": "q13",
+      "prompt": "[Module 3]  To which acquisition factors is histogram analysis MOST sensitive when calculating Exposure Index?",
+      "choices": {
+        "A": "kVp and mAs",
+        "B": "SID and grid use",
+        "C": "Collimation and centering",
+        "D": "Tube filtration and focal spot size"
+      },
+      "correct": "C",
+      "rationale": "Histogram analysis is most sensitive to collimation and centering. Accurate collimation to the anatomical region of interest and precise patient centering create the conditions for reliable field recognition and accurate EI calculation. Departures from these conditions distort the histogram and compromise EI reliability."
+    },
+    {
+      "id": "q14",
+      "prompt": "[Module 3]  A technologist performs a PA chest radiograph with collimation wider than the patient's chest wall, including significant air background on both sides. What is the most likely consequence for EI calculation?",
+      "choices": {
+        "A": "Improved field recognition accuracy",
+        "B": "Reduced patient dose",
+        "C": "Histogram distortion",
+        "D": "More accurate EI value"
+      },
+      "correct": "C",
+      "rationale": "Improper collimation may cause histogram distortion. When the collimated field includes background areas, those areas receive the full unattenuated beam and produce very high pixel values that shift the histogram distribution, potentially causing field recognition to misidentify the exposure indicator region."
+    },
+    {
+      "id": "q15",
+      "prompt": "[Module 3]  When background air is included in the X-ray field during a digital radiographic exposure, which of the following is MOST likely to occur?",
+      "choices": {
+        "A": "Improved spatial resolution",
+        "B": "Distorted histogram interpretation",
+        "C": "Accurate EI calculation",
+        "D": "Reduced scatter radiation"
+      },
+      "correct": "B",
+      "rationale": "Including background air in the exposure field may distort histogram interpretation. Background areas receive the full unattenuated X-ray beam, producing extremely high pixel values that skew the histogram distribution upward and may cause the field recognition algorithm to calculate an inaccurate EI for the anatomical region of interest."
+    },
+    {
+      "id": "q16",
+      "prompt": "[Module 3]  During which type of acquisition are field recognition errors MOST likely to occur?",
+      "choices": {
+        "A": "Single anatomy, well-centered on the detector",
+        "B": "Tight collimation to the anatomical borders",
+        "C": "When multiple anatomy regions confuse processing algorithms",
+        "D": "Examinations using AEC with the correct chamber selected"
+      },
+      "correct": "C",
+      "rationale": "Field recognition errors occur when multiple anatomy regions confuse processing algorithms. A bimodal or multimodal histogram \u2014 from imaging two distinct anatomical regions simultaneously or from off-center positioning \u2014 can cause the field recognition algorithm to misidentify the exposure indicator region and produce an unreliable EI value."
+    },
+    {
+      "id": "q17",
+      "prompt": "[Module 3]  What is a potential consequence of selecting an AEC chamber that is positioned over a region of very LOW X-ray attenuation?",
+      "choices": {
+        "A": "Delayed exposure termination and overexposure",
+        "B": "Accurate exposure compensation",
+        "C": "Early exposure termination and underexposure",
+        "D": "Increased image contrast"
+      },
+      "correct": "C",
+      "rationale": "Incorrect AEC chamber selection may cause early or delayed exposure termination. When the selected chamber is over low-attenuation tissue or air, it accumulates its target signal rapidly and terminates the exposure before adequate penetration of higher-attenuation anatomy is achieved \u2014 resulting in underexposure of the primary diagnostic region."
+    },
+    {
+      "id": "q18",
+      "prompt": "[Module 3]  A digital radiograph appears visually acceptable on the workstation. Why should this alone NOT be used to confirm that the exposure was appropriate?",
+      "choices": {
+        "A": "The PACS system applies lossy compression to all transmitted images, which alters pixel values and makes exposure assessment from the displayed image unreliable",
+        "B": "The radiologist may not have reviewed it yet, and only a radiologist review can confirm that the exposure was within acceptable diagnostic limits",
+        "C": "Post-processing adjusts display appearance independently of detector exposure level",
+        "D": "EI values are never stored in the DICOM header, so there is no way to retrieve the original exposure data after the image is sent to PACS"
+      },
+      "correct": "C",
+      "rationale": "Post-processing adjusts display appearance independently of detector exposure level, which is why a visually acceptable image cannot reliably confirm appropriate exposure. An image produced at twice the target EI will, after normalization, display with essentially the same brightness and contrast as a correctly exposed image."
+    },
+    {
+      "id": "q19",
+      "prompt": "[Module 4]  A newly hired technologist argues that the department should reduce all exposure times to the absolute minimum achievable for every patient, regardless of resulting image quality, because 'ALARA means as low as possible.' Which response BEST corrects this misunderstanding?",
+      "choices": {
+        "A": "The technologist is correct \u2014 absolute dose minimization is always the ALARA goal, and image quality is a secondary consideration",
+        "B": "ALARA only applies to pediatric and pregnant patients, not to standard adult diagnostic radiography",
+        "C": "ALARA emphasizes radiation levels that are as low as reasonably achievable \u2014 the lowest dose consistent with diagnostic adequacy, not absolute minimization",
+        "D": "ALARA is a voluntary guideline with no binding clinical application in routine diagnostic radiography"
+      },
+      "correct": "C",
+      "rationale": "ALARA emphasizes radiation levels that are as low as reasonably achievable. The key word is 'reasonably' \u2014 ALARA is an optimization principle requiring the lowest dose consistent with diagnostic adequacy, not minimization without regard for image quality. Reducing dose below the threshold for diagnostic image quality violates the optimization principle rather than fulfilling it."
+    },
+    {
+      "id": "q20",
+      "prompt": "[Module 4]  A department's monthly EI/DI audit shows mean DI for AP chest has increased from +0.3 six months ago to +1.7 today across multiple technologists. No equipment changes have occurred. The medical director asks what single departmental practice, if implemented and enforced consistently, would MOST directly prevent this pattern from recurring.",
+      "choices": {
+        "A": "Replacing all flat-panel detectors with updated models",
+        "B": "Requiring technologists to visually inspect each image before sending to PACS",
+        "C": "Implementing and enforcing structured technique charts for all examination protocols",
+        "D": "Increasing mAs for all chest examinations to improve signal quality"
+      },
+      "correct": "C",
+      "rationale": "Structured technique charts most directly prevent dose creep by eliminating the mechanism of informal technique escalation. When every technologist follows a documented, approved technique for each examination, individual decisions to informally increase technique \u2014 the primary driver of dose creep \u2014 are replaced by a controlled, governed process."
+    },
+    {
+      "id": "q21",
+      "prompt": "[Module 4]  Beyond selecting appropriate technique factors, what does proper ALARA implementation in digital radiography REQUIRE?",
+      "choices": {
+        "A": "Replacing computed radiography with direct DR",
+        "B": "Using only manual technique (no AEC)",
+        "C": "Monitoring EI and DI trends",
+        "D": "Providing patients with personal dosimeters"
+      },
+      "correct": "C",
+      "rationale": "Proper ALARA implementation requires monitoring EI and DI trends. Without systematic data collection and trend review, dose creep and other exposure deviations cannot be detected. ALARA is not a single-point intervention but an ongoing process that requires continuous monitoring and corrective action."
+    },
+    {
+      "id": "q22",
+      "prompt": "[Module 4]  A radiology department is preparing for ACR accreditation and wants to demonstrate ongoing ALARA compliance in their digital radiography program. The accreditation reviewer asks what the department does to ensure that dose optimization is actively practiced rather than just stated as policy. Which element of the QA program provides the MOST direct evidence of active ALARA compliance?",
+      "choices": {
+        "A": "Documentation showing that all detectors were purchased within the last five years",
+        "B": "Technologist attestations that they follow the ALARA principle",
+        "C": "Periodic EI/DI trend review reports showing analysis of exposure data over time",
+        "D": "A posted copy of the ALARA radiation protection policy in each examination room"
+      },
+      "correct": "C",
+      "rationale": "Quality assurance programs should include periodic EI/DI trend review. Regular analysis of EI/DI data provides documented, objective evidence that the department is actively monitoring patient exposure and responding to deviations \u2014 which is what ALARA compliance looks like in practice, not just as a posted policy."
+    },
+    {
+      "id": "q23",
+      "prompt": "[Module 4]  A 6-year-old is referred for bilateral hand radiographs to evaluate bone age. The technologist wants to apply current evidence-based guidance on pediatric dose optimization before selecting technique factors. Which resource is specifically designed to provide this type of guidance for pediatric imaging?",
+      "choices": {
+        "A": "The American Registry of Radiologic Technologists (ARRT) Practice Standards",
+        "B": "The Image Gently campaign",
+        "C": "The Nuclear Regulatory Commission (NRC) Regulatory Guide 8.29",
+        "D": "The FDA's Initiative to Reduce Unnecessary Radiation Exposure from Medical Imaging"
+      },
+      "correct": "B",
+      "rationale": "The Image Gently campaign provides evidence-based guidance on dose optimization for pediatric radiography. It is a multi-society initiative specifically focused on reducing radiation doses in children through pediatric-specific technique charts, smallest possible field sizes, and other child-size exposure strategies."
+    },
+    {
+      "id": "q24",
+      "prompt": "[Modules 1-4]  A department has properly implemented an EI/DI QA program, including documented EI_T values, monthly trend review, and corrective action records. Which statement BEST describes why visual image quality assessment alone is insufficient for this program to be effective?",
+      "choices": {
+        "A": "PACS systems do not store EI/DI values in the DICOM header, so there is no way to retrieve exposure data programmatically for trend analysis",
+        "B": "Visual assessment confirms patient dose accurately when performed by an experienced technologist who has been trained in image quality standards",
+        "C": "Post-processing adjusts display appearance independently of detector exposure level, so visual review cannot detect overexposure",
+        "D": "Radiologists are not trained to evaluate image quality from a dose perspective and cannot reliably distinguish overexposed from correctly exposed images"
+      },
+      "correct": "C",
+      "rationale": "Post-processing adjusts display appearance independently of detector exposure level, which is why a visually acceptable image cannot reliably confirm appropriate exposure. Even in a well-structured QA program, systematic EI/DI review is required because post-processing normalization conceals exposure deviations from visual inspection."
+    }
+  ]
+}

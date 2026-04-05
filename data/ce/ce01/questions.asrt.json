@@ -1,0 +1,151 @@
+[
+  {
+    "id": "ce01-q1",
+    "prompt": "[Module 1]  A radiologic technologist is reviewing a new digital radiography system's documentation. The system uses the IEC 62494-1 standard for Exposure Index. According to this standard, if the detector receives an air kerma of 2.0 μGy, what Exposure Index value would the system display?",
+    "choices": { "A": "50", "B": "100", "C": "200", "D": "400" },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "ce01-q2",
+    "prompt": "[Module 1]  What does Exposure Index (EI) primarily reflect in digital radiography?",
+    "choices": { "A": "Patient absorbed dose", "B": "Scatter radiation within the field", "C": "Detector exposure level", "D": "Tube current setting (mA)" },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "ce01-q3",
+    "prompt": "[Module 1]  In digital radiography, why does visual image brightness alone not confirm that the patient received an appropriate radiation dose?",
+    "choices": { "A": "The display monitor is always miscalibrated", "B": "Brightness is normalized during post-processing", "C": "Radiologists manually adjust brightness after review", "D": "Images are always underexposed in digital systems" },
+    "correctAnswer": "B"
+  },
+  {
+    "id": "ce01-q4",
+    "prompt": "[Module 1]  Which statement is TRUE regarding the relationship between Exposure Index (EI) and patient absorbed dose?",
+    "choices": { "A": "EI is a direct measurement of patient absorbed dose", "B": "EI increases only when patient absorbed dose decreases", "C": "EI reflects detector exposure and does not directly represent patient absorbed dose", "D": "EI is unaffected by technique factors such as kVp or mAs" },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "ce01-q5",
+    "prompt": "[Module 1]  Two patients undergo the same abdomen projection using a digital system with a target EI (EI_T) of 400. Both images record an EI of 400. One patient is significantly larger. Which statement BEST describes the dose implication?",
+    "choices": { "A": "The larger patient received a lower absorbed dose because EI was the same", "B": "The larger patient received the same absorbed dose because EI was the same", "C": "The larger patient likely received a higher absorbed dose because more exposure was required to achieve EI_T", "D": "Absorbed dose cannot vary when EI values match" },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "ce01-q6",
+    "prompt": "[Module 1]  A technologist notices that EI values across multiple exams are consistently above the target EI_T. What is the MOST likely risk associated with this trend?",
+    "choices": { "A": "Increased image noise due to underexposure", "B": "More repeat images due to motion blur", "C": "Exposure creep leading to unnecessary patient dose", "D": "Loss of spatial resolution due to high kVp" },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "ce01-q7",
+    "prompt": "[Module 2]  In the IEC 62494-1 standard, the Deviation Index (DI) is designed to represent:",
+    "choices": { "A": "The patient’s entrance skin exposure relative to baseline", "B": "How far the actual detector exposure deviates from the target exposure", "C": "The percentage of image noise present in a study", "D": "A fixed correction factor applied during post-processing" },
+    "correctAnswer": "B"
+  },
+  {
+    "id": "ce01-q8",
+    "prompt": "[Module 2]  A DI value of +2 indicates that detector exposure is approximately how far ABOVE the target?",
+    "choices": { "A": "About 25% above target", "B": "About 50% above target", "C": "About 60% above target", "D": "About 100% above target" },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "ce01-q9",
+    "prompt": "[Module 2]  A DI value of -1 indicates the detector exposure is closest to:",
+    "choices": { "A": "Approximately 20% above target", "B": "Approximately 10% above target", "C": "Approximately 20% below target", "D": "Approximately 50% below target" },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "ce01-q10",
+    "prompt": "[Module 2]  Which of the following DI ranges is MOST appropriate for routine diagnostic imaging in a well-controlled department (assuming proper positioning and collimation)?",
+    "choices": { "A": "-5 to +5", "B": "-4 to +4", "C": "-1 to +1", "D": "+2 to +6" },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "ce01-q11",
+    "prompt": "[Module 2]  A technologist performs a portable chest exam with poor collimation and includes a large area of unattenuated air outside the patient. How can this MOST affect EI/DI accuracy?",
+    "choices": { "A": "EI/DI will always decrease because scatter increases", "B": "EI/DI will always increase because the detector receives more exposure", "C": "EI/DI can be artificially skewed because field recognition/histogram analysis is impacted", "D": "EI/DI cannot be affected by collimation" },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "ce01-q12",
+    "prompt": "[Module 2]  Which statement BEST describes the difference between EI and DI?",
+    "choices": { "A": "EI and DI are identical values reported in different units", "B": "EI reports detector exposure, while DI reports the deviation from a target exposure", "C": "EI reports patient dose, while DI reports detector dose", "D": "DI is only used in computed radiography (CR), not digital radiography (DR)" },
+    "correctAnswer": "B"
+  },
+  {
+    "id": "ce01-q13",
+    "prompt": "[Module 3]  In digital radiography, which action MOST directly supports ALARA while maintaining image quality?",
+    "choices": { "A": "Increasing mAs until noise is eliminated regardless of EI/DI", "B": "Using a fixed technique for all patients to simplify workflow", "C": "Using technique charts and monitoring EI/DI to stay near target exposures", "D": "Avoiding collimation to ensure anatomy is not cut off" },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "ce01-q14",
+    "prompt": "[Module 3]  Which statement is TRUE regarding kVp and patient dose in digital radiography when technique is adjusted appropriately?",
+    "choices": { "A": "Increasing kVp always increases patient dose", "B": "Decreasing kVp always decreases patient dose", "C": "Increasing kVp can reduce dose if mAs is reduced while maintaining receptor exposure", "D": "kVp has no effect on patient dose" },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "ce01-q15",
+    "prompt": "[Module 3]  A technologist increases SID for a projection but does not adjust technique factors. What is the MOST likely EI/DI outcome?",
+    "choices": { "A": "EI/DI increases because the detector receives more exposure", "B": "EI/DI decreases because the detector receives less exposure", "C": "EI/DI remains unchanged because SID does not affect exposure", "D": "EI/DI becomes invalid due to post-processing normalization" },
+    "correctAnswer": "B"
+  },
+  {
+    "id": "ce01-q16",
+    "prompt": "[Module 3]  Which situation is MOST likely to cause exposure creep in a digital radiography department?",
+    "choices": { "A": "Technologists rely on EI/DI trends and correct technique consistently", "B": "Radiologists request lower dose images and accept increased noise", "C": "Technologists increase technique to reduce noise because post-processing masks overexposure", "D": "Departments strictly enforce target EI values with QA review" },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "ce01-q17",
+    "prompt": "[Module 4]  A department wants to reduce unnecessary patient dose and standardize exposures. What is the BEST first step in implementing an EI/DI QA program?",
+    "choices": { "A": "Eliminate technique charts and let technologists adjust freely", "B": "Track only repeat rates and ignore EI/DI values", "C": "Establish documented target EI (EI_T) values and acceptable DI ranges by exam type", "D": "Only evaluate image brightness as the primary metric" },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "ce01-q18",
+    "prompt": "[Module 4]  After identifying that EI/DI values are trending high for portable chests, what is the BEST corrective action approach?",
+    "choices": { "A": "Ignore trends if image quality appears acceptable", "B": "Reduce all portable chest techniques by 50% immediately without review", "C": "Review technique selection, positioning/collimation practices, and implement targeted retraining with follow-up monitoring", "D": "Increase technique to reduce noise complaints" },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "ce01-q19",
+    "prompt": "[Module 4]  Which metric provides the MOST direct early warning sign of exposure creep?",
+    "choices": { "A": "Repeat rate only", "B": "Radiologist satisfaction score", "C": "EI/DI trend analysis over time", "D": "Patient wait time" },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "ce01-q20",
+    "prompt": "[Module 4]  A department’s EI/DI review shows frequent outliers for lateral lumbar spine exams. Which factor MOST commonly contributes to inconsistent EI/DI in this projection?",
+    "choices": { "A": "Use of grids always lowers EI", "B": "Patient thickness variation and improper AEC chamber selection", "C": "Digital post-processing eliminates EI variation", "D": "SID is the only contributing factor" },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "ce01-q21",
+    "prompt": "[Module 4]  A quality improvement team is using EI/DI data to document compliance with ALARA. Which practice BEST supports defensible documentation?",
+    "choices": { "A": "Storing only the final images without exposure metadata", "B": "Recording EI/DI values occasionally when there is a complaint", "C": "Maintaining routine EI/DI trend reports and corrective action logs", "D": "Deleting outlier exams so averages look better" },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "ce01-q22",
+    "prompt": "[Modules 1-4]  Which statement BEST summarizes why EI/DI monitoring is essential in digital radiography?",
+    "choices": { "A": "EI/DI guarantees patient dose is always low", "B": "EI/DI replaces the need for technique charts", "C": "EI/DI helps detect overexposure masked by post-processing and supports consistent ALARA practice", "D": "EI/DI determines image contrast and spatial resolution directly" },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "ce01-q23",
+    "prompt": "[Modules 1-4]  A technologist wants to reduce patient dose on a routine projection while maintaining acceptable image quality. Which approach BEST aligns with ALARA?",
+    "choices": { "A": "Increase mAs until no noise is visible", "B": "Use technique charts and adjust factors while monitoring EI/DI to stay near targets", "C": "Ignore EI/DI and judge only by image brightness", "D": "Collimate widely to avoid clipping anatomy" },
+    "correctAnswer": "B"
+  },
+  {
+    "id": "ce01-q24",
+    "prompt": "[Modules 1-4]  A department has properly implemented an EI/DI QA program, including documented EI_T values, monthly trend review, and corrective action records. Which statement BEST describes why visual image quality assessment alone is insufficient for this program to be effective?",
+    "choices": {
+      "A": "PACS systems do not store EI/DI values in the DICOM header, so there is no way to retrieve exposure data programmatically for trend analysis",
+      "B": "Visual assessment confirms patient dose accurately when performed by an experienced technologist who has been trained in image quality standards",
+      "C": "Post-processing adjusts display appearance independently of detector exposure level, so visual review cannot detect overexposure",
+      "D": "Radiologists are not trained to evaluate image quality from a dose perspective and cannot reliably distinguish overexposed from correctly exposed images"
+    },
+    "correctAnswer": "C"
+  }
+]

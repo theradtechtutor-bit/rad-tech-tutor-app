@@ -1,0 +1,25 @@
+'use client';
+
+import { usePro } from '@/app/app/_lib/usePro';
+
+export default function FlashcardsPage() {
+  const isPro = usePro();
+
+  if (isPro === null) return <div className="p-6">Loading...</div>;
+
+  if (!isPro) {
+    return (
+      <div className="p-6">
+        <h1 className="text-xl font-bold mb-4">Flashcards</h1>
+        <p>Upgrade to Pro to unlock.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-6">
+      <h1 className="text-xl font-bold">Flashcards</h1>
+      <p>All decks unlocked.</p>
+    </div>
+  );
+}

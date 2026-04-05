@@ -1,0 +1,25 @@
+'use client';
+
+import { usePro } from '@/app/app/_lib/usePro';
+
+export default function MockExamPage() {
+  const isPro = usePro();
+
+  if (isPro === null) return <div className="p-6">Loading...</div>;
+
+  if (!isPro) {
+    return (
+      <div className="p-6">
+        <h1 className="text-xl font-bold mb-4">Mock Exam</h1>
+        <p>This feature is Pro only.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-6">
+      <h1 className="text-xl font-bold">Mock Exam</h1>
+      <p>Full access unlocked.</p>
+    </div>
+  );
+}

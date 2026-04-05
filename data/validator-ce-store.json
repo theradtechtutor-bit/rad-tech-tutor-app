@@ -1,0 +1,30 @@
+{
+  "attempts": {
+    "asrtTestUser2::optimizing-patient-dose": 3,
+    "asrtTestUser3::optimizing-patient-dose": 1
+  },
+  "lastAttempt": {
+    "asrtTestUser2::optimizing-patient-dose": {
+      "created_at": "2026-03-06T12:51:27.717Z",
+      "score_pct": 79.2,
+      "passed": true
+    },
+    "asrtTestUser3::optimizing-patient-dose": {
+      "created_at": "2026-03-06T13:09:22.651Z",
+      "score_pct": 79.2,
+      "passed": true
+    }
+  },
+  "certificates": {
+    "asrtTestUser2::optimizing-patient-dose": {
+      "cert_number": "RTT-OPTIMIZING-PATIENT-DOSE-20260306-OR8ZM",
+      "issued_at": "2026-03-06T12:51:27.719Z",
+      "score_pct": 79.2
+    },
+    "asrtTestUser3::optimizing-patient-dose": {
+      "cert_number": "RTT-OPTIMIZING-PATIENT-DOSE-20260306-K7PZY",
+      "issued_at": "2026-03-06T13:09:22.656Z",
+      "score_pct": 79.2
+    }
+  }
+}

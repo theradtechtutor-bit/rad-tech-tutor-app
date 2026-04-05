@@ -1,0 +1,2557 @@
+[
+  {
+    "id": "qbank3-1",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Radiation produced at the anode of the x-ray tube that then travels toward the patient and image receptor is called:",
+    "choices": {
+      "A": "Remnant radiation",
+      "B": "Gamma radiation",
+      "C": "Nonionizing radiation",
+      "D": "Primary radiation"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: Primary radiation.\n\nPrimary radiation is the useful beam that leaves the x-ray tube and travels toward the patient and image receptor.\n\nIncorrect Answers:\nA. Remnant radiation is the radiation that exits the patient and reaches the image receptor after attenuation.\nB. Gamma radiation comes from the nucleus of unstable atoms rather than from the x-ray tube.\nC. Nonionizing radiation does not have enough energy to remove orbital electrons."
+  },
+  {
+    "id": "qbank3-2",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Which photon-tissue interaction in diagnostic radiography results in complete absorption of the incident photon and is primarily responsible for producing radiographic contrast?",
+    "choices": {
+      "A": "Compton scatter",
+      "B": "Coherent scatter",
+      "C": "Photoelectric effect",
+      "D": "Pair production"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: Photoelectric effect.\n\nThe photoelectric effect results in complete absorption of the incident photon and is primarily responsible for radiographic contrast.\n\nIncorrect Answers:\nA. Compton scatter produces a scattered photon and mainly reduces radiographic contrast.\nB. Coherent scatter is a low-energy interaction that does not significantly contribute to image contrast.\nD. Pair production does not occur at diagnostic x-ray energies."
+  },
+  {
+    "id": "qbank3-3",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Which photon-tissue interaction produces both a recoil electron and a scattered photon traveling in a new direction?",
+    "choices": {
+      "A": "Compton interaction",
+      "B": "Coherent scatter",
+      "C": "Photoelectric effect",
+      "D": "Pair production"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: Compton interaction.\n\nCompton interaction produces a recoil electron and a scattered photon that changes direction.\n\nIncorrect Answers:\nB. Coherent scatter changes photon direction but does not eject an electron.\nC. Photoelectric effect causes complete absorption of the photon.\nD. Pair production occurs only at much higher energies than those used in diagnostic imaging."
+  },
+{
+  "id": "qbank3-4",
+  "category": "Safety",
+  "subcategory": "General",
+  "question": "The unit of radiation absorbed in air is the:",
+  "choices": {
+    "A": "Sv",
+    "B": "Gyₐ",
+    "C": "Bq",
+    "D": "Gyₜ"
+  },
+  "correctAnswer": "B",
+  "explanation": "Correct Answer: Gyₐ.\n\nGyₐ (gray-air) is used to express air kerma, which represents the energy transferred to air.\n\nIncorrect Answers:\nA. Sievert (Sv) measures equivalent and effective dose.\nC. Becquerel (Bq) measures radioactivity.\nD. Gyₜ (gray-tissue) represents absorbed dose in tissue."
+},
+  {
+    "id": "qbank3-5",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The SI unit used to express the amount of energy deposited (absorbed dose) in any material is the:",
+    "choices": {
+      "A": "LET",
+      "B": "Gyₜ",
+      "C": "Curie",
+      "D": "Sievert"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Gyₜ.\nGyₜ is the SI unit for absorbed dose in any material.\n\nIncorrect Answers:\nA. LET describes energy deposited per unit path length.\nC. Curie is a conventional unit of radioactivity.\nD. Sievert expresses biologic effect, not absorbed dose alone."
+  },
+  {
+    "id": "qbank3-6",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The SI unit used to express equivalent dose — absorbed dose adjusted for the biological effectiveness of the radiation type — is the:",
+    "choices": {
+      "A": "Sievert",
+      "B": "Gyₜ",
+      "C": "Radiation weighting factor",
+      "D": "LET"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: Sievert.\n\nSievert is the SI unit used for equivalent dose because it reflects biologic effect.\n\nIncorrect Answers:\nB. Gyₜ expresses absorbed dose only.\nC. Radiation weighting factor is used in the calculation but is not the unit.\nD. LET is not a unit of equivalent dose."
+  },
+  {
+    "id": "qbank3-7",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The SI unit used to express effective dose — which accounts for both radiation type and tissue sensitivity — is the:",
+    "choices": {
+      "A": "Sievert",
+      "B": "Gyₜ",
+      "C": "Radiation weighting factor",
+      "D": "LET"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: Sievert.\n\nSievert is the SI unit used for effective dose because it reflects biologic effect.\n\nIncorrect Answers:\nB. Gyₜ expresses absorbed dose only.\nC. Radiation weighting factor is part of the calculation but is not the unit.\nD. LET is not a unit of effective dose."
+  },
+  {
+    "id": "qbank3-8",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The SI unit used to express the rate of radioactive decay (radioactivity) is the:",
+    "choices": {
+      "A": "Becquerel",
+      "B": "Gyₜ",
+      "C": "Quality factor",
+      "D": "Curie"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: Becquerel.\n\nBecquerel is the SI unit of radioactivity and represents one nuclear disintegration per second.\n\nIncorrect Answers:\nB. Gyₜ is a unit of absorbed dose.\nC. Quality factor is not a unit of radioactivity.\nD. Curie is a conventional unit of radioactivity, not the SI unit."
+  },
+{
+  "id": "qbank3-9",
+  "category": "Safety",
+  "subcategory": "General",
+  "question": "Which term refers specifically to the energy absorbed per unit mass of tissue?",
+  "choices": {
+    "A": "Becquerel (Bq)",
+    "B": "Gyₐ",
+    "C": "Radiation weighting factor (WR)",
+    "D": "Gyₜ"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Gyₜ.\n\nGyₜ (gray-tissue) represents absorbed dose, which is the energy deposited per unit mass of tissue.\n\nIncorrect Answers:\nA. Becquerel measures radioactivity.\nB. Gyₐ refers to air kerma, not absorbed dose in tissue.\nC. Radiation weighting factor adjusts dose based on radiation type."
+},
+  {
+    "id": "qbank3-10",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The quantity describing the amount of radiation energy deposited per unit path length as photons travel through tissue is the:",
+    "choices": {
+      "A": "REM",
+      "B": "RAD",
+      "C": "Linear energy transfer (LET)",
+      "D": "RPU"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: Linear energy transfer (LET).\n\nLET describes how much energy ionizing radiation deposits along its path through tissue.\n\nIncorrect Answers:\nA. REM is a conventional unit of dose equivalent.\nB. RAD is a conventional unit of absorbed dose.\nD. RPU is not the correct term for this concept."
+  },
+  {
+    "id": "qbank3-11",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The tissue weighting factor (WT) accounts for which of the following in calculating effective dose?",
+    "choices": {
+      "A": "Radiation type only",
+      "B": "Exposure in air",
+      "C": "Absorbed dose in tissue",
+      "D": "The relative sensitivity of specific organs and tissues to radiation"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: The relative sensitivity of specific organs and tissues to radiation.\n\nThe tissue weighting factor accounts for the relative radiosensitivity of specific organs and tissues when calculating effective dose.\n\nIncorrect Answers:\nA. Radiation type is accounted for by the radiation weighting factor, not the tissue weighting factor.\nB. Exposure in air is not what WT represents.\nC. Absorbed dose is part of the calculation, but WT specifically reflects tissue sensitivity."
+  },
+  {
+    "id": "qbank3-12",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Compton scatter in diagnostic radiography has which effect on the radiographic image?",
+    "choices": {
+      "A": "Reduces recorded detail",
+      "B": "Results in complete photon absorption",
+      "C": "Increases radiographic contrast",
+      "D": "Produces a gray fog over the image, reducing contrast"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: Produces a gray fog over the image, reducing contrast.\n\nCompton scatter adds unwanted exposure to the image receptor, creating fog and reducing radiographic contrast.\n\nIncorrect Answers:\nA. It may indirectly affect image quality, but the main effect is reduced contrast.\nB. Complete absorption describes the photoelectric effect.\nC. Compton scatter decreases, not increases, radiographic contrast."
+  },
+  {
+    "id": "qbank3-13",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The radiation weighting factor (WR) assigned to diagnostic x-rays is:",
+    "choices": {
+      "A": "10",
+      "B": "1",
+      "C": "20",
+      "D": "5"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: 1.\n\nDiagnostic x-rays have a radiation weighting factor of 1.\n\nIncorrect Answers:\nA. 10 is too high for diagnostic x-rays.\nC. 20 is the value associated with alpha particles, not x-rays.\nD. 5 is not the standard WR for diagnostic x-rays."
+  },
+  {
+    "id": "qbank3-14",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Mutations that are passed on to future generations are classified as:",
+    "choices": {
+      "A": "Short-term somatic effects",
+      "B": "Genetic effects",
+      "C": "Acute radiation syndrome responses",
+      "D": "Long-term somatic effects"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Genetic effects.\n\nGenetic effects are mutations that may be transmitted to future generations.\n\nIncorrect Answers:\nA. Short-term somatic effects occur in the exposed person, not offspring.\nC. Acute radiation syndrome refers to severe whole-body exposure effects in the exposed individual.\nD. Long-term somatic effects occur in the exposed individual, not descendants."
+  },
+  {
+    "id": "qbank3-15",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The annual effective dose limit for occupationally exposed radiographers is:",
+    "choices": {
+      "A": "The dose at which cancer formation begins",
+      "B": "Age × 1 mSv per year for occupational workers",
+      "C": "50 mSv per month",
+      "D": "50 mSv per year"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: 50 mSv per year.\n\nThe annual effective dose limit for occupationally exposed radiographers is 50 mSv per year.\n\nIncorrect Answers:\nA. There is no specific dose that marks the beginning of cancer formation.\nB. Age × 1 mSv refers to cumulative occupational dose, not annual dose.\nC. 50 mSv per month is far too high."
+  },
+  {
+    "id": "qbank3-16",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Which organization publishes the radiation protection recommendations most widely used in the United States?",
+    "choices": {
+      "A": "ICRP (International Commission on Radiological Protection)",
+      "B": "NCRP (National Council on Radiation Protection and Measurements)",
+      "C": "NRC (Nuclear Regulatory Commission)",
+      "D": "ASRT (American Society of Radiologic Technologists)"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: NCRP (National Council on Radiation Protection and Measurements).\n\nThe NCRP publishes the radiation protection recommendations most widely used in the United States.\n\nIncorrect Answers:\nA. The ICRP issues international recommendations, but NCRP is the key U.S. source.\nC. The NRC regulates certain radioactive materials but does not serve as the main recommendation source for diagnostic radiation protection.\nD. ASRT is a professional organization, not the primary source of radiation protection recommendations."
+  },
+  {
+    "id": "qbank3-17",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The dose-response relationship assumed for radiation safety standards — that any dose carries some risk and there is no safe threshold — is:",
+    "choices": {
+      "A": "Linear-threshold",
+      "B": "Nonlinear-nonthreshold",
+      "C": "Linear-nonthreshold",
+      "D": "Nonlinear-threshold"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: Linear-nonthreshold.\n\nThe linear-nonthreshold model assumes that any radiation dose carries some risk and there is no safe threshold.\n\nIncorrect Answers:\nA. Linear-threshold assumes effects begin only after a certain dose.\nB. Nonlinear-nonthreshold is not the standard model used for radiation protection.\nD. Nonlinear-threshold is not the accepted model for routine radiation safety standards."
+  },
+  {
+    "id": "qbank3-18",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The principle stating that rapidly dividing, undifferentiated cells are most sensitive to radiation exposure is most applicable in which clinical field?",
+    "choices": {
+      "A": "Radiation protection",
+      "B": "Radiation therapy",
+      "C": "Diagnostic radiography",
+      "D": "Nuclear medicine"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Radiation therapy.\n\nThis principle is most applicable in radiation therapy, where rapidly dividing cells are selectively targeted.\n\nIncorrect Answers:\nA. Radiation protection uses the principle conceptually, but it is most directly applied in therapy.\nC. Diagnostic radiography uses much lower doses and is not based on therapeutic cell destruction.\nD. Nuclear medicine involves radiopharmaceuticals, but this principle is most classically applied in radiation therapy."
+  },
+  {
+    "id": "qbank3-19",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Approximately what percentage of all radiation-induced cellular damage occurs via the direct effect?",
+    "choices": {
+      "A": "5%",
+      "B": "25%",
+      "C": "50%",
+      "D": "95%"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: 5%.\n\nApproximately 5% of radiation-induced cellular damage occurs by the direct effect.\n\nIncorrect Answers:\nB. 25% is too high for the direct effect.\nC. 50% greatly overestimates direct action.\nD. 95% is more consistent with the indirect effect."
+  },
+  {
+    "id": "qbank3-20",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "When radiation strikes the cytoplasm of the cell rather than the nucleus, this is classified as:",
+    "choices": {
+      "A": "Direct effect",
+      "B": "Law of Bergonié and Tribondeau",
+      "C": "Target theory",
+      "D": "Indirect effect"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: Indirect effect.\n\nThe indirect effect occurs when radiation interacts with cytoplasmic water and produces free radicals that may then damage critical molecules.\n\nIncorrect Answers:\nA. Direct effect occurs when radiation directly strikes critical targets such as DNA.\nB. The Law of Bergonié and Tribondeau describes radiosensitivity, not the mechanism of cellular damage.\nC. Target theory is a broader concept, not the specific interaction described here."
+  },
+  {
+    "id": "qbank3-21",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The equivalent dose limit for the embryo or fetus of a declared pregnant radiographer is:",
+    "choices": {
+      "A": "500 mSv over the entire pregnancy",
+      "B": "0.5 mSv per month during the gestational period",
+      "C": "0.05 rem per month",
+      "D": "0.5 mSv total for the entire gestational period"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: 0.5 mSv per month during the gestational period.\n\nThe recommended monthly equivalent dose limit for the embryo or fetus of a declared pregnant radiographer is 0.5 mSv per month.\n\nIncorrect Answers:\nA. 500 mSv is far above the recommended fetal dose limit.\nC. 0.05 rem per month is not the standard value typically expressed in current SI-based recommendations here.\nD. 0.5 mSv total for the entire gestational period is too low."
+  },
+  {
+    "id": "qbank3-22",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The annual effective dose limit for localized areas of skin for occupationally exposed workers is:",
+    "choices": {
+      "A": "50 mSv per year",
+      "B": "500 mSv per year",
+      "C": "0.5 mSv monthly",
+      "D": "10 mSv monthly"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: 500 mSv per year.\n\nThe annual equivalent dose limit for localized areas of skin in occupationally exposed workers is 500 mSv per year.\n\nIncorrect Answers:\nA. 50 mSv per year is the annual whole-body effective dose limit, not the skin limit.\nC. 0.5 mSv monthly is associated with fetal dose recommendations.\nD. 10 mSv monthly does not represent the standard annual skin dose limit."
+  },
+  {
+    "id": "qbank3-23",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The cumulative occupational effective dose limit for a 48-year-old radiographer is:",
+    "choices": {
+      "A": "48 mSv",
+      "B": "480 mSv",
+      "C": "24 mSv",
+      "D": "0.48 mSv"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: 480 mSv.\n\nThe cumulative occupational effective dose limit is calculated as age × 10 mSv. For a 48-year-old radiographer, that equals 480 mSv.\n\nIncorrect Answers:\nA. 48 mSv is too low.\nC. 24 mSv is too low.\nD. 0.48 mSv is far too low."
+  },
+{
+  "id": "qbank3-24",
+  "category": "Safety",
+  "subcategory": "General",
+  "question": "The annual effective dose limit for members of the general public is:",
+  "choices": {
+    "A": "1 mSv",
+    "B": "500 mSv",
+    "C": "0.5 mSv",
+    "D": "50 mSv"
+  },
+  "correctAnswer": "A",
+  "explanation": "Correct Answer: 1 mSv.\n\nThe annual effective dose limit for members of the general public is 1 mSv.\n\nIncorrect Answers:\nB. 500 mSv is far above safe limits.\nC. 0.5 mSv is below the established limit.\nD. 50 mSv is the occupational annual limit, not the public limit."
+},
+  {
+    "id": "qbank3-25",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The upper dose boundary that an individual can receive while still carrying negligible risk of somatic or genetic harm defines the:",
+    "choices": {
+      "A": "Maximum permissible dose (no longer used)",
+      "B": "ALARA principle",
+      "C": "Law of Bergonié and Tribondeau",
+      "D": "Effective dose limit"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: Effective dose limit.\n\nThe effective dose limit is the upper dose boundary set to keep the risk of somatic or genetic harm negligible.\n\nIncorrect Answers:\nA. Maximum permissible dose is an older term, but the current concept is expressed as effective dose limit.\nB. ALARA is a guiding principle to keep exposure as low as reasonably achievable, not the upper boundary itself.\nC. The Law of Bergonié and Tribondeau describes radiosensitivity, not dose limits."
+  },
+  {
+    "id": "qbank3-26",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Compared with OSL and TLD personnel dosimeters, film badges demonstrate:",
+    "choices": {
+      "A": "Greater sensitivity",
+      "B": "Lower sensitivity",
+      "C": "Equivalent sensitivity",
+      "D": "Greater energy discrimination"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Lower sensitivity.\n\nCompared with OSL and TLD dosimeters, film badges are less sensitive.\n\nIncorrect Answers:\nA. Film badges are not more sensitive than OSL or TLD devices.\nC. Their sensitivity is not equivalent.\nD. Greater energy discrimination is not their main advantage over OSL and TLD."
+  },
+  {
+    "id": "qbank3-27",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "On a portable x-ray machine, the exposure switch must be on a cord of at least what length, so the operator can stand at a safe distance?",
+    "choices": {
+      "A": "3 feet",
+      "B": "6 feet",
+      "C": "12 feet",
+      "D": "2 feet"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: 6 feet.\n\nOn a portable x-ray machine, the exposure switch cord must be at least 6 feet long so the operator can stand at a safer distance.\n\nIncorrect Answers:\nA. 3 feet is too short.\nC. 12 feet is more than the minimum required length.\nD. 2 feet is too short."
+  },
+  {
+    "id": "qbank3-28",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Under which of the following circumstances is it acceptable for a radiographer to be exposed to the primary x-ray beam?",
+    "choices": {
+      "A": "During mobile radiography if exposures are kept low",
+      "B": "Under no circumstances whatsoever",
+      "C": "During cross-table projections when holding the cassette",
+      "D": "During fluoroscopic procedures"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Under no circumstances whatsoever.\n\nA radiographer should never be exposed to the primary x-ray beam.\n\nIncorrect Answers:\nA. Low exposure does not justify primary-beam exposure.\nC. Holding the cassette in the primary beam is not acceptable.\nD. Fluoroscopy also does not justify exposure to the primary beam."
+  },
+  {
+    "id": "qbank3-29",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "For radiation protection purposes, x-ray tubes operating above 70 kVp must have a minimum total filtration of:",
+    "choices": {
+      "A": "At least 0.25-mm aluminum equivalent",
+      "B": "At least 0.25-mm lead equivalent",
+      "C": "No more than 2.5-mm aluminum equivalent",
+      "D": "At least 2.5-mm aluminum equivalent"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: At least 2.5-mm aluminum equivalent.\n\nX-ray tubes operating above 70 kVp must have a minimum total filtration of 2.5-mm aluminum equivalent.\n\nIncorrect Answers:\nA. 0.25-mm aluminum is far below the required minimum.\nB. Lead equivalent is not the standard way this requirement is stated.\nC. The requirement is a minimum of 2.5 mm aluminum equivalent, not a maximum."
+  },
+  {
+    "id": "qbank3-30",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Gonadal shielding should be applied:",
+    "choices": {
+      "A": "On every examination regardless of field location",
+      "B": "Whenever it will not obstruct the area of clinical interest",
+      "C": "Only for children and women of childbearing age",
+      "D": "Only during confirmed pregnancy"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Whenever it will not obstruct the area of clinical interest.\n\nGonadal shielding should be used whenever it does not interfere with the required anatomy.\n\nIncorrect Answers:\nA. Shielding should not be used if it obscures the anatomy of interest.\nC. It is not limited only to children and women of childbearing age.\nD. It is not used only during confirmed pregnancy."
+  },
+  {
+    "id": "qbank3-31",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The secondary protective barrier must extend beyond and overlap the primary protective barrier by at least:",
+    "choices": {
+      "A": "1/10 inch",
+      "B": "1 inch",
+      "C": "1 foot",
+      "D": "1/2 inch"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: 1/2 inch.\n\nThe secondary protective barrier must overlap the primary protective barrier by at least 1/2 inch.\n\nIncorrect Answers:\nA. 1/10 inch is not enough overlap.\nB. 1 inch is more than the standard minimum.\nC. 1 foot is far greater than the required minimum."
+  },
+  {
+    "id": "qbank3-32",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "For radiation protection purposes, the x-ray control booth is classified as which type of barrier?",
+    "choices": {
+      "A": "Secondary protective barrier",
+      "B": "Primary protective barrier",
+      "C": "Mobile shielding barrier",
+      "D": "No barrier classification"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: Secondary protective barrier.\n\nThe x-ray control booth is classified as a secondary protective barrier because it protects against scatter and leakage radiation.\n\nIncorrect Answers:\nB. A primary barrier is intended to intercept the useful beam.\nC. Mobile shielding barrier is not the correct classification.\nD. The control booth does have a barrier classification."
+  },
+  {
+    "id": "qbank3-33",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The design of the exposure switch cord in the x-ray control booth must ensure the radiographer is positioned behind which barrier to make an exposure?",
+    "choices": {
+      "A": "Primary protective barrier",
+      "B": "Secondary protective barrier",
+      "C": "The x-ray tube housing",
+      "D": "The exam room door"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Secondary protective barrier.\n\nThe exposure switch design must ensure the radiographer is behind a secondary protective barrier when making an exposure.\n\nIncorrect Answers:\nA. A primary barrier is designed for the useful beam, not the operator position in the booth.\nC. The x-ray tube housing is not the control booth barrier.\nD. The exam room door is not the protective barrier intended for this purpose."
+  },
+  {
+    "id": "qbank3-34",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Waiting rooms, hallways, and stairways accessible to the general public are classified as:",
+    "choices": {
+      "A": "Controlled radiation areas",
+      "B": "Uncontrolled areas",
+      "C": "Restricted off-limits areas",
+      "D": "Monitored radiation areas"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Uncontrolled areas.\n\nWaiting rooms, hallways, and stairways accessible to the public are classified as uncontrolled areas.\n\nIncorrect Answers:\nA. Controlled areas are occupied by trained radiation workers.\nC. Restricted off-limits areas is not the standard classification here.\nD. Monitored radiation areas is not the correct designation."
+  },
+  {
+    "id": "qbank3-35",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "To protect the general public, uncontrolled areas adjacent to x-ray rooms must be kept below what dose per week?",
+    "choices": {
+      "A": "5 µSv",
+      "B": "10 µSv",
+      "C": "15 µSv",
+      "D": "20 µSv"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: 20 µSv.\n\nUncontrolled areas adjacent to x-ray rooms must be kept below 20 µSv per week.\n\nIncorrect Answers:\nA. 5 µSv is lower than the weekly limit used here.\nB. 10 µSv is lower than the weekly limit used here.\nC. 15 µSv is lower than the weekly limit used here."
+  },
+  {
+    "id": "qbank3-36",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Areas occupied by personnel who have received radiation safety training and wear dosimeters are classified as:",
+    "choices": {
+      "A": "Controlled areas",
+      "B": "Uncontrolled areas",
+      "C": "Off-limits areas",
+      "D": "General radiation areas"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: Controlled areas.\n\nControlled areas are occupied by personnel who have radiation safety training and wear dosimeters.\n\nIncorrect Answers:\nB. Uncontrolled areas are accessible to the general public.\nC. Off-limits areas is not the standard classification here.\nD. General radiation areas is not the correct formal classification."
+  },
+  {
+    "id": "qbank3-37",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Which shielding design factor accounts for the volume and types of radiographic examinations performed in a room per week?",
+    "choices": {
+      "A": "Use factor",
+      "B": "Shielding factor",
+      "C": "Volume factor",
+      "D": "Workload"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: Workload.\n\nWorkload accounts for the volume and types of examinations performed in a room per week.\n\nIncorrect Answers:\nA. Use factor describes how often the beam is directed at a particular barrier.\nB. Shielding factor is not the correct design term here.\nC. Volume factor is not the standard term."
+  },
+  {
+    "id": "qbank3-38",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The workload factor used in room shielding calculations is measured in units of:",
+    "choices": {
+      "A": "Half-value layers",
+      "B": "Total beam-on time per week",
+      "C": "Milliampere-minutes per week (mA·min/wk)",
+      "D": "Average kVp per week"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: Milliampere-minutes per week (mA·min/wk).\n\nWorkload is measured in milliampere-minutes per week.\n\nIncorrect Answers:\nA. Half-value layers describe beam quality.\nB. Total beam-on time alone is not the standard workload unit.\nD. Average kVp per week is not the unit used for workload."
+  },
+  {
+    "id": "qbank3-39",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The proportion of time the x-ray beam is directed at a specific wall or barrier is called the:",
+    "choices": {
+      "A": "Use factor",
+      "B": "Shielding factor",
+      "C": "Occupancy factor",
+      "D": "Workload"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: Use factor.\n\nUse factor is the proportion of time the useful beam is directed at a particular barrier.\n\nIncorrect Answers:\nB. Shielding factor is not the correct term here.\nC. Occupancy factor refers to how often an area is occupied.\nD. Workload refers to exam volume and technique use over time."
+  },
+  {
+    "id": "qbank3-40",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Leakage radiation from a diagnostic x-ray tube housing must not exceed which limit?",
+    "choices": {
+      "A": "1 mGya per hour measured at the tube source",
+      "B": "10 mGya per hour anywhere",
+      "C": "1 mGya per hour measured at 1 meter from the housing",
+      "D": "100 mGya per hour at 1 meter from the housing"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: 1 mGya per hour measured at 1 meter from the housing.\n\nLeakage radiation from the tube housing must not exceed 1 mGya per hour measured at 1 meter from the housing.\n\nIncorrect Answers:\nA. The measurement standard is not taken at the tube source.\nB. 10 mGya per hour is too high.\nD. 100 mGya per hour is far above the permitted limit."
+  },
+  {
+    "id": "qbank3-41",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The organelles — membrane-bound structures that perform specialized metabolic functions — are located within which part of the cell?",
+    "choices": {
+      "A": "DNA molecule",
+      "B": "Cytoplasm",
+      "C": "RNA strands",
+      "D": "Cell nucleus"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Cytoplasm.\n\nOrganelles are located within the cytoplasm of the cell.\n\nIncorrect Answers:\nA. DNA is genetic material, not the location of organelles.\nC. RNA strands are not the compartment that contains organelles.\nD. The nucleus is one organelle, but the other organelles are generally located in the cytoplasm."
+  },
+  {
+    "id": "qbank3-42",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Relative biological effectiveness (RBE) is a comparison that describes:",
+    "choices": {
+      "A": "The capacity of a given radiation type to produce biological damage relative to a reference radiation",
+      "B": "The therapeutic effectiveness of radiation therapy",
+      "C": "The sensitivity of DNA to radiation",
+      "D": "The radiosensitivity of cytoplasmic water"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: The capacity of a given radiation type to produce biological damage relative to a reference radiation.\n\nRBE compares how effective a type of radiation is at producing biologic damage relative to a reference radiation.\n\nIncorrect Answers:\nB. RBE does not describe therapeutic success.\nC. It is broader than DNA sensitivity alone.\nD. It does not specifically describe the radiosensitivity of cytoplasmic water."
+  },
+  {
+    "id": "qbank3-43",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The principle that cells are most radiosensitive when they are undifferentiated, immature, and actively dividing is expressed by:",
+    "choices": {
+      "A": "The inverse square law",
+      "B": "The Law of Bergonié and Tribondeau",
+      "C": "Ohm's law",
+      "D": "The all-or-none law of radiation"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: The Law of Bergonié and Tribondeau.\n\nThis law states that cells are most radiosensitive when they are immature, undifferentiated, and rapidly dividing.\n\nIncorrect Answers:\nA. The inverse square law describes intensity changes with distance.\nC. Ohm's law describes electrical relationships.\nD. The all-or-none law of radiation is not the principle described here."
+  },
+  {
+    "id": "qbank3-44",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Among all cells in the human body, which type is considered the most radiosensitive?",
+    "choices": {
+      "A": "Muscle cells (least sensitive)",
+      "B": "Nerve cells",
+      "C": "Lymphocytes",
+      "D": "Mature bone cells"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: Lymphocytes.\n\nLymphocytes are among the most radiosensitive cells in the human body.\n\nIncorrect Answers:\nA. Muscle cells are relatively radioresistant.\nB. Nerve cells are relatively radioresistant.\nD. Mature bone cells are less radiosensitive than lymphocytes."
+  },
+  {
+    "id": "qbank3-45",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "During which stage of pregnancy are embryologic radiation effects least likely to cause significant harm?",
+    "choices": {
+      "A": "During the third (final) trimester",
+      "B": "During the second trimester",
+      "C": "During the first trimester",
+      "D": "At the moment of conception"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: During the third (final) trimester.\n\nEmbryologic radiation effects are least likely to cause significant harm during the third trimester.\n\nIncorrect Answers:\nB. The second trimester still carries developmental risk.\nC. The first trimester is the period of greatest sensitivity.\nD. Early conception stages are highly sensitive to radiation effects."
+  },
+  {
+    "id": "qbank3-46",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "A lead apron should be worn by fluoroscopy personnel primarily to attenuate which photon-tissue interaction?",
+    "choices": {
+      "A": "Compton scatter radiation reaching personnel",
+      "B": "Coherent scatter",
+      "C": "Photoelectric interaction in the patient",
+      "D": "Pair production"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: Compton scatter radiation reaching personnel.\n\nLead aprons are worn primarily to attenuate Compton scatter reaching personnel during fluoroscopy.\n\nIncorrect Answers:\nB. Coherent scatter contributes minimally compared with Compton scatter.\nC. Photoelectric interaction occurs in the patient and is not what primarily exposes personnel.\nD. Pair production does not occur at diagnostic fluoroscopic energies."
+  },
+  {
+    "id": "qbank3-47",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "On a dose-response curve used in radiation biology, what quantity is plotted along the horizontal (x) axis?",
+    "choices": {
+      "A": "Radiation dose",
+      "B": "Biological response",
+      "C": "Receptor exposure index",
+      "D": "Radioactivity level"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: Radiation dose.\n\nOn a dose-response curve, radiation dose is plotted on the horizontal (x) axis.\n\nIncorrect Answers:\nB. Biological response is plotted on the vertical (y) axis.\nC. Receptor exposure index is not the standard variable used on the x-axis for a radiation biology dose-response curve.\nD. Radioactivity level is not the quantity typically plotted here."
+  },
+  {
+    "id": "qbank3-48",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The preferred (recommended) minimum source-to-skin distance for C-arm fluoroscopic equipment is:",
+    "choices": {
+      "A": "12 inches",
+      "B": "10 inches",
+      "C": "20 inches",
+      "D": "15 inches"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: 15 inches.\n\nThe preferred minimum source-to-skin distance for C-arm fluoroscopic equipment is 15 inches.\n\nIncorrect Answers:\nA. 12 inches is less than the preferred minimum.\nB. 10 inches is too short.\nC. 20 inches is greater than the recommended minimum but not the standard answer."
+  },
+  {
+    "id": "qbank3-49",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Photoelectric interaction in the x-ray tube target and in patient tissue occurs primarily at which electron shell level?",
+    "choices": {
+      "A": "L-shell",
+      "B": "K-shell",
+      "C": "M-shell",
+      "D": "Outer valence shell"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: K-shell.\n\nPhotoelectric interactions occur primarily with inner-shell electrons, especially K-shell electrons.\n\nIncorrect Answers:\nA. L-shell electrons may be involved, but K-shell interaction is the primary association.\nC. M-shell electrons are farther from the nucleus and are less commonly involved in this context.\nD. Outer valence shell electrons are not the primary shell involved in photoelectric interaction."
+  },
+  {
+    "id": "qbank3-50",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Radiation exiting the patient in widely divergent paths rather than straight-line trajectories is indicative of:",
+    "choices": {
+      "A": "Photoelectric rays",
+      "B": "Scatter radiation",
+      "C": "Coherent interaction products",
+      "D": "Patient motion during exposure"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Scatter radiation.\n\nRadiation exiting the patient in divergent paths indicates scatter radiation.\n\nIncorrect Answers:\nA. Photoelectric interaction results in complete absorption rather than exiting photons.\nC. Coherent scatter is a type of scatter, but the broader correct answer is scatter radiation.\nD. Patient motion does not create divergent photon paths."
+  },
+  {
+    "id": "qbank3-51",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "The specialized membrane-enclosed structures found within the cell cytoplasm that perform specific metabolic functions are called:",
+    "choices": {
+      "A": "Free radicals",
+      "B": "Ions",
+      "C": "Organelles",
+      "D": "DNA strands"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: Organelles.\n\nOrganelles are specialized membrane-enclosed structures within the cytoplasm that perform specific metabolic functions.\n\nIncorrect Answers:\nA. Free radicals are reactive molecules, not cell structures.\nB. Ions are charged particles, not membrane-enclosed structures.\nD. DNA strands are genetic material, not cytoplasmic organelles."
+  },
+  {
+    "id": "qbank3-52",
+    "category": "Safety",
+    "subcategory": "General",
+    "question": "Long-wavelength, low-energy x-ray photons that contribute to patient dose but not to image formation are removed from the primary beam by a(n):",
+    "choices": {
+      "A": "Collimator",
+      "B": "Aluminum filter",
+      "C": "Cylinder cone",
+      "D": "Gonadal shield"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Aluminum filter.\n\nAluminum filtration removes long-wavelength, low-energy photons that increase patient dose without improving image formation.\n\nIncorrect Answers:\nA. A collimator restricts beam size, not beam quality.\nC. A cylinder cone mainly limits beam shape and field size.\nD. A gonadal shield protects a specific area of the patient but does not filter the primary beam."
+  },
+{
+  "id": "qbank3-53",
+  "category": "Safety",
+  "subcategory": "General",
+  "question": "The primary goal of radiation safety practices in diagnostic imaging is to:",
+  "choices": {
+    "A": "Limit occupational dose to workers",
+    "B": "Keep radiation exposure as low as reasonably achievable (ALARA)",
+    "C": "Minimize long-term somatic effects on individual patients",
+    "D": "Reduce short-term somatic effects"
+  },
+  "correctAnswer": "B",
+  "explanation": "Correct Answer: Keep radiation exposure as low as reasonably achievable (ALARA).\n\nALARA is the guiding principle of radiation protection, aiming to minimize exposure while maintaining diagnostic image quality.\n\nIncorrect Answers:\nA. This is part of safety, but not the primary overall goal.\nC. This is a result of ALARA, not the guiding principle.\nD. Short-term effects are not the primary concern in diagnostic imaging."
+},
+  {
+    "id": "qbank3-54",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Electrical devices in the x-ray circuit that raise or lower the voltage of the alternating current supply are called:",
+    "choices": {
+      "A": "Rectifiers",
+      "B": "Generators",
+      "C": "Timers",
+      "D": "Transformers"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: Transformers.\n\nTransformers raise or lower voltage in the x-ray circuit by mutual induction between primary and secondary coils.\n\nIncorrect Answers:\nA. Rectifiers convert alternating current into direct current.\nB. Generators supply the electrical waveform used to power the x-ray circuit, but they do not specifically raise or lower voltage by induction.\nC. Timers control exposure duration rather than voltage transformation."
+  },
+  {
+    "id": "qbank3-55",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The low-voltage filament circuit of the x-ray machine uses which type of transformer to supply the cathode filament with a small, controlled current?",
+    "choices": {
+      "A": "Step-up transformer",
+      "B": "Autotransformer",
+      "C": "Step-down transformer",
+      "D": "Falling load generator"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: Step-down transformer.\n\nThe filament circuit uses a step-down transformer to lower voltage and increase current to heat the cathode filament.\n\nIncorrect Answers:\nA. A step-up transformer raises voltage in the high-voltage circuit.\nB. The autotransformer is used to select and adjust kVp before the high-voltage transformer stage.\nD. A falling load generator changes mA during long exposures but is not the transformer used in the filament circuit."
+  },
+  {
+    "id": "qbank3-56",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Because the x-ray tube requires direct current (DC) to function, which component of the x-ray circuit converts AC to DC?",
+    "choices": {
+      "A": "Autotransformer",
+      "B": "Step-up transformer",
+      "C": "Rectifier",
+      "D": "Falling load generator"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: Rectifier.\n\nThe rectifier converts alternating current into direct current so electrons flow in only one direction through the x-ray tube.\n\nIncorrect Answers:\nA. The autotransformer selects and adjusts kVp but does not convert AC to DC.\nB. The step-up transformer raises voltage but does not change AC into DC.\nD. A falling load generator changes mA during exposure but does not perform rectification."
+  },
+  {
+    "id": "qbank3-57",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "In the high-voltage x-ray circuit, the rectifier is positioned between the:",
+    "choices": {
+      "A": "Timer and the step-up transformer",
+      "B": "Step-up and step-down transformers",
+      "C": "Primary and secondary windings of the step-up transformer",
+      "D": "Step-up transformer and the x-ray tube"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: Step-up transformer and the x-ray tube.\n\nIn the high-voltage circuit, rectifiers are placed between the step-up transformer and the x-ray tube to ensure current flows in one direction.\n\nIncorrect Answers:\nA. The timer is not the correct location for the rectifier in the high-voltage circuit.\nB. The rectifier is not placed between the step-up and step-down transformers.\nC. Rectifiers are not located between the primary and secondary windings of the transformer."
+  },
+  {
+    "id": "qbank3-58",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Thermionic emission — the boiling-off of electrons to form an electron cloud — occurs at the:",
+    "choices": {
+      "A": "Anode target",
+      "B": "Control panel",
+      "C": "Rectifier circuit",
+      "D": "Cathode filament"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: Cathode filament.\n\nThermionic emission occurs at the heated cathode filament, which releases electrons to form the electron cloud.\n\nIncorrect Answers:\nA. The anode target receives the electrons but is not where thermionic emission occurs.\nB. The control panel selects technique factors and does not emit electrons.\nC. The rectifier circuit converts AC to DC and is not the source of thermionic emission."
+  },
+  {
+    "id": "qbank3-59",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "During an x-ray exposure, the focusing cup at the cathode maintains a negative charge in order to:",
+    "choices": {
+      "A": "Attract electrons toward the anode",
+      "B": "Repel electrons to focus the beam toward the focal spot",
+      "C": "Alternate charge to stabilize the electron stream",
+      "D": "Remain electrically neutral"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Repel electrons to focus the beam toward the focal spot.\n\nThe negatively charged focusing cup repels the electron cloud and directs it toward the anode focal spot.\n\nIncorrect Answers:\nA. Electrons are attracted toward the positively charged anode, not because the focusing cup attracts them.\nC. The focusing cup does not alternate charge during exposure.\nD. The focusing cup is not electrically neutral during exposure."
+  },
+  {
+    "id": "qbank3-60",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The interaction that occurs when a high-speed electron decelerates near an atomic nucleus, converting its kinetic energy into an x-ray photon, is called:",
+    "choices": {
+      "A": "Characteristic radiation",
+      "B": "Photoelectric effect",
+      "C": "Compton interaction",
+      "D": "Bremsstrahlung (braking radiation)"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: Bremsstrahlung (braking radiation).\n\nBremsstrahlung radiation is produced when a high-speed electron is slowed or deflected by the nucleus of a target atom, converting kinetic energy into an x-ray photon.\n\nIncorrect Answers:\nA. Characteristic radiation occurs when an inner-shell electron is ejected and an outer-shell electron fills the vacancy.\nB. The photoelectric effect is a photon-tissue interaction, not an x-ray production mechanism in the tube.\nC. Compton interaction is also a photon-tissue interaction and not a tube production process."
+  },
+  {
+    "id": "qbank3-61",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "For a QC exposure linearity test, outputs from adjacent milliamperage stations must agree within:",
+    "choices": {
+      "A": "2% of SID",
+      "B": "4%",
+      "C": "10%",
+      "D": "5%"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: 10%.\n\nFor exposure linearity testing, output from adjacent mA stations should agree within 10%.\n\nIncorrect Answers:\nA. 2% of SID applies to collimation accuracy, not exposure linearity.\nB. 4% is not the accepted tolerance for exposure linearity.\nD. 5% is the tolerance more closely associated with exposure reproducibility, not linearity."
+  },
+  {
+    "id": "qbank3-62",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "For a QC exposure reproducibility test, successive exposures at the same technique settings must agree within:",
+    "choices": {
+      "A": "2% of SID",
+      "B": "4%",
+      "C": "10%",
+      "D": "5%"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: 5%.\n\nExposure reproducibility requires repeated exposures made at the same settings to agree within 5%.\n\nIncorrect Answers:\nA. 2% of SID applies to collimation accuracy, not reproducibility.\nB. 4% is not the accepted tolerance for this test.\nC. 10% is used for linearity rather than reproducibility."
+  },
+  {
+    "id": "qbank3-63",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "For a QC collimator accuracy test, field size must match the indicated light field size within:",
+    "choices": {
+      "A": "2% of the SID",
+      "B": "4%",
+      "C": "10%",
+      "D": "5%"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: 2% of the SID.\n\nCollimator accuracy requires the x-ray field and light field to agree within 2% of the SID.\n\nIncorrect Answers:\nB. 4% is too large a tolerance for collimator accuracy.\nC. 10% is not the accepted tolerance for this test.\nD. 5% is not the accepted tolerance for collimator accuracy."
+  },
+  {
+    "id": "qbank3-64",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "For a QC test of kVp accuracy, the measured kVp must be within what tolerance of the control panel setting?",
+    "choices": {
+      "A": "2% of SID",
+      "B": "4%",
+      "C": "10%",
+      "D": "4 kVp"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: 10%.\n\nFor kVp accuracy testing, the measured kVp must be within 10% of the selected value.\n\nIncorrect Answers:\nA. 2% of SID applies to collimation accuracy, not kVp testing.\nB. 4% is not the standard tolerance given here.\nD. 4 kVp is not the accepted general tolerance for this question."
+  },
+  {
+    "id": "qbank3-65",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "At a 72-inch SID, the maximum allowable collimation inaccuracy is:",
+    "choices": {
+      "A": "± 1.44 inches (2% of 72)",
+      "B": "± 7.2 inches",
+      "C": "± 3.6 inches",
+      "D": "± 0.02 inch"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: ± 1.44 inches (2% of 72).\n\nCollimation accuracy is allowed within 2% of the SID. At 72 inches, 2% equals 1.44 inches.\n\nIncorrect Answers:\nB. 7.2 inches is far outside the allowable tolerance.\nC. 3.6 inches is also too large.\nD. 0.02 inch is much smaller than the accepted tolerance."
+  },
+  {
+    "id": "qbank3-66",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The image intensifier feature that automatically adjusts the radiation dose to maintain a constant brightness level at the input phosphor is the:",
+    "choices": {
+      "A": "Photocathode",
+      "B": "Electrostatic focusing lenses",
+      "C": "Automatic brightness control (ABC)",
+      "D": "Vidicon camera tube"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: Automatic brightness control (ABC).\n\nABC automatically adjusts technical factors during fluoroscopy to maintain a constant brightness level.\n\nIncorrect Answers:\nA. The photocathode converts light into electrons but does not regulate brightness automatically.\nB. Electrostatic focusing lenses focus electrons within the image intensifier.\nD. The Vidicon camera tube transmits the image but is not the automatic dose-adjusting feature."
+  },
+  {
+    "id": "qbank3-67",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Modern fluoroscopic television systems may use which solid-state device in place of traditional Vidicon or Plumbicon camera tubes?",
+    "choices": {
+      "A": "Charge-coupled device (CCD)",
+      "B": "C-arm image intensifier",
+      "C": "Automatic brightness control",
+      "D": "Output phosphor"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: Charge-coupled device (CCD).\n\nModern fluoroscopic television systems may use a CCD instead of older camera tubes such as the Vidicon or Plumbicon.\n\nIncorrect Answers:\nB. A C-arm image intensifier is not the solid-state replacement for the television camera tube.\nC. Automatic brightness control regulates brightness but is not the camera pickup device.\nD. The output phosphor emits visible light but is not the solid-state television component."
+  },
+  {
+    "id": "qbank3-68",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The electronic measuring instrument used for multiple QC tests on x-ray equipment — including exposure output, linearity, and reproducibility — is a:",
+    "choices": {
+      "A": "Automatic exposure control (AEC)",
+      "B": "Digital dosimeter",
+      "C": "Penetrometer",
+      "D": "Densitometer"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Digital dosimeter.\n\nA digital dosimeter is used in x-ray equipment QC testing to measure exposure output and evaluate linearity and reproducibility.\n\nIncorrect Answers:\nA. AEC terminates the exposure when enough radiation reaches the detector but is not the measuring instrument used for these QC tests.\nC. A penetrometer is not the standard instrument for these x-ray equipment QC measurements.\nD. A densitometer measures optical density, not x-ray output, linearity, or reproducibility."
+  },
+  {
+    "id": "qbank3-69",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The smallest unit of a compound that still retains the chemical properties of that compound is a(n):",
+    "choices": {
+      "A": "Element",
+      "B": "Atom",
+      "C": "Molecule",
+      "D": "Neutron"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: Molecule.\n\nA molecule is the smallest unit of a compound that still retains the chemical properties of that compound.\n\nIncorrect Answers:\nA. An element is a pure substance made of one type of atom, not the smallest unit of a compound.\nB. An atom is the smallest unit of an element, not of a compound.\nD. A neutron is a subatomic particle in the nucleus and does not represent a compound."
+  },
+  {
+    "id": "qbank3-70",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Given a baseline technique of 20 mAs at 80 kVp, which of the following would produce exactly double the image receptor exposure?",
+    "choices": {
+      "A": "40 mAs, 90 kVp",
+      "B": "30 mAs, 92 kVp",
+      "C": "40 mAs, 80 kVp",
+      "D": "15 mAs, 92 kVp"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: 40 mAs, 80 kVp.\n\nDoubling mAs while keeping kVp the same doubles image receptor exposure.\n\nIncorrect Answers:\nA. Doubling mAs and increasing kVp would more than double receptor exposure.\nB. Increasing both mAs and kVp would also produce more than exactly double exposure.\nD. Although kVp is increased, the mAs is reduced, so this would not produce exactly double exposure."
+  },
+  {
+    "id": "qbank3-71",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The relationship between SID and image receptor exposure — where doubling the distance quarters the exposure — is governed by the:",
+    "choices": {
+      "A": "Reciprocity law",
+      "B": "15% rule",
+      "C": "Inverse square law",
+      "D": "Density maintenance rule"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: Inverse square law.\n\nThe inverse square law states that radiation intensity changes inversely with the square of the distance from the source.\n\nIncorrect Answers:\nA. Reciprocity law relates exposure time and mA combinations.\nB. The 15% rule describes kVp changes and receptor exposure.\nD. Density maintenance refers to changing mAs to compensate for distance changes but is based on the inverse square law."
+  },
+  {
+    "id": "qbank3-72",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Unwanted marks or patterns appearing on a radiographic image that do not represent true anatomy are called:",
+    "choices": {
+      "A": "Processing irregularities",
+      "B": "Processing artifacts",
+      "C": "Artifacts",
+      "D": "Plus-density marks"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: Artifacts.\n\nArtifacts are unwanted marks, patterns, or image features that do not represent actual anatomy.\n\nIncorrect Answers:\nA. Processing irregularities are one cause of artifacts but are not the broad term.\nB. Processing artifacts are only one category of artifact.\nD. Plus-density marks are not the general term for all unwanted image features."
+  },
+  {
+    "id": "qbank3-73",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The adjustment of image appearance — including brightness, contrast, and edge enhancement — performed on a digital image after it has been acquired is called:",
+    "choices": {
+      "A": "Digital coding",
+      "B": "Postprocessing",
+      "C": "Leveling",
+      "D": "Archiving"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Postprocessing.\n\nPostprocessing is the adjustment of digital image appearance after image acquisition.\n\nIncorrect Answers:\nA. Digital coding is not the term for adjusting image appearance after acquisition.\nC. Leveling may describe one specific adjustment but is not the overall term.\nD. Archiving refers to storing images, not changing their appearance."
+  },
+  {
+    "id": "qbank3-74",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "As the speed class of an image receptor decreases (slower speed), the radiation dose required and therefore patient dose:",
+    "choices": {
+      "A": "Increases",
+      "B": "Decreases",
+      "C": "Remains unchanged",
+      "D": "Decreases by half"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: Increases.\n\nA slower image receptor speed requires more radiation exposure, which increases patient dose.\n\nIncorrect Answers:\nB. Patient dose does not decrease when a slower receptor is used.\nC. Receptor speed does affect required exposure and patient dose.\nD. Dose does not decrease by half with slower receptor speed."
+  },
+  {
+    "id": "qbank3-75",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Because image contrast in digital systems is controlled primarily by software processing, the kVp selected may be:",
+    "choices": {
+      "A": "Increased to optimize penetration and reduce patient dose",
+      "B": "Decreased to minimize receptor exposure",
+      "C": "Kept the same as for film-screen systems",
+      "D": "Set by the AEC without technologist adjustment"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: Increased to optimize penetration and reduce patient dose.\n\nIn digital imaging, contrast is largely controlled by processing, so a somewhat higher kVp may be used to improve penetration and reduce patient dose.\n\nIncorrect Answers:\nB. Lowering kVp usually increases patient dose if mAs must be increased to compensate.\nC. Digital systems do not always require the same kVp choices as film-screen systems.\nD. AEC does not independently select kVp without technologist adjustment."
+  },
+  {
+    "id": "qbank3-76",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Image acquisition, image display, and image storage and retrieval are the three primary functions of which system?",
+    "choices": {
+      "A": "DICOM communication standard",
+      "B": "CR/DR imaging hardware",
+      "C": "PACS (Picture Archiving and Communication System)",
+      "D": "HIS (Hospital Information System)"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: PACS (Picture Archiving and Communication System).\n\nPACS performs image acquisition support, display, storage, and retrieval in digital imaging environments.\n\nIncorrect Answers:\nA. DICOM is the communication standard, not the full storage and retrieval system.\nB. CR/DR hardware acquires images but does not represent the full system for display, storage, and retrieval.\nD. HIS manages broader hospital information rather than imaging workflow specifically."
+  },
+  {
+    "id": "qbank3-77",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "PACS uses which standardized digital communication protocol as its 'language' for transmitting images?",
+    "choices": {
+      "A": "DICOM (Digital Imaging and Communications in Medicine)",
+      "B": "Base 10 numeric system",
+      "C": "HIS (Hospital Information System)",
+      "D": "RIS (Radiology Information System)"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: DICOM (Digital Imaging and Communications in Medicine).\n\nDICOM is the standard communication protocol used for transmitting and managing digital medical images.\n\nIncorrect Answers:\nB. Base 10 numeric system is unrelated to medical image communication standards.\nC. HIS is a hospital information system, not the image transmission language.\nD. RIS manages radiology information but is not the communication protocol for image transmission."
+  },
+  {
+    "id": "qbank3-78",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Which exposure factor, when set too low, results in excessive image noise because too few photons contribute to image formation?",
+    "choices": {
+      "A": "kVp (too low creates excessive noise via insufficient quantum mottle)",
+      "B": "mAs",
+      "C": "AEC selection",
+      "D": "Exposure time"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: mAs.\n\nIf mAs is set too low, too few photons reach the receptor, producing excessive quantum noise.\n\nIncorrect Answers:\nA. Low kVp can affect penetration and contrast, but insufficient mAs is the primary factor causing too few photons and excessive quantum mottle.\nC. AEC selection may influence exposure indirectly, but it is not the exposure factor being tested here.\nD. Exposure time alone is not the best answer because photon quantity depends on mAs."
+  },
+  {
+    "id": "qbank3-79",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Which of the following can be documented and used as a direct indicator of patient radiation dose in digital imaging?",
+    "choices": {
+      "A": "AEC chamber selection",
+      "B": "Exposure indicator (EI) number",
+      "C": "System speed class",
+      "D": "Histogram shape"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Exposure indicator (EI) number.\n\nThe exposure indicator provides feedback about the amount of radiation reaching the detector and is used as a practical indicator related to patient exposure.\n\nIncorrect Answers:\nA. AEC chamber selection does not directly document radiation dose.\nC. System speed class describes detector characteristics rather than a documented exposure value for a specific image.\nD. Histogram shape does not directly indicate patient radiation dose."
+  },
+  {
+    "id": "qbank3-80",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Using a touch-screen display to select the anatomy being imaged so the system automatically sets appropriate technique parameters is called:",
+    "choices": {
+      "A": "Phototiming",
+      "B": "Anatomically programmed radiography (APR)",
+      "C": "AEC imaging",
+      "D": "Automatic radiography"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Anatomically programmed radiography (APR).\n\nAPR allows the technologist to select the body part and projection so the system suggests or sets appropriate technical factors.\n\nIncorrect Answers:\nA. Phototiming is another term related to AEC, not anatomy-based technique selection.\nC. AEC imaging is not the standard term for this feature.\nD. Automatic radiography is too vague and is not the accepted term."
+  },
+  {
+    "id": "qbank3-81",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Limiting the size of the x-ray field to the anatomy of interest reduces both patient dose and scatter production through the technique of:",
+    "choices": {
+      "A": "Grids",
+      "B": "High-speed image receptors",
+      "C": "Collimation (beam restriction)",
+      "D": "Beam filtration"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: Collimation (beam restriction).\n\nCollimation restricts the x-ray beam to the area of interest, reducing irradiated tissue volume, scatter production, and patient dose.\n\nIncorrect Answers:\nA. Grids absorb scatter after it is produced but do not reduce beam size.\nB. High-speed receptors reduce required dose but do not restrict field size.\nD. Beam filtration removes low-energy photons but does not limit field size."
+  },
+  {
+    "id": "qbank3-82",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Radiographic artifacts are most commonly classified as:",
+    "choices": {
+      "A": "Scatter-related artifacts",
+      "B": "Plus-density or minus-density artifacts",
+      "C": "Compton or photoelectric artifacts",
+      "D": "Patient-motion or equipment-related artifacts"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Plus-density or minus-density artifacts.\n\nRadiographic artifacts are commonly classified by whether they add density or remove density from the image.\n\nIncorrect Answers:\nA. Scatter-related artifacts are only one possible source and not the most common classification scheme.\nC. Compton and photoelectric effects are interaction types, not the usual artifact categories.\nD. Motion and equipment issues are causes of artifacts, not the most common overall classification."
+  },
+  {
+    "id": "qbank3-83",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Grid ratio is mathematically expressed as:",
+    "choices": {
+      "A": "Length of lead strips divided by the distance between them",
+      "B": "Height of aluminum interspacers divided by lead strip spacing",
+      "C": "Height of the interspacers divided by the lead strip height",
+      "D": "Height of the lead strips divided by the distance between them (H/D)"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: Height of the lead strips divided by the distance between them (H/D).\n\nGrid ratio is calculated by dividing the height of the lead strips by the distance between them.\n\nIncorrect Answers:\nA. Grid ratio is based on strip height, not strip length.\nB. Aluminum interspacer height is not used in the formula.\nC. This inverts the relationship and uses the wrong structures."
+  },
+  {
+    "id": "qbank3-84",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The most commonly used type of radiographic grid in diagnostic imaging is the:",
+    "choices": {
+      "A": "Crosshatch grid",
+      "B": "Parallel grid",
+      "C": "Rhombic grid",
+      "D": "Focused grid"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: Focused grid.\n\nFocused grids are the most commonly used radiographic grids because they are designed to match x-ray beam divergence.\n\nIncorrect Answers:\nA. Crosshatch grids are less commonly used in routine diagnostic imaging.\nB. Parallel grids are simpler but not the most commonly used type.\nC. Rhombic grid is not the standard commonly used diagnostic grid type."
+  },
+  {
+    "id": "qbank3-85",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Which of the following does NOT belong in the definition of matter?",
+    "choices": {
+      "A": "Travels at the speed of light",
+      "B": "Has shape or form",
+      "C": "Has a defined structure",
+      "D": "Occupies space"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: Travels at the speed of light.\n\nMatter has mass and occupies space; traveling at the speed of light is not part of the definition of matter.\n\nIncorrect Answers:\nB. Matter has form or physical presence.\nC. Matter has structure at the atomic and molecular level.\nD. Occupying space is one of the defining properties of matter."
+  },
+  {
+    "id": "qbank3-86",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "At a 60-inch SID, the maximum allowable total collimator field size error is:",
+    "choices": {
+      "A": "± 6 inches",
+      "B": "± 3 inches",
+      "C": "± 2 inches",
+      "D": "± 1.2 inches (2% of 60)"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: ± 1.2 inches (2% of 60).\n\nCollimator field-size error is allowed within 2% of the SID. At 60 inches, 2% equals 1.2 inches.\n\nIncorrect Answers:\nA. 6 inches is far beyond the allowable tolerance.\nB. 3 inches is too large.\nC. 2 inches is still greater than the accepted tolerance."
+  },
+  {
+    "id": "qbank3-87",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The relationship between wavelength and frequency in electromagnetic radiation is best described as:",
+    "choices": {
+      "A": "Directly proportional — as frequency rises, wavelength increases",
+      "B": "Frequency and wavelength are independent of each other",
+      "C": "Inversely proportional to the square of the distance between wave crests",
+      "D": "Inversely proportional — as frequency increases, wavelength decreases"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: Inversely proportional — as frequency increases, wavelength decreases.\n\nIn electromagnetic radiation, frequency and wavelength are inversely related.\n\nIncorrect Answers:\nA. As frequency rises, wavelength decreases rather than increases.\nB. Frequency and wavelength are directly linked, not independent.\nC. The inverse square relationship applies to radiation intensity with distance, not frequency and wavelength."
+  },
+  {
+    "id": "qbank3-88",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Beam restrictors (collimators) reduce scatter reaching the image receptor by decreasing the volume of patient tissue irradiated, thereby reducing:",
+    "choices": {
+      "A": "Characteristic x-ray production",
+      "B": "Photoelectric interactions",
+      "C": "Compton interactions",
+      "D": "Pair production"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: Compton interactions.\n\nCollimation reduces scatter by decreasing the volume of tissue exposed, which reduces the number of Compton interactions.\n\nIncorrect Answers:\nA. Characteristic x-ray production occurs at the anode target, not in the patient due to field size.\nB. Photoelectric interactions contribute to image contrast and are not the main source of scatter.\nD. Pair production does not occur at diagnostic x-ray energies."
+  },
+  {
+    "id": "qbank3-89",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "When beam filtration is increased, what effect does it have on image contrast?",
+    "choices": {
+      "A": "Increases contrast by hardening the beam",
+      "B": "Decreases contrast because the higher average energy beam produces more Compton scatter",
+      "C": "No effect on contrast",
+      "D": "A variable, unpredictable effect"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Decreases contrast because the higher average energy beam produces more Compton scatter.\n\nIncreasing filtration hardens the beam, raising average photon energy and tending to reduce image contrast.\n\nIncorrect Answers:\nA. Hardening the beam generally lowers, not increases, radiographic contrast.\nC. Beam filtration does affect contrast.\nD. The effect is not unpredictable; increased beam energy generally decreases contrast."
+  },
+  {
+    "id": "qbank3-90",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Reducing the source-to-image receptor distance (SID) while all other factors remain constant causes which image quality change?",
+    "choices": {
+      "A": "Minification of the image",
+      "B": "Foreshortening of anatomic structures",
+      "C": "Elongation of anatomic structures",
+      "D": "Magnification of the image"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: Magnification of the image.\n\nReducing SID increases beam divergence at the receptor, which increases image magnification.\n\nIncorrect Answers:\nA. Minification would occur with the opposite geometric effect.\nB. Foreshortening is caused by alignment issues, not simply changing SID.\nC. Elongation is also a distortion from misalignment rather than the primary result of reduced SID."
+  },
+  {
+    "id": "qbank3-91",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Improper use of a radiographic grid — such as incorrect focal distance or tilting — may cause repeat exposures because of:",
+    "choices": {
+      "A": "Image overexposure",
+      "B": "Grid histogram analysis error",
+      "C": "Image underexposure",
+      "D": "Grid cutoff"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: Grid cutoff.\n\nIncorrect grid use can absorb too much primary radiation and cause grid cutoff.\n\nIncorrect Answers:\nA. Overexposure is not the characteristic problem produced by grid misalignment.\nB. Histogram analysis error is not the primary concept being tested.\nC. Underexposure may be seen, but the specific cause is grid cutoff."
+  },
+  {
+    "id": "qbank3-92",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The numerical measure of a grid's ability to improve image contrast by selectively absorbing scatter radiation is the:",
+    "choices": {
+      "A": "Grid ratio",
+      "B": "Grid selectivity",
+      "C": "Grid speed",
+      "D": "Contrast improvement factor"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: Contrast improvement factor.\n\nThe contrast improvement factor is the numerical measure of how much a grid improves image contrast.\n\nIncorrect Answers:\nA. Grid ratio describes strip height relative to interspace width.\nB. Grid selectivity describes the ratio of primary to scatter transmission but is not the direct measure asked here.\nC. Grid speed refers to exposure increase needed when using a grid."
+  },
+  {
+    "id": "qbank3-93",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Which grid positioning error results in normal exposure at the image center but progressively decreasing exposure toward both sides, occurring when a focused grid is accidentally reversed?",
+    "choices": {
+      "A": "Upside-down grid (reversed)",
+      "B": "Off-level tilt",
+      "C": "Lateral decentering",
+      "D": "Grid-focus decentering"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: Upside-down grid (reversed).\n\nWhen a focused grid is used upside down, exposure is relatively normal at the center but decreases progressively toward both sides.\n\nIncorrect Answers:\nB. Off-level tilt causes a more uniform loss of exposure across the image.\nC. Lateral decentering does not produce the classic bilateral edge cutoff pattern of a reversed focused grid.\nD. Grid-focus decentering refers to using the wrong SID range, not reversing the grid."
+  },
+  {
+    "id": "qbank3-94",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Which grid error produces an image with decreased density more pronounced on one side than the other?",
+    "choices": {
+      "A": "Upside-down grid",
+      "B": "Off-level tilt",
+      "C": "Lateral decentering",
+      "D": "Grid-focus decentering"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: Lateral decentering.\n\nLateral decentering shifts the beam off the grid center and can produce density loss that is more pronounced on one side.\n\nIncorrect Answers:\nA. An upside-down focused grid typically produces symmetric loss toward both sides.\nB. Off-level tilt usually causes a more uniform density loss across the image.\nD. Grid-focus decentering occurs when the SID is outside the grid focal range and does not classically produce one-sided density loss."
+  },
+  {
+    "id": "qbank3-95",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "The mathematical formula H/D (height divided by distance) is used to calculate:",
+    "choices": {
+      "A": "H&D; curve (characteristic curve)",
+      "B": "Grid ratio",
+      "C": "mAs reciprocity",
+      "D": "15% rule factor"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Grid ratio.\n\nThe formula H/D is used to calculate grid ratio, where H is strip height and D is the distance between lead strips.\n\nIncorrect Answers:\nA. The H&D curve refers to film response and is unrelated to this formula.\nC. mAs reciprocity is not calculated with H/D.\nD. The 15% rule is a kVp relationship and not based on this formula."
+  },
+  {
+    "id": "qbank3-96",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "In a focused grid, the range of source-to-image receptor distances at which the grid can be used without significant cutoff is called the:",
+    "choices": {
+      "A": "Grid ratio (H/D)",
+      "B": "Distance between lead strips divided by their height",
+      "C": "Number of lead strips per unit length",
+      "D": "Grid radius (focal range)"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: Grid radius (focal range).\n\nThe grid radius, or focal range, is the SID range over which a focused grid can be used correctly.\n\nIncorrect Answers:\nA. Grid ratio describes strip height relative to interspace width.\nB. This is not the name of the SID operating range.\nC. Number of lead strips per unit length refers to grid frequency."
+  },
+  {
+    "id": "qbank3-97",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Structures appearing outside the collimated field border on a radiograph — caused by extrafocal (off-focus) radiation — result from:",
+    "choices": {
+      "A": "Electron interactions occurring at areas of the anode other than the focal spot",
+      "B": "Scatter radiation from the patient or tabletop",
+      "C": "Using an SID outside the grid focal range",
+      "D": "The x-ray tube being positioned off-center to the grid"
+    },
+    "correctAnswer": "A",
+    "explanation": "Correct Answer: Electron interactions occurring at areas of the anode other than the focal spot.\n\nExtrafocal radiation is produced when electrons interact with areas of the anode outside the focal spot.\n\nIncorrect Answers:\nB. Scatter from the patient or tabletop is not extrafocal radiation.\nC. An SID outside the grid focal range causes grid cutoff, not off-focus radiation.\nD. Off-centering to the grid also causes grid cutoff rather than extrafocal radiation."
+  },
+  {
+    "id": "qbank3-98",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Geometric unsharpness (penumbra) in a radiographic image can be minimized by simultaneously using which combination of factors?",
+    "choices": {
+      "A": "Smallest focal spot and shortest OID",
+      "B": "Smallest focal spot and longest SID",
+      "C": "Shortest OID and longest SID",
+      "D": "All three: smallest focal spot, shortest OID, and longest SID"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: All three: smallest focal spot, shortest OID, and longest SID.\n\nGeometric unsharpness is minimized by using the smallest focal spot, the shortest object-to-image distance, and the longest source-to-image distance.\n\nIncorrect Answers:\nA. This helps reduce unsharpness but does not include the longest SID.\nB. This helps but does not include the shortest OID.\nC. This helps but does not include the smallest focal spot."
+  },
+  {
+    "id": "qbank3-99",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "An undistorted (true-shape) image results when the plane of the object and the plane of the image receptor are:",
+    "choices": {
+      "A": "At oblique angles relative to each other",
+      "B": "At right angles to each other",
+      "C": "Parallel to each other",
+      "D": "Perpendicular to each other"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: Parallel to each other.\n\nTrue shape is best produced when the object plane and image receptor plane are parallel.\n\nIncorrect Answers:\nA. Oblique alignment produces shape distortion.\nB. Right angles between object and receptor create distortion.\nD. Perpendicular alignment between object and receptor also produces distortion."
+  },
+  {
+    "id": "qbank3-100",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "A radiographic grid should be used when which combination of conditions is present?",
+    "choices": {
+      "A": "Body part >10 cm, field size >10–12 inches",
+      "B": "Body part >10 cm and >60 kVp required",
+      "C": "Field size >10–12 inches and >60 kVp required",
+      "D": "All three: body part >10 cm, field size >10–12 inches, and >60 kVp required"
+    },
+    "correctAnswer": "D",
+    "explanation": "Correct Answer: All three: body part >10 cm, field size >10–12 inches, and >60 kVp required.\n\nA grid is generally indicated when body part thickness is more than about 10 cm, the field size is large, and technique factors above 60 kVp are used.\n\nIncorrect Answers:\nA. This does not include the kVp factor.\nB. This does not include field size.\nC. This does not include body part thickness."
+  },
+  {
+    "id": "qbank3-101",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "When mAs is doubled, the number of electrons striking the anode target and therefore x-ray output:",
+    "choices": {
+      "A": "Stays the same — kVp controls electron quantity",
+      "B": "Doubles — direct proportional relationship",
+      "C": "Quadruples",
+      "D": "Halves"
+    },
+    "correctAnswer": "B",
+    "explanation": "Correct Answer: Doubles — direct proportional relationship.\n\nmAs and x-ray output are directly proportional, so doubling mAs doubles the number of electrons striking the target and doubles x-ray output.\n\nIncorrect Answers:\nA. Electron quantity is primarily affected by mAs, not kVp alone.\nC. Doubling mAs does not quadruple output.\nD. Doubling mAs does not halve x-ray output."
+  },
+  {
+    "id": "qbank3-102",
+    "category": "Image Production",
+    "subcategory": "General",
+    "question": "Reducing the size of the collimated field (beam restriction) results in which effect on radiographic contrast?",
+    "choices": {
+      "A": "Decreases contrast — fewer photons reach the detector",
+      "B": "Produces a longer (lower) scale of contrast",
+      "C": "Produces a shorter (higher) scale of contrast — fewer Compton interactions occur",
+      "D": "No measurable effect on contrast"
+    },
+    "correctAnswer": "C",
+    "explanation": "Correct Answer: Produces a shorter (higher) scale of contrast — fewer Compton interactions occur.\n\nReducing field size decreases scatter production, especially Compton scatter, which improves image contrast and creates a shorter-scale image.\n\nIncorrect Answers:\nA. Restricting the field does not primarily decrease contrast.\nB. A longer-scale contrast would indicate lower contrast, which is the opposite effect.\nD. Beam restriction has a measurable positive effect on radiographic contrast."
+  },
+  {
+  "id": "qbank3-103",
+  "category": "Image Production",
+  "subcategory": "General",
+  "question": "The grid conversion factor (Bucky factor) is defined as the:",
+  "choices": {
+    "A": "Height of lead strips divided by interspacer distance",
+    "B": "Distance between strips divided by strip height",
+    "C": "Number of lead strips per unit length",
+    "D": "Exposure increase factor required to compensate for radiation absorbed by the grid"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Exposure increase factor required to compensate for radiation absorbed by the grid.\n\nThe grid conversion factor, or Bucky factor, is the exposure increase required to maintain receptor exposure when a grid is used.\n\nIncorrect Answers:\nA. This describes grid ratio, not grid conversion factor.\nB. This is the inverse of the grid ratio relationship, not the Bucky factor.\nC. This describes grid frequency, not exposure compensation."
+},
+{
+  "id": "qbank3-104",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "A rounded, expanded enlargement at the end of a long bone is called a:",
+  "choices": {
+    "A": "Prominence",
+    "B": "Sharp prominence",
+    "C": "Tubercle",
+    "D": "Head"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Head.\n\nA head is a rounded, expanded articular end of a bone.\n\nIncorrect Answers:\nA. Prominence is a general description, not the specific anatomical term here.\nB. A sharp prominence is more consistent with a spine.\nC. A tubercle is a smaller rounded projection, not an expanded bone end."
+},
+{
+  "id": "qbank3-105",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "A rounded bony projection of moderate size is called a:",
+  "choices": {
+    "A": "Prominence",
+    "B": "Sharp prominence",
+    "C": "Tubercle",
+    "D": "Tuberosity"
+  },
+  "correctAnswer": "C",
+  "explanation": "Correct Answer: Tubercle.\n\nA tubercle is a rounded bony projection of moderate size.\n\nIncorrect Answers:\nA. Prominence is only a general description.\nB. A sharp prominence is more consistent with a spine.\nD. A tuberosity is usually larger and rougher than a tubercle."
+},
+{
+  "id": "qbank3-106",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "A thin, sharp bony projection is described as a:",
+  "choices": {
+    "A": "Prominence",
+    "B": "Spine",
+    "C": "Tubercle",
+    "D": "Tuberosity"
+  },
+  "correctAnswer": "B",
+  "explanation": "Correct Answer: Spine.\n\nA spine is a thin, sharp bony projection.\n\nIncorrect Answers:\nA. Prominence is too general.\nC. A tubercle is rounded rather than thin and sharp.\nD. A tuberosity is a larger roughened projection."
+},
+{
+  "id": "qbank3-107",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "A shallow, bowl-shaped bony depression is described as a:",
+  "choices": {
+    "A": "Fossa",
+    "B": "Groove",
+    "C": "Sulcus",
+    "D": "Sinus"
+  },
+  "correctAnswer": "A",
+  "explanation": "Correct Answer: Fossa.\n\nA fossa is a shallow, bowl-shaped depression in a bone.\n\nIncorrect Answers:\nB. A groove is a long narrow channel.\nC. A sulcus is another term for a groove or furrow.\nD. A sinus is an air-filled cavity within a bone."
+},
+{
+  "id": "qbank3-108",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "A long, narrow channel or groove on a bone is described as a:",
+  "choices": {
+    "A": "Fossa",
+    "B": "Groove (or sulcus)",
+    "C": "Sulcus",
+    "D": "Sinus"
+  },
+  "correctAnswer": "B",
+  "explanation": "Correct Answer: Groove (or sulcus).\n\nA groove, also called a sulcus, is a long, narrow channel on a bone.\n\nIncorrect Answers:\nA. A fossa is a shallow depression, not a narrow channel.\nC. Sulcus is essentially synonymous here, but the best answer given is groove (or sulcus).\nD. A sinus is an air-filled cavity within a bone."
+},
+{
+  "id": "qbank3-109",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "An average-shaped skull — neither long and narrow nor short and wide — is classified as:",
+  "choices": {
+    "A": "Synarthroses",
+    "B": "Amphiarthroses",
+    "C": "Diarthroses",
+    "D": "Mesocephalic"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Mesocephalic.\n\nA mesocephalic skull is average in shape, neither especially long nor especially broad.\n\nIncorrect Answers:\nA. Synarthroses are immovable joints.\nB. Amphiarthroses are slightly movable joints.\nC. Diarthroses are freely movable joints."
+},
+{
+  "id": "qbank3-110",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "Freely movable synovial joints that allow a wide range of motion are classified as:",
+  "choices": {
+    "A": "Synarthroses",
+    "B": "Amphiarthroses",
+    "C": "Diarthroses",
+    "D": "Mesocephalic"
+  },
+  "correctAnswer": "C",
+  "explanation": "Correct Answer: Diarthroses.\n\nDiarthroses are freely movable synovial joints.\n\nIncorrect Answers:\nA. Synarthroses are immovable joints.\nB. Amphiarthroses are only slightly movable.\nD. Mesocephalic describes skull shape, not joint type."
+},
+{
+  "id": "qbank3-111",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "Immovable fibrous joints held together by fibrous connective tissue are classified as:",
+  "choices": {
+    "A": "Synarthroses",
+    "B": "Amphiarthroses",
+    "C": "Diarthroses",
+    "D": "Mesocephalic"
+  },
+  "correctAnswer": "A",
+  "explanation": "Correct Answer: Synarthroses.\n\nSynarthroses are immovable joints, often fibrous in structure.\n\nIncorrect Answers:\nB. Amphiarthroses are slightly movable.\nC. Diarthroses are freely movable synovial joints.\nD. Mesocephalic describes skull shape."
+},
+{
+  "id": "qbank3-112",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "The radiocarpal (wrist) joint allows which type of motion?",
+  "choices": {
+    "A": "Hinge motion",
+    "B": "Pivot motion",
+    "C": "Saddle motion",
+    "D": "Condyloid motion"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Condyloid motion.\n\nThe radiocarpal joint is a condyloid synovial joint that allows flexion, extension, abduction, adduction, and circumduction.\n\nIncorrect Answers:\nA. Hinge joints mainly allow flexion and extension only.\nB. Pivot joints allow rotation around a central axis.\nC. Saddle motion is characteristic of the first carpometacarpal joint."
+},
+{
+  "id": "qbank3-113",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "The proximal radioulnar joint, where the radial head rotates within the radial notch of the ulna, permits which type of motion?",
+  "choices": {
+    "A": "Hinge motion",
+    "B": "Pivot motion",
+    "C": "Saddle motion",
+    "D": "Gliding motion"
+  },
+  "correctAnswer": "B",
+  "explanation": "Correct Answer: Pivot motion.\n\nThe proximal radioulnar joint is a pivot joint that allows pronation and supination.\n\nIncorrect Answers:\nA. Hinge motion is characteristic of joints like the elbow.\nC. Saddle motion is not present at the proximal radioulnar joint.\nD. Gliding motion occurs in plane joints."
+},
+{
+  "id": "qbank3-114",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "Which facial bone has a temporal process that extends posteriorly to meet the zygomatic process of the temporal bone, forming the zygomatic arch?",
+  "choices": {
+    "A": "Sphenoid bone",
+    "B": "Ethmoid bone",
+    "C": "Mandible",
+    "D": "Zygomatic bone"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Zygomatic bone.\n\nThe temporal process of the zygomatic bone joins the zygomatic process of the temporal bone to form the zygomatic arch.\n\nIncorrect Answers:\nA. The sphenoid does not form the zygomatic arch in this way.\nB. The ethmoid is primarily a midline cranial and nasal bone.\nC. The mandible is the lower jaw."
+},
+{
+  "id": "qbank3-115",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "Which facial bone contains the alveolar process that forms the sockets for the upper teeth?",
+  "choices": {
+    "A": "Sphenoid bone",
+    "B": "Ethmoid bone",
+    "C": "Mandible",
+    "D": "Maxilla"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Maxilla.\n\nThe maxilla contains the alveolar process that holds the upper teeth.\n\nIncorrect Answers:\nA. The sphenoid is a cranial bone.\nB. The ethmoid contributes to the nasal cavity and orbit.\nC. The mandible contains the sockets for the lower teeth."
+},
+{
+  "id": "qbank3-116",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "Which cranial bone has greater and lesser wings that form part of the floor and lateral walls of the cranial cavity?",
+  "choices": {
+    "A": "Sphenoid bone",
+    "B": "Ethmoid bone",
+    "C": "Mandible",
+    "D": "Maxilla"
+  },
+  "correctAnswer": "A",
+  "explanation": "Correct Answer: Sphenoid bone.\n\nThe sphenoid bone has greater and lesser wings that contribute to the cranial floor and lateral skull.\n\nIncorrect Answers:\nB. The ethmoid contributes to the nasal cavity and orbit.\nC. The mandible is a facial bone.\nD. The maxilla is part of the upper jaw."
+},
+{
+  "id": "qbank3-117",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "The coronal suture — the immovable articulation between the frontal bone and the parietal bones — forms which skull boundary?",
+  "choices": {
+    "A": "Frontal-parietal junction",
+    "B": "Temporal-parietal junction",
+    "C": "Occipital-parietal junction",
+    "D": "Parietal-parietal junction"
+  },
+  "correctAnswer": "A",
+  "explanation": "Correct Answer: Frontal-parietal junction.\n\nThe coronal suture is the articulation between the frontal bone and the parietal bones.\n\nIncorrect Answers:\nB. The temporal-parietal junction is associated with the squamosal suture.\nC. The occipital-parietal junction is associated with the lambdoid suture.\nD. The parietal-parietal junction is the sagittal suture."
+},
+{
+  "id": "qbank3-118",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "The external occipital protuberance (inion) — the most prominent bony landmark on the posterior skull surface — is a feature of the:",
+  "choices": {
+    "A": "Frontal bone",
+    "B": "Temporal bone",
+    "C": "Occipital bone",
+    "D": "Mandible"
+  },
+  "correctAnswer": "C",
+  "explanation": "Correct Answer: Occipital bone.\n\nThe external occipital protuberance is located on the occipital bone.\n\nIncorrect Answers:\nA. The frontal bone forms the forehead.\nB. The temporal bone lies laterally on the skull.\nD. The mandible is the lower jaw."
+},
+{
+  "id": "qbank3-119",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "Which structure of the axial skeleton is formed by five fused vertebral segments?",
+  "choices": {
+    "A": "Sacrum",
+    "B": "Axis (C2)",
+    "C": "Thoracic vertebra",
+    "D": "Lumbar vertebra"
+  },
+  "correctAnswer": "A",
+  "explanation": "Correct Answer: Sacrum.\n\nThe sacrum is formed by the fusion of five sacral vertebrae.\n\nIncorrect Answers:\nB. The axis is a single cervical vertebra.\nC. A thoracic vertebra is a single vertebral segment.\nD. A lumbar vertebra is also a single vertebral segment."
+},
+{
+  "id": "qbank3-120",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "The dens (odontoid process) — the toothlike projection around which the atlas rotates — is a distinctive feature of which vertebra?",
+  "choices": {
+    "A": "Atlas (C1)",
+    "B": "Axis (C2)",
+    "C": "Thoracic vertebra",
+    "D": "Lumbar vertebra"
+  },
+  "correctAnswer": "B",
+  "explanation": "Correct Answer: Axis (C2).\n\nThe dens is the odontoid projection of the axis, allowing rotation of the atlas.\n\nIncorrect Answers:\nA. The atlas does not have a vertebral body or dens.\nC. Thoracic vertebrae do not contain the dens.\nD. Lumbar vertebrae do not contain the dens."
+},
+{
+  "id": "qbank3-121",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "Which individual vertebra is the largest and heaviest, reflecting its role in supporting the weight of the upper body?",
+  "choices": {
+    "A": "Atlas (C1)",
+    "B": "Axis (C2)",
+    "C": "Thoracic vertebra",
+    "D": "Lumbar vertebra"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Lumbar vertebra.\n\nLumbar vertebrae are the largest and strongest vertebrae because they support the most body weight.\n\nIncorrect Answers:\nA. The atlas is specialized for supporting the skull.\nB. The axis is specialized for rotation.\nC. Thoracic vertebrae are smaller than lumbar vertebrae."
+},
+{
+  "id": "qbank3-122",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "The eleventh and twelfth pairs of ribs, which do not attach to the sternum or costal cartilage anteriorly, are called:",
+  "choices": {
+    "A": "True ribs",
+    "B": "Floating ribs",
+    "C": "False ribs",
+    "D": "Costal ribs"
+  },
+  "correctAnswer": "B",
+  "explanation": "Correct Answer: Floating ribs.\n\nThe eleventh and twelfth ribs are floating ribs because they have no anterior attachment to the sternum.\n\nIncorrect Answers:\nA. True ribs attach directly to the sternum by costal cartilage.\nC. False ribs include ribs 8 through 12, but ribs 11 and 12 are more specifically called floating ribs.\nD. Costal ribs is not the standard term."
+},
+{
+  "id": "qbank3-123",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "The blunt, inferior cartilaginous tip at the lower end of the sternum is the:",
+  "choices": {
+    "A": "Manubrium",
+    "B": "Jugular notch",
+    "C": "Xiphoid process",
+    "D": "Sternal angle"
+  },
+  "correctAnswer": "C",
+  "explanation": "Correct Answer: Xiphoid process.\n\nThe xiphoid process is the inferior tip of the sternum.\n\nIncorrect Answers:\nA. The manubrium is the superior portion of the sternum.\nB. The jugular notch is the superior midline notch of the manubrium.\nD. The sternal angle is the junction of the manubrium and body of the sternum."
+},
+{
+  "id": "qbank3-124",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "The shallow groove on the anterior surface of the proximal humerus running between the greater and lesser tubercles, through which the long head of the biceps tendon passes, is the:",
+  "choices": {
+    "A": "Greater and lesser tubercles",
+    "B": "Bicipital (intertubercular) groove",
+    "C": "Capitulum",
+    "D": "Trochlea"
+  },
+  "correctAnswer": "B",
+  "explanation": "Correct Answer: Bicipital (intertubercular) groove.\n\nThe bicipital groove lies between the greater and lesser tubercles and transmits the tendon of the long head of the biceps.\n\nIncorrect Answers:\nA. The tubercles border the groove but are not the groove itself.\nC. The capitulum is a distal humeral articular surface.\nD. The trochlea is also a distal humeral articular surface."
+},
+{
+  "id": "qbank3-125",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "The constricted region of the proximal humerus just distal to the tubercles — the most common site of humeral fractures — is the:",
+  "choices": {
+    "A": "Greater and lesser tubercles",
+    "B": "Bicipital groove",
+    "C": "Capitulum",
+    "D": "Surgical neck"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Surgical neck.\n\nThe surgical neck is the constricted proximal humeral region just distal to the tubercles and is a common fracture site.\n\nIncorrect Answers:\nA. The tubercles are prominences, not the constricted neck region.\nB. The bicipital groove lies between the tubercles.\nC. The capitulum is located at the distal humerus."
+},
+{
+  "id": "qbank3-126",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "The pulley-shaped medial articular surface of the distal humerus that articulates with the trochlear notch of the ulna is the:",
+  "choices": {
+    "A": "Greater and lesser tubercles",
+    "B": "Bicipital groove",
+    "C": "Capitulum",
+    "D": "Trochlea"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Trochlea.\n\nThe trochlea is the pulley-shaped medial distal humeral articular surface for the ulna.\n\nIncorrect Answers:\nA. The tubercles are on the proximal humerus.\nB. The bicipital groove is also on the proximal humerus.\nC. The capitulum is the lateral distal humeral articular surface for the radius."
+},
+{
+  "id": "qbank3-127",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "Which carpal bone is located in the distal row between the trapezoid (medially) and the hamate (laterally)?",
+  "choices": {
+    "A": "Scaphoid",
+    "B": "Hamate",
+    "C": "Pisiform",
+    "D": "Capitate"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Capitate.\n\nThe capitate is the central carpal bone of the distal row, between the trapezoid and hamate.\n\nIncorrect Answers:\nA. The scaphoid is a proximal row carpal.\nB. The hamate lies medial to the capitate in the distal row.\nC. The pisiform is a proximal row sesamoid bone."
+},
+{
+  "id": "qbank3-128",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "Which carpal bone occupies the proximal row between the lunate medially and the pisiform?",
+  "choices": {
+    "A": "Scaphoid",
+    "B": "Hamate",
+    "C": "Pisiform",
+    "D": "Triquetrum"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Triquetrum.\n\nThe triquetrum lies in the proximal row, medial to the lunate and deep to the pisiform.\n\nIncorrect Answers:\nA. The scaphoid is lateral in the proximal row.\nB. The hamate is in the distal row.\nC. The pisiform sits on the palmar surface of the triquetrum."
+},
+{
+  "id": "qbank3-129",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "Which tarsal bone sits atop the calcaneus and serves as the primary weight-transfer link between the leg and the foot, distributing body weight from the tibia to the other tarsal bones?",
+  "choices": {
+    "A": "Navicular",
+    "B": "Calcaneus",
+    "C": "Talus",
+    "D": "Cuboid"
+  },
+  "correctAnswer": "C",
+  "explanation": "Correct Answer: Talus.\n\nThe talus receives body weight from the tibia and transmits it to the other tarsal bones.\n\nIncorrect Answers:\nA. The navicular is a medial midfoot tarsal bone.\nB. The calcaneus forms the heel and lies beneath the talus.\nD. The cuboid is a lateral tarsal bone."
+},
+{
+  "id": "qbank3-130",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "Which tarsal bone is located on the lateral side of the foot, adjacent to the base of the fifth metatarsal, between the calcaneus and the fourth and fifth metatarsals?",
+  "choices": {
+    "A": "Navicular",
+    "B": "Calcaneus",
+    "C": "Talus",
+    "D": "Cuboid"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Cuboid.\n\nThe cuboid is the lateral tarsal bone between the calcaneus and the fourth and fifth metatarsals.\n\nIncorrect Answers:\nA. The navicular is on the medial side of the foot.\nB. The calcaneus is posterior and forms the heel.\nC. The talus sits above the calcaneus."
+},
+{
+  "id": "qbank3-131",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "Which tarsal bones articulate with the bases of the first, second, and third metatarsal bones?",
+  "choices": {
+    "A": "Navicular",
+    "B": "Calcaneus",
+    "C": "Talus",
+    "D": "Three cuneiforms"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Three cuneiforms.\n\nThe medial, intermediate, and lateral cuneiforms articulate with the first, second, and third metatarsals.\n\nIncorrect Answers:\nA. The navicular articulates with the cuneiforms, not directly with all three of those metatarsals.\nB. The calcaneus mainly articulates with the talus and cuboid.\nC. The talus articulates with the tibia, fibula, calcaneus, and navicular."
+},
+{
+  "id": "qbank3-132",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "Which pulmonary structure has three lobes — superior, middle, and inferior?",
+  "choices": {
+    "A": "Trachea",
+    "B": "Left lung (two lobes)",
+    "C": "Right lung",
+    "D": "Hilum"
+  },
+  "correctAnswer": "C",
+  "explanation": "Correct Answer: Right lung.\n\nThe right lung has three lobes: superior, middle, and inferior.\n\nIncorrect Answers:\nA. The trachea is the main airway, not a lung.\nB. The left lung has only two lobes.\nD. The hilum is the root region of the lung."
+},
+{
+  "id": "qbank3-133",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "Which respiratory structure is approximately 12 cm in length, located anterior to the esophagus, and extends from the larynx to the carina?",
+  "choices": {
+    "A": "Trachea",
+    "B": "Left lung",
+    "C": "Right lung",
+    "D": "Hilum"
+  },
+  "correctAnswer": "A",
+  "explanation": "Correct Answer: Trachea.\n\nThe trachea extends from the larynx to the carina and lies anterior to the esophagus.\n\nIncorrect Answers:\nB. The left lung is a respiratory organ, not a conducting tube.\nC. The right lung is also not the airway described.\nD. The hilum is the lung root region."
+},
+{
+  "id": "qbank3-134",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "The narrow distal portion of the stomach that leads into the duodenum through the pyloric sphincter is called the:",
+  "choices": {
+    "A": "Rugae",
+    "B": "Pylorus",
+    "C": "Fundus",
+    "D": "Greater curvature"
+  },
+  "correctAnswer": "B",
+  "explanation": "Correct Answer: Pylorus.\n\nThe pylorus is the distal outlet of the stomach leading into the duodenum.\n\nIncorrect Answers:\nA. Rugae are folds of the stomach lining.\nC. The fundus is the superior dome of the stomach.\nD. The greater curvature is the long lateral border of the stomach."
+},
+{
+  "id": "qbank3-135",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "The region of the stomach surrounding the gastroesophageal junction — where the esophagus enters the stomach — is called the:",
+  "choices": {
+    "A": "Rugae",
+    "B": "Pyloric antrum",
+    "C": "Fundus",
+    "D": "Cardiac portion (cardia)"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Cardiac portion (cardia).\n\nThe cardia is the stomach region surrounding the gastroesophageal junction.\n\nIncorrect Answers:\nA. Rugae are mucosal folds within the stomach.\nB. The pyloric antrum is part of the distal stomach.\nC. The fundus is the superior rounded portion of the stomach."
+},
+{
+  "id": "qbank3-136",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "The lateral convex surface of the stomach, which forms the outer curve of the organ, is called the:",
+  "choices": {
+    "A": "Rugae",
+    "B": "Pylorus",
+    "C": "Fundus",
+    "D": "Greater curvature"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Greater curvature.\n\nThe greater curvature is the long lateral convex border of the stomach.\n\nIncorrect Answers:\nA. Rugae are mucosal folds inside the stomach.\nB. The pylorus is the distal outlet of the stomach.\nC. The fundus is the superior dome-shaped portion."
+},
+{
+  "id": "qbank3-137",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "The segment of the large intestine that descends on the left side of the abdomen, connecting the splenic flexure above to the sigmoid colon below, is the:",
+  "choices": {
+    "A": "Duodenum",
+    "B": "Descending colon",
+    "C": "Ileum",
+    "D": "Ascending colon"
+  },
+  "correctAnswer": "B",
+  "explanation": "Correct Answer: Descending colon.\n\nThe descending colon runs inferiorly on the left side between the splenic flexure and sigmoid colon.\n\nIncorrect Answers:\nA. The duodenum is part of the small intestine.\nC. The ileum is the distal small intestine.\nD. The ascending colon lies on the right side of the abdomen."
+},
+{
+  "id": "qbank3-138",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "The distal segment of the small intestine that connects with the large intestine at the ileocecal valve is the:",
+  "choices": {
+    "A": "Duodenum",
+    "B": "Jejunum",
+    "C": "Ileum",
+    "D": "Cecum"
+  },
+  "correctAnswer": "C",
+  "explanation": "Correct Answer: Ileum.\n\nThe ileum is the distal segment of the small intestine and joins the large intestine at the ileocecal valve.\n\nIncorrect Answers:\nA. The duodenum is the proximal small intestine.\nB. The jejunum is the middle segment of the small intestine.\nD. The cecum is the first part of the large intestine."
+},
+{
+  "id": "qbank3-139",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "The proximal segment of the small intestine that begins at the pylorus and receives secretions from the liver and pancreas is the:",
+  "choices": {
+    "A": "Duodenum",
+    "B": "Jejunum",
+    "C": "Ileum",
+    "D": "Cecum"
+  },
+  "correctAnswer": "A",
+  "explanation": "Correct Answer: Duodenum.\n\nThe duodenum is the proximal small intestine and receives biliary and pancreatic secretions.\n\nIncorrect Answers:\nB. The jejunum is distal to the duodenum.\nC. The ileum is the distal small intestine.\nD. The cecum is part of the large intestine."
+},
+{
+  "id": "qbank3-140",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "The outer region of the kidney, which contains the glomeruli and portions of the renal tubules, is called the:",
+  "choices": {
+    "A": "Cortex",
+    "B": "Medulla",
+    "C": "Nephron unit",
+    "D": "Glomeruli"
+  },
+  "correctAnswer": "A",
+  "explanation": "Correct Answer: Cortex.\n\nThe renal cortex is the outer kidney region containing glomeruli and portions of the renal tubules.\n\nIncorrect Answers:\nB. The medulla is the inner kidney region.\nC. The nephron is the microscopic functional unit, not a large regional division.\nD. Glomeruli are structures located within the cortex."
+},
+{
+  "id": "qbank3-141",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "The microscopic filtering unit of the kidney where blood is initially filtered through a specialized capillary tuft is the:",
+  "choices": {
+    "A": "Cortex",
+    "B": "Medulla",
+    "C": "Nephron",
+    "D": "Glomerulus"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Glomerulus.\n\nThe glomerulus is the capillary tuft where blood filtration begins.\n\nIncorrect Answers:\nA. The cortex is a kidney region, not the capillary tuft itself.\nB. The medulla contains pyramids and collecting structures.\nC. The nephron includes the glomerulus and tubules, but the filtration tuft itself is the glomerulus."
+},
+{
+  "id": "qbank3-142",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "For radiography of the fingers, the central ray should be directed:",
+  "choices": {
+    "A": "Perpendicular to the distal interphalangeal joint",
+    "B": "Parallel to the distal interphalangeal joint",
+    "C": "Parallel to the proximal interphalangeal joint",
+    "D": "Perpendicular to the proximal interphalangeal joint"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Perpendicular to the proximal interphalangeal joint.\n\nFor finger radiography, the central ray is centered perpendicular to the proximal interphalangeal joint.\n\nIncorrect Answers:\nA. The DIP joint is not the standard centering point.\nB. The central ray is perpendicular, not parallel, to the joint.\nC. The CR is not described as parallel to the joint."
+},
+{
+  "id": "qbank3-143",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "For a PA projection of the hand, the central ray is centered perpendicular to the:",
+  "choices": {
+    "A": "First metacarpophalangeal joint",
+    "B": "Third metatarsophalangeal joint",
+    "C": "Third metacarpophalangeal joint at an oblique angle",
+    "D": "Third metacarpophalangeal joint"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Third metacarpophalangeal joint.\n\nFor a PA hand, the CR is centered perpendicular to the third metacarpophalangeal joint.\n\nIncorrect Answers:\nA. The first MCP joint is too lateral for standard centering.\nB. The third metatarsophalangeal joint is in the foot, not the hand.\nC. The PA hand uses a perpendicular central ray, not an oblique one."
+},
+{
+  "id": "qbank3-144",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "For a true lateral projection of the wrist, the elbow must be flexed to approximately:",
+  "choices": {
+    "A": "45 degrees",
+    "B": "90 degrees",
+    "C": "Minimally — just slightly bent",
+    "D": "25 degrees"
+  },
+  "correctAnswer": "B",
+  "explanation": "Correct Answer: 90 degrees.\n\nFor a true lateral wrist, the elbow is flexed 90 degrees.\n\nIncorrect Answers:\nA. 45 degrees does not produce the standard wrist lateral position.\nC. Slight flexion is not enough for a true lateral.\nD. 25 degrees is insufficient."
+},
+{
+  "id": "qbank3-145",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "For a PA axial projection of the clavicle, the central ray is angled:",
+  "choices": {
+    "A": "25 to 30 degrees caudad",
+    "B": "25 to 30 degrees cephalad",
+    "C": "20 degrees caudad",
+    "D": "20 degrees cephalad"
+  },
+  "correctAnswer": "A",
+  "explanation": "Correct Answer: 25 to 30 degrees caudad.\n\nA PA axial clavicle uses a caudad angle, commonly 15 to 30 degrees; 25 to 30 degrees caudad is the best answer given.\n\nIncorrect Answers:\nB. A cephalad angle is used for an AP axial clavicle, not PA axial.\nC. 20 degrees caudad may be used in some cases, but 25 to 30 degrees caudad is the best answer listed.\nD. Cephalad is the wrong direction for a PA axial clavicle."
+},
+{
+  "id": "qbank3-146",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "For an AP projection of the toes, the central ray is centered at the:",
+  "choices": {
+    "A": "Third metatarsophalangeal joint",
+    "B": "Second metacarpophalangeal joint",
+    "C": "First metatarsophalangeal joint",
+    "D": "Second metatarsophalangeal joint"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Second metatarsophalangeal joint.\n\nFor an AP projection of the toes, the CR is centered at the second metatarsophalangeal joint.\n\nIncorrect Answers:\nA. The third MTP joint is not the standard centering point.\nB. The MCP joint is in the hand, not the foot.\nC. The first MTP is used for the great toe only."
+},
+{
+  "id": "qbank3-147",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "For an AP projection of the foot, the central ray is directed perpendicular to the:",
+  "choices": {
+    "A": "Head of the third metatarsal",
+    "B": "Head of the second metatarsal",
+    "C": "Base of the first metatarsal",
+    "D": "Base of the third metatarsal"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: Base of the third metatarsal.\n\nFor an AP foot, the CR is directed to the base of the third metatarsal.\n\nIncorrect Answers:\nA. The head of the third metatarsal is too distal.\nB. The head of the second metatarsal is also too distal.\nC. The base of the first metatarsal is too medial."
+},
+{
+  "id": "qbank3-148",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "For an axial (plantodorsal) projection of the calcaneus, the central ray is angled how many degrees cephalad to the long axis of the foot?",
+  "choices": {
+    "A": "25 degrees",
+    "B": "15 degrees",
+    "C": "10 degrees",
+    "D": "40 degrees"
+  },
+  "correctAnswer": "D",
+  "explanation": "Correct Answer: 40 degrees.\n\nFor an axial plantodorsal calcaneus, the central ray is angled 40 degrees cephalad to the long axis of the foot.\n\nIncorrect Answers:\nA. 25 degrees is too little for the standard projection.\nB. 15 degrees is too little.\nC. 10 degrees is also too little."
+},
+{
+  "id": "qbank3-149",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "For an AP projection of the ankle, the central ray is directed perpendicular to the:",
+  "choices": {
+    "A": "Lateral malleolus alone",
+    "B": "Ankle joint at the midpoint between the malleoli",
+    "C": "Medial malleolus alone",
+    "D": "Midshaft tibia"
+  },
+  "correctAnswer": "B",
+  "explanation": "Correct Answer: Ankle joint at the midpoint between the malleoli.\n\nFor an AP ankle, the CR is centered midway between the malleoli at the ankle joint.\n\nIncorrect Answers:\nA. Centering only to the lateral malleolus is not standard.\nC. Centering only to the medial malleolus is not standard.\nD. The midshaft tibia is too proximal."
+},
+{
+  "id": "qbank3-150",
+  "category": "Procedures",
+  "subcategory": "General",
+  "question": "For an AP projection of the knee, to open the joint space the central ray is angled:",
+  "choices": {
+    "A": "5 to 7 degrees cephalad",
+    "B": "5 to 7 degrees caudad",
+    "C": "10 degrees cephalad",
+    "D": "10 degrees caudad"
+  },
+  "correctAnswer": "A",
+  "explanation": "Correct Answer: 5 to 7 degrees cephalad.\n\nFor an AP knee projection, a 5 to 7 degree cephalad angle is used to better open the knee joint space in average patients.\n\nIncorrect Answers:\nB. Caudad is the wrong direction for the standard AP knee angle.\nC. 10 degrees cephalad is more than the usual standard angle.\nD. 10 degrees caudad is both the wrong direction and too much angulation."
+},
+{
+"id":"qbank3-151",
+"category":"Procedures",
+"subcategory":"General",
+"question":"For an AP projection of the cervical spine, the central ray is directed:",
+"choices":{
+  "A":"10 degrees cephalad",
+  "B":"Parallel to C4",
+  "C":"15 to 20 degrees caudad",
+  "D":"15 to 20 degrees cephalad"
+},
+"correctAnswer":"D",
+"explanation":"Correct Answer: 15 to 20 degrees cephalad.\n\nFor an AP cervical spine, the central ray is angled 15–20 degrees cephalad to open the intervertebral disc spaces.\n\nIncorrect Answers:\nA. 10 degrees is insufficient to adequately open the disc spaces.\nB. The CR is angled, not parallel.\nC. Caudad angulation is incorrect for this projection."
+},
+{
+"id":"qbank3-152",
+"category":"Procedures",
+"subcategory":"General",
+"question":"For a lateral projection of the cervical spine, the central ray is directed:",
+"choices":{"A":"Perpendicular to C4","B":"Horizontal and perpendicular to C4","C":"15 to 20 degrees caudad","D":"20 to 25 degrees cephalad"},
+"correctAnswer":"B",
+"explanation":"Correct Answer: Horizontal and perpendicular to C4.\n\nThe lateral cervical spine requires a horizontal beam perpendicular to C4 to demonstrate alignment and intervertebral spaces.\n\nIncorrect Answers:\nA. Missing the key requirement that the beam must be horizontal.\nC. No angulation is used.\nD. Cephalad angulation is incorrect."
+},
+{
+"id":"qbank3-153",
+"category":"Procedures",
+"subcategory":"General",
+"question":"For an AP projection of the thoracic spine, the central ray is directed:",
+"choices":{"A":"5 degrees cephalad","B":"Parallel to T7","C":"3 to 4 degrees caudad","D":"Perpendicular to T7"},
+"correctAnswer":"D",
+"explanation":"Correct Answer: Perpendicular to T7.\n\nThe CR is perpendicular to T7 for proper centering of the thoracic spine.\n\nIncorrect Answers:\nA. No angulation is required.\nB. The CR is perpendicular, not parallel.\nC. Caudad angulation is not used."
+},
+{
+"id":"qbank3-154",
+"category":"Procedures",
+"subcategory":"General",
+"question":"For an AP projection of the lumbar spine, the central ray is directed:",
+"choices":{"A":"Parallel to the midline at iliac crest level","B":"Perpendicular to L2","C":"Perpendicular to the midline at the level of the iliac crests (L4-L5)","D":"Perpendicular to L4"},
+"correctAnswer":"C",
+"explanation":"Correct Answer: Perpendicular at iliac crest level (L4–L5).\n\nThe iliac crest corresponds to L4–L5, the correct centering point.\n\nIncorrect Answers:\nA. The CR is perpendicular, not parallel.\nB. L2 is too superior.\nD. L4 alone is less precise than L4–L5 landmark."
+},
+{
+"id":"qbank3-155",
+"category":"Procedures",
+"subcategory":"General",
+"question":"For AP oblique projections of the sacroiliac joints, the central ray is directed to a point:",
+"choices":{"A":"1 inch lateral to the elevated ASIS","B":"1 inch medial to the elevated ASIS","C":"1 inch lateral to the dependent ASIS","D":"1 inch medial to the dependent ASIS"},
+"correctAnswer":"B",
+"explanation":"Correct Answer: 1 inch medial to the elevated ASIS.\n\nThis positioning best demonstrates the SI joint closest to the IR.\n\nIncorrect Answers:\nA. Lateral is incorrect.\nC. Uses wrong (dependent) side.\nD. Targets incorrect joint."
+},
+{
+"id":"qbank3-156",
+"category":"Procedures",
+"subcategory":"General",
+"question":"For a PA projection of the chest, the central ray is directed:",
+"choices":{"A":"Perpendicular to T10","B":"Parallel to the thoracic spine","C":"Perpendicular to T7 (center of thorax)","D":"Perpendicular to posterior ribs"},
+"correctAnswer":"C",
+"explanation":"Correct Answer: Perpendicular to T7.\n\nT7 corresponds to the level of the inferior scapula and is standard chest centering.\n\nIncorrect Answers:\nA. T10 is too low.\nB. CR is perpendicular, not parallel.\nD. Posterior ribs are not the centering landmark."
+},
+{
+"id":"qbank3-157",
+"category":"Procedures",
+"subcategory":"General",
+"question":"For an AP projection of the lower ribs (below diaphragm), the central ray is directed perpendicular to:",
+"choices":{"A":"T10","B":"T5","C":"T7","D":"T12"},
+"correctAnswer":"D",
+"explanation":"Correct Answer: T12.\n\nLower ribs are centered at T12 to include ribs below the diaphragm.\n\nIncorrect Answers:\nA. T10 is too high.\nB. T5 is for upper ribs.\nC. T7 is for chest."
+},
+{
+"id":"qbank3-158",
+"category":"Procedures",
+"subcategory":"General",
+"question":"For the AP axial (Towne) projection of the skull, the central ray is directed:",
+"choices":{"A":"30° caudad to IOML","B":"37° caudad to OML","C":"25° caudad to IOML","D":"30° caudad to OML"},
+"correctAnswer":"D",
+"explanation":"Correct Answer: 30° caudad to OML.\n\nStandard Towne uses 30° caudad to OML (or 37° to IOML).\n\nIncorrect Answers:\nA. Wrong baseline.\nB. Wrong angle for OML.\nC. Wrong angle for IOML."
+},
+{
+"id":"qbank3-159",
+"category":"Procedures",
+"subcategory":"General",
+"question":"For a lateral projection of the facial bones, the central ray is centered at the:",
+"choices":{"A":"Glabella","B":"Medial zygoma","C":"Medial nasal bone","D":"Lateral zygomatic bone"},
+"correctAnswer":"D",
+"explanation":"Correct Answer: Lateral zygomatic bone.\n\nThis centers the facial bones properly.\n\nIncorrect Answers:\nA. Used for skull.\nB/C. Not correct centering landmarks."
+},
+{
+"id":"qbank3-160",
+"category":"Procedures",
+"subcategory":"General",
+"question":"The fluoroscopic contrast exam evaluating uterus and fallopian tubes is called:",
+"choices":{"A":"Uterogram","B":"HSG","C":"IVU","D":"Ultrasound"},
+"correctAnswer":"B",
+"explanation":"Correct Answer: Hysterosalpingogram (HSG).\n\nEvaluates uterine cavity and tube patency.\n\nIncorrect Answers:\nA. Not standard term.\nC. Urinary system exam.\nD. Not contrast fluoroscopy."
+},
+{
+"id":"qbank3-161",
+"category":"Procedures",
+"subcategory":"General",
+"question":"Contrast exam evaluating spinal canal and discs is:",
+"choices":{"A":"Arthrogram","B":"Angiogram","C":"Myelogram","D":"Discogram"},
+"correctAnswer":"C",
+"explanation":"Correct Answer: Myelogram.\n\nEvaluates spinal cord and subarachnoid space.\n\nIncorrect Answers:\nA. Joints.\nB. Vessels.\nD. Disc only."
+},
+{
+"id":"qbank3-162",
+"category":"Procedures",
+"subcategory":"General",
+"question":"Which procedure may be both diagnostic and therapeutic?",
+"choices":{"A":"HSG","B":"Myelogram","C":"Arthrogram","D":"Barium enema"},
+"correctAnswer":"A",
+"explanation":"Correct Answer: HSG.\n\nCan open blocked tubes.\n\nIncorrect Answers:\nOthers are diagnostic only."
+},
+{
+"id":"qbank3-163",
+"category":"Procedures",
+"subcategory":"General",
+"question":"Preferred lumbar myelogram injection site:",
+"choices":{"A":"C6–C7","B":"L5–S1","C":"L3–L4","D":"L1–L2"},
+"correctAnswer":"C",
+"explanation":"Correct Answer: L3–L4.\n\nBelow spinal cord termination.\n\nIncorrect Answers:\nA. Cervical.\nB/D. Less preferred."
+},
+{
+"id":"qbank3-164",
+"category":"Procedures",
+"subcategory":"General",
+"question":"Contrast exam of joints is:",
+"choices":{"A":"Myelogram","B":"Arthrogram","C":"Joint study","D":"Sports imaging"},
+"correctAnswer":"B",
+"explanation":"Correct Answer: Arthrogram.\n\nEvaluates cartilage, ligaments, menisci.\n\nIncorrect Answers:\nOthers are incorrect modalities."
+},
+{
+"id":"qbank3-165",
+"category":"Procedures",
+"subcategory":"General",
+"question":"Modality replacing arthrography:",
+"choices":{"A":"CT","B":"Ultrasound","C":"PET","D":"MRI"},
+"correctAnswer":"D",
+"explanation":"Correct Answer: MRI.\n\nBest for soft tissue detail.\n\nIncorrect Answers:\nOthers inferior for menisci."
+},
+{
+"id":"qbank3-166",
+"category":"Procedures",
+"subcategory":"General",
+"question":"The ilium is part of the:",
+"choices":{"A":"Hip bone","B":"Shoulder","C":"Skull","D":"Intestine"},
+"correctAnswer":"A",
+"explanation":"Correct Answer: Hip bone.\n\nIlium is part of os coxae.\n\nIncorrect Answers:\nOthers unrelated."
+},
+{
+"id":"qbank3-167",
+"category":"Procedures",
+"subcategory":"General",
+"question":"AP lordotic chest best shows:",
+"choices":{"A":"Lung apices","B":"Bases","C":"Mediastinum","D":"Diaphragm"},
+"correctAnswer":"A",
+"explanation":"Correct Answer: Apices.\n\nProjects clavicles above apices.\n\nIncorrect Answers:\nOthers not primary focus."
+},
+{
+"id":"qbank3-168",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Advantage of nonionic contrast:",
+"choices":{"A":"Cheaper","B":"Fewer reactions","C":"Better contrast","D":"Lower technique"},
+"correctAnswer":"B",
+"explanation":"Correct Answer: Lower risk of reactions.\n\nNonionic contrast is safer.\n\nIncorrect Answers:\nOthers are false."
+},
+{
+"id":"qbank3-169",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Treatment for choking patient:",
+"choices":{"A":"Heimlich","B":"Valsalva","C":"Modified Valsalva","D":"Toe-touch"},
+"correctAnswer":"A",
+"explanation":"Correct Answer: Heimlich maneuver.\n\nUsed to dislodge obstruction.\n\nIncorrect Answers:\nOthers inappropriate."
+},
+{
+"id":"qbank3-170",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Extravasation response:",
+"choices":{"A":"Continue","B":"Stop and remove needle","C":"Re-puncture","D":"Warm compress and continue"},
+"correctAnswer":"B",
+"explanation":"Correct Answer: Stop injection.\n\nPrevents tissue damage.\n\nIncorrect Answers:\nOthers unsafe."
+},
+{
+"id":"qbank3-171",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Required before iodinated contrast:",
+"choices":{"A":"Chest x-ray","B":"Kidney function","C":"NPO 8 hrs","D":"Pregnancy test"},
+"correctAnswer":"B",
+"explanation":"Correct Answer: Kidney function.\n\nPrevents contrast-induced nephropathy.\n\nIncorrect Answers:\nOthers not mandatory."
+},
+{
+"id":"qbank3-172",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Diabetic contrast scheduling:",
+"choices":{"A":"Later","B":"Early","C":"Before meal","D":"After meal"},
+"correctAnswer":"B",
+"explanation":"Correct Answer: Early.\n\nMinimizes fasting risk.\n\nIncorrect Answers:\nOthers increase risk."
+},
+{
+"id":"qbank3-173",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"IVU peak opacification:",
+"choices":{"A":"1–2 min","B":"2–5 min","C":"2–8 min","D":"15–20 min"},
+"correctAnswer":"B",
+"explanation":"Correct Answer: 2–5 minutes.\n\nRenal pelvis best visualized.\n\nIncorrect Answers:\nOthers incorrect timing."
+},
+{
+"id":"qbank3-174",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"ARRT ethics document:",
+"choices":{"A":"Standards of Ethics","B":"Practice standards","C":"Mission","D":"Scope"},
+"correctAnswer":"A",
+"explanation":"Correct Answer: Standards of Ethics.\n\nContains rules and code.\n\nIncorrect Answers:\nOthers different documents."
+},
+{
+"id":"qbank3-175",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Civil wrongs are:",
+"choices":{"A":"Assault","B":"Battery","C":"False imprisonment","D":"Torts"},
+"correctAnswer":"D",
+"explanation":"Correct Answer: Torts.\n\nCivil legal violations.\n\nIncorrect Answers:\nOthers are types of torts."
+},
+{
+"id":"qbank3-176",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Unjustified confinement is:",
+"choices":{"A":"Assault","B":"Battery","C":"False imprisonment","D":"Privacy"},
+"correctAnswer":"C",
+"explanation":"Correct Answer: False imprisonment.\n\nRestricting movement unlawfully.\n\nIncorrect Answers:\nOthers different legal terms."
+},
+{
+"id":"qbank3-177",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Suffix -oid means:",
+"choices":{"A":"Tumor","B":"Resembling","C":"Condition","D":"Disease"},
+"correctAnswer":"B",
+"explanation":"Correct Answer: Resembling.\n\nMeans like or similar.\n\nIncorrect Answers:\nOthers incorrect."
+},
+{
+"id":"qbank3-178",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Suffix -oma means:",
+"choices":{"A":"Resembling","B":"Disease","C":"Tumor","D":"Pain"},
+"correctAnswer":"C",
+"explanation":"Correct Answer: Tumor.\n\nIndicates mass or growth.\n\nIncorrect Answers:\nOthers incorrect."
+},
+{
+"id":"qbank3-179",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Negligence obvious doctrine:",
+"choices":{"A":"Respondeat superior","B":"Res ipsa loquitur","C":"Gross negligence","D":"Slander"},
+"correctAnswer":"B",
+"explanation":"Correct Answer: Res ipsa loquitur.\n\nNegligence inferred.\n\nIncorrect Answers:\nOthers different doctrines."
+},
+{
+"id":"qbank3-180",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Tachycardia is:",
+"choices":{"A":">100 bpm","B":"<60 bpm","C":">90 bpm","D":"<50 bpm"},
+"correctAnswer":"A",
+"explanation":"Correct Answer: >100 bpm.\n\nDefines tachycardia.\n\nIncorrect Answers:\nOthers incorrect."
+},
+{
+"id":"qbank3-181",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Elevated diastolic BP:",
+"choices":{"A":">100","B":"<60","C":">90","D":"<50"},
+"correctAnswer":"C",
+"explanation":"Correct Answer: >90 mm Hg.\n\nIndicates hypertension.\n\nIncorrect Answers:\nOthers incorrect."
+},
+{
+"id":"qbank3-182",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Standard oxygen flow:",
+"choices":{"A":"L/sec","B":"L/hr","C":"1–3 L/min","D":"3–5 L/min"},
+"correctAnswer":"D",
+"explanation":"Correct Answer: 3–5 L/min.\n\nTypical adult oxygen flow.\n\nIncorrect Answers:\nOthers incorrect."
+},
+{
+"id":"qbank3-183",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Removes airway secretions:",
+"choices":{"A":"Crash cart","B":"Suction","C":"Defibrillator","D":"BP cuff"},
+"correctAnswer":"B",
+"explanation":"Correct Answer: Suction unit.\n\nClears airway.\n\nIncorrect Answers:\nOthers unrelated."
+},
+{
+"id":"qbank3-184",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Electrical shock device:",
+"choices":{"A":"Crash cart","B":"Suction","C":"Defibrillator","D":"BP cuff"},
+"correctAnswer":"C",
+"explanation":"Correct Answer: Defibrillator.\n\nRestores rhythm.\n\nIncorrect Answers:\nOthers incorrect."
+},
+{
+"id":"qbank3-185",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Severe allergic shock:",
+"choices":{"A":"Hypovolemic","B":"Septic","C":"Neurogenic","D":"Anaphylactic"},
+"correctAnswer":"D",
+"explanation":"Correct Answer: Anaphylactic shock.\n\nSevere allergic reaction.\n\nIncorrect Answers:\nOthers different shock types."
+},
+{
+"id":"qbank3-186",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Tube from nose to stomach:",
+"choices":{"A":"Ventilator","B":"NG tube","C":"Chest tube","D":"Catheter"},
+"correctAnswer":"B",
+"explanation":"Correct Answer: NG tube.\n\nUsed for feeding/decompression.\n\nIncorrect Answers:\nOthers incorrect."
+},
+{
+"id":"qbank3-187",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Urinary drainage bag positioning rule:",
+"choices":{"A":"Backflow causes infection","B":"Air embolism","C":"No gravity drainage","D":"Overflow"},
+"correctAnswer":"A",
+"explanation":"Correct Answer: Backflow causes infection.\n\nBag must stay below bladder.\n\nIncorrect Answers:\nOthers incorrect."
+},
+{
+"id":"qbank3-188",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Mechanical breathing device:",
+"choices":{"A":"Ventilator","B":"NG tube","C":"Chest tube","D":"Catheter"},
+"correctAnswer":"A",
+"explanation":"Correct Answer: Ventilator.\n\nProvides respiration.\n\nIncorrect Answers:\nOthers incorrect."
+},
+{
+"id":"qbank3-189",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Barium enema temp:",
+"choices":{"A":"100°C","B":"75°F","C":"85°C","D":"100°F"},
+"correctAnswer":"D",
+"explanation":"Correct Answer: 100°F.\n\nNear body temp.\n\nIncorrect Answers:\nOthers unsafe or uncomfortable."
+},
+{
+"id":"qbank3-190",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Barium sulfate type:",
+"choices":{"A":"Positive contrast","B":"Negative","C":"Iodine","D":"Osmotic"},
+"correctAnswer":"A",
+"explanation":"Correct Answer: Positive contrast.\n\nRadiopaque substance.\n\nIncorrect Answers:\nOthers incorrect."
+},
+{
+"id":"qbank3-191",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Best infection control:",
+"choices":{"A":"Gloves","B":"Gowns","C":"Shielding","D":"Handwashing"},
+"correctAnswer":"D",
+"explanation":"Correct Answer: Handwashing.\n\nMost effective prevention.\n\nIncorrect Answers:\nOthers less effective."
+},
+{
+"id":"qbank3-192",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"If unsure contaminated:",
+"choices":{"A":"Treat as contaminated","B":"Use anyway","C":"Assume clean","D":"Only clean hands"},
+"correctAnswer":"A",
+"explanation":"Correct Answer: Treat as contaminated.\n\nStandard precaution principle.\n\nIncorrect Answers:\nOthers unsafe."
+},
+{
+"id":"qbank3-193",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Anxiety-based reactions:",
+"choices":{"A":"Local","B":"Cardiac","C":"Anaphylactic","D":"Psychogenic"},
+"correctAnswer":"D",
+"explanation":"Correct Answer: Psychogenic.\n\nTriggered by anxiety.\n\nIncorrect Answers:\nOthers physiological."
+},
+{
+"id":"qbank3-194",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Vein inflammation:",
+"choices":{"A":"Irritation","B":"Cardiac","C":"Anaphylactic","D":"Phlebitis"},
+"correctAnswer":"D",
+"explanation":"Correct Answer: Phlebitis.\n\nInflamed vein.\n\nIncorrect Answers:\nOthers incorrect."
+},
+{
+"id":"qbank3-195",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Animal vector transmission:",
+"choices":{"A":"Contact","B":"Airborne","C":"Droplet","D":"Vectorborne"},
+"correctAnswer":"D",
+"explanation":"Correct Answer: Vectorborne.\n\nTransmitted via insects.\n\nIncorrect Answers:\nOthers incorrect."
+},
+{
+"id":"qbank3-196",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Cough/sneeze transmission:",
+"choices":{"A":"Contact","B":"Airborne","C":"Droplet","D":"Vehicle"},
+"correctAnswer":"C",
+"explanation":"Correct Answer: Droplet.\n\nRespiratory droplets.\n\nIncorrect Answers:\nOthers incorrect."
+},
+{
+"id":"qbank3-197",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Direct touch transmission:",
+"choices":{"A":"Contact","B":"Airborne","C":"Droplet","D":"Vehicle"},
+"correctAnswer":"A",
+"explanation":"Correct Answer: Contact.\n\nDirect/indirect contact.\n\nIncorrect Answers:\nOthers incorrect."
+},
+{
+"id":"qbank3-198",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Complete microorganism elimination:",
+"choices":{"A":"Medical asepsis","B":"Surgical asepsis","C":"Standard precautions","D":"Gas sterilization"},
+"correctAnswer":"B",
+"explanation":"Correct Answer: Surgical asepsis.\n\nSterile technique.\n\nIncorrect Answers:\nOthers not complete sterilization."
+},
+{
+"id":"qbank3-199",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Viscer- means:",
+"choices":{"A":"Organ","B":"Enlargement","C":"Across","D":"Blood"},
+"correctAnswer":"A",
+"explanation":"Correct Answer: Organ.\n\nRefers to internal organs.\n\nIncorrect Answers:\nOthers incorrect."
+},
+{
+"id":"qbank3-200",
+"category":"Patient Care",
+"subcategory":"General",
+"question":"Nephr- means:",
+"choices":{"A":"Organ","B":"Enlargement","C":"Across","D":"Kidney"},
+"correctAnswer":"D",
+"explanation":"Correct Answer: Kidney.\n\nRefers to kidneys.\n\nIncorrect Answers:\nOthers incorrect."
+}
+]
