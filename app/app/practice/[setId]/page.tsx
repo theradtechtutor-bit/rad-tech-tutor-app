@@ -275,6 +275,8 @@ export default function PracticeSetPage() {
   const setId = (params?.setId || 'qbank1').toLowerCase();
   const questionAnchorRef = useRef<HTMLDivElement | null>(null);
   const explanationAnchorRef = useRef<HTMLDivElement | null>(null);
+  const savePromptRef = useRef<HTMLDivElement | null>(null);
+  const hasScrolledToSavePromptRef = useRef(false);
   const isPausingRef = useRef(false);
 
   const { session } = useSupabaseSession();
@@ -570,6 +572,30 @@ export default function PracticeSetPage() {
     }, 120);
     return () => window.clearTimeout(t);
   }, [revealed]);
+
+  useEffect(() => {
+    if (session) {
+      hasScrolledToSavePromptRef.current = false;
+      return;
+    }
+
+    if (answeredCount < 10) {
+      hasScrolledToSavePromptRef.current = false;
+      return;
+    }
+
+    if (hasScrolledToSavePromptRef.current) return;
+
+    const t = window.setTimeout(() => {
+      savePromptRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+      hasScrolledToSavePromptRef.current = true;
+    }, 500);
+
+    return () => window.clearTimeout(t);
+  }, [session, answeredCount]);
 
   useEffect(() => {
     if (session || answeredCount === 0) return;
@@ -1082,7 +1108,7 @@ function clearAllSavedAnswers() {
       </div> */}
 
       {!session && answeredCount >= 10 ? (
-        <div className="mt-4">
+        <div ref={savePromptRef} className="mt-4">
           <SaveProgressPrompt
             nextPath={`${pathname}?${searchParams?.toString() || ''}`}
             title="Create a free account to save this session"
