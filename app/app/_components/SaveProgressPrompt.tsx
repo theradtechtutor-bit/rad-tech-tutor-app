@@ -19,7 +19,7 @@ export default function SaveProgressPrompt({
     const node = promptRef.current;
     if (!node) return;
     const t = window.setTimeout(() => {
-      node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // node.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 120);
     return () => window.clearTimeout(t);
   }, []);
