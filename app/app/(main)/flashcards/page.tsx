@@ -153,14 +153,42 @@ function FlashcardsPageInner() {
   const [flipped, setFlipped] = useState(false);
   const [hasSavedSession, setHasSavedSession] = useState(false);
   const deckAnchorRef = useRef<HTMLDivElement | null>(null);
+  const savePromptRef = useRef<HTMLDivElement | null>(null);
+  const hasScrolledToSavePromptRef = useRef(false);
 
   useEffect(() => {
     if (!deck.length) return;
+    if (savePromptRef.current) return;
     const t = window.setTimeout(() => {
       deckAnchorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 250);
     return () => window.clearTimeout(t);
   }, [deck.length]);
+
+  useEffect(() => {
+    if (session) {
+      hasScrolledToSavePromptRef.current = false;
+      return;
+    }
+
+    if (!savePromptRef.current) {
+      hasScrolledToSavePromptRef.current = false;
+      return;
+    }
+
+    if (hasScrolledToSavePromptRef.current) return;
+
+    const t = setTimeout(() => {
+      savePromptRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+      hasScrolledToSavePromptRef.current = true;
+    }, 500);
+
+    return () => clearTimeout(t);
+  }, [session, deck.length, mastered.length]);
+
 
   useEffect(() => {
     let cancelled = false;
@@ -512,7 +540,7 @@ function FlashcardsPageInner() {
       ) : null}
 
       {!session && reviewedCount >= Math.min(8, Math.ceil((deck.length + mastered.length) * 0.6)) ? (
-        <div className="mt-4">
+        <div ref={savePromptRef} className="mt-4">
           <SaveProgressPrompt
             nextPath={`${pathname}?${sp?.toString() || ''}`}
             title="Create a free account to save your flashcard progress"
