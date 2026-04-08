@@ -8,6 +8,7 @@ let hydrationPromise: Promise<void> | null = null;
 let hydratedForUserId: string | null = null;
 let authSyncInitialized = false;
 
+
 const ATTEMPTS_KEY = 'rtt_mock_attempts';
 const EXAM_DATE_KEY = 'rtt_exam_date';
 
@@ -223,8 +224,9 @@ export function hydrateProgressFromDBOnce(): Promise<void> {
 
       // 🚫 DO NOT merge guest if DB already exists
 
-      for (const [key, value] of dbMap.entries()) {
-        storage.setItem(key, encodeStoredValue(key, value));
+      for (const row of data) {
+        if (!row?.key) continue;
+        storage.setItem(row.key, encodeStoredValue(row.key, row.value));
       }
 
       hydratedForUserId = userId;
@@ -332,12 +334,13 @@ export function clearRttClientState() {
 export function readJson<T>(key: string, fallback: T): T {
   if (typeof window === 'undefined') return fallback;
 
+  if (hasAuthToken()) {
+    void hydrateProgressFromDBOnce();
+  }
+
   try {
     const active = getClientStorage();
-    const raw =
-      active?.getItem(key) ??
-      window.localStorage.getItem(key) ??
-      window.sessionStorage.getItem(key);
+    const raw = active?.getItem(key);
     if (!raw) return fallback;
     return JSON.parse(raw) as T;
   } catch {
@@ -381,6 +384,10 @@ export function appendAttempt(
 
 export function readExamDate(): string {
   if (typeof window === 'undefined') return '';
+
+  if (hasAuthToken()) {
+    void hydrateProgressFromDBOnce();
+  }
 
   try {
     return getClientStorage()?.getItem(EXAM_DATE_KEY) || '';

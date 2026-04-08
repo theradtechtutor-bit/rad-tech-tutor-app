@@ -157,7 +157,7 @@ function FlashcardsPageInner() {
   const hasScrolledToSavePromptRef = useRef(false);
 
   useEffect(() => {
-if (!deck.length) return;
+    if (!deck.length) return;
     if (savePromptRef.current) return;
     const t = window.setTimeout(() => {
       deckAnchorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -166,7 +166,7 @@ if (!deck.length) return;
   }, [deck.length]);
 
   useEffect(() => {
-if (session) {
+    if (session) {
       hasScrolledToSavePromptRef.current = false;
       return;
     }
@@ -191,9 +191,9 @@ if (session) {
 
 
   useEffect(() => {
-  let cancelled = false;
+    let cancelled = false;
 
-  async function load() {
+    (async () => {
       setLoading(true);
       try {
         const res = await fetch(apiForSetId(setId), { cache: 'no-store' });
@@ -312,11 +312,9 @@ if (session) {
       } finally {
         if (!cancelled) setLoading(false);
       }
-    
-  }
+    })();
 
-  load();
-return () => {
+    return () => {
       cancelled = true;
     };
   }, [
@@ -332,7 +330,7 @@ return () => {
   ]);
 
   useEffect(() => {
-if (loading) return;
+    if (loading) return;
     if (!deck.length && !mastered.length) return;
 
     saveFlashSession(flashSessionScopeKey, {
@@ -371,18 +369,18 @@ if (loading) return;
 
 
   useEffect(() => {
-if (!deck.length) setCursor(0);
+    if (!deck.length) setCursor(0);
     else if (cursor >= deck.length) setCursor(0);
   }, [deck.length, cursor]);
 
   useEffect(() => {
-setFlipped(false);
+    setFlipped(false);
   }, [cursor, deck.length]);
 
   const reviewedCount = mastered.length + Math.min(cursor, deck.length);
 
   useEffect(() => {
-if (session || reviewedCount === 0) return;
+    if (session || reviewedCount === 0) return;
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
       e.returnValue = '';

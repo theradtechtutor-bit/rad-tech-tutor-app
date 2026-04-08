@@ -145,27 +145,8 @@ export default function MasteryFlowSteps({
               );
             }
 
-          const handleClick = (e: any) => {
-            e.preventDefault();
-
-            const distance =
-              typeof window !== 'undefined' && window.innerWidth < 768
-                ? Math.round(window.innerHeight * 1.05)
-                : Math.round(window.innerHeight * 0.9);
-
-            window.scrollBy({
-              top: distance,
-              behavior: 'smooth',
-            });
-          };
-
           return (
-            <Link
-              key={step.id}
-              href={step.href}
-              onClick={handleClick}
-              className={className}
-            >
+            <Link key={step.id} href={step.href} className={className}>
               {content}
             </Link>
           );

@@ -13,12 +13,8 @@ import { normalizeChoices, type ChoiceLetter } from '@/lib/normalizeChoices';
 import {
   appendAttempt,
   getPracticeRemainingIds,
-  hydrateProgressFromDBOnce,
   markPracticeCleared,
   markWrongFromPractice,
-  readPracticeSession,
-  savePracticeSession,
-  clearPracticeSession,
   saveMasteryMiniStep,
 } from '@/lib/progressStore';
 import { buildRationale } from '@/lib/masteryContent';
@@ -149,6 +145,54 @@ function mapToArrtMajorCategory(raw: string): string {
   return 'Other';
 }
 
+function practiceSessionKey(scopeKey: string) {
+  return `rtt_practice_session_${String(scopeKey || 'qbank1').toLowerCase()}`;
+}
+
+function loadPracticeSession(scopeKey: string): PracticeSession | null {
+  if (typeof window === 'undefined') return null;
+  const key = practiceSessionKey(scopeKey);
+
+  try {
+    const raw =
+      window.localStorage.getItem(key) || window.sessionStorage.getItem(key);
+    if (!raw) return null;
+    return JSON.parse(raw) as PracticeSession;
+  } catch {
+    return null;
+  }
+}
+
+function await savePracticeSession(scopeKey: string, value: PracticeSession) {
+  if (typeof window === 'undefined') return;
+  const key = practiceSessionKey(scopeKey);
+
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch {}
+
+  try {
+    window.sessionStorage.setItem(key, JSON.stringify(value));
+  } catch {}
+
+  window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+}
+
+function clearPracticeSession(scopeKey: string) {
+  if (typeof window === 'undefined') return;
+  const key = practiceSessionKey(scopeKey);
+
+  try {
+    window.localStorage.removeItem(key);
+  } catch {}
+
+  try {
+    window.sessionStorage.removeItem(key);
+  } catch {}
+
+  window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+}
+
 function clearAllPracticeSessionsForSet(setId: string) {
   if (typeof window === 'undefined') return;
   const prefix = `rtt_practice_session_free__${String(setId || 'qbank1').toLowerCase()}__`;
@@ -222,6 +266,7 @@ function clearFreePracticeAggregate(setId: string, mode: 'all' | 'missed') {
   window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
 }
 
+
 export default function PracticeSetPage() {
   const router = useRouter();
   const pathname = usePathname();
@@ -233,9 +278,8 @@ export default function PracticeSetPage() {
   const savePromptRef = useRef<HTMLDivElement | null>(null);
   const hasScrolledToSavePromptRef = useRef(false);
   const isPausingRef = useRef(false);
-  const skipNextAutosaveRef = useRef(true);
 
-  const { session, loading: sessionLoading } = useSupabaseSession();
+  const { session } = useSupabaseSession();
 
   const rawMode = (searchParams?.get('mode') || 'all').toLowerCase();
   const mode = rawMode === 'mastery' || rawMode === 'missed' ? 'missed' : 'all';
@@ -279,6 +323,7 @@ export default function PracticeSetPage() {
     }
   }, [rawMode, router, setId]);
 
+
   const api = useMemo(() => apiForSetId(setId), [setId]);
   const title = useMemo(() => titleForSetId(setId), [setId]);
 
@@ -306,17 +351,12 @@ export default function PracticeSetPage() {
   const isMiniLocked =
     !!requestedMiniNumber && requestedMiniNumber > 5 && !isPro;
 
+
   const locked = (isPaidSet(setId) && !isPro) || isMiniLocked;
 
   async function initBank() {
-    if (sessionLoading) return;
-
     setLoading(true);
     try {
-      if (session?.user?.id) {
-        await hydrateProgressFromDBOnce();
-      }
-
       const res = await fetch(api, { cache: 'no-store' });
       const data = await res.json();
       const originalQuestions = (data.questions || []) as Question[];
@@ -400,7 +440,7 @@ export default function PracticeSetPage() {
           ? originalIds.filter((id) => !aggregateAnswered.has(id))
           : originalIds;
 
-      const saved = readPracticeSession(practiceSessionScopeKey);
+      const saved = loadPracticeSession(practiceSessionScopeKey);
       const allowedIds = new Set(remainingIds);
 
       const savedQueue = (saved?.queueIds || []).filter((id) =>
@@ -410,12 +450,6 @@ export default function PracticeSetPage() {
         saved?.currentId && allowedIds.has(saved.currentId)
           ? saved.currentId
           : savedQueue[0] || null;
-
-      console.log(
-        'RESTORE KEY:',
-        `rtt_practice_session_${practiceSessionScopeKey}`,
-      );
-      console.log('SAVED SESSION:', saved);
 
       const answeredInThisFilter =
         flow === 'free'
@@ -432,11 +466,7 @@ export default function PracticeSetPage() {
           ? originalIds.filter((id) => aggregateMissed.has(id))
           : [];
 
-      const canRestore =
-        !!saved &&
-        savedQueue.length > 0 &&
-        !!savedCurrentId &&
-        Number(saved?.totalCount || 0) > 0;
+      const canRestore = !!saved && savedQueue.length > 0 && !!savedCurrentId;
 
       if (flow === 'free') {
         setFreeAnsweredIds(aggregate?.answeredIds || []);
@@ -448,25 +478,25 @@ export default function PracticeSetPage() {
         setFreeMissedIds([]);
       }
 
-      skipNextAutosaveRef.current = true;
-
       if (canRestore) {
         setQueueIds(savedQueue);
         setCurrentId(savedCurrentId);
-        setPicked((saved.picked as ChoiceLetter) || null);
+        setPicked(saved.picked || null);
         setRevealed(Boolean(saved.revealed));
         setAnsweredCount(
           flow === 'free'
             ? answeredInThisFilter.length
-            : saved.answeredCount || 0,
+            : (saved.answeredCount || 0),
         );
         setCorrectCount(
           flow === 'free'
             ? correctInThisFilter.length
-            : saved.correctCount || 0,
+            : (saved.correctCount || 0),
         );
         setMissedCount(
-          flow === 'free' ? missedInThisFilter.length : saved.missedCount || 0,
+          flow === 'free'
+            ? missedInThisFilter.length
+            : (saved.missedCount || 0),
         );
       } else {
         setQueueIds(remainingIds);
@@ -476,10 +506,7 @@ export default function PracticeSetPage() {
         setAnsweredCount(flow === 'free' ? answeredInThisFilter.length : 0);
         setCorrectCount(flow === 'free' ? correctInThisFilter.length : 0);
         setMissedCount(flow === 'free' ? missedInThisFilter.length : 0);
-
-        if (!session?.user?.id) {
-          clearPracticeSession(practiceSessionScopeKey);
-        }
+        clearPracticeSession(practiceSessionScopeKey);
       }
     } finally {
       setLoading(false);
@@ -487,12 +514,11 @@ export default function PracticeSetPage() {
   }
 
   useEffect(() => {
-    if (locked) return;
-    if (sessionLoading) return;
+    (async () => {
+if (locked) return;
     void initBank();
-  }, [
-    sessionLoading,
-    session?.user?.id,
+  })();
+}, [
     practiceSessionScopeKey,
     setId,
     mode,
@@ -506,13 +532,32 @@ export default function PracticeSetPage() {
   ]);
 
   useEffect(() => {
-    if (skipNextAutosaveRef.current) {
-      skipNextAutosaveRef.current = false;
-    }
-  }, [practiceSessionScopeKey]);
+    (async () => {
+if (locked || loading || !currentId || queueIds.length === 0) return;
+
+    persistCurrentPracticeSession();
+  })();
+}, [
+    practiceSessionScopeKey,
+    setId,
+    mode,
+    filterValue,
+    effectiveMiniSessionKey,
+    queueIds,
+    currentId,
+    picked,
+    revealed,
+    answeredCount,
+    correctCount,
+    missedCount,
+    totalCount,
+    locked,
+    loading,
+  ]);
 
   useEffect(() => {
-    if (!currentId || loading) return;
+    (async () => {
+if (!currentId || loading) return;
     const t = window.setTimeout(() => {
       questionAnchorRef.current?.scrollIntoView({
         behavior: 'smooth',
@@ -520,10 +565,12 @@ export default function PracticeSetPage() {
       });
     }, 250);
     return () => window.clearTimeout(t);
-  }, [currentId, loading]);
+  })();
+}, [currentId, loading]);
 
   useEffect(() => {
-    if (!revealed) return;
+    (async () => {
+if (!revealed) return;
     const t = window.setTimeout(() => {
       explanationAnchorRef.current?.scrollIntoView({
         behavior: 'smooth',
@@ -531,10 +578,12 @@ export default function PracticeSetPage() {
       });
     }, 120);
     return () => window.clearTimeout(t);
-  }, [revealed]);
+  })();
+}, [revealed]);
 
   useEffect(() => {
-    if (session) {
+    (async () => {
+if (session) {
       hasScrolledToSavePromptRef.current = false;
       return;
     }
@@ -555,20 +604,21 @@ export default function PracticeSetPage() {
     }, 500);
 
     return () => window.clearTimeout(t);
-  }, [session, answeredCount]);
+  })();
+}, [session, answeredCount]);
 
   useEffect(() => {
-    if (session || answeredCount === 0) return;
-
+    (async () => {
+if (session || answeredCount === 0) return;
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
       if (isPausingRef.current) return;
       e.preventDefault();
       e.returnValue = '';
     };
-
     window.addEventListener('beforeunload', onBeforeUnload);
     return () => window.removeEventListener('beforeunload', onBeforeUnload);
-  }, [session, answeredCount]);
+  })();
+}, [session, answeredCount]);
 
   const q = currentId ? questionsById[currentId] : null;
   const choiceList = q ? normalizeChoices((q as any).choices) : [];
@@ -582,10 +632,10 @@ export default function PracticeSetPage() {
     .toUpperCase() as ChoiceLetter;
   const isCorrect = picked ? picked === correctKey : false;
 
-  async function persistCurrentPracticeSession() {
+  function persistCurrentPracticeSession() {
     if (locked || loading || !currentId || queueIds.length === 0) return;
 
-    savePracticeSession(practiceSessionScopeKey, {
+    await savePracticeSession(practiceSessionScopeKey, {
       setId,
       mode: mode as 'all' | 'missed',
       cat: filterValue,
@@ -597,32 +647,6 @@ export default function PracticeSetPage() {
       answeredCount,
       correctCount,
       missedCount,
-      totalCount,
-      savedAt: Date.now(),
-    });
-  }
-
-  function persistPracticeSnapshot(snapshot: {
-    queueIds: string[];
-    currentId: string | null;
-    picked: ChoiceLetter | null;
-    revealed: boolean;
-    answeredCount: number;
-    correctCount: number;
-    missedCount: number;
-  }) {
-    savePracticeSession(practiceSessionScopeKey, {
-      setId,
-      mode: mode as 'all' | 'missed',
-      cat: filterValue,
-      mini: effectiveMiniSessionKey,
-      queueIds: snapshot.queueIds,
-      currentId: snapshot.currentId,
-      picked: snapshot.picked,
-      revealed: snapshot.revealed,
-      answeredCount: snapshot.answeredCount,
-      correctCount: snapshot.correctCount,
-      missedCount: snapshot.missedCount,
       totalCount,
       savedAt: Date.now(),
     });
@@ -700,17 +724,7 @@ export default function PracticeSetPage() {
       });
     }
 
-    if (nextQueue.length > 0) {
-      persistPracticeSnapshot({
-        queueIds: nextQueue,
-        currentId: nextQueue[0] || null,
-        picked: null,
-        revealed: false,
-        answeredCount: answeredNext,
-        correctCount: correctNext,
-        missedCount: missedNext,
-      });
-    } else {
+    if (nextQueue.length === 0) {
       clearPracticeSession(practiceSessionScopeKey);
     }
 
@@ -746,6 +760,7 @@ export default function PracticeSetPage() {
     void initBank();
   }
 
+
   function getCurrentFilterQuestionIds(): string[] {
     const byId = questionsById || {};
     let ids = Object.keys(byId);
@@ -779,16 +794,13 @@ export default function PracticeSetPage() {
     if (selectedCategory !== 'all') {
       ids = ids.filter(
         (id) =>
-          mapToArrtMajorCategory(
-            String((byId[id] as any)?.category || ''),
-          ).toLowerCase() === selectedCategory,
+          mapToArrtMajorCategory(String((byId[id] as any)?.category || '')).toLowerCase() ===
+          selectedCategory,
       );
     }
 
     if (mode === 'missed') {
-      const remaining = new Set(
-        getPracticeRemainingIds(setId, selectedCategory),
-      );
+      const remaining = new Set(getPracticeRemainingIds(setId, selectedCategory));
       ids = ids.filter((id) => remaining.has(id));
     }
 
@@ -826,7 +838,8 @@ export default function PracticeSetPage() {
     void initBank();
   }
 
-  function clearAllSavedAnswers() {
+
+function clearAllSavedAnswers() {
     clearAllPracticeSessionsForSet(setId);
     clearFreePracticeAggregate(setId, mode as 'all' | 'missed');
     setFreeAnsweredIds([]);
@@ -836,7 +849,8 @@ export default function PracticeSetPage() {
   }
 
   useEffect(() => {
-    if (locked) return;
+    (async () => {
+if (locked) return;
 
     function onKey(e: KeyboardEvent) {
       const key = e.key.toLowerCase();
@@ -872,7 +886,8 @@ export default function PracticeSetPage() {
 
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [revealed, q, locked, router, picked, setId, queueIds]);
+  })();
+}, [revealed, q, locked, router, picked, setId, queueIds]);
 
   if (locked) {
     return (
@@ -966,10 +981,7 @@ export default function PracticeSetPage() {
               <div className="mt-5 flex flex-wrap gap-2">
                 <Link
                   href={`/app/flashcards?set=${setId}&mode=missed&cat=all&flow=mastery&mini=${mini}`}
-                  onClick={() =>
-                    typeof mini === 'number' &&
-                    saveMasteryMiniStep(setId, mini, 'flashcards')
-                  }
+                  onClick={() => typeof mini === 'number' && saveMasteryMiniStep(setId, mini, 'flashcards')}
                   className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
                 >
                   Continue to Flashcards

@@ -191,9 +191,9 @@ if (session) {
 
 
   useEffect(() => {
-  let cancelled = false;
+let cancelled = false;
 
-  async function load() {
+    (async () => {
       setLoading(true);
       try {
         const res = await fetch(apiForSetId(setId), { cache: 'no-store' });
@@ -256,7 +256,7 @@ if (session) {
           selectedCategory === 'all' ? 'all' : selectedCategory,
         );
 
-        const saved = readFlashSession(flashSessionScopeKey);
+        const saved = await readFlashSession(flashSessionScopeKey);
         const allowedIds = new Set(cards.map((card) => card.id));
         const savedDeck = (saved?.deck || []).filter((card) => allowedIds.has(card.id));
         const savedMastered = (saved?.mastered || []).filter((card) => allowedIds.has(card.id));
@@ -293,7 +293,7 @@ if (session) {
         clearFlashSession(flashSessionScopeKey);
 
         if (initialDeck.length) {
-          saveFlashSession(flashSessionScopeKey, {
+          await saveFlashSession(flashSessionScopeKey, {
             setId,
             mode,
             cat: filterValue,
@@ -312,11 +312,9 @@ if (session) {
       } finally {
         if (!cancelled) setLoading(false);
       }
-    
-  }
+    })();
 
-  load();
-return () => {
+    return () => {
       cancelled = true;
     };
   }, [
@@ -335,7 +333,7 @@ return () => {
 if (loading) return;
     if (!deck.length && !mastered.length) return;
 
-    saveFlashSession(flashSessionScopeKey, {
+    await saveFlashSession(flashSessionScopeKey, {
       setId,
       mode,
       cat: filterValue,
@@ -674,7 +672,7 @@ if (session || reviewedCount === 0) return;
                 <div className="flex flex-col items-stretch gap-2 md:min-w-[140px] md:justify-self-center">
                   <button
                     onClick={() => {
-                      saveFlashSession(flashSessionScopeKey, {
+                      await saveFlashSession(flashSessionScopeKey, {
                         setId,
                         mode,
                         cat: filterValue,

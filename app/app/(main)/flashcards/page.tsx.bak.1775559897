@@ -157,7 +157,7 @@ function FlashcardsPageInner() {
   const hasScrolledToSavePromptRef = useRef(false);
 
   useEffect(() => {
-if (!deck.length) return;
+    if (!deck.length) return;
     if (savePromptRef.current) return;
     const t = window.setTimeout(() => {
       deckAnchorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -166,7 +166,7 @@ if (!deck.length) return;
   }, [deck.length]);
 
   useEffect(() => {
-if (session) {
+    if (session) {
       hasScrolledToSavePromptRef.current = false;
       return;
     }
@@ -191,9 +191,9 @@ if (session) {
 
 
   useEffect(() => {
-  let cancelled = false;
+    let cancelled = false;
 
-  async function load() {
+    (async () => {
       setLoading(true);
       try {
         const res = await fetch(apiForSetId(setId), { cache: 'no-store' });
@@ -312,11 +312,9 @@ if (session) {
       } finally {
         if (!cancelled) setLoading(false);
       }
-    
-  }
+    })();
 
-  load();
-return () => {
+    return () => {
       cancelled = true;
     };
   }, [
@@ -332,7 +330,7 @@ return () => {
   ]);
 
   useEffect(() => {
-if (loading) return;
+    if (loading) return;
     if (!deck.length && !mastered.length) return;
 
     saveFlashSession(flashSessionScopeKey, {
@@ -371,18 +369,18 @@ if (loading) return;
 
 
   useEffect(() => {
-if (!deck.length) setCursor(0);
+    if (!deck.length) setCursor(0);
     else if (cursor >= deck.length) setCursor(0);
   }, [deck.length, cursor]);
 
   useEffect(() => {
-setFlipped(false);
+    setFlipped(false);
   }, [cursor, deck.length]);
 
   const reviewedCount = mastered.length + Math.min(cursor, deck.length);
 
   useEffect(() => {
-if (session || reviewedCount === 0) return;
+    if (session || reviewedCount === 0) return;
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
       e.returnValue = '';
@@ -650,13 +648,13 @@ if (session || reviewedCount === 0) return;
                 </button>
               </div>
 
-              <div className="mt-4 grid gap-3 md:grid-cols-[1fr_auto_1fr] md:items-end">
-                <div className="grid grid-cols-2 gap-2 md:justify-self-start">
+              <div className="mt-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div className="grid grid-cols-2 gap-2 md:flex">
                   <button
                     onClick={() =>
                       setCursor((i) => (deck.length ? (i - 1 + deck.length) % deck.length : 0))
                     }
-                    className="w-full rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"
+                    className="w-full rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15 md:w-auto"
                   >
                     Prev
                   </button>
@@ -665,43 +663,41 @@ if (session || reviewedCount === 0) return;
                     onClick={() =>
                       setCursor((i) => (deck.length ? (i + 1) % deck.length : 0))
                     }
-                    className="w-full rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"
+                    className="w-full rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15 md:w-auto"
                   >
                     Next
                   </button>
                 </div>
 
-                <div className="flex flex-col items-stretch gap-2 md:min-w-[140px] md:justify-self-center">
-                  <button
-                    onClick={() => {
-                      saveFlashSession(flashSessionScopeKey, {
-                        setId,
-                        mode,
-                        cat: filterValue,
-                        mini: effectiveMiniSessionKey,
-                        cursor,
-                        deck,
-                        mastered,
-                        savedAt: Date.now(),
-                      });
-                      router.push(masteryMode ? '/app/dashboard' : '/app/practice');
-                    }}
-                    className="w-full cursor-pointer rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"
-                  >
-                    Save & Exit
-                  </button>
-                </div>
+                <button
+                  onClick={() => {
+                    saveFlashSession(flashSessionScopeKey, {
+                      setId,
+                      mode,
+                      cat: filterValue,
+                      mini: effectiveMiniSessionKey,
+                      cursor,
+                      deck,
+                      mastered,
+                      savedAt: Date.now(),
+                    });
+                    router.push(masteryMode ? '/app/dashboard' : '/app/practice');
+                  }}
+                  className="w-full cursor-pointer rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15 md:w-auto"
+                >
+                  Save & Exit
+                </button>
 
-                <div className="grid grid-cols-2 gap-2 md:justify-self-end">
+                <div className="grid grid-cols-2 gap-2 md:flex">
                   <button
                     onClick={() => handleGrade(false)}
-                    className="w-full rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"
+                    className="w-full rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15 md:w-auto"
                   >
                     Missed It
                   </button>
                   <button
                     onClick={() => handleGrade(true)}
-                    className="w-full rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
+                    className="w-full rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95 md:w-auto"
                   >
                     Got It
                   </button>

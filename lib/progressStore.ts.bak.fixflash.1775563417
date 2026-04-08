@@ -1,255 +1,3 @@
-import supabase from '@/lib/supabaseClient';
-import type { ChoiceLetter } from '@/lib/normalizeChoices';
-
-let cachedUserId: string | null = null;
-let userIdLoaded = false;
-let userIdPromise: Promise<string | null> | null = null;
-let hydrationPromise: Promise<void> | null = null;
-let hydratedForUserId: string | null = null;
-let authSyncInitialized = false;
-
-const ATTEMPTS_KEY = 'rtt_mock_attempts';
-const EXAM_DATE_KEY = 'rtt_exam_date';
-
-function progressKey(setId: string) {
-  return `rtt_progress_${(setId || 'qbank1').toLowerCase()}`;
-}
-
-function flashSessionKey(scopeKey: string) {
-  return `rtt_flash_session_${String(scopeKey || 'qbank1').toLowerCase()}`;
-}
-
-function practiceSessionKey(scopeKey: string) {
-  return `rtt_practice_session_${String(scopeKey || 'qbank1').toLowerCase()}`;
-}
-
-function masteryKey(setId: string) {
-  return `rtt_bank_mastery_${(setId || 'qbank1').toLowerCase()}`;
-}
-
-function masteryStepKey(setId: string, miniId: number) {
-  return `rtt_mastery_step_${setId}_${miniId}`;
-}
-
-function ensureAuthSync() {
-  if (typeof window === 'undefined') return;
-  if (authSyncInitialized) return;
-  authSyncInitialized = true;
-
-  supabase.auth.onAuthStateChange((_event, session) => {
-    const nextUserId = session?.user?.id ?? null;
-    cachedUserId = nextUserId;
-    userIdLoaded = true;
-    userIdPromise = null;
-    hydrationPromise = null;
-    hydratedForUserId = null;
-
-    if (nextUserId) {
-      window.setTimeout(() => {
-        void hydrateProgressFromDBOnce();
-      }, 0);
-    }
-  });
-}
-
-function hasAuthToken() {
-  if (typeof window === 'undefined') return false;
-  try {
-    const hasIn = (store: Storage) =>
-      Object.keys(store).some(
-        (key) => /^sb-.*-auth-token$/i.test(key) && !!store.getItem(key),
-      );
-    return hasIn(window.localStorage) || hasIn(window.sessionStorage);
-  } catch {
-    return false;
-  }
-}
-
-export function getClientStorage() {
-  if (typeof window === 'undefined') return null;
-  try {
-    return hasAuthToken() ? window.localStorage : window.sessionStorage;
-  } catch {
-    return null;
-  }
-}
-
-function parseStoredValue(key: string, raw: string): unknown {
-  if (key === EXAM_DATE_KEY) return raw;
-  try {
-    return JSON.parse(raw);
-  } catch {
-    return raw;
-  }
-}
-
-function encodeStoredValue(key: string, value: unknown): string {
-  if (key === EXAM_DATE_KEY && typeof value === 'string') return value;
-  return JSON.stringify(value);
-}
-
-function getGuestRttEntries(): Array<{ key: string; value: unknown }> {
-  if (typeof window === 'undefined') return [];
-
-  const entries: Array<{ key: string; value: unknown }> = [];
-  const seen = new Set<string>();
-
-  try {
-    for (const key of Object.keys(window.sessionStorage)) {
-      if (!key.startsWith('rtt_')) continue;
-      const raw = window.sessionStorage.getItem(key);
-      if (raw == null) continue;
-      entries.push({ key, value: parseStoredValue(key, raw) });
-      seen.add(key);
-    }
-  } catch {}
-
-  try {
-    for (const key of Object.keys(window.localStorage)) {
-      if (!key.startsWith('rtt_')) continue;
-      if (seen.has(key)) continue;
-      const raw = window.localStorage.getItem(key);
-      if (raw == null) continue;
-      entries.push({ key, value: parseStoredValue(key, raw) });
-    }
-  } catch {}
-
-  return entries;
-}
-
-function getCachedUserId(): Promise<string | null> {
-  ensureAuthSync();
-
-  if (userIdLoaded) return Promise.resolve(cachedUserId);
-  if (userIdPromise) return userIdPromise;
-
-  userIdPromise = supabase.auth
-    .getSession()
-    .then(({ data }) => {
-      cachedUserId = data.session?.user?.id ?? null;
-      userIdLoaded = true;
-      return cachedUserId;
-    })
-    .finally(() => {
-      userIdPromise = null;
-    });
-
-  return userIdPromise;
-}
-
-function saveToDB(key: string, value: unknown) {
-  void getCachedUserId().then((userId) => {
-    if (!userId) return;
-
-    return supabase.from('user_progress').upsert({
-      user_id: userId,
-      key,
-      value,
-      updated_at: new Date().toISOString(),
-    });
-  });
-}
-
-function removeFromDB(key: string) {
-  void getCachedUserId().then((userId) => {
-    if (!userId) return;
-
-    return supabase
-      .from('user_progress')
-      .delete()
-      .eq('user_id', userId)
-      .eq('key', key);
-  });
-}
-
-export function hydrateProgressFromDBOnce(): Promise<void> {
-  ensureAuthSync();
-
-  if (typeof window === 'undefined') return Promise.resolve();
-  if (hydrationPromise) return hydrationPromise;
-
-  hydrationPromise = getCachedUserId()
-    .then(async (userId) => {
-      if (!userId) return;
-      if (hydratedForUserId === userId) return;
-
-      const storage = getClientStorage();
-      if (!storage) return;
-
-      const { data, error } = await supabase
-        .from('user_progress')
-        .select('key,value')
-        .eq('user_id', userId);
-
-      if (error || !data) return;
-
-      const dbMap = new Map<string, unknown>();
-      for (const row of data) {
-        if (!row?.key) continue;
-        dbMap.set(row.key, row.value);
-      }
-
-      // 🔥 decide source of truth
-      const dbHasProgress = dbMap.size > 0;
-
-      if (!dbHasProgress) {
-        // FIRST TIME USER → import guest into DB
-        const guestEntries = getGuestRttEntries();
-
-        if (guestEntries.length > 0) {
-          await Promise.all(
-            guestEntries.map(({ key, value }) =>
-              supabase.from('user_progress').upsert({
-                user_id: userId,
-                key,
-                value,
-                updated_at: new Date().toISOString(),
-              }),
-            ),
-          );
-
-          // reload DB after import
-          const { data: newData } = await supabase
-            .from('user_progress')
-            .select('key,value')
-            .eq('user_id', userId);
-
-          dbMap.clear();
-          for (const row of newData || []) {
-            if (row?.key) dbMap.set(row.key, row.value);
-          }
-        }
-      }
-
-      // 🚫 DO NOT merge guest if DB already exists
-
-      for (const [key, value] of dbMap.entries()) {
-        storage.setItem(key, encodeStoredValue(key, value));
-      }
-
-      hydratedForUserId = userId;
-      window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
-    })
-    .finally(() => {
-      hydrationPromise = null;
-    });
-
-  return hydrationPromise;
-}
-
-function removeKeyFromBoth(key: string) {
-  if (typeof window === 'undefined') return;
-  try {
-    window.localStorage.removeItem(key);
-  } catch {}
-  try {
-    window.sessionStorage.removeItem(key);
-  } catch {}
-  removeFromDB(key);
-}
-
-ensureAuthSync();
-
 export type QuestionProgress = {
   questionId: string;
   category?: string;
@@ -297,17 +45,70 @@ export type PracticeSession = {
   mini: number | 'all';
   queueIds: string[];
   currentId: string | null;
-
-  // 🔥 ADD THESE
-  picked?: ChoiceLetter | null;
-  revealed?: boolean;
-
   answeredCount: number;
   correctCount: number;
   missedCount: number;
   totalCount: number;
   savedAt: number;
 };
+
+const ATTEMPTS_KEY = 'rtt_mock_attempts';
+const EXAM_DATE_KEY = 'rtt_exam_date';
+
+function progressKey(setId: string) {
+  return `rtt_progress_${(setId || 'qbank1').toLowerCase()}`;
+}
+
+function flashSessionKey(scopeKey: string) {
+  return `rtt_flash_session_${String(scopeKey || 'qbank1').toLowerCase()}`;
+}
+
+function practiceSessionKey(scopeKey: string) {
+  return `rtt_practice_session_${String(scopeKey || 'qbank1').toLowerCase()}`;
+}
+
+function hasAuthToken() {
+  if (typeof window === 'undefined') return false;
+  try {
+    const hasIn = (store: Storage) =>
+      Object.keys(store).some(
+        (key) => /^sb-.*-auth-token$/i.test(key) && !!store.getItem(key),
+      );
+    return hasIn(window.localStorage) || hasIn(window.sessionStorage);
+  } catch {
+    return false;
+  }
+}
+
+export function getClientStorage() {
+  if (typeof window === 'undefined') if (local) {
+      await writeUserProgress(key, local); // 🔥 migrate
+      return local;
+    }
+
+    if (session) {
+      const parsed = JSON.parse(session);
+      await writeUserProgress(key, parsed); // 🔥 migrate
+      return parsed;
+    }
+
+    return null;
+  try {
+    return hasAuthToken() ? window.localStorage : window.sessionStorage;
+  } catch {
+    return null;
+  }
+}
+
+function removeKeyFromBoth(key: string) {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.removeItem(key);
+  } catch {}
+  try {
+    window.sessionStorage.removeItem(key);
+  } catch {}
+}
 
 export function clearRttClientState() {
   if (typeof window === 'undefined') return;
@@ -331,13 +132,9 @@ export function clearRttClientState() {
 
 export function readJson<T>(key: string, fallback: T): T {
   if (typeof window === 'undefined') return fallback;
-
   try {
     const active = getClientStorage();
-    const raw =
-      active?.getItem(key) ??
-      window.localStorage.getItem(key) ??
-      window.sessionStorage.getItem(key);
+    const raw = active?.getItem(key);
     if (!raw) return fallback;
     return JSON.parse(raw) as T;
   } catch {
@@ -351,7 +148,6 @@ export function writeJson(key: string, value: unknown) {
     const active = getClientStorage();
     active?.setItem(key, JSON.stringify(value));
     window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
-    saveToDB(key, value);
   } catch {}
 }
 
@@ -381,7 +177,6 @@ export function appendAttempt(
 
 export function readExamDate(): string {
   if (typeof window === 'undefined') return '';
-
   try {
     return getClientStorage()?.getItem(EXAM_DATE_KEY) || '';
   } catch {
@@ -393,12 +188,8 @@ export function writeExamDate(value: string) {
   if (typeof window === 'undefined') return;
   try {
     const active = getClientStorage();
-    if (value) {
-      active?.setItem(EXAM_DATE_KEY, value);
-      saveToDB(EXAM_DATE_KEY, value);
-    } else {
-      removeKeyFromBoth(EXAM_DATE_KEY);
-    }
+    if (value) active?.setItem(EXAM_DATE_KEY, value);
+    else removeKeyFromBoth(EXAM_DATE_KEY);
     window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
   } catch {}
 }
@@ -550,26 +341,81 @@ export function getMasterySummary(setId?: string) {
   };
 }
 
-export function readFlashSession(scopeKey: string): FlashSession | null {
-  return readJson<FlashSession | null>(flashSessionKey(scopeKey), null);
+export async function readFlashSession(scopeKey: string): Promise<FlashSession | null> {
+  const key = flashSessionKey(scopeKey);
+
+  const db = await readUserProgress(key);
+  if (db) return db;
+
+  try {
+    const local = window.localStorage.getItem(key);
+    if (local) return JSON.parse(local);
+
+    const session = window.sessionStorage.getItem(key);
+    if (session) return JSON.parse(session);
+
+    return null;
+  } catch {
+    return null;
+  }
+} catch {
+    return null;
+  }
 }
 
-export function saveFlashSession(scopeKey: string, value: FlashSession) {
-  writeJson(flashSessionKey(scopeKey), value);
+export async function saveFlashSession(scopeKey: string, value: FlashSession) {
+  const key = flashSessionKey(scopeKey);
+
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+    window.sessionStorage.setItem(key, JSON.stringify(value));
+  } catch {}
+
+  await writeUserProgress(key, value);
+
+  window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+} catch {}
 }
 
 export function clearFlashSession(scopeKey: string) {
   if (typeof window === 'undefined') return;
-  removeKeyFromBoth(flashSessionKey(scopeKey));
+  const key = flashSessionKey(scopeKey);
+
+  try {
+    window.localStorage.removeItem(key);
+  } catch {}
+
+  try {
+    window.sessionStorage.removeItem(key);
+  } catch {}
+
   window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
 }
 
-export function readPracticeSession(scopeKey: string): PracticeSession | null {
-  return readJson<PracticeSession | null>(practiceSessionKey(scopeKey), null);
+export async function readPracticeSession(scopeKey: string): Promise<PracticeSession | null> {
+  const key = practiceSessionKey(scopeKey);
+
+  // 1. try DB first
+  const db = await readUserProgress(key);
+  if (db) return db;
+
+  const local = readJson<PracticeSession | null>(key, null);
+
+  if (local) {
+    await writeUserProgress(key, local); // 🔥 migrate
+  }
+
+  return local;
 }
 
-export function savePracticeSession(scopeKey: string, value: PracticeSession) {
-  writeJson(practiceSessionKey(scopeKey), value);
+export async function savePracticeSession(scopeKey: string, value: PracticeSession) {
+  const key = practiceSessionKey(scopeKey);
+
+  // save locally (fast UX)
+  writeJson(key, value);
+
+  // save to DB if logged in
+  await writeUserProgress(key, value);
 }
 
 export function clearPracticeSession(scopeKey: string) {
@@ -590,6 +436,10 @@ export type BankMastery = {
   setId: string;
   miniStatus: Record<string, MiniMockStatus>;
 };
+
+function masteryKey(setId: string) {
+  return `rtt_bank_mastery_${(setId || 'qbank1').toLowerCase()}`;
+}
 
 export function readBankMastery(setId: string): BankMastery {
   return readJson<BankMastery>(masteryKey(setId), {
@@ -759,33 +609,23 @@ export function resetMiniMock(setId: string, miniId: number) {
 
   try {
     const storageSources = [window.localStorage, window.sessionStorage];
+    const prefixes = [
+      `rtt_practice_session_${setId}__all__all__${miniId}`,
+      `rtt_practice_session_mastery__${setId}__all__all__${miniId}`,
+      `rtt_flash_session_${setId}__missed__all__${miniId}`,
+      `rtt_flash_session_mastery__${setId}__missed__all__${miniId}`,
+      `rtt_mock_session_${setId}_mini_${miniId}`,
+      `rtt_mock_session_mastery_${setId}_mini_${miniId}_`,
+      `rtt_mock_results_${setId}_mini_${miniId}`,
+      `rtt_mastery_mini_step_${setId}_${miniId}`,
+    ];
 
     for (const storage of storageSources) {
       for (let i = storage.length - 1; i >= 0; i -= 1) {
         const key = storage.key(i);
         if (!key) continue;
-
-        if (
-          key.startsWith(`rtt_practice_session_${setId}__all__all__${miniId}`)
-        ) {
-          storage.removeItem(key);
-          removeFromDB(key);
-          continue;
-        }
-
-        if (
-          key.startsWith(`rtt_flash_session_${setId}__missed__all__${miniId}`)
-        ) {
-          storage.removeItem(key);
-          removeFromDB(key);
-          continue;
-        }
-
-        if (key.startsWith(`rtt_mock_session_${setId}_mini_${miniId}`)) {
-          storage.removeItem(key);
-          removeFromDB(key);
-          continue;
-        }
+        if (!prefixes.some((prefix) => key.startsWith(prefix))) continue;
+        storage.removeItem(key);
       }
     }
 
@@ -807,21 +647,70 @@ export function saveMasteryMiniStep(
   miniId: number,
   step: 'practice' | 'flashcards' | 'exam',
 ) {
-  writeJson(masteryStepKey(setId, miniId), step);
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(`rtt_mastery_step_${setId}_${miniId}`, step);
+    window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+  } catch {}
 }
 
 export function readMasteryMiniStep(
   setId: string,
   miniId: number,
 ): 'practice' | 'flashcards' | 'exam' | null {
-  const raw = readJson<string | null>(masteryStepKey(setId, miniId), null);
-  return raw === 'practice' || raw === 'flashcards' || raw === 'exam'
-    ? raw
-    : null;
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.localStorage.getItem(
+      `rtt_mastery_step_${setId}_${miniId}`,
+    );
+    return raw === 'practice' || raw === 'flashcards' || raw === 'exam'
+      ? raw
+      : null;
+  } catch {}
+  return null;
 }
 
 export function clearMasteryMiniStep(setId: string, miniId: number) {
   if (typeof window === 'undefined') return;
-  removeKeyFromBoth(masteryStepKey(setId, miniId));
-  window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+  try {
+    window.localStorage.removeItem(`rtt_mastery_step_${setId}_${miniId}`);
+    window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+  } catch {}
+}
+
+
+// ===============================
+// 🔐 SUPABASE PROGRESS HELPERS
+// ===============================
+
+import supabase from '@/lib/supabaseClient';
+
+async function getUser() {
+  const { data: { session } } = await supabase.auth.getSession();
+  return session?.user ?? null;
+}
+
+async function readUserProgress(key: string) {
+  const user = await getUser();
+  if (!user) return null;
+
+  const { data } = await supabase
+    .from('user_progress')
+    .select('value')
+    .eq('user_id', user.id)
+    .eq('key', key)
+    .maybeSingle();
+
+  return data?.value ?? null;
+}
+
+async function writeUserProgress(key: string, value: any) {
+  const user = await getUser();
+  if (!user) return;
+
+  await supabase.from('user_progress').upsert({
+    user_id: user.id,
+    key,
+    value,
+  });
 }

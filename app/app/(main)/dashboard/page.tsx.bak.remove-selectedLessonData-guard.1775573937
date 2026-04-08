@@ -1,10 +1,6 @@
 'use client';
 
-import {
-  readFlashSession,
-  readMasteryMiniStep,
-  readPracticeSession,
-} from '@/lib/progressStore';
+import { readFlashSession, readMasteryMiniStep } from '@/lib/progressStore';
 
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
@@ -64,11 +60,6 @@ function stepSectionId(mini: number, step: StepKey) {
   return `mini-${mini}-step-${step}`;
 }
 
-function scrollToMiniStep(mini: number, step: StepKey) {
-  const id = stepSectionId(mini, step);
-  scrollToElementById(id);
-}
-
 function getSavedMiniMockSessionMeta(setId: string, mini: number) {
   if (typeof window === 'undefined') return null;
 
@@ -112,27 +103,36 @@ function hasSavedMiniMockSession(setId: string, mini: number) {
 function getSavedPracticeMeta(setId: string, mini: number) {
   if (typeof window === 'undefined') return null;
 
-  const keys = [
-    `mastery__${setId}__all__all__${mini}`,
-    `${setId}__all__all__${mini}`,
-  ];
+  try {
+    const storageSources = [window.localStorage, window.sessionStorage];
+    const prefixes = [
+      `rtt_practice_session_mastery__${setId}__all__all__${mini}`,
+      `rtt_practice_session_${setId}__all__all__${mini}`,
+    ];
 
-  for (const scopeKey of keys) {
-    const parsed = readPracticeSession(scopeKey);
-    if (!parsed) continue;
+    for (const storage of storageSources) {
+      for (let i = 0; i < storage.length; i++) {
+        const key = storage.key(i);
+        if (!key) continue;
+        if (!prefixes.some((prefix) => key.startsWith(prefix))) continue;
 
-    return {
-      answeredCount: Number(parsed?.answeredCount || 0),
-      total:
-        Number(parsed?.totalCount || 0) ||
-        Number(
-          (parsed?.answeredCount || 0) + ((parsed?.queueIds || []).length || 0),
-        ),
-      currentId: parsed?.currentId || null,
-      queueIds: Array.isArray(parsed?.queueIds) ? parsed.queueIds : [],
-      savedAt: Number(parsed?.savedAt || 0),
-    };
-  }
+        const raw = storage.getItem(key);
+        if (!raw) continue;
+
+        const parsed = JSON.parse(raw);
+        return {
+          answeredCount: Number(parsed?.answeredCount || 0),
+          total: Number(
+            parsed?.totalCount ||
+              parsed?.answeredCount + (parsed?.queueIds?.length || 0) ||
+              parsed?.queueIds?.length ||
+              0,
+          ),
+          key,
+        };
+      }
+    }
+  } catch {}
 
   return null;
 }
@@ -632,17 +632,6 @@ export default function DashboardPage() {
   );
   const [selectedBank, setSelectedBank] = useState<BankId>('qbank1');
   const [selectedLesson, setSelectedLesson] = useState<LessonKey>('mini-1');
-
-  function handleRestartMini(mini: number) {
-    setSelectedLesson(`mini-${mini}`);
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        scrollToMiniStep(mini, 'practice');
-      });
-    });
-  }
-
   const [pendingScrollTarget, setPendingScrollTarget] = useState<string | null>(
     null,
   );
@@ -698,91 +687,6 @@ export default function DashboardPage() {
   const currentMiniStep = currentBank
     ? getCurrentMiniStep(summary, currentBank, attempts)
     : 'practice';
-
-  const currentMiniAction = useMemo(() => {
-    if (!currentBank) return null;
-    return (
-      buildMiniStepConfigs(currentBank, currentBank.currentMini).find(
-        (step) => step.key === currentMiniStep,
-      ) || null
-    );
-  }, [currentBank, currentMiniStep]);
-
-  const selectedMini = selectedLesson.startsWith('mini-')
-    ? Number(selectedLesson.replace('mini-', ''))
-    : null;
-
-  const selectedLessonData = useMemo(() => {
-    if (!currentBank) return null;
-
-    if (selectedLesson.startsWith('mini-') && selectedMini) {
-      const steps = buildMiniStepConfigs(currentBank, selectedMini);
-      const activeStep =
-        selectedMini === currentBank.currentMini ? currentMiniStep : 'practice';
-
-      return {
-        subtitle: 'Mini Mock Mastery',
-        title: `Mini Mock ${selectedMini}`,
-        lessonNumber: selectedMini,
-        description:
-          'Work through the baseline practice test, review only the missed flashcards, then retake the Mini Mock for your official score.',
-        steps,
-        activeStep,
-      };
-    }
-
-    if (selectedLesson === 'full-practice') {
-      return {
-        subtitle: 'Phase 2 — Full Practice',
-        title: 'Full Practice Test',
-        description:
-          'Take a full-bank practice test to measure readiness before moving into the final review and registry simulation.',
-        steps: [
-          {
-            key: 'practice' as const,
-            title: 'Full Practice Test',
-            body: 'Run a full-length practice test across the bank.',
-            href: `/app/practice/${currentBank.setId}?mode=all&cat=all`,
-            badge: 'Phase 2',
-          },
-        ],
-      };
-    }
-
-    if (selectedLesson === 'full-flashcards') {
-      return {
-        subtitle: 'Phase 2 — Full Practice',
-        title: 'Full-Test Flashcards',
-        description:
-          'Review the full-bank missed concepts deck before moving into the final mock.',
-        steps: [
-          {
-            key: 'flashcards' as const,
-            title: 'Full-Test Flashcards',
-            body: 'Review missed concepts from the full-bank practice.',
-            href: `/app/flashcards?set=${currentBank.setId}&mode=missed&cat=all`,
-            badge: 'Review',
-          },
-        ],
-      };
-    }
-
-    return {
-      subtitle: 'Phase 3 — Registry Simulation',
-      title: 'Full Mock Exam',
-      description:
-        'Complete the full registry simulation and use the score to judge final exam readiness.',
-      steps: [
-        {
-          key: 'exam' as const,
-          title: 'Full Mock Exam',
-          body: 'Take the final full-length registry simulation.',
-          href: `/app/mock-exam?qbank=${currentBank.setId}&scope=full&flow=mastery&autostart=1`,
-          badge: 'Final',
-        },
-      ],
-    };
-  }, [currentBank, selectedLesson, selectedMini, currentMiniStep]);
 
   useEffect(() => {
     if (!pendingScrollTarget) return;
@@ -842,7 +746,7 @@ export default function DashboardPage() {
     );
   }, [cumulative.latest, miniScores]);
 
-  if (!mounted || !currentBank || !currentMiniAction || !selectedLessonData) {
+  if (!mounted || !currentBank || !selectedLessonData || !currentMiniAction) {
     return <div className="max-w-7xl" />;
   }
 

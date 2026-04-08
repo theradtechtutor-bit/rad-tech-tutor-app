@@ -157,16 +157,19 @@ function FlashcardsPageInner() {
   const hasScrolledToSavePromptRef = useRef(false);
 
   useEffect(() => {
-if (!deck.length) return;
+    (async () => {
+    if (!deck.length) return;
     if (savePromptRef.current) return;
     const t = window.setTimeout(() => {
       deckAnchorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 250);
     return () => window.clearTimeout(t);
+  })();
   }, [deck.length]);
 
   useEffect(() => {
-if (session) {
+    (async () => {
+    if (session) {
       hasScrolledToSavePromptRef.current = false;
       return;
     }
@@ -187,13 +190,15 @@ if (session) {
     }, 500);
 
     return () => clearTimeout(t);
+  })();
   }, [session, deck.length, mastered.length]);
 
 
   useEffect(() => {
-  let cancelled = false;
+    (async () => {
+    let cancelled = false;
 
-  async function load() {
+    (async () => {
       setLoading(true);
       try {
         const res = await fetch(apiForSetId(setId), { cache: 'no-store' });
@@ -256,7 +261,7 @@ if (session) {
           selectedCategory === 'all' ? 'all' : selectedCategory,
         );
 
-        const saved = readFlashSession(flashSessionScopeKey);
+        const saved = await readFlashSession(flashSessionScopeKey);
         const allowedIds = new Set(cards.map((card) => card.id));
         const savedDeck = (saved?.deck || []).filter((card) => allowedIds.has(card.id));
         const savedMastered = (saved?.mastered || []).filter((card) => allowedIds.has(card.id));
@@ -293,7 +298,7 @@ if (session) {
         clearFlashSession(flashSessionScopeKey);
 
         if (initialDeck.length) {
-          saveFlashSession(flashSessionScopeKey, {
+          await saveFlashSession(flashSessionScopeKey, {
             setId,
             mode,
             cat: filterValue,
@@ -312,13 +317,12 @@ if (session) {
       } finally {
         if (!cancelled) setLoading(false);
       }
-    
-  }
+    })();
 
-  load();
-return () => {
+    return () => {
       cancelled = true;
     };
+  })();
   }, [
     flashSessionScopeKey,
     setId,
@@ -332,10 +336,11 @@ return () => {
   ]);
 
   useEffect(() => {
-if (loading) return;
+    (async () => {
+    if (loading) return;
     if (!deck.length && !mastered.length) return;
 
-    saveFlashSession(flashSessionScopeKey, {
+    await saveFlashSession(flashSessionScopeKey, {
       setId,
       mode,
       cat: filterValue,
@@ -345,6 +350,7 @@ if (loading) return;
       mastered,
       savedAt: Date.now(),
     });
+  })();
   }, [
     loading,
     flashSessionScopeKey,
@@ -367,28 +373,35 @@ if (loading) return;
       else if (c.stage === 3) green += 1;
     }
     return { missed, yellow, green, gold: mastered.length };
+  })();
   }, [deck, mastered]);
 
 
   useEffect(() => {
-if (!deck.length) setCursor(0);
+    (async () => {
+    if (!deck.length) setCursor(0);
     else if (cursor >= deck.length) setCursor(0);
+  })();
   }, [deck.length, cursor]);
 
   useEffect(() => {
-setFlipped(false);
+    (async () => {
+    setFlipped(false);
+  })();
   }, [cursor, deck.length]);
 
   const reviewedCount = mastered.length + Math.min(cursor, deck.length);
 
   useEffect(() => {
-if (session || reviewedCount === 0) return;
+    (async () => {
+    if (session || reviewedCount === 0) return;
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
       e.returnValue = '';
     };
     window.addEventListener('beforeunload', onBeforeUnload);
     return () => window.removeEventListener('beforeunload', onBeforeUnload);
+  })();
   }, [session, reviewedCount]);
 
   const card = deck[cursor] || null;
@@ -674,7 +687,7 @@ if (session || reviewedCount === 0) return;
                 <div className="flex flex-col items-stretch gap-2 md:min-w-[140px] md:justify-self-center">
                   <button
                     onClick={() => {
-                      saveFlashSession(flashSessionScopeKey, {
+                      await saveFlashSession(flashSessionScopeKey, {
                         setId,
                         mode,
                         cat: filterValue,
