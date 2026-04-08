@@ -74,7 +74,7 @@ export default function HomePage() {
   }, []);
 
   const isReturning = !!session && hasResumeProgress;
-  const primaryCta = isReturning ? 'Continue RTT Mastery Method' : 'Start Free — RTT Mastery Method';
+  const primaryCta = isReturning ? 'Continue RTT Mastery Method' : 'Start Free — No Signup Required';
   const primaryHref = isReturning ? resumeHref : '/app/practice/qbank1?mode=all&cat=all&flow=mastery&mini=1';
 
   return (
