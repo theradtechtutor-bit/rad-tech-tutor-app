@@ -76,13 +76,13 @@ export default function AuthStatusNav() {
           href="/app/upgrade"
           className="rounded-full bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:bg-yellow-300"
         >
-          Get Pro
+          <span className="whitespace-nowrap">Get Pro</span>
         </Link>
         <Link
           href="/app/login"
           className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 hover:bg-white/10"
         >
-          Sign In
+          <span className="whitespace-nowrap">Sign In</span>
         </Link>
       </div>
     )
@@ -102,7 +102,7 @@ export default function AuthStatusNav() {
           href="/app/upgrade"
           className="rounded-full bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:bg-yellow-300"
         >
-          Get Pro
+          <span className="whitespace-nowrap">Get Pro</span>
         </Link>
       )}
 
