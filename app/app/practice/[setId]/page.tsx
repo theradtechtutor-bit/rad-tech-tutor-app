@@ -511,17 +511,19 @@ export default function PracticeSetPage() {
     }
   }, [practiceSessionScopeKey]);
 
-  useEffect(() => {
-    if (!currentId || loading) return;
-    const t = window.setTimeout(() => {
-      questionAnchorRef.current?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    }, 250);
-    return () => window.clearTimeout(t);
-  }, [currentId, loading]);
+  //initial page load scroll
+  // useEffect(() => {
+  //   if (!currentId || loading) return;
+  //   const t = window.setTimeout(() => {
+  //     questionAnchorRef.current?.scrollIntoView({
+  //       behavior: 'smooth',
+  //       block: 'start',
+  //     });
+  //   }, 250);
+  //   return () => window.clearTimeout(t);
+  // }, [currentId, loading]);
 
+  // When a question is revealed, scroll to the explanation after a short delay to give the user a moment to see the question and their answer first.
   useEffect(() => {
     if (!revealed) return;
     const t = window.setTimeout(() => {
@@ -533,6 +535,8 @@ export default function PracticeSetPage() {
     return () => window.clearTimeout(t);
   }, [revealed]);
 
+
+  // After 10 questions answered, if user is not signed in, gently prompt them to save their progress by scrolling to the save prompt. Only do this once per session.
   useEffect(() => {
     if (session) {
       hasScrolledToSavePromptRef.current = false;

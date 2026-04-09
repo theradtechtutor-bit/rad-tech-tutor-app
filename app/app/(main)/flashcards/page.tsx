@@ -156,14 +156,14 @@ function FlashcardsPageInner() {
   const savePromptRef = useRef<HTMLDivElement | null>(null);
   const hasScrolledToSavePromptRef = useRef(false);
 
-  useEffect(() => {
-if (!deck.length) return;
-    if (savePromptRef.current) return;
-    const t = window.setTimeout(() => {
-      deckAnchorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 250);
-    return () => window.clearTimeout(t);
-  }, [deck.length]);
+//   useEffect(() => {
+// if (!deck.length) return;
+//     if (savePromptRef.current) return;
+//     const t = window.setTimeout(() => {
+//       deckAnchorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+//     }, 250);
+//     return () => window.clearTimeout(t);
+//   }, [deck.length]);
 
   useEffect(() => {
 if (session) {

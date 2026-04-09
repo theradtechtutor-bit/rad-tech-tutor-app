@@ -493,16 +493,16 @@ function MockExamPageInner() {
     sp,
   ]);
 
-  useEffect(() => {
-    if (!questions?.length || done) return;
-    const t = window.setTimeout(() => {
-      examAnchorRef.current?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      });
-    }, 250);
-    return () => window.clearTimeout(t);
-  }, [questions?.length, done]);
+  // useEffect(() => {
+  //   if (!questions?.length || done) return;
+  //   const t = window.setTimeout(() => {
+  //     examAnchorRef.current?.scrollIntoView({
+  //       behavior: 'smooth',
+  //       block: 'center',
+  //     });
+  //   }, 250);
+  //   return () => window.clearTimeout(t);
+  // }, [questions?.length, done]);
 
 
   useEffect(() => {
