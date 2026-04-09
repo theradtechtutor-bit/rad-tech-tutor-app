@@ -90,48 +90,46 @@ export default function HomePage() {
           }}
         />
 
-        <div className="relative mx-auto grid max-w-6xl grid-cols-1 gap-12 px-5 pb-16 pt-12 md:grid-cols-2 md:items-start md:pb-24 md:pt-16">
+        <div className="relative mx-auto grid max-w-6xl grid-cols-1 gap-12 px-5 pb-16 pt-6 md:grid-cols-2 md:items-start md:pb-24 md:pt-16">
           <div>
             <div className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
               ARRT® Radiography Exam Prep
             </div>
 
-            <h1 className="mt-6 text-5xl font-bold leading-[1.02] tracking-tight md:text-6xl">
+            <h1 className="mt-2 text-5xl font-bold leading-[1.02] tracking-tight md:text-6xl">
               Study smarter.
               <br />
               Pass the ARRT® on your first try.
             </h1>
 
-            {/* <h1 className="mt-6 text-5xl font-bold leading-[1.02] tracking-tight md:text-6xl">
-              Practice Questions, Flashcards, and Mock Exams
-              <br />
-              to Help You Pass
-              <br />
-              the ARRT.
-            </h1> */}
-
-            <p className="mt-6 max-w-xl text-base leading-8 text-[color:var(--rtt-muted)] md:text-lg">
-              Start free with 100 questions, practice tests, flashcards, and
-              mock exams built around the real ARRT® exam categories.
-            </p>
-
-            <p className="mt-4 max-w-xl text-sm font-medium text-white/75 md:text-base">
+            <p className="mt-2 max-w-xl text-sm text-white/75 md:text-base">
               Go from overwhelmed to registry-ready in as little as
-              <span className="font-semibold text-white"> one month.</span>
+              <span className="font-extrabold text-white"> one month.</span>
             </p>
 
-            {/* <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-sm text-white/80">
-              <div className="font-semibold text-white mb-2">
-                Who this is for:
-              </div>
-              <div>🎓 ARRT Students → Pass your registry exam</div>
-              <div className="mt-1">
-                🩻 CQR Techs → Prepare for your assessment and fix weak areas
-              </div>
-              <div className="mt-1">
-                📚 CE (Renewal & CQR) → Earn credits and stay sharp
-              </div>
-            </div> */}
+            <div className="mt-5 space-y-3">
+              {/* Hook */}
+              <p className="text-base font-semibold text-white sm:text-lg">
+                Stop rereading. Start improving your score.
+              </p>
+
+              {/* Checklist */}
+              <ul className="space-y-2.5 text-sm text-white/80 sm:text-base">
+                {[
+                  '600+ ARRT®-style practice questions',
+                  '200-question full mock exams',
+                  'Auto-generated flashcards from what you miss to target your weak areas',
+                  'Based on official ARRT® exam categories',
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <span className="mt-[0.35rem] text-white/70 text-sm">
+                      ✓
+                    </span>
+                    <span className="leading-6">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link
@@ -163,18 +161,6 @@ export default function HomePage() {
                 off.
               </div>
             ) : null}
-
-            {/* <div className="mt-6 flex flex-wrap gap-3 text-xs text-white/50">
-              <div className="rounded-full border border-white/10 bg-white/5 px-3 py-2">
-                Diagnostic practice
-              </div>
-              <div className="rounded-full border border-white/10 bg-white/5 px-3 py-2">
-                Weak-spot training
-              </div>
-              <div className="rounded-full border border-white/10 bg-white/5 px-3 py-2">
-                Mock exams
-              </div>
-            </div> */}
 
             <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-3">
               <div className="rtt-card rounded-2xl p-4">
@@ -542,9 +528,8 @@ export default function HomePage() {
                 ARRT® Continuing Education and CQR Support
               </div>
               <div className="mt-2 text-sm text-white/70">
-                Complete CE modules, pass the post-test, and
-                download your certificate while staying prepared for CQR
-                assessments
+                Complete CE modules, pass the post-test, and download your
+                certificate while staying prepared for CQR assessments
               </div>
               <div className="mt-5">
                 <Link href="/app/ce" className="rtt-btn rtt-btn-cta">
