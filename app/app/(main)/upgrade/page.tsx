@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 type PlanKey = 'pro_1m' | 'pro_3m' | 'pro_6m';
 
@@ -46,7 +47,11 @@ function UnlockCard({ title, desc }: { title: string; desc: string }) {
   );
 }
 
-export default function UpgradePage() {
+function UpgradePageInner() {  
+  const searchParams = useSearchParams();
+  const autobuy = searchParams.get('autobuy') as PlanKey | null;
+  const autoStartedRef = useRef(false);
+
   const [busyPlan, setBusyPlan] = useState<PlanKey | null>(null);
   const [error, setError] = useState('');
 
@@ -63,10 +68,10 @@ export default function UpgradePage() {
 
       const data = await res.json().catch(() => ({}));
 
-      if (res.status === 401) {
-        window.location.href = '/app/login?next=/app/upgrade';
-        return;
-      }
+if (res.status === 401) {
+  window.location.href = `/app/login?next=${encodeURIComponent(`/app/upgrade?autobuy=${plan}`)}`;
+  return;
+}
 
       if (!res.ok || !data?.url) {
         setError(data?.error || 'Unable to start checkout.');
@@ -80,6 +85,17 @@ export default function UpgradePage() {
       setBusyPlan(null);
     }
   }
+
+  useEffect(() => {
+    if (!autobuy || autoStartedRef.current) return;
+
+    if (autobuy !== 'pro_1m' && autobuy !== 'pro_3m' && autobuy !== 'pro_6m') {
+      return;
+    }
+
+    autoStartedRef.current = true;
+    startCheckout(autobuy);
+  }, [autobuy]);
 
   return (
     <div className="relative min-h-[calc(100vh-73px)] overflow-hidden bg-[color:var(--rtt-bg)] text-[color:var(--rtt-text)]">
@@ -199,5 +215,13 @@ export default function UpgradePage() {
         </section>
       </div>
     </div>
+  );
+}
+
+export default function UpgradePage() {
+  return (
+    <Suspense fallback={null}>
+      <UpgradePageInner />
+    </Suspense>
   );
 }
