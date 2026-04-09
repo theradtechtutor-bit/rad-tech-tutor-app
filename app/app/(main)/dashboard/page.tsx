@@ -350,12 +350,11 @@ function SidebarMiniMock({
     : flashcardsComplete
       ? 1
       : 0;
-  const flashPct =
-    flashMeta && flashTotal > 0
-      ? Math.max(0, Math.min(100, Math.round((flashDone / flashTotal) * 100)))
-      : flashcardsComplete
-        ? 100
-        : 0;
+const flashPct = flashcardsComplete
+  ? 100
+  : flashMeta && flashTotal > 0
+    ? Math.max(0, Math.min(100, Math.round((flashDone / flashTotal) * 100)))
+    : 0;
 
   const examAnswered = completed
     ? Number(examMeta?.total || 20)
@@ -515,13 +514,13 @@ function SidebarMiniMock({
                 <div>
                   <div className="mb-1 flex items-center justify-between gap-2">
                     <span>Missed Flashcards</span>
-                    {flashMeta ? (
-                      <span className="font-semibold text-yellow-300">
-                        {flashDone} / {flashTotal}
-                      </span>
-                    ) : flashcardsComplete ? (
+                    {flashcardsComplete ? (
                       <span className="font-semibold text-emerald-300">
                         Complete
+                      </span>
+                    ) : flashMeta ? (
+                      <span className="font-semibold text-yellow-300">
+                        {flashDone} / {flashTotal}
                       </span>
                     ) : (
                       <span className="text-white/40">Not started</span>
