@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import MarketingNav from './_components/MarketingNav';
+import PostHogProvider from './posthog-provider';
 
 export const metadata: Metadata = {
   title: 'Rad Tech Tutor',
@@ -16,6 +17,7 @@ export default function RootLayout({
     <html lang="en">
       {/* <body className="min-h-screen bg-black text-white antialiased"> */}
       <body className="flex min-h-screen flex-col bg-black text-white antialiased">
+        <PostHogProvider />
         <MarketingNav />
         {/* <main>{children}</main> */}
         <main className="flex-1">{children}</main>
