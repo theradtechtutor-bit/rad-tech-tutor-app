@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { captureEvent } from '@/lib/analytics';
 
 type PlanKey = 'pro_1m' | 'pro_3m' | 'pro_6m';
 
@@ -56,6 +57,11 @@ function UpgradePageInner() {
   const [error, setError] = useState('');
 
   async function startCheckout(plan: PlanKey) {
+    captureEvent('clicked_get_pro', {
+      plan,
+      source: autobuy === plan ? 'upgrade_page_autobuy' : 'upgrade_page',
+    });
+
     setBusyPlan(plan);
     setError('');
 
@@ -77,6 +83,11 @@ if (res.status === 401) {
         setError(data?.error || 'Unable to start checkout.');
         return;
       }
+
+      captureEvent('checkout_started', {
+        plan,
+        source: autobuy === plan ? 'upgrade_page_autobuy' : 'upgrade_page',
+      });
 
       window.location.href = data.url;
     } catch {

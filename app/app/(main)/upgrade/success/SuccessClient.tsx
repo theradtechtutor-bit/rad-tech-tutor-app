@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { captureEvent } from '@/lib/analytics';
 
 export default function SuccessClient() {
   const searchParams = useSearchParams();
@@ -24,6 +25,22 @@ export default function SuccessClient() {
         const data = await res.json();
 
         if (data.success) {
+          try {
+            const purchaseKey = `rtt_purchase_completed_${sessionId}`;
+            if (window.sessionStorage.getItem(purchaseKey) !== '1') {
+              captureEvent('purchase_completed', {
+                source: 'stripe_success_page',
+                session_id: sessionId,
+              });
+              window.sessionStorage.setItem(purchaseKey, '1');
+            }
+          } catch {
+            captureEvent('purchase_completed', {
+              source: 'stripe_success_page',
+              session_id: sessionId,
+            });
+          }
+
           setReady(true);
           setMessage('Your Pro access has been unlocked.');
         } else {

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import supabase from '@/lib/supabaseClient';
+import { identifyUser, resetAnalyticsUser } from '@/lib/analytics';
 type Session = Awaited<ReturnType<typeof supabase.auth.getSession>>["data"]["session"];
 
 export function useSupabaseSession() {
@@ -10,12 +11,32 @@ export function useSupabaseSession() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session ?? null);
+      const nextSession = data.session ?? null;
+      setSession(nextSession);
+
+      if (nextSession?.user?.id) {
+        identifyUser(nextSession.user.id, {
+          email: nextSession.user.email ?? '',
+        });
+      } else {
+        resetAnalyticsUser();
+      }
+
       setLoading(false);
     });
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session ?? null);
+      const nextSession = session ?? null;
+      setSession(nextSession);
+
+      if (nextSession?.user?.id) {
+        identifyUser(nextSession.user.id, {
+          email: nextSession.user.email ?? '',
+        });
+      } else {
+        resetAnalyticsUser();
+      }
+
       setLoading(false);
     });
 

@@ -28,6 +28,7 @@ import SaveProgressPrompt from '@/app/app/_components/SaveProgressPrompt';
 import { useSupabaseSession } from '@/app/app/_hooks/useSupabaseSession';
 import { usePro } from '@/app/app/_lib/usePro';
 import { buildMiniMocks, selectQuestionsForScope } from '@/lib/mockPlan';
+import { captureEvent } from '@/lib/analytics';
 
 type PracticeSession = {
   setId: string;
@@ -234,6 +235,8 @@ export default function PracticeSetPage() {
   const hasScrolledToSavePromptRef = useRef(false);
   const isPausingRef = useRef(false);
   const skipNextAutosaveRef = useRef(true);
+  const trackedPracticeStartRef = useRef(false);
+  const trackedPracticeCompleteRef = useRef(false);
 
   const { session, loading: sessionLoading } = useSupabaseSession();
 
@@ -511,6 +514,25 @@ export default function PracticeSetPage() {
     }
   }, [practiceSessionScopeKey]);
 
+  useEffect(() => {
+    trackedPracticeStartRef.current = false;
+    trackedPracticeCompleteRef.current = false;
+  }, [practiceSessionScopeKey]);
+
+  useEffect(() => {
+    if (loading || locked || !currentId || totalCount <= 0) return;
+    if (trackedPracticeStartRef.current) return;
+
+    trackedPracticeStartRef.current = true;
+    captureEvent('practice_test_started', {
+      set_id: setId,
+      mode,
+      flow,
+      filter: filterValue,
+      total_count: totalCount,
+    });
+  }, [loading, locked, currentId, totalCount, setId, mode, flow, filterValue]);
+
   //initial page load scroll
   // useEffect(() => {
   //   if (!currentId || loading) return;
@@ -715,6 +737,22 @@ export default function PracticeSetPage() {
         missedCount: missedNext,
       });
     } else {
+      if (!trackedPracticeCompleteRef.current) {
+        trackedPracticeCompleteRef.current = true;
+        captureEvent('practice_test_completed', {
+          set_id: setId,
+          mode,
+          flow,
+          filter: filterValue,
+          total_count: totalCount || answeredNext,
+          correct_count: correctNext,
+          missed_count: missedNext,
+          score_percent: (totalCount || answeredNext)
+            ? Math.round((correctNext / (totalCount || answeredNext)) * 100)
+            : 0,
+        });
+      }
+
       clearPracticeSession(practiceSessionScopeKey);
     }
 
