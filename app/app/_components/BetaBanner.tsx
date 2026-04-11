@@ -13,7 +13,7 @@ const ALLOWED_PATHS = [
 ];
 
 const MESSAGE =
-  '🚧 Improving daily based on real student feedback. We’re aware of a few issues and working to resolve them soon. We appreciate your patience. 🚧';
+  '🚧 Improving daily based on real student feedback. We’re aware of a few issues and working to resolve them soon. Your core study tools should still work smoothly. We appreciate your patience. 🚧';
 
 export default function BetaBanner() {
   const pathname = usePathname();
