@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
-const STORAGE_KEY = 'rtt_beta_banner_dismissed_v1';
+// const STORAGE_KEY = 'rtt_beta_banner_dismissed_v1';
 
 const ALLOWED_PATHS = [
   '/app/dashboard',
@@ -25,20 +25,29 @@ export default function BetaBanner() {
     return ALLOWED_PATHS.some((path) => pathname === path || pathname.startsWith(path + '/'));
   }, [pathname]);
 
+  // useEffect(() => {
+  //   setMounted(true);
+  //   try {
+  //     const saved = window.localStorage.getItem(STORAGE_KEY);
+  //     setDismissed(saved === '1');
+  //   } catch {
+  //     setDismissed(false);
+  //   }
+  // }, []);
+
+  // const handleDismiss = () => {
+  //   try {
+  //     window.localStorage.setItem(STORAGE_KEY, '1');
+  //   } catch {}
+  //   setDismissed(true);
+  // };
+
   useEffect(() => {
     setMounted(true);
-    try {
-      const saved = window.localStorage.getItem(STORAGE_KEY);
-      setDismissed(saved === '1');
-    } catch {
-      setDismissed(false);
-    }
+    setDismissed(false);
   }, []);
 
   const handleDismiss = () => {
-    try {
-      window.localStorage.setItem(STORAGE_KEY, '1');
-    } catch {}
     setDismissed(true);
   };
 
