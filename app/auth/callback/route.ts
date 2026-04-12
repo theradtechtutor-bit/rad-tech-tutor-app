@@ -90,8 +90,8 @@ export async function GET(request: Request) {
 
   const { data: existingProfile, error: profileLookupError } = await supabase
     .from('profiles')
-    .select('id')
-    .eq('id', user.id)
+    .select('user_id')
+    .eq('user_id', user.id)
     .maybeSingle();
 
   if (profileLookupError) {
@@ -101,7 +101,7 @@ export async function GET(request: Request) {
 
   if (!existingProfile) {
     const { error: insertError } = await supabase.from('profiles').insert({
-      id: user.id,
+      user_id: user.id,
     });
 
     if (insertError) {
