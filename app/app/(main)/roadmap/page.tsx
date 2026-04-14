@@ -288,7 +288,10 @@ export default function RoadmapPage() {
         .sort((a: Attempt, b: Attempt) => Date.parse(a.dateISO) - Date.parse(b.dateISO));
 
       setAttempts(normalized);
-      setExamDate(readExamDate());
+      const saved = readExamDate();
+      const today = new Date().toISOString().split('T')[0];
+
+      setExamDate(saved && saved >= today ? saved : '');
       setMounted(true);
     };
 
@@ -361,15 +364,21 @@ export default function RoadmapPage() {
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <input
-                type="date"
-                value={examDate}
-                onChange={(e) => {
-                  setExamDate(e.target.value);
-                  writeExamDate(e.target.value);
-                }}
-                className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none"
-              />
+<input
+  type="date"
+  value={examDate}
+  min={new Date().toISOString().split('T')[0]}
+  onChange={(e) => {
+    const today = new Date().toISOString().split('T')[0];
+    const next = e.target.value;
+
+    const safeDate = next < today ? today : next;
+
+    setExamDate(safeDate);
+    writeExamDate(safeDate);
+  }}
+  className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none"
+/>
               {examDate ? (
                 <button
                   type="button"

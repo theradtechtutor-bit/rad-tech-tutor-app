@@ -12,7 +12,7 @@ import StartHereTour from '@/app/app/_components/StartHereTour';
 import { usePro } from '@/app/app/_lib/usePro';
 import {
   getBankMasterySummary,
-  resetMiniMock,
+  resetMiniMockFull,
   getCategoryCumulative,
   getMasterySummary,
   readAttempts,
@@ -219,20 +219,99 @@ function getCurrentMiniStep(
   const savedPractice = getSavedPracticeMeta(bank.setId, bank.currentMini);
   const savedFlash = getSavedFlashcardsMeta(bank.setId, bank.currentMini);
   const savedExam = getSavedMiniMockSessionMeta(bank.setId, bank.currentMini);
-
   const savedStep = readMasteryMiniStep(bank.setId, bank.currentMini);
+
+    console.log('getCurrentMiniStep', {
+      mini: bank.currentMini,
+      status,
+      savedPractice,
+      savedFlash,
+      savedExam,
+      savedStep,
+    });
 
   if (status?.attempts) return 'exam' as const;
   if (savedExam && savedExam.answeredCount > 0) return 'exam' as const;
   if (savedStep === 'exam') return 'exam' as const;
-  if (savedFlash || savedStep === 'flashcards') return 'flashcards' as const;
+
+  if (savedFlash) {
+    if (savedFlash.remaining > 0) return 'flashcards' as const;
+    return 'exam' as const;
+  }
+
+  if (savedStep === 'flashcards') return 'flashcards' as const;
+
   if (
     savedPractice ||
     hasPracticeAttemptForMini(attempts, bank, bank.currentMini)
   ) {
     return 'practice' as const;
   }
+
   return 'practice' as const;
+  
+}
+
+function getMiniState(bank: BankSummary, attempts: Attempts, mini: number) {
+  const status = bank.miniStatus[String(mini)];
+  const completed = Boolean(status?.attempts);
+
+  const practiceMeta = getSavedPracticeMeta(bank.setId, mini);
+  const flashMeta = getSavedFlashcardsMeta(bank.setId, mini);
+  const examMeta = getSavedMiniMockSessionMeta(bank.setId, mini);
+  const savedStep = readMasteryMiniStep(bank.setId, mini);
+
+  const practiceAnswered = Number(practiceMeta?.answeredCount || 0);
+  const practiceHasWork =
+    practiceAnswered > 0 || hasPracticeAttemptForMini(attempts, bank, mini);
+
+  const flashTotal = Number(flashMeta?.total || 0);
+  const flashRemaining = Number(flashMeta?.remaining || 0);
+  const flashReviewed = Math.max(0, flashTotal - flashRemaining);
+  const flashHasWork = flashTotal > 0 || flashReviewed > 0;
+
+  const examAnswered = Number(examMeta?.answeredCount || 0);
+  const examHasWork = savedStep === 'exam' || examAnswered > 0 || !!examMeta;
+
+  const practiceComplete =
+    completed ||
+    savedStep === 'flashcards' ||
+    (practiceHasWork && flashHasWork);
+
+  const flashcardsComplete =
+    completed || (flashMeta ? flashTotal > 0 && flashRemaining === 0 : false);
+
+  const practiceSkipped = !practiceComplete && !practiceHasWork && examHasWork;
+
+  const flashcardsSkipped = !flashcardsComplete && !flashHasWork && examHasWork;
+
+  let activeStep: StepKey = 'practice';
+
+  if (completed) {
+    activeStep = 'exam';
+  } else if (savedStep === 'exam' || examMeta) {
+    activeStep = 'exam';
+  } else if (flashMeta) {
+    activeStep = flashRemaining > 0 ? 'flashcards' : 'exam';
+  } else if (savedStep === 'flashcards') {
+    activeStep = 'flashcards';
+  } else {
+    activeStep = 'practice';
+  }
+
+  return {
+    status,
+    completed,
+    practiceMeta,
+    flashMeta,
+    examMeta,
+    savedStep,
+    practiceComplete,
+    flashcardsComplete,
+    practiceSkipped,
+    flashcardsSkipped,
+    activeStep,
+  };
 }
 
 function lessonForCurrentProgress(
@@ -261,21 +340,21 @@ function buildMiniStepConfigs(bank: BankSummary, mini: number): StepConfig[] {
     {
       key: 'practice',
       title: 'Step 1 — Practice Test',
-      body: 'Take the baseline attempt for this Mini Mock before reviewing anything.',
+      body: 'Take the baseline attempt for this Mini Mock before reviewing anything that you may miss.',
       href: `/app/practice/${bank.setId}?mode=all&cat=all&flow=mastery&mini=${mini}`,
       badge: 'Start here',
     },
     {
       key: 'flashcards',
       title: 'Step 2 — Missed Flashcards',
-      body: 'Review only the concepts you missed so your study time stays focused.',
+      body: 'Review the concepts you missed so you close your weak spots.',
       href: `/app/flashcards?set=${bank.setId}&mode=missed&cat=all&flow=mastery&mini=${mini}`,
       badge: 'Review',
     },
     {
       key: 'exam',
       title: 'Step 3 — Mini Mock Exam',
-      body: 'Retake the Mini Mock after review. This score becomes your official Mini Mock score.',
+      body: 'Take the Mini Mock Exam after Practice test and Flashcards. This score becomes your official Mini Mock score.',
       href: `/app/mock-exam?qbank=${bank.setId}&scope=mini&mini=${mini}&flow=mastery&autostart=1`,
       badge: 'Official score',
     },
@@ -287,8 +366,9 @@ function SidebarMiniMock({
   bank,
   isActive,
   isCurrent,
-  currentMiniStep,
   isPro,
+  summary,
+  attempts,
   onSelect,
   onStart,
   onResume,
@@ -298,8 +378,9 @@ function SidebarMiniMock({
   bank: BankSummary;
   isActive: boolean;
   isCurrent: boolean;
-  currentMiniStep: 'practice' | 'flashcards' | 'exam';
   isPro: boolean;
+  summary: Summary;
+  attempts: Attempts;
   onSelect: () => void;
   onStart: () => void;
   onResume: () => void;
@@ -308,28 +389,16 @@ function SidebarMiniMock({
   const isLocked = mini > 5 && !isPro;
   const status = bank.miniStatus[String(mini)];
   const completed = Boolean(status?.attempts);
-  const practiceMeta = getSavedPracticeMeta(bank.setId, mini);
-  const flashMeta = getSavedFlashcardsMeta(bank.setId, mini);
-  const examMeta = getSavedMiniMockSessionMeta(bank.setId, mini);
-  const savedStep = readMasteryMiniStep(bank.setId, mini);
-
-  const practiceComplete =
-    completed ||
-    !!practiceMeta ||
-    !!flashMeta ||
-    !!examMeta ||
-    savedStep === 'flashcards' ||
-    savedStep === 'exam' ||
-    (isCurrent &&
-      (currentMiniStep === 'flashcards' || currentMiniStep === 'exam'));
-
-  const flashcardsComplete =
-    completed ||
-    !!flashMeta ||
-    !!examMeta ||
-    savedStep === 'exam' ||
-    (isCurrent &&
-      (currentMiniStep === 'flashcards' || currentMiniStep === 'exam'));
+  const miniState = getMiniState(bank, attempts, mini);
+  
+const practiceMeta = miniState.practiceMeta;
+const flashMeta = miniState.flashMeta;
+const examMeta = miniState.examMeta;
+const savedStep = miniState.savedStep;
+const practiceComplete = miniState.practiceComplete;
+const flashcardsComplete = miniState.flashcardsComplete;
+const practiceSkipped = miniState.practiceSkipped;
+const flashcardsSkipped = miniState.flashcardsSkipped;
 
   const practiceAnswered = Number(practiceMeta?.answeredCount || 0);
   const practiceTotal = Number(practiceMeta?.total || 0);
@@ -350,11 +419,11 @@ function SidebarMiniMock({
     : flashcardsComplete
       ? 1
       : 0;
-const flashPct = flashcardsComplete
-  ? 100
-  : flashMeta && flashTotal > 0
-    ? Math.max(0, Math.min(100, Math.round((flashDone / flashTotal) * 100)))
-    : 0;
+  const flashPct = flashcardsComplete
+    ? 100
+    : flashMeta && flashTotal > 0
+      ? Math.max(0, Math.min(100, Math.round((flashDone / flashTotal) * 100)))
+      : 0;
 
   const examAnswered = completed
     ? Number(examMeta?.total || 20)
@@ -499,6 +568,10 @@ const flashPct = flashcardsComplete
                       <span className="font-semibold text-emerald-300">
                         Complete
                       </span>
+                    ) : practiceSkipped ? (
+                      <span className="font-semibold text-yellow-300">
+                        Skipped
+                      </span>
                     ) : (
                       <span className="text-white/40">Not started</span>
                     )}
@@ -521,6 +594,10 @@ const flashPct = flashcardsComplete
                     ) : flashMeta ? (
                       <span className="font-semibold text-yellow-300">
                         {flashDone} / {flashTotal}
+                      </span>
+                    ) : flashcardsSkipped ? (
+                      <span className="font-semibold text-yellow-300">
+                        Skipped
                       </span>
                     ) : (
                       <span className="text-white/40">Not started</span>
@@ -631,15 +708,33 @@ export default function DashboardPage() {
   );
   const [selectedBank, setSelectedBank] = useState<BankId>('qbank1');
   const [selectedLesson, setSelectedLesson] = useState<LessonKey>('mini-1');
+  const [showSkipExamModal, setShowSkipExamModal] = useState(false);
+  const [pendingExamHref, setPendingExamHref] = useState<string | null>(null);
+  const [lockedStepMessage, setLockedStepMessage] = useState<string | null>(
+    null,
+  );
 
-  function handleRestartMini(mini: number) {
-    setSelectedLesson(`mini-${mini}`);
+function handleRestartMini(mini: number) {
+  if (!currentBank) return;
 
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        scrollToMiniStep(mini, 'practice');
-      });
-    });
+  resetMiniMockFull(currentBank.setId, mini);
+  setSelectedLesson(`mini-${mini}`);
+}
+
+  function openSkipExamModal(href: string) {
+    setPendingExamHref(href);
+    setShowSkipExamModal(true);
+  }
+
+  function closeSkipExamModal() {
+    setShowSkipExamModal(false);
+    setPendingExamHref(null);
+  }
+
+  function confirmSkipExam() {
+    if (pendingExamHref) {
+      window.location.href = pendingExamHref;
+    }
   }
 
   const [pendingScrollTarget, setPendingScrollTarget] = useState<string | null>(
@@ -680,32 +775,58 @@ export default function DashboardPage() {
     [bankSummaries, selectedBank],
   );
 
-  useEffect(() => {
-    if (!currentBank) return;
-    const nextLesson = lessonForCurrentProgress(summary, currentBank);
-    const lockedFullPhase =
-      !isPro &&
-      (nextLesson === 'full-practice' ||
-        nextLesson === 'full-flashcards' ||
-        nextLesson === 'full-mock');
+useEffect(() => {
+  if (!currentBank) return;
 
-    setSelectedLesson(
-      lockedFullPhase ? `mini-${currentBank.currentMini}` : nextLesson,
-    );
-  }, [currentBank, summary, isPro]);
+  const nextLesson = lessonForCurrentProgress(summary, currentBank);
+  const lockedFullPhase =
+    !isPro &&
+    (nextLesson === 'full-practice' ||
+      nextLesson === 'full-flashcards' ||
+      nextLesson === 'full-mock');
 
-  const currentMiniStep = currentBank
-    ? getCurrentMiniStep(summary, currentBank, attempts)
-    : 'practice';
+  const fallbackLesson = lockedFullPhase
+    ? (`mini-${currentBank.currentMini}` as LessonKey)
+    : nextLesson;
+
+  const selectedMiniNumber = selectedLesson.startsWith('mini-')
+    ? Number(selectedLesson.replace('mini-', ''))
+    : null;
+
+  const isSelectedMiniValid =
+    selectedMiniNumber != null &&
+    selectedMiniNumber >= 1 &&
+    selectedMiniNumber <= 10;
+
+  const isSelectedFullPhase =
+    selectedLesson === 'full-practice' ||
+    selectedLesson === 'full-flashcards' ||
+    selectedLesson === 'full-mock';
+
+  if (selectedLesson.startsWith('mini-') && isSelectedMiniValid) {
+    return;
+  }
+
+  if (isSelectedFullPhase && !lockedFullPhase) {
+    return;
+  }
+
+  setSelectedLesson(fallbackLesson);
+}, [currentBank, summary, isPro, selectedLesson]);
+
+  const currentMiniState = currentBank
+    ? getMiniState(currentBank, attempts, currentBank.currentMini)
+    : null;
 
   const currentMiniAction = useMemo(() => {
-    if (!currentBank) return null;
+    if (!currentBank || !currentMiniState) return null;
+
     return (
       buildMiniStepConfigs(currentBank, currentBank.currentMini).find(
-        (step) => step.key === currentMiniStep,
+        (step) => step.key === currentMiniState.activeStep,
       ) || null
     );
-  }, [currentBank, currentMiniStep]);
+  }, [currentBank, currentMiniState]);
 
   const selectedMini = selectedLesson.startsWith('mini-')
     ? Number(selectedLesson.replace('mini-', ''))
@@ -716,8 +837,8 @@ export default function DashboardPage() {
 
     if (selectedLesson.startsWith('mini-') && selectedMini) {
       const steps = buildMiniStepConfigs(currentBank, selectedMini);
-      const activeStep =
-        selectedMini === currentBank.currentMini ? currentMiniStep : 'practice';
+      const miniState = getMiniState(currentBank, attempts, selectedMini);
+      const activeStep = miniState.activeStep;
 
       return {
         subtitle: 'Mini Mock Mastery',
@@ -781,7 +902,7 @@ export default function DashboardPage() {
         },
       ],
     };
-  }, [currentBank, selectedLesson, selectedMini, currentMiniStep]);
+  }, [currentBank, selectedLesson, selectedMini, summary, attempts]);
 
   useEffect(() => {
     if (!pendingScrollTarget) return;
@@ -1024,8 +1145,9 @@ export default function DashboardPage() {
                           bank={currentBank}
                           isActive={selectedLesson === miniLessonKey}
                           isCurrent={mini === currentBank.currentMini}
-                          currentMiniStep={currentMiniStep}
                           isPro={isPro}
+                          summary={summary}
+                          attempts={attempts}
                           onSelect={() => {
                             if (mini > 5 && !isPro) {
                               window.location.href = '/app/upgrade';
@@ -1164,56 +1286,107 @@ export default function DashboardPage() {
               <div className="space-y-6 px-6 py-6 md:px-8 md:py-8">
                 <div className="grid gap-4 lg:grid-cols-3">
                   {selectedLessonData.steps.map((step, idx) => {
-                    const activeStepKey =
-                      selectedLesson.startsWith('mini-') &&
-                      'activeStep' in selectedLessonData
-                        ? selectedLessonData.activeStep
-                        : currentMiniStep;
-
-                    const isHighlighted =
-                      selectedLesson.startsWith('mini-') &&
-                      'activeStep' in selectedLessonData &&
-                      selectedLessonData.activeStep === step.key;
-
                     const isMiniLesson = selectedLesson.startsWith('mini-');
-                    const isClickable = !isMiniLesson || isHighlighted;
 
-                    const stepState =
-                      step.key === activeStepKey
-                        ? 'active'
-                        : step.key === 'practice' &&
-                            activeStepKey !== 'practice'
-                          ? 'completed'
-                          : step.key === 'flashcards' &&
-                              activeStepKey === 'exam'
-                            ? 'completed'
-                            : step.key === 'exam' && activeStepKey === 'exam'
-                              ? 'active'
-                              : 'locked';
-
-                    const lockedReason =
-                      isMiniLesson && !isClickable
-                        ? step.key === 'practice'
-                          ? 'Completed. Restart Mini Mock to retake.'
-                          : step.key === 'flashcards'
-                            ? 'Completed. Restart Mini Mock to review again.'
-                            : step.key === 'exam'
-                              ? 'Complete Practice Test and Flashcards first'
-                              : null
+                    const activeStepKey =
+                      isMiniLesson && 'activeStep' in selectedLessonData
+                        ? selectedLessonData.activeStep
                         : null;
+
+                    const isHighlighted = activeStepKey === step.key;
+
+                    const isClickable =
+                      !isMiniLesson ||
+                      isHighlighted ||
+                      (isMiniLesson &&
+                        step.key === 'exam' &&
+                        activeStepKey !== 'exam');
+
+                    const miniStateForCard =
+                      isMiniLesson && currentBank && selectedMini
+                        ? getMiniState(currentBank, attempts, selectedMini)
+                        : null;
+
+                    const isSkippedFlow =
+                      miniStateForCard?.practiceSkipped === true;
+                    
+                    const isExamFlow = miniStateForCard?.activeStep === 'exam';
+
+                    const isPracticeClosedAfterExam =
+                      isExamFlow &&
+                      step.key === 'practice' &&
+                      !miniStateForCard?.practiceSkipped &&
+                      !!miniStateForCard?.practiceMeta;
+
+                    const isFlashcardsSkippedAfterExam =
+                      isExamFlow &&
+                      step.key === 'flashcards' &&
+                      miniStateForCard?.flashcardsSkipped === true;
+
+                    const stepState:
+                      | 'active'
+                      | 'completed'
+                      | 'skipped'
+                      | 'locked' = (() => {
+                      if (!isMiniLesson || !activeStepKey) return 'locked';
+
+                      if (step.key === activeStepKey) return 'active';
+
+                      if (step.key === 'practice') {
+                        if (miniStateForCard?.practiceComplete)
+                          return 'completed';
+                        if (miniStateForCard?.practiceSkipped) return 'skipped';
+                      }
+
+                      if (step.key === 'flashcards') {
+                        if (miniStateForCard?.flashcardsComplete)
+                          return 'completed';
+                        if (miniStateForCard?.flashcardsSkipped)
+                          return 'skipped';
+                      }
+
+                      return 'locked';
+                    })();
+
+const lockedReason = isPracticeClosedAfterExam
+  ? 'Practice Test is closed after moving to the Mini Mock Exam. Restart this Mini Mock to return to Step 1.'
+  : isFlashcardsSkippedAfterExam
+    ? 'Flashcards were skipped. Restart this Mini Mock to unlock the full study flow again.'
+    : isSkippedFlow
+      ? step.key === 'practice'
+        ? 'Practice Test is locked after skipping. Restart this Mini Mock to begin again.'
+        : step.key === 'flashcards'
+          ? 'Flashcards are locked after skipping. Restart this Mini Mock to unlock them.'
+          : null
+      : step.key === 'practice' && stepState === 'completed'
+        ? 'Completed. Restart Mini Mock to retake.'
+        : step.key === 'flashcards'
+          ? 'Complete the Practice Test first.'
+          : step.key === 'exam'
+            ? 'Complete Practice Test and Flashcards first.'
+            : null;
+
+                    const canOpenStep =
+                      stepState === 'active' ||
+                      step.key === 'exam' ||
+                      (!isSkippedFlow && stepState === 'completed');
 
                     const className = cx(
                       'group relative rounded-3xl border p-5 transition focus:outline-none',
-                      stepState === 'active'
-                        ? 'hover:border-white/20 hover:bg-white/[0.04] cursor-pointer'
+                      canOpenStep
+                        ? 'cursor-pointer hover:border-white/20 hover:bg-white/[0.04]'
                         : stepState === 'completed'
                           ? 'opacity-75 cursor-default'
-                          : 'opacity-55 cursor-not-allowed saturate-75',
+                          : stepState === 'skipped'
+                            ? 'opacity-80 cursor-pointer'
+                            : 'opacity-55 cursor-not-allowed saturate-75',
                       isHighlighted
                         ? 'border-emerald-400/35 bg-emerald-500/10 shadow-[0_0_0_1px_rgba(45,212,191,0.16),0_0_24px_rgba(16,185,129,0.12)]'
-                        : stepState === 'locked'
-                          ? 'border-white/8 bg-black/30'
-                          : 'border-white/10 bg-black/20',
+                        : stepState === 'skipped'
+                          ? 'border-yellow-400/20 bg-yellow-400/5'
+                          : stepState === 'locked'
+                            ? 'border-white/8 bg-black/30'
+                            : 'border-white/10 bg-black/20',
                     );
 
                     const displayTitle =
@@ -1245,6 +1418,10 @@ export default function DashboardPage() {
                               ) : stepState === 'completed' ? (
                                 <div className="rounded-full border border-emerald-300/20 bg-emerald-400/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-200">
                                   Completed
+                                </div>
+                              ) : stepState === 'skipped' ? (
+                                <div className="rounded-full border border-yellow-400/20 bg-yellow-400/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-yellow-200/90">
+                                  Skipped
                                 </div>
                               ) : stepState === 'locked' ? (
                                 <div className="rounded-full border border-yellow-400/20 bg-yellow-400/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-yellow-200/90">
@@ -1283,11 +1460,20 @@ export default function DashboardPage() {
                               </div>
                             ) : (
                               <div className="text-yellow-300/78">
-                                {step.key === 'flashcards'
-                                  ? 'Complete Practice Test first.'
-                                  : step.key === 'exam'
-                                    ? 'Complete Practice Test and Flashcards first.'
-                                    : 'Locked until this step becomes active.'}
+                                {isPracticeClosedAfterExam
+                                  ? 'Practice Test is closed after moving to the Mini Mock Exam. Restart this Mini Mock to return to Step 1.'
+                                  : isFlashcardsSkippedAfterExam
+                                    ? 'Flashcards were skipped. Restart this Mini Mock to unlock the full study flow again.'
+                                    : isSkippedFlow && step.key === 'practice'
+                                      ? 'Practice Test is locked after skipping. Restart this Mini Mock to begin again.'
+                                      : isSkippedFlow &&
+                                          step.key === 'flashcards'
+                                        ? 'Flashcards are locked after skipping. Restart this Mini Mock to unlock them.'
+                                        : step.key === 'flashcards'
+                                          ? 'Flashcards are made from the questions you get wrong in the Practice Test. Complete the Practice Test first to generate your flashcards.'
+                                          : step.key === 'exam'
+                                            ? 'Complete Practice Test and Flashcards first.'
+                                            : 'Locked until this step becomes active.'}
                               </div>
                             )}
                           </div>
@@ -1315,13 +1501,49 @@ export default function DashboardPage() {
                         ? stepSectionId(selectedMini, step.key)
                         : undefined;
 
-                    if (stepState !== 'active') {
+                    if (!canOpenStep) {
+                      return (
+                        <button
+                          key={step.title}
+                          type="button"
+                          id={isHighlighted ? 'current-step-card' : undefined}
+                          data-step-id={stepCardId}
+                          className={`${className} text-left`}
+                          onClick={() => {
+                            if (lockedReason) {
+                              setLockedStepMessage(lockedReason);
+                            }
+                          }}
+                        >
+                          {content}
+
+                          {lockedReason ? (
+                            <div className="pointer-events-none absolute inset-0 hidden items-center justify-center rounded-3xl bg-black/72 px-5 text-center md:flex md:opacity-0 md:transition md:duration-200 group-hover:md:opacity-100">
+                              <div className="max-w-[220px] text-xs font-semibold leading-5 text-yellow-200">
+                                {lockedReason}
+                              </div>
+                            </div>
+                          ) : null}
+                        </button>
+                      );
+                    }
+
+                    if (step.key === 'exam' && stepState !== 'active') {
                       return (
                         <div
                           key={step.title}
+                          role="button"
+                          tabIndex={0}
                           id={isHighlighted ? 'current-step-card' : undefined}
                           data-step-id={stepCardId}
                           className={className}
+                          onClick={() => openSkipExamModal(step.href)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              openSkipExamModal(step.href);
+                            }
+                          }}
                         >
                           {content}
                         </div>
@@ -1436,6 +1658,62 @@ export default function DashboardPage() {
           </section>
         </div>
       </div>
+
+      {lockedStepMessage ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 md:hidden">
+          <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-zinc-900 p-6">
+            <h2 className="text-lg font-semibold text-white">Step Locked</h2>
+
+            <p className="mt-3 text-sm leading-6 text-white/70">
+              {lockedStepMessage}
+            </p>
+
+            <div className="mt-5 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setLockedStepMessage(null)}
+                className="rounded-lg bg-yellow-400 px-4 py-2 font-semibold text-black"
+              >
+                Got it
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {showSkipExamModal ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+          <div className="w-full max-w-md rounded-3xl border border-white/10 bg-[#0b0b0c] p-6 shadow-2xl">
+            <div className="text-lg font-semibold text-white">
+              Skip Ahead to Mini Mock Exam?
+            </div>
+
+            <p className="mt-3 text-sm leading-6 text-white/70">
+              You can skip ahead to the Mini Mock Exam, but without completing
+              the Practice Test and Flashcards first, your score may be lower
+              since your weak areas won’t be reviewed.
+            </p>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={closeSkipExamModal}
+                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/75 transition hover:bg-white/10"
+              >
+                Go Back
+              </button>
+
+              <button
+                type="button"
+                onClick={confirmSkipExam}
+                className="rounded-xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black transition hover:bg-yellow-300"
+              >
+                Continue to Mini Mock Exam
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }

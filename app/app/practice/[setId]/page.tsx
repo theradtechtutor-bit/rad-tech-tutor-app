@@ -302,6 +302,8 @@ export default function PracticeSetPage() {
   const [answeredCount, setAnsweredCount] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [missedCount, setMissedCount] = useState(0);
+  const [showSkipPracticeModal, setShowSkipPracticeModal] = useState(false);
+  const [pendingMockHref, setPendingMockHref] = useState<string | null>(null);
   const [freeAnsweredIds, setFreeAnsweredIds] = useState<string[]>([]);
   const [freeCorrectIds, setFreeCorrectIds] = useState<string[]>([]);
   const [freeMissedIds, setFreeMissedIds] = useState<string[]>([]);
@@ -1017,6 +1019,25 @@ export default function PracticeSetPage() {
                   Continue to Flashcards
                 </Link>
               </div>
+              {/* //disabling skip for now since we want to encourage users to review flashcards first, and skipping adds complexity around tracking mastery progress. We can revisit this later with a more robust solution for tracking mastery progress that isn't solely based on flashcard review. */}
+              {/* <button
+                onClick={() => {
+                  const href = `/app/mock-exam?qbank=${setId}&scope=mini&mini=${mini}&flow=mastery&autostart=1`;
+
+                  const practiceComplete = queueIds.length === 0;
+
+                  if (!practiceComplete) {
+                    setPendingMockHref(href);
+                    setShowSkipPracticeModal(true);
+                    return;
+                  }
+
+                  router.push(href);
+                }}
+                className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"
+              >
+                Skip to Mini Mock Exam
+              </button> */}
             </>
           ) : (
             <>
@@ -1244,7 +1265,7 @@ export default function PracticeSetPage() {
                 Save & Exit
               </button>
             </div>
-            <div>Keyboard: 1-4 or A-D • Enter = next</div>
+            {/* <div>Keyboard: 1-4 or A-D • Enter = next</div> */}
           </div>
         </div>
 
@@ -1320,12 +1341,47 @@ export default function PracticeSetPage() {
               </button>
             </div>
           </div>
-        ) : (
-          <div className="mt-4 text-xs text-white/55">
-            Pick an answer. Keyboard: 1-4 or A-D.
-          </div>
-        )}
+        ) : null}
       </div>
+      {showSkipPracticeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+          <div className="w-full max-w-md rounded-2xl bg-zinc-900 p-6">
+            <h2 className="text-lg font-semibold text-white">
+              Skip Practice Test?
+            </h2>
+
+            <p className="mt-3 text-sm text-white/70">
+              You haven’t completed the Practice Test yet. This may affect your
+              Mini Mock score. Are you sure you want to continue?
+            </p>
+
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                onClick={() => {
+                  setShowSkipPracticeModal(false);
+                  setPendingMockHref(null);
+                }}
+                className="rounded-lg bg-white/10 px-4 py-2 text-white"
+              >
+                Stay Here
+              </button>
+
+              <button
+                onClick={() => {
+                  const href = pendingMockHref;
+                  setShowSkipPracticeModal(false);
+                  setPendingMockHref(null);
+                  if (href) router.push(href);
+                }}
+                className="rounded-lg bg-yellow-400 px-4 py-2 font-semibold text-black"
+              >
+                Continue Anyway
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+

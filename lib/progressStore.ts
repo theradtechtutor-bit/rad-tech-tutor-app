@@ -754,54 +754,6 @@ export function getCategoryCumulative() {
   };
 }
 
-export function resetMiniMock(setId: string, miniId: number) {
-  if (typeof window === 'undefined') return;
-
-  try {
-    const storageSources = [window.localStorage, window.sessionStorage];
-
-    for (const storage of storageSources) {
-      for (let i = storage.length - 1; i >= 0; i -= 1) {
-        const key = storage.key(i);
-        if (!key) continue;
-
-        if (
-          key.startsWith(`rtt_practice_session_${setId}__all__all__${miniId}`)
-        ) {
-          storage.removeItem(key);
-          removeFromDB(key);
-          continue;
-        }
-
-        if (
-          key.startsWith(`rtt_flash_session_${setId}__missed__all__${miniId}`)
-        ) {
-          storage.removeItem(key);
-          removeFromDB(key);
-          continue;
-        }
-
-        if (key.startsWith(`rtt_mock_session_${setId}_mini_${miniId}`)) {
-          storage.removeItem(key);
-          removeFromDB(key);
-          continue;
-        }
-      }
-    }
-
-    const mastery = readBankMastery(setId);
-
-    if (mastery.miniStatus[String(miniId)]) {
-      delete mastery.miniStatus[String(miniId)];
-    }
-
-    writeJson(masteryKey(setId), mastery);
-    clearMasteryMiniStep(setId, miniId);
-
-    window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
-  } catch {}
-}
-
 export function saveMasteryMiniStep(
   setId: string,
   miniId: number,
@@ -823,5 +775,56 @@ export function readMasteryMiniStep(
 export function clearMasteryMiniStep(setId: string, miniId: number) {
   if (typeof window === 'undefined') return;
   removeKeyFromBoth(masteryStepKey(setId, miniId));
+  window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+}
+
+export function resetMiniMockFull(setId: string, miniId: number) {
+  if (typeof window === 'undefined') return;
+
+  const stepKey = `rtt_mastery_step_${setId}_${miniId}`;
+
+  for (const store of [window.localStorage, window.sessionStorage]) {
+    try {
+      const keys = Object.keys(store);
+
+      for (const key of keys) {
+        const isPracticeKey =
+          key.startsWith('rtt_practice_session_') &&
+          key.includes(setId) &&
+          key.includes(`__${miniId}`);
+
+        const isFlashKey =
+          key.startsWith('rtt_flash_session_') &&
+          key.includes(setId) &&
+          key.includes(`__${miniId}`);
+
+        const isMockKey =
+          key.startsWith('rtt_mock_session_') &&
+          key.includes(setId) &&
+          (key.includes(`_mini_${miniId}_`) || key.includes(`_${miniId}_`));
+
+        const isMockResultsKey =
+          key.startsWith('rtt_mock_results_') &&
+          key.includes(setId) &&
+          (key.includes(`_mini_${miniId}_`) || key.includes(`_${miniId}_`));
+
+        if (isPracticeKey || isFlashKey || isMockKey || isMockResultsKey) {
+          store.removeItem(key);
+          removeFromDB(key);
+        }
+      }
+
+      store.removeItem(stepKey);
+      removeFromDB(stepKey);
+    } catch {}
+  }
+
+  const mastery = readBankMastery(setId);
+
+  if (mastery.miniStatus[String(miniId)]) {
+    delete mastery.miniStatus[String(miniId)];
+    writeJson(masteryKey(setId), mastery);
+  }
+
   window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
 }

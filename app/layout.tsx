@@ -23,9 +23,9 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <footer className="border-t border-white/10 px-6 py-4 text-center text-xs text-white/45">
           <div>
-            Disclaimer: The Rad Tech Tutor LLC provides original ARRT-style
-            practice questions and educational materials created by Rad Tech
-            Tutor. The ARRT® is a registered trademark of The American Registry
+            Disclaimer: The Rad Tech Tutor LLC provides original ARRT®-style
+            practice questions and educational materials created by The Rad Tech
+            Tutor LLC. The ARRT® is a registered trademark of The American Registry
             of Radiologic Technologists and is not affiliated with this
             platform.
           </div>

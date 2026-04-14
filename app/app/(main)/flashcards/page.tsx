@@ -152,6 +152,8 @@ function FlashcardsPageInner() {
   const [cursor, setCursor] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [hasSavedSession, setHasSavedSession] = useState(false);
+  const [showMockSkipModal, setShowMockSkipModal] = useState(false);
+  const [pendingMockHref, setPendingMockHref] = useState<string | null>(null);
   const deckAnchorRef = useRef<HTMLDivElement | null>(null);
   const savePromptRef = useRef<HTMLDivElement | null>(null);
   const hasScrolledToSavePromptRef = useRef(false);
@@ -435,7 +437,7 @@ if (session || reviewedCount === 0) return;
   }
 
   const emptyText = masteryMode
-    ? 'Flashcards Complete. Your next step is the associated Mini Mock Exam in the RTT Mastery Method.'
+    ? 'Flashcards complete. Now apply what you reviewed in the Mini Mock Exam.'
     : mode === 'missed'
       ? 'No missed-question flashcards yet. Only questions missed on Practice Tests should show up here.'
       : 'No flashcards found.';
@@ -460,7 +462,9 @@ if (session || reviewedCount === 0) return;
 
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <div className="text-sm text-white/60">Flashcards • {titleForSetId(setId)}</div>
+          <div className="text-sm text-white/60">
+            Flashcards • {titleForSetId(setId)}
+          </div>
           <h1 className="mt-1 text-3xl font-semibold tracking-tight text-white">
             {masteryMode
               ? 'RTT Mastery Flashcards'
@@ -490,7 +494,11 @@ if (session || reviewedCount === 0) return;
                     const num = isMini ? Number(option.key.split('-')[1]) : 0;
                     const locked = isMini && num > 5 && !isPro;
                     return (
-                      <option key={option.key} value={option.key} disabled={locked}>
+                      <option
+                        key={option.key}
+                        value={option.key}
+                        disabled={locked}
+                      >
                         {locked ? `${option.label} PRO 🔒` : option.label}
                       </option>
                     );
@@ -520,16 +528,25 @@ if (session || reviewedCount === 0) return;
                 All Flashcards
               </Link>
 
-              <Link
-                href={
-                  selectedMini !== 'all'
-                    ? `/app/mock-exam?qbank=${setId}&scope=mini&mini=${selectedMini}&flow=free`
-                    : `/app/mock-exam?qbank=${setId}&scope=mini&flow=free`
-                }
+              <button
+                onClick={() => {
+                  const href =
+                    selectedMini !== 'all'
+                      ? `/app/mock-exam?qbank=${setId}&scope=mini&mini=${selectedMini}&flow=free`
+                      : `/app/mock-exam?qbank=${setId}&scope=mini&flow=free`;
+
+                  if (deck.length > 0) {
+                    setPendingMockHref(href);
+                    setShowMockSkipModal(true);
+                    return;
+                  }
+
+                  router.push(href);
+                }}
                 className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
               >
                 Mini Mock Exam
-              </Link>
+              </button>
             </>
           )}
         </div>
@@ -537,11 +554,17 @@ if (session || reviewedCount === 0) return;
 
       {masteryMode ? (
         <div className="mt-6">
-          <MasteryFlowSteps currentStep={2} currentBankLabel={titleForSetId(setId)} currentMini={mini} />
+          <MasteryFlowSteps
+            currentStep={2}
+            currentBankLabel={titleForSetId(setId)}
+            currentMini={mini}
+          />
         </div>
       ) : null}
 
-      {!session && reviewedCount >= Math.min(8, Math.ceil((deck.length + mastered.length) * 0.6)) ? (
+      {!session &&
+      reviewedCount >=
+        Math.min(8, Math.ceil((deck.length + mastered.length) * 0.6)) ? (
         <div ref={savePromptRef} className="mt-4">
           <SaveProgressPrompt
             nextPath={`${pathname}?${sp?.toString() || ''}`}
@@ -555,31 +578,53 @@ if (session || reviewedCount === 0) return;
         Progress saves on this device now. Sign in to save your study progress across devices later.
       </div> */}
 
-
       <div className="mt-6 grid gap-4 md:grid-cols-[300px_1fr]">
         <div className="space-y-4">
-          <div data-tour="flash-actions" className="rounded-3xl border border-white/10 bg-white/5 p-5">
+          <div
+            data-tour="flash-actions"
+            className="rounded-3xl border border-white/10 bg-white/5 p-5"
+          >
             <div className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">
               How flashcards work
             </div>
             <div className="mt-3 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/70">
-              Miss a concept and it starts in <span className="font-semibold text-red-200">Needs Work</span>. Each time you get it right, it moves forward:
+              Miss a concept and it starts in{' '}
+              <span className="font-semibold text-red-200">Needs Work</span>.
+              Each time you get it right, it moves forward:
               <div className="mt-2 text-white/60">
                 Needs Work → Getting Better → Almost Locked In → Mastered
               </div>
             </div>
             <div className="mt-4 grid gap-2">
-              <div className={`rounded-2xl border px-3 py-3 text-sm ${stackTileClass('missed')}`}>
-                Needs Work <span className="float-right font-semibold">{counts.missed}</span>
+              <div
+                className={`rounded-2xl border px-3 py-3 text-sm ${stackTileClass('missed')}`}
+              >
+                Needs Work{' '}
+                <span className="float-right font-semibold">
+                  {counts.missed}
+                </span>
               </div>
-              <div className={`rounded-2xl border px-3 py-3 text-sm ${stackTileClass('yellow')}`}>
-                Getting Better <span className="float-right font-semibold">{counts.yellow}</span>
+              <div
+                className={`rounded-2xl border px-3 py-3 text-sm ${stackTileClass('yellow')}`}
+              >
+                Getting Better{' '}
+                <span className="float-right font-semibold">
+                  {counts.yellow}
+                </span>
               </div>
-              <div className={`rounded-2xl border px-3 py-3 text-sm ${stackTileClass('green')}`}>
-                Almost Locked In <span className="float-right font-semibold">{counts.green}</span>
+              <div
+                className={`rounded-2xl border px-3 py-3 text-sm ${stackTileClass('green')}`}
+              >
+                Almost Locked In{' '}
+                <span className="float-right font-semibold">
+                  {counts.green}
+                </span>
               </div>
-              <div className={`rounded-2xl border px-3 py-3 text-sm ${stackTileClass('gold')}`}>
-                Mastered <span className="float-right font-semibold">{counts.gold}</span>
+              <div
+                className={`rounded-2xl border px-3 py-3 text-sm ${stackTileClass('gold')}`}
+              >
+                Mastered{' '}
+                <span className="float-right font-semibold">{counts.gold}</span>
               </div>
             </div>
             <div className="mt-4 text-xs text-white/50">
@@ -600,12 +645,22 @@ if (session || reviewedCount === 0) return;
               <div>{emptyText}</div>
               {masteryMode ? (
                 <div className="mt-4">
-                  <Link
-                    href={`/app/mock-exam?qbank=${setId}&scope=mini&mini=${mini}&flow=mastery&autostart=1`}
+                  <button
+                    onClick={() => {
+                      const href = `/app/mock-exam?qbank=${setId}&scope=mini&mini=${mini}&flow=mastery&autostart=1`;
+
+                      if (deck.length > 0) {
+                        setPendingMockHref(href);
+                        setShowMockSkipModal(true);
+                        return;
+                      }
+
+                      router.push(href);
+                    }}
                     className="inline-flex rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
                   >
-                    Continue to Mini Mock Exam
-                  </Link>
+                    Start Mini Mock Exam
+                  </button>
                 </div>
               ) : null}
             </div>
@@ -615,11 +670,15 @@ if (session || reviewedCount === 0) return;
                 <div className="text-sm text-white/60">
                   Card {cursor + 1} of {deck.length}
                 </div>
-                <div className="text-xs text-white/50">{cardCategory(card)}</div>
+                <div className="text-xs text-white/50">
+                  {cardCategory(card)}
+                </div>
               </div>
 
               <div className="mt-3">
-                <div className="text-xs text-white/55">Tap card or press Flip to reveal answer</div>
+                <div className="text-xs text-white/55">
+                  Tap card or press Flip to reveal answer
+                </div>
               </div>
 
               <button
@@ -654,7 +713,9 @@ if (session || reviewedCount === 0) return;
                 <div className="grid grid-cols-2 gap-2 md:justify-self-start">
                   <button
                     onClick={() =>
-                      setCursor((i) => (deck.length ? (i - 1 + deck.length) % deck.length : 0))
+                      setCursor((i) =>
+                        deck.length ? (i - 1 + deck.length) % deck.length : 0,
+                      )
                     }
                     className="w-full rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"
                   >
@@ -663,7 +724,9 @@ if (session || reviewedCount === 0) return;
 
                   <button
                     onClick={() =>
-                      setCursor((i) => (deck.length ? (i + 1) % deck.length : 0))
+                      setCursor((i) =>
+                        deck.length ? (i + 1) % deck.length : 0,
+                      )
                     }
                     className="w-full rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"
                   >
@@ -684,7 +747,9 @@ if (session || reviewedCount === 0) return;
                         mastered,
                         savedAt: Date.now(),
                       });
-                      router.push(masteryMode ? '/app/dashboard' : '/app/practice');
+                      router.push(
+                        masteryMode ? '/app/dashboard' : '/app/practice',
+                      );
                     }}
                     className="w-full cursor-pointer rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"
                   >
@@ -711,6 +776,45 @@ if (session || reviewedCount === 0) return;
           )}
         </div>
       </div>
+      {showMockSkipModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+          <div className="w-full max-w-md rounded-2xl bg-zinc-900 p-6">
+            <h2 className="text-lg font-semibold text-white">
+              Skip Ahead to Mini Mock Exam?
+            </h2>
+
+            <p className="mt-3 text-sm text-white/70">
+              You can skip ahead to the Mini Mock Exam, but without completing
+              the Practice Test and Flashcards first, your score may be lower
+              since your weak areas won’t be reviewed.
+            </p>
+
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                onClick={() => {
+                  setShowMockSkipModal(false);
+                  setPendingMockHref(null);
+                }}
+                className="rounded-lg bg-white/10 px-4 py-2 text-white"
+              >
+                Stay Here
+              </button>
+
+              <button
+                onClick={() => {
+                  const href = pendingMockHref;
+                  setShowMockSkipModal(false);
+                  setPendingMockHref(null);
+                  if (href) router.push(href);
+                }}
+                className="rounded-lg bg-yellow-400 px-4 py-2 font-semibold text-black"
+              >
+                Continue Anyway
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

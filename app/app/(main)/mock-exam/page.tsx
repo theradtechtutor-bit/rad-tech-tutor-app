@@ -1239,25 +1239,25 @@ function MockExamPageInner() {
             >
               Continue RTT Mastery Method
             </Link>
-            {scope === 'mini' ? (
+            {/* {scope === 'mini' ? (
               // <button
               //   onClick={startNew}
               //   className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"
               // >
               //   Retake Mini Mock Exam
               // </button>
-              <button
-                // onClick={() => {
-                //   const params = new URLSearchParams(window.location.search);
-                //   params.delete('done'); // remove results state
-                //   window.location.href = `${window.location.pathname}?${params.toString()}`;
-                // }}
-                onClick={startNew}
-                className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"
-              >
-                Retake Mini Mock Exam
-              </button>
-            ) : null}
+              // <button
+              //   // onClick={() => {
+              //   //   const params = new URLSearchParams(window.location.search);
+              //   //   params.delete('done'); // remove results state
+              //   //   window.location.href = `${window.location.pathname}?${params.toString()}`;
+              //   // }}
+              //   onClick={startNew}
+              //   className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"
+              // >
+              //   Retake Mini Mock Exam
+              // </button>
+             ) : null} */}
             <Link
               href="/app/roadmap"
               className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"
@@ -1461,8 +1461,8 @@ function MockExamPageInner() {
               <div>
                 Progress: {Object.keys(answers).length} / {total}
               </div>
-              <div>Correct: {Object.keys(answers).length - missed.size}</div>
-              <div>Missed: {missed.size}</div>
+              {/* <div>Correct: {Object.keys(answers).length - missed.size}</div> */}
+              {/* <div>Missed: {missed.size}</div> */}
             </div>
           </div>
 
@@ -1470,7 +1470,7 @@ function MockExamPageInner() {
             <div className="rounded-xl border border-yellow-400/20 bg-yellow-400/10 px-3 py-2 text-sm font-semibold text-yellow-300">
               Time Remaining: {formatTime(timeLeft)}
             </div>
-            <div>Keyboard: A-D • Enter = submit</div>
+            {/* <div>Keyboard: A-D • Enter = submit</div> */}
           </div>
         </div>
 
