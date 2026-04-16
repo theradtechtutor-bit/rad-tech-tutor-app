@@ -716,7 +716,7 @@ Correct Answer:
   B
 
 Current explanation:
-  {'whyCorrect': 'Patient part thickness is correct for this question.', 'whyIncorrect': {'A': 'Radiation dose is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Patient BMI is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Patient overall body weight IMAGE PRODUCTION Questions 54–103 is not the best answer because it refers to a different concept than the one tested here.'}}
+  {'whyCorrect': 'Patient part thickness is correct for this question.', 'whyIncorrect': {'A': 'Radiation dose is not the best answer because it refers to a different concept than the one tested here.', 'C': 'Patient BMI is not the best answer because it refers to a different concept than the one tested here.', 'D': 'Patient overall body weight is not the best answer because it refers to a different concept than the one tested here.'}}
 
 ====================================================================================================
 QUESTION #59

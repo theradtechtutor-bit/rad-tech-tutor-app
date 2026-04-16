@@ -14,7 +14,8 @@ const ALLOWED_PATHS = [
 ];
 
 const MESSAGE =
-  '🩻 Practice. Fix mistakes. Repeat. Score higher. Pass the Radiology ARRT®  with confidence.';
+  '🚀 Follow the system. 1–2 Mini Mocks/day → finish all banks + full exams to pass the ARRT® in as little as 30 days';
+  // '🩻 Practice. Fix mistakes. Repeat. Score higher. Pass the Radiology ARRT®  with confidence.';
   // '🚧 Improving daily based on real student feedback. We’re aware of a few issues and working to resolve them soon. Your core study tools should still work smoothly. We appreciate your patience. 🚧';
 
 export default function BetaBanner() {

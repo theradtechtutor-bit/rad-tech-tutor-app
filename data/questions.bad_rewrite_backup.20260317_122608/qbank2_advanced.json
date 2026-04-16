@@ -1100,7 +1100,7 @@
       "A": "Secondary protective barrier",
       "B": "Primary protective barrier",
       "C": "Lead-apron equivalent structure",
-      "D": "Tertiary protective barrier IMAGE PRODUCTION Questions 54–103"
+      "D": "Tertiary protective barrier"
     },
     "correctAnswer": "A",
     "explanation": {
@@ -1108,7 +1108,7 @@
       "whyIncorrect": {
         "B": "Primary protective barrier is not the best answer because it refers to a different concept than the one tested here.",
         "C": "Lead-apron equivalent structure is not the best answer because it refers to a different concept than the one tested here.",
-        "D": "Tertiary protective barrier IMAGE PRODUCTION Questions 54–103 is not the best answer because it refers to a different concept than the one tested here."
+        "D": "Tertiary protective barrier is not the best answer because it refers to a different concept than the one tested here."
       }
     }
   },

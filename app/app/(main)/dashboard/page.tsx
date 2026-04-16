@@ -1,31 +1,28 @@
 'use client';
 
-import {
-  readFlashSession,
-  readMasteryMiniStep,
-  readPracticeSession,
-} from '@/lib/progressStore';
-
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import StartHereTour from '@/app/app/_components/StartHereTour';
 import { usePro } from '@/app/app/_lib/usePro';
 import {
+  readFlashSession,
+  readMasteryMiniStep,
+  readPracticeSession,
+  readFullQbankMastery,
+  readFullQbankStep,
   getBankMasterySummary,
   resetMiniMockFull,
+  resetFullQbank,
   getCategoryCumulative,
   getMasterySummary,
   readAttempts,
+  saveFullQbankStep,
 } from '@/lib/progressStore';
 
 const BANKS = ['qbank1', 'qbank2', 'qbank3'] as const;
 
 type BankId = (typeof BANKS)[number];
-type LessonKey =
-  | `mini-${number}`
-  | 'full-practice'
-  | 'full-flashcards'
-  | 'full-mock';
+type LessonKey = `mini-${number}` | 'full-qbank';
 
 type Attempts = ReturnType<typeof readAttempts>;
 type Summary = ReturnType<typeof getMasterySummary>;
@@ -133,6 +130,73 @@ function getSavedPracticeMeta(setId: string, mini: number) {
       savedAt: Number(parsed?.savedAt || 0),
     };
   }
+
+  return null;
+}
+
+function getSavedFullPracticeMeta(setId: string) {
+  if (typeof window === 'undefined') return null;
+
+const keys = [
+  `mastery__${setId}__FULL`,
+  `mastery__${setId}__all__all__full`,
+  `${setId}__all__all__full`,
+];
+
+let parsed = null;
+
+for (const key of keys) {
+  const attempt = readPracticeSession(key);
+  if (attempt) {
+    parsed = attempt;
+    break;
+  }
+}
+
+if (!parsed) return null;  if (!parsed) return null;
+
+  return {
+    answeredCount: Number(parsed?.answeredCount || 0),
+    total:
+      Number(parsed?.totalCount || 0) ||
+      Number(
+        (parsed?.answeredCount || 0) + ((parsed?.queueIds || []).length || 0),
+      ),
+    currentId: parsed?.currentId || null,
+    queueIds: Array.isArray(parsed?.queueIds) ? parsed.queueIds : [],
+    savedAt: Number(parsed?.savedAt || 0),
+  };
+}
+
+function getSavedFullMockSessionMeta(setId: string) {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const storageSources = [window.localStorage, window.sessionStorage];
+    const prefix = `rtt_mock_session_mastery_${setId}_full_0_`;
+
+    for (const storage of storageSources) {
+      for (let i = 0; i < storage.length; i++) {
+        const key = storage.key(i);
+        if (!key) continue;
+        if (!key.startsWith(prefix)) continue;
+
+        const raw = storage.getItem(key);
+        if (!raw) continue;
+
+        const parsed = JSON.parse(raw);
+        return {
+          answeredCount:
+            Number(
+              parsed?.answeredCount ??
+                Object.keys(parsed?.answers || {}).length,
+            ) || 0,
+          total: Array.isArray(parsed?.questions) ? parsed.questions.length : 0,
+          key,
+        };
+      }
+    }
+  } catch {}
 
   return null;
 }
@@ -318,16 +382,9 @@ function lessonForCurrentProgress(
   summary: Summary,
   bank: BankSummary,
 ): LessonKey {
-  if (bank.bankMastered) {
-    if (summary.flashRemaining > 0) return 'full-flashcards';
-    const attempts = readAttempts();
-    const hasFull = attempts.some(
-      (item) =>
-        item.type === 'full' &&
-        item.bankId === Number(bank.setId.replace('qbank', '')),
-    );
-    return hasFull ? 'full-mock' : 'full-practice';
-  }
+if (bank.bankMastered) {
+  return 'full-qbank';
+}
   return `mini-${bank.currentMini}`;
 }
 
@@ -460,7 +517,13 @@ const flashcardsSkipped = miniState.flashcardsSkipped;
     <div
       role="button"
       tabIndex={0}
-      onClick={onSelect}
+      onClick={() => {
+        if (isLocked) {
+          window.location.href = '/app/upgrade';
+          return;
+        }
+        onSelect();
+      }}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -674,6 +737,331 @@ const flashcardsSkipped = miniState.flashcardsSkipped;
   );
 }
 
+function SidebarFullQbank({
+  bank,
+  isActive,
+  isPro,
+  onSelect,
+  onStart,
+  onResume,
+  onRestart,
+}: {
+  bank: BankSummary;
+  isActive: boolean;
+  isPro: boolean; // ✅ ADD THIS LINE
+
+  onSelect: () => void;
+  onStart: () => void;
+  onResume: () => void;
+  onRestart: () => void;
+}) {
+  const full = readFullQbankMastery(bank.setId);
+  const isLocked = !isPro;
+  const savedStep = readFullQbankStep(bank.setId);
+  const practiceMeta = getSavedFullPracticeMeta(bank.setId);
+
+  const flashMeta = readFlashSession(`${bank.setId}__missed__all__full`);
+  const examMeta = getSavedFullMockSessionMeta(bank.setId);
+  const examAnswered = Number(examMeta?.answeredCount || 0);
+  const examTotal = Number(examMeta?.total || 0);
+  const examInProgress = savedStep === 'exam';
+
+  const practiceComplete = full.practice.completed;
+  const practiceAnswered = Number(practiceMeta?.answeredCount || 0);
+  const practiceTotal = Number(practiceMeta?.total || 0);
+  const flashcardsComplete = full.flashcards.completed;
+  const completed = full.exam.completed;
+  console.log('FULL MOCK STATE:', {
+    completed,
+    lastScore: full.exam.lastScore,
+    exam: full.exam,
+  });
+
+  const practiceSkipped = examInProgress && !practiceComplete && !practiceMeta;
+  const flashcardsSkipped = examInProgress && !flashcardsComplete && !flashMeta;
+
+  const hasStarted =
+    completed ||
+    practiceComplete ||
+    flashcardsComplete ||
+    !!practiceMeta ||
+    !!examMeta ||
+    savedStep === 'practice' ||
+    savedStep === 'flashcards' ||
+    savedStep === 'exam';
+
+  const showStart = !isLocked && !hasStarted;
+  const showResume = !isLocked && hasStarted && !completed;
+  const showRestart = !isLocked && hasStarted;
+
+const activeStep: StepKey = completed
+  ? 'exam'
+  : savedStep === 'exam'
+    ? 'exam'
+    : flashcardsComplete || savedStep === 'flashcards'
+      ? 'flashcards'
+      : 'practice';
+
+  const practicePct =
+    practiceMeta && practiceTotal > 0
+      ? Math.max(
+          0,
+          Math.min(100, Math.round((practiceAnswered / practiceTotal) * 100)),
+        )
+      : practiceComplete
+        ? 100
+        : 0;
+
+  const flashPct = flashcardsComplete ? 100 : 0;
+  const examPct = completed
+    ? 100
+    : examMeta && examTotal > 0
+      ? Math.max(0, Math.min(100, Math.round((examAnswered / examTotal) * 100)))
+      : 0;
+
+  const totalStagePct = completed
+    ? 100
+    : Math.round(
+        Math.min(99, practicePct * 0.34 + flashPct * 0.33 + examPct * 0.33),
+      );
+
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={() => {
+        if (isLocked) {
+          window.location.href = '/app/upgrade';
+          return;
+        }
+        onSelect();
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+
+          if (isLocked) {
+            window.location.href = '/app/upgrade';
+            return;
+          }
+
+          onSelect();
+        }
+      }}
+      className={cx(
+        'cursor-pointer rounded-2xl border transition',
+        isActive
+          ? 'border-yellow-400/40 bg-yellow-500/10 shadow-[0_0_0_1px_rgba(250,204,21,0.18)]'
+          : 'border-transparent bg-white/[0.03] hover:border-white/10 hover:bg-white/[0.05]',
+      )}
+    >
+      <div className="px-3 py-3">
+        <div className="flex items-center gap-3">
+          <div
+            className={cx(
+              'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold',
+              completed
+                ? 'bg-yellow-400/20 text-yellow-300'
+                : isActive
+                  ? 'bg-yellow-400/15 text-yellow-300'
+                  : 'bg-yellow-400/10 text-yellow-200/70',
+            )}
+          >
+            {completed ? '✓' : '★'}
+          </div>
+
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 truncate text-sm font-semibold text-white">
+                <span className="truncate text-yellow-300">
+                  Full Mock
+                  {isLocked && (
+                    <span className="ml-2 text-yellow-400">PRO 🔒</span>
+                  )}
+                </span>
+
+                <span className="ml-2 rounded-full bg-yellow-400/20 px-2 py-0.5 text-[10px] font-semibold text-yellow-300">
+                  200Qs
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {showRestart ? (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (isLocked) {
+                        window.location.href = '/app/upgrade';
+                        return;
+                      }
+                      onRestart();
+                    }}
+                    className="shrink-0 rounded-md bg-red-500/20 px-2 py-1 text-[10px] font-semibold text-red-300 hover:bg-red-500/30"
+                  >
+                    Restart
+                  </button>
+                ) : null}
+
+                {showResume ? (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (isLocked) {
+                        window.location.href = '/app/upgrade';
+                        return;
+                      }
+                      onResume();
+                    }}
+                    className="xl:hidden rounded-full border border-yellow-300/25 bg-yellow-400/10 px-2 py-0.5 text-[10px] font-semibold text-yellow-200"
+                  >
+                    Resume
+                  </button>
+                ) : null}
+
+                {showStart ? (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (isLocked) {
+                        window.location.href = '/app/upgrade';
+                        return;
+                      }
+                      onStart();
+                    }}
+                    className="xl:hidden rounded-full border border-yellow-300/25 bg-yellow-400/10 px-2 py-0.5 text-[10px] font-semibold text-yellow-200"
+                  >
+                    Start
+                  </button>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-black/25">
+              <div
+                className="h-full rounded-full bg-[linear-gradient(90deg,rgba(250,204,21,0.95),rgba(234,179,8,0.65))]"
+                style={{ width: `${totalStagePct}%` }}
+              />
+            </div>
+
+            {isActive ? (
+              <div className="mt-3 space-y-3 text-xs text-white/65">
+                <div>
+                  <div className="mb-1 flex items-center justify-between gap-2">
+                    <span>Practice Test</span>
+                    {practiceMeta ? (
+                      <span className="font-semibold text-yellow-300">
+                        {practiceAnswered} / {practiceTotal}
+                      </span>
+                    ) : practiceComplete ? (
+                      <span className="font-semibold text-yellow-300">
+                        Complete
+                      </span>
+                    ) : practiceSkipped ? (
+                      <span className="font-semibold text-yellow-300">
+                        Skipped
+                      </span>
+                    ) : (
+                      <span className="text-white/40">Not started</span>
+                    )}
+                  </div>
+                  <div className="h-1.5 overflow-hidden rounded-full bg-black/25">
+                    <div
+                      className="h-full rounded-full bg-yellow-300/80"
+                      style={{ width: `${practicePct}%` }}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="mb-1 flex items-center justify-between gap-2">
+                    <span>Missed Flashcards</span>
+                    {flashcardsComplete ? (
+                      <span className="font-semibold text-yellow-300">
+                        Complete
+                      </span>
+                    ) : flashMeta ? (
+                      <span className="font-semibold text-yellow-300">
+                        In progress
+                      </span>
+                    ) : flashcardsSkipped ? (
+                      <span className="font-semibold text-yellow-300">
+                        Skipped
+                      </span>
+                    ) : savedStep === 'flashcards' ? (
+                      <span className="font-semibold text-yellow-300">
+                        In progress
+                      </span>
+                    ) : (
+                      <span className="text-white/40">Not started</span>
+                    )}
+                  </div>
+                  <div className="h-1.5 overflow-hidden rounded-full bg-black/25">
+                    <div
+                      className="h-full rounded-full bg-yellow-300/80"
+                      style={{ width: `${flashPct}%` }}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <div className="mb-1 flex items-center justify-between gap-2">
+                    <span>Full Mock Exam</span>
+                    {completed ? (
+                      <span className="font-semibold text-yellow-300">
+                        Complete
+                        {full.exam.lastScore != null
+                          ? ` • ${full.exam.lastScore}%`
+                          : ''}
+                      </span>
+                    ) : examMeta ? (
+                      <span className="font-semibold text-yellow-300">
+                        {examAnswered} / {examTotal}
+                      </span>
+                    ) : savedStep === 'exam' ? (
+                      <span className="font-semibold text-yellow-300">
+                        In progress
+                      </span>
+                    ) : (
+                      <span className="text-white/40">Not started</span>
+                    )}
+                  </div>
+                  <div className="h-1.5 overflow-hidden rounded-full bg-black/25">
+                    <div
+                      className="h-full rounded-full bg-yellow-300/80"
+                      style={{ width: `${examPct}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-white/55">
+                {practiceComplete ? (
+                  <span>Practice: Done</span>
+                ) : practiceSkipped ? (
+                  <span className="text-yellow-300">Practice: Skipped</span>
+                ) : null}
+
+                {flashcardsComplete ? (
+                  <span>Flashcards: Done</span>
+                ) : flashcardsSkipped ? (
+                  <span className="text-yellow-300">Flashcards: Skipped</span>
+                ) : null}
+                {completed ? (
+                  <span className="font-semibold text-yellow-300">
+                    Complete
+                  </span>
+                ) : null}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function hasSavedPracticeSession(setId: string, mini?: number) {
   if (typeof window === 'undefined') return false;
 
@@ -721,6 +1109,13 @@ function handleRestartMini(mini: number) {
   setSelectedLesson(`mini-${mini}`);
 }
 
+  function handleRestartFull() {
+    if (!currentBank) return;
+
+    resetFullQbank(currentBank.setId);
+    setSelectedLesson('full-qbank');
+  }
+
   function openSkipExamModal(href: string) {
     setPendingExamHref(href);
     setShowSkipExamModal(true);
@@ -731,11 +1126,15 @@ function handleRestartMini(mini: number) {
     setPendingExamHref(null);
   }
 
-  function confirmSkipExam() {
-    if (pendingExamHref) {
-      window.location.href = pendingExamHref;
-    }
+function confirmSkipExam() {
+  if (!pendingExamHref) return;
+
+  if (selectedLesson === 'full-qbank' && currentBank) {
+    saveFullQbankStep(currentBank.setId, 'exam');
   }
+
+  window.location.href = pendingExamHref;
+}
 
   const [pendingScrollTarget, setPendingScrollTarget] = useState<string | null>(
     null,
@@ -781,9 +1180,7 @@ useEffect(() => {
   const nextLesson = lessonForCurrentProgress(summary, currentBank);
   const lockedFullPhase =
     !isPro &&
-    (nextLesson === 'full-practice' ||
-      nextLesson === 'full-flashcards' ||
-      nextLesson === 'full-mock');
+    (nextLesson === 'full-qbank');
 
   const fallbackLesson = lockedFullPhase
     ? (`mini-${currentBank.currentMini}` as LessonKey)
@@ -799,9 +1196,7 @@ useEffect(() => {
     selectedMiniNumber <= 10;
 
   const isSelectedFullPhase =
-    selectedLesson === 'full-practice' ||
-    selectedLesson === 'full-flashcards' ||
-    selectedLesson === 'full-mock';
+    selectedLesson === 'full-qbank';
 
   if (selectedLesson.startsWith('mini-') && isSelectedMiniValid) {
     return;
@@ -851,57 +1246,53 @@ useEffect(() => {
       };
     }
 
-    if (selectedLesson === 'full-practice') {
-      return {
-        subtitle: 'Phase 2 — Full Practice',
-        title: 'Full Practice Test',
-        description:
-          'Take a full-bank practice test to measure readiness before moving into the final review and registry simulation.',
-        steps: [
-          {
-            key: 'practice' as const,
-            title: 'Full Practice Test',
-            body: 'Run a full-length practice test across the bank.',
-            href: `/app/practice/${currentBank.setId}?mode=all&cat=all`,
-            badge: 'Phase 2',
-          },
-        ],
-      };
-    }
+if (selectedLesson === 'full-qbank') {
+  const full = readFullQbankMastery(currentBank.setId);
+  const savedStep = readFullQbankStep(currentBank.setId);
 
-    if (selectedLesson === 'full-flashcards') {
-      return {
-        subtitle: 'Phase 2 — Full Practice',
-        title: 'Full-Test Flashcards',
-        description:
-          'Review the full-bank missed concepts deck before moving into the final mock.',
-        steps: [
-          {
-            key: 'flashcards' as const,
-            title: 'Full-Test Flashcards',
-            body: 'Review missed concepts from the full-bank practice.',
-            href: `/app/flashcards?set=${currentBank.setId}&mode=missed&cat=all`,
-            badge: 'Review',
-          },
-        ],
-      };
-    }
+const steps = [
+  {
+    key: 'practice' as const,
+    title: 'Step 1 — Full Practice Test',
+    body: 'Take a full-bank practice test to measure readiness.',
+    href: `/app/practice/${currentBank.setId}?mode=all&cat=all&flow=mastery&scope=full`,
+    badge: 'Start here',
+  },
+  {
+    key: 'flashcards' as const,
+    title: 'Step 2 — Missed Flashcards',
+    body: 'Review the missed concepts from your full practice test.',
+    href: `/app/flashcards?set=${currentBank.setId}&mode=missed&cat=all&flow=mastery&scope=full`,
+    badge: 'Review',
+  },
+  {
+    key: 'exam' as const,
+    title: 'Step 3 — Full Mock Exam',
+    body: 'Take the final full-length registry simulation.',
+    href: `/app/mock-exam?qbank=${currentBank.setId}&scope=full&flow=mastery&autostart=1`,
+    badge: 'Final',
+  },
+];
 
-    return {
-      subtitle: 'Phase 3 — Registry Simulation',
-      title: 'Full Mock Exam',
-      description:
-        'Complete the full registry simulation and use the score to judge final exam readiness.',
-      steps: [
-        {
-          key: 'exam' as const,
-          title: 'Full Mock Exam',
-          body: 'Take the final full-length registry simulation.',
-          href: `/app/mock-exam?qbank=${currentBank.setId}&scope=full&flow=mastery&autostart=1`,
-          badge: 'Final',
-        },
-      ],
-    };
+let activeStep: StepKey = 'practice';
+
+if (savedStep === 'exam' || full.exam.completed) {
+  activeStep = 'exam';
+} else if (savedStep === 'flashcards' || full.flashcards.completed) {
+  activeStep = 'flashcards';
+} else {
+  activeStep = 'practice';
+}
+
+  return {
+    subtitle: 'Full QBank Mastery',
+    title: 'Full QBank Mock',
+    description:
+      'Complete full practice, review your misses, then take the full mock exam.',
+    steps,
+    activeStep,
+  };
+}
   }, [currentBank, selectedLesson, selectedMini, summary, attempts]);
 
   useEffect(() => {
@@ -1030,12 +1421,20 @@ useEffect(() => {
               <div className="flex w-full max-w-[380px] flex-col gap-3">
                 {bankSummaries.map((bank, idx) => {
                   const locked = idx > 0 && !isPro;
+                  const bankMeta =
+                    idx === 0
+                      ? '200 Questions • Starts Free'
+                      : '200 Questions • PRO';
+
                   return (
                     <button
                       key={bank.setId}
                       type="button"
                       onClick={() => {
-                        if (locked) return;
+                        if (locked) {
+                          window.location.href = '/app/upgrade';
+                          return;
+                        }
                         setSelectedBank(bank.setId as BankId);
                       }}
                       className={cx(
@@ -1043,17 +1442,30 @@ useEffect(() => {
                         selectedBank === bank.setId
                           ? 'border-emerald-400/30 bg-emerald-500/10 text-white'
                           : 'border-white/10 bg-black/15 text-white/60',
-                        locked && 'opacity-80',
+                        locked &&
+                          'cursor-pointer opacity-90 hover:border-yellow-400/30 hover:bg-yellow-400/5 hover:text-white',
                       )}
+                      title={
+                        locked
+                          ? 'Unlock 200 more ARRT-style questions'
+                          : undefined
+                      }
                     >
                       <span className="font-semibold">
                         {labelForBank(bank.setId)}
                       </span>
-                      <span className="flex items-center gap-2 text-xs font-semibold text-white/60">
-                        {bank.completedMiniMocks}/10
-                        {locked ? (
+
+                      <span className="flex items-center gap-1 text-xs font-semibold text-white/60">
+                        <span>200 Questions</span>
+                        <span>•</span>
+
+                        {idx === 0 ? (
+                          <span className="font-extrabold text-white">
+                            Starts Free
+                          </span>
+                        ) : (
                           <span className="text-yellow-400">PRO</span>
-                        ) : null}
+                        )}
                       </span>
                     </button>
                   );
@@ -1081,7 +1493,7 @@ useEffect(() => {
           </div>
         </section>
 
-        <div className="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
+        <div className="grid items-start gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
           <aside
             data-tour="course-curriculum"
             className="overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.04] shadow-[0_24px_80px_rgba(0,0,0,0.25)]"
@@ -1096,11 +1508,11 @@ useEffect(() => {
               </p>
             </div>
 
-            <div className="space-y-6 px-4 py-5 xl:max-h-[820px] xl:overflow-y-auto">
+            <div className="space-y-6 px-4 py-5">
               <div>
-                <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40">
+                {/* <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40">
                   Phase 1 — Mini Mock Mastery
-                </div>
+                </div> */}
                 <div className="space-y-2">
                   {Array.from({ length: 10 }, (_, idx) => {
                     const mini = idx + 1;
@@ -1139,124 +1551,99 @@ useEffect(() => {
                           : 'practice';
 
                     return (
-                      <div key={mini} className="block w-full text-left">
-                        <SidebarMiniMock
-                          mini={mini}
-                          bank={currentBank}
-                          isActive={selectedLesson === miniLessonKey}
-                          isCurrent={mini === currentBank.currentMini}
-                          isPro={isPro}
-                          summary={summary}
-                          attempts={attempts}
-                          onSelect={() => {
-                            if (mini > 5 && !isPro) {
-                              window.location.href = '/app/upgrade';
-                              return;
-                            }
-                            setSelectedLesson(miniLessonKey);
-                            setPendingScrollTarget(null);
-                          }}
-                          onStart={() => {
-                            if (mini > 5 && !isPro) {
-                              window.location.href = '/app/upgrade';
-                              return;
-                            }
-                            setSelectedLesson(miniLessonKey);
-                            requestAnimationFrame(() => {
+                      <div key={mini}>
+                        <div className="block w-full text-left">
+                          <SidebarMiniMock
+                            mini={mini}
+                            bank={currentBank}
+                            isActive={selectedLesson === miniLessonKey}
+                            isCurrent={mini === currentBank.currentMini}
+                            isPro={isPro}
+                            summary={summary}
+                            attempts={attempts}
+                            onSelect={() => {
+                              if (mini > 5 && !isPro) {
+                                window.location.href = '/app/upgrade';
+                                return;
+                              }
+                              setSelectedLesson(miniLessonKey);
+                              setPendingScrollTarget(null);
+                            }}
+                            onStart={() => {
+                              if (mini > 5 && !isPro) {
+                                window.location.href = '/app/upgrade';
+                                return;
+                              }
+                              setSelectedLesson(miniLessonKey);
                               requestAnimationFrame(() => {
-                                scrollToMiniStep(mini, 'practice');
+                                requestAnimationFrame(() => {
+                                  scrollToMiniStep(mini, 'practice');
+                                });
                               });
-                            });
-                          }}
-                          onResume={() => {
-                            if (mini > 5 && !isPro) {
-                              window.location.href = '/app/upgrade';
-                              return;
-                            }
-                            const targetStep = hasStarted
-                              ? resumeStep
-                              : 'practice';
-                            setSelectedLesson(miniLessonKey);
-                            requestAnimationFrame(() => {
+                            }}
+                            onResume={() => {
+                              if (mini > 5 && !isPro) {
+                                window.location.href = '/app/upgrade';
+                                return;
+                              }
+                              const targetStep = hasStarted
+                                ? resumeStep
+                                : 'practice';
+                              setSelectedLesson(miniLessonKey);
                               requestAnimationFrame(() => {
-                                scrollToMiniStep(mini, targetStep);
+                                requestAnimationFrame(() => {
+                                  scrollToMiniStep(mini, targetStep);
+                                });
                               });
-                            });
-                          }}
-                          onRestart={() => handleRestartMini(mini)}
-                        />
+                            }}
+                            onRestart={() => handleRestartMini(mini)}
+                          />
+                        </div>
+
+                        {mini === 5 && !isPro && (
+                          <div className="mt-2 flex items-center justify-between rounded-lg border border-yellow-400/20 bg-yellow-400/5 px-3 py-2 text-xs">
+                            <div className="text-white/70">
+                              🔒 Continue your progress — unlock all Mini Mocks and QBanks
+                            </div>
+
+                            <button
+                              onClick={() => {
+                                window.location.href = '/app/upgrade';
+                              }}
+                              className="ml-3 rounded-md bg-yellow-400 px-3 py-1 text-[11px] font-semibold text-black hover:bg-yellow-300"
+                            >
+                              Upgrade
+                            </button>
+                          </div>
+                        )}
                       </div>
                     );
                   })}
-                </div>
-              </div>
 
-              <div>
-                <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40">
-                  Phase 2 — Full Practice
+                  <SidebarFullQbank
+                    bank={currentBank}
+                    isActive={selectedLesson === 'full-qbank'}
+                    isPro={isPro} // ✅ THIS MUST EXIST
+                    onSelect={() => {
+                      setSelectedLesson('full-qbank');
+                    }}
+                    onStart={() => {
+                      setSelectedLesson('full-qbank');
+                      requestAnimationFrame(() => {
+                        scrollToElementById('full-step-practice');
+                      });
+                    }}
+                    onResume={() => {
+                      setSelectedLesson('full-qbank');
+                      requestAnimationFrame(() => {
+                        scrollToElementById('full-step-practice');
+                      });
+                    }}
+                    onRestart={() => {
+                      handleRestartFull();
+                    }}
+                  />
                 </div>
-                <div className="space-y-2">
-                  {[
-                    ['full-practice', 'Full Practice Test'],
-                    ['full-flashcards', 'Full-Test Flashcards'],
-                  ].map(([key, label]) => {
-                    const active = selectedLesson === key;
-                    const locked = !isPro;
-                    return (
-                      <button
-                        key={key}
-                        type="button"
-                        onClick={() => {
-                          if (locked) return;
-                          setSelectedLesson(key as LessonKey);
-                        }}
-                        className={cx(
-                          'block w-full rounded-2xl border px-4 py-3 text-left text-sm font-semibold transition',
-                          locked
-                            ? 'cursor-not-allowed border-white/5 bg-white/[0.02] text-white/45'
-                            : active
-                              ? 'border-emerald-400/30 bg-emerald-500/10 text-white'
-                              : 'border-transparent bg-white/[0.03] text-white/80 hover:border-white/10 hover:bg-white/[0.05]',
-                        )}
-                      >
-                        <div className="flex items-center justify-between gap-2">
-                          <span>{label}</span>
-                          {locked ? (
-                            <span className="text-yellow-400">PRO 🔒</span>
-                          ) : null}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div>
-                <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40">
-                  Phase 3 — Registry Simulation
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (!isPro) return;
-                    setSelectedLesson('full-mock');
-                  }}
-                  className={cx(
-                    'block w-full rounded-2xl border px-4 py-3 text-left text-sm font-semibold transition',
-                    !isPro
-                      ? 'cursor-not-allowed border-white/5 bg-white/[0.02] text-white/45'
-                      : selectedLesson === 'full-mock'
-                        ? 'border-emerald-400/30 bg-emerald-500/10 text-white'
-                        : 'border-transparent bg-white/[0.03] text-white/80 hover:border-white/10 hover:bg-white/[0.05]',
-                  )}
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span>Full Mock Exam</span>
-                    {!isPro ? (
-                      <span className="text-yellow-400">PRO 🔒</span>
-                    ) : null}
-                  </div>
-                </button>
               </div>
             </div>
           </aside>
@@ -1287,9 +1674,10 @@ useEffect(() => {
                 <div className="grid gap-4 lg:grid-cols-3">
                   {selectedLessonData.steps.map((step, idx) => {
                     const isMiniLesson = selectedLesson.startsWith('mini-');
+                    const isFullLesson = selectedLesson === 'full-qbank';
 
                     const activeStepKey =
-                      isMiniLesson && 'activeStep' in selectedLessonData
+                      'activeStep' in selectedLessonData
                         ? selectedLessonData.activeStep
                         : null;
 
@@ -1307,9 +1695,44 @@ useEffect(() => {
                         ? getMiniState(currentBank, attempts, selectedMini)
                         : null;
 
+                    const fullStateForCard =
+                      isFullLesson && currentBank
+                        ? {
+                            full: readFullQbankMastery(currentBank.setId),
+                            savedStep: readFullQbankStep(currentBank.setId),
+                          }
+                        : null;
+
+                    const fullPracticeMeta =
+                      isFullLesson && currentBank
+                        ? getSavedFullPracticeMeta(currentBank.setId)
+                        : null;
+
+                    const fullFlashMeta =
+                      isFullLesson && currentBank
+                        ? readFlashSession(
+                            `${currentBank.setId}__missed__all__full`,
+                          )
+                        : null;
+
+                    const isFullExamFlow =
+                      fullStateForCard?.savedStep === 'exam';
+
+                    const isFullPracticeSkipped =
+                      isFullExamFlow &&
+                      !fullStateForCard?.full.practice.completed &&
+                      !getSavedFullPracticeMeta(currentBank.setId);
+
+                    const isFullFlashcardsSkipped =
+                      isFullExamFlow &&
+                      !fullStateForCard?.full.flashcards.completed &&
+                      !readFlashSession(
+                        `${currentBank.setId}__missed__all__full`,
+                      );
+
                     const isSkippedFlow =
                       miniStateForCard?.practiceSkipped === true;
-                    
+
                     const isExamFlow = miniStateForCard?.activeStep === 'exam';
 
                     const isPracticeClosedAfterExam =
@@ -1323,53 +1746,149 @@ useEffect(() => {
                       step.key === 'flashcards' &&
                       miniStateForCard?.flashcardsSkipped === true;
 
+                    const isFullPracticeClosedAfterExam =
+                      isFullLesson &&
+                      isFullExamFlow &&
+                      step.key === 'practice' &&
+                      !isFullPracticeSkipped &&
+                      !!fullPracticeMeta;
+
+                    const isFullFlashcardsSkippedAfterExam =
+                      isFullLesson &&
+                      step.key === 'flashcards' &&
+                      isFullFlashcardsSkipped;
+
                     const stepState:
                       | 'active'
                       | 'completed'
                       | 'skipped'
                       | 'locked' = (() => {
-                      if (!isMiniLesson || !activeStepKey) return 'locked';
+                      if (!activeStepKey) {
+                        if (isFullLesson && step.key === 'practice')
+                          return 'active';
+                        return 'locked';
+                      }
 
                       if (step.key === activeStepKey) return 'active';
 
-                      if (step.key === 'practice') {
-                        if (miniStateForCard?.practiceComplete)
-                          return 'completed';
-                        if (miniStateForCard?.practiceSkipped) return 'skipped';
+                      if (isFullLesson) {
+                        if (step.key === 'practice') {
+                          if (fullStateForCard?.full.practice.completed)
+                            return 'completed';
+                          if (isFullPracticeSkipped) return 'skipped';
+                          if (isFullPracticeClosedAfterExam) return 'locked';
+                          if (fullStateForCard?.savedStep === 'exam')
+                            return 'locked';
+                          if (fullPracticeMeta) return 'active';
+                          if (fullStateForCard?.savedStep === 'practice')
+                            return 'active';
+                          return 'locked';
+                        }
+
+                        if (step.key === 'flashcards') {
+                          if (fullStateForCard?.full.flashcards.completed)
+                            return 'completed';
+                          if (isFullFlashcardsSkipped) return 'skipped';
+                          if (fullFlashMeta) return 'active';
+                          if (fullStateForCard?.savedStep === 'flashcards')
+                            return 'active';
+                          if (
+                            !fullStateForCard?.full.practice.completed &&
+                            !isFullPracticeSkipped
+                          ) {
+                            return 'locked';
+                          }
+                          return 'locked';
+                        }
+
+                        if (step.key === 'exam') {
+                          if (fullStateForCard?.full.exam.completed)
+                            return 'completed';
+                          if (fullStateForCard?.savedStep === 'exam')
+                            return 'active';
+                          return 'locked';
+                        }
                       }
 
-                      if (step.key === 'flashcards') {
-                        if (miniStateForCard?.flashcardsComplete)
+                      if (isMiniLesson) {
+                        if (step.key === 'practice') {
+                          if (miniStateForCard?.practiceComplete)
+                            return 'completed';
+                          if (miniStateForCard?.practiceSkipped)
+                            return 'skipped';
+                        }
+
+                        if (step.key === 'flashcards') {
+                          if (miniStateForCard?.flashcardsComplete)
+                            return 'completed';
+                          if (miniStateForCard?.flashcardsSkipped)
+                            return 'skipped';
+                        }
+
+                        return 'locked';
+                      }
+
+                      if (isFullLesson) {
+                        if (
+                          step.key === 'practice' &&
+                          fullStateForCard?.full.practice.completed
+                        ) {
                           return 'completed';
-                        if (miniStateForCard?.flashcardsSkipped)
-                          return 'skipped';
+                        }
+
+                        if (
+                          step.key === 'flashcards' &&
+                          fullStateForCard?.full.flashcards.completed
+                        ) {
+                          return 'completed';
+                        }
+
+                        return 'locked';
                       }
 
                       return 'locked';
                     })();
 
-const lockedReason = isPracticeClosedAfterExam
-  ? 'Practice Test is closed after moving to the Mini Mock Exam. Restart this Mini Mock to return to Step 1.'
-  : isFlashcardsSkippedAfterExam
-    ? 'Flashcards were skipped. Restart this Mini Mock to unlock the full study flow again.'
-    : isSkippedFlow
-      ? step.key === 'practice'
-        ? 'Practice Test is locked after skipping. Restart this Mini Mock to begin again.'
-        : step.key === 'flashcards'
-          ? 'Flashcards are locked after skipping. Restart this Mini Mock to unlock them.'
-          : null
-      : step.key === 'practice' && stepState === 'completed'
-        ? 'Completed. Restart Mini Mock to retake.'
-        : step.key === 'flashcards'
-          ? 'Complete the Practice Test first.'
-          : step.key === 'exam'
-            ? 'Complete Practice Test and Flashcards first.'
-            : null;
+                    const lockedReason = isPracticeClosedAfterExam
+                      ? 'Practice Test is closed after moving to the Mini Mock Exam. Restart this Mini Mock to return to Step 1.'
+                      : isFlashcardsSkippedAfterExam
+                        ? 'Flashcards were skipped. Restart this Mini Mock to unlock the full study flow again.'
+                        : isFullPracticeClosedAfterExam
+                          ? 'Practice Test is closed after moving to the Full Mock Exam. Restart Full QBank to return to Step 1.'
+                          : isFullFlashcardsSkippedAfterExam
+                            ? 'Flashcards were skipped. Restart Full QBank to unlock them.'
+                            : isFullPracticeSkipped && step.key === 'practice'
+                              ? 'Practice Test was skipped. Restart Full QBank to begin again.'
+                              : isFullFlashcardsSkipped &&
+                                  step.key === 'flashcards'
+                                ? 'Flashcards were skipped. Restart Full QBank to unlock them.'
+                                : isSkippedFlow
+                                  ? step.key === 'practice'
+                                    ? 'Practice Test is locked after skipping. Restart this Mini Mock to begin again.'
+                                    : step.key === 'flashcards'
+                                      ? 'Flashcards are locked after skipping. Restart this Mini Mock to unlock them.'
+                                      : null
+                                  : step.key === 'practice' &&
+                                      stepState === 'completed'
+                                    ? 'Completed. Restart Mini Mock to retake.'
+                                    : step.key === 'flashcards'
+                                      ? 'Complete the Practice Test first.'
+                                      : step.key === 'exam'
+                                        ? 'Complete Practice Test and Flashcards first.'
+                                        : null;
 
-                    const canOpenStep =
-                      stepState === 'active' ||
-                      step.key === 'exam' ||
-                      (!isSkippedFlow && stepState === 'completed');
+                    const shouldUseSkipExamModal =
+                      step.key === 'exam' &&
+                      stepState !== 'active' &&
+                      (isMiniLesson || isFullLesson);
+
+                    const canOpenStep = isFullLesson
+                      ? stepState === 'active' ||
+                        stepState === 'completed' ||
+                        shouldUseSkipExamModal
+                      : stepState === 'active' ||
+                        step.key === 'exam' ||
+                        (!isSkippedFlow && stepState === 'completed');
 
                     const className = cx(
                       'group relative rounded-3xl border p-5 transition focus:outline-none',
@@ -1394,7 +1913,9 @@ const lockedReason = isPracticeClosedAfterExam
                         ? 'Practice Test'
                         : step.key === 'flashcards'
                           ? 'Missed Flashcards'
-                          : 'Mini Mock Exam';
+                          : isFullLesson
+                            ? 'Full Mock Exam'
+                            : 'Mini Mock Exam';
 
                     const displayKicker = `Step ${idx + 1}`;
 
@@ -1445,7 +1966,9 @@ const lockedReason = isPracticeClosedAfterExam
                                 {step.badge === 'Complete'
                                   ? 'Restart this step if you want to do it again.'
                                   : step.key === 'exam'
-                                    ? 'Ready to take Mini Mock Exam.'
+                                    ? isFullLesson
+                                      ? 'Ready to take Full Mock Exam.'
+                                      : 'Ready to take Mini Mock Exam.'
                                     : step.key === 'flashcards'
                                       ? 'Continue with Missed Flashcards.'
                                       : 'Start with the Practice Test.'}
@@ -1453,9 +1976,13 @@ const lockedReason = isPracticeClosedAfterExam
                             ) : stepState === 'completed' ? (
                               <div className="text-yellow-300/78">
                                 {step.key === 'practice'
-                                  ? 'Completed. Restart Mini Mock to retake.'
+                                  ? isFullLesson
+                                    ? 'Completed. Restart Full QBank to retake.'
+                                    : 'Completed. Restart Mini Mock to retake.'
                                   : step.key === 'flashcards'
-                                    ? 'Completed. Restart Mini Mock to review again.'
+                                    ? isFullLesson
+                                      ? 'Completed. Restart Full QBank to review again.'
+                                      : 'Completed. Restart Mini Mock to review again.'
                                     : 'Complete Practice Test and Flashcards first.'}
                               </div>
                             ) : (
@@ -1499,7 +2026,9 @@ const lockedReason = isPracticeClosedAfterExam
                     const stepCardId =
                       selectedLesson.startsWith('mini-') && selectedMini
                         ? stepSectionId(selectedMini, step.key)
-                        : undefined;
+                        : selectedLesson === 'full-qbank'
+                          ? `full-step-${step.key}`
+                          : undefined;
 
                     if (!canOpenStep) {
                       return (
@@ -1528,7 +2057,7 @@ const lockedReason = isPracticeClosedAfterExam
                       );
                     }
 
-                    if (step.key === 'exam' && stepState !== 'active') {
+                    if (shouldUseSkipExamModal) {
                       return (
                         <div
                           key={step.title}
@@ -1631,7 +2160,7 @@ const lockedReason = isPracticeClosedAfterExam
                     </div>
                   </div>
 
-                  <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+                  {/* <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
                     <div className="text-sm font-semibold text-white">
                       Weakest Category
                     </div>
@@ -1651,7 +2180,7 @@ const lockedReason = isPracticeClosedAfterExam
                       <br />
                       Goal: 90%+
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
@@ -1685,13 +2214,15 @@ const lockedReason = isPracticeClosedAfterExam
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
           <div className="w-full max-w-md rounded-3xl border border-white/10 bg-[#0b0b0c] p-6 shadow-2xl">
             <div className="text-lg font-semibold text-white">
-              Skip Ahead to Mini Mock Exam?
+              {selectedLesson === 'full-qbank'
+                ? 'Skip Ahead to Full Mock Exam?'
+                : 'Skip Ahead to Mini Mock Exam?'}{' '}
             </div>
 
             <p className="mt-3 text-sm leading-6 text-white/70">
-              You can skip ahead to the Mini Mock Exam, but without completing
-              the Practice Test and Flashcards first, your score may be lower
-              since your weak areas won’t be reviewed.
+              {selectedLesson === 'full-qbank'
+                ? 'You can skip ahead to the Full Mock Exam, but without completing the Practice Test and Flashcards first, your score may be lower since your weak areas won’t be reviewed.'
+                : 'You can skip ahead to the Mini Mock Exam, but without completing the Practice Test and Flashcards first, your score may be lower since your weak areas won’t be reviewed.'}
             </p>
 
             <div className="mt-6 flex justify-end gap-3">
@@ -1708,7 +2239,9 @@ const lockedReason = isPracticeClosedAfterExam
                 onClick={confirmSkipExam}
                 className="rounded-xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black transition hover:bg-yellow-300"
               >
-                Continue to Mini Mock Exam
+                {selectedLesson === 'full-qbank'
+                  ? 'Continue to Full Mock Exam'
+                  : 'Continue to Mini Mock Exam'}
               </button>
             </div>
           </div>

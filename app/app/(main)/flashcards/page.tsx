@@ -123,6 +123,9 @@ function FlashcardsPageInner() {
       | 'missed';
   const masteryMode = (sp?.get('flow') || '').toLowerCase() === 'mastery';
 
+  const scope = (sp?.get('scope') || '').toLowerCase();
+  const isFullQBank = scope === 'full';
+
   const filterValue = (sp?.get('filter') || 'all').toLowerCase();
   const filterIsMini = /^mini-\d+$/.test(filterValue);
   const selectedMini = filterIsMini ? Number(filterValue.replace('mini-', '')) : 'all';
@@ -130,14 +133,16 @@ function FlashcardsPageInner() {
 
   const rawMini = (sp?.get('mini') || 'all').toLowerCase();
   const mini = Math.max(1, Number(sp?.get('mini') || '1'));
-  const effectiveMiniSessionKey = masteryMode
+const effectiveMiniSessionKey = isFullQBank
+  ? 'full'
+  : masteryMode
     ? mini
     : typeof selectedMini === 'number'
       ? selectedMini
       : 'all';
-  const flashSessionScopeKey = `${setId}__${mode}__${filterValue}__${String(
-    effectiveMiniSessionKey,
-  )}`;
+const flashSessionScopeKey = isFullQBank
+  ? `${setId}__FULL`
+  : `${setId}__${mode}__${filterValue}__${String(effectiveMiniSessionKey)}`;
 
   const [loading, setLoading] = useState(false);
   const [questionById, setQuestionById] = useState<Record<string, Question>>({});
@@ -227,18 +232,22 @@ if (session) {
         ];
         setFilterOptions(fullFilterOptions);
 
-        let filteredQuestions = questions;
-        if (masteryMode) {
-          filteredQuestions = selectQuestionsForScope(questions, 'mini', {
-            miniId: Number(mini),
-            category: 'all',
-          });
-        } else if (selectedMini !== 'all') {
-          filteredQuestions = selectQuestionsForScope(questions, 'mini', {
-            miniId: Number(selectedMini),
-            category: 'all',
-          });
-        }
+let filteredQuestions = questions;
+
+if (isFullQBank) {
+  // ✅ FULL QBANK — DO NOT FILTER TO MINI
+  filteredQuestions = questions;
+} else if (masteryMode) {
+  filteredQuestions = selectQuestionsForScope(questions, 'mini', {
+    miniId: Number(mini),
+    category: 'all',
+  });
+} else if (selectedMini !== 'all') {
+  filteredQuestions = selectQuestionsForScope(questions, 'mini', {
+    miniId: Number(selectedMini),
+    category: 'all',
+  });
+}
 
         let cards = filteredQuestions.map((q) =>
           toFlashcard({
@@ -253,10 +262,12 @@ if (session) {
 
         setAllCards(cards);
 
-        const remainingMissedIds = getFlashcardRemainingIds(
-          setId,
-          selectedCategory === 'all' ? 'all' : selectedCategory,
-        );
+const remainingMissedIds = isFullQBank
+  ? getFlashcardRemainingIds(setId, 'all')
+  : getFlashcardRemainingIds(
+      setId,
+      selectedCategory === 'all' ? 'all' : selectedCategory,
+    );
 
         const saved = readFlashSession(flashSessionScopeKey);
         const allowedIds = new Set(cards.map((card) => card.id));

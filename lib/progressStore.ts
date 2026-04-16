@@ -31,6 +31,14 @@ function masteryStepKey(setId: string, miniId: number) {
   return `rtt_mastery_step_${setId}_${miniId}`;
 }
 
+function fullQbankKey(setId: string) {
+  return `rtt_full_qbank_${(setId || 'qbank1').toLowerCase()}`;
+}
+
+function fullQbankStepKey(setId: string) {
+  return `rtt_full_qbank_step_${(setId || 'qbank1').toLowerCase()}`;
+}
+
 function ensureAuthSync() {
   if (typeof window === 'undefined') return;
   if (authSyncInitialized) return;
@@ -283,7 +291,7 @@ export type FlashSession = {
   setId: string;
   mode: 'all' | 'missed';
   cat: string;
-  mini?: number | 'all';
+  mini?: number | 'all' | 'full';
   cursor: number;
   deck: any[];
   mastered: any[];
@@ -627,6 +635,26 @@ export function recordMiniMockResult(
   });
 }
 
+export function recordFullMockResult(setId: string, score: number) {
+  const current = readFullQbankMastery(setId);
+
+  const next = {
+    ...current,
+    exam: {
+      completed: true,
+      lastScore: score,
+      attempts: (current.exam?.attempts || 0) + 1,
+    },
+  };
+
+  writeJson(fullQbankKey(setId), next);
+
+  // 🔥 clear step so it doesn't say "in progress"
+  removeKeyFromBoth(fullQbankStepKey(setId));
+
+  window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+}
+
 export function getBankMasterySummary(setId: string) {
   const current = readBankMastery(setId);
   const values = Object.values(current.miniStatus);
@@ -824,6 +852,123 @@ export function resetMiniMockFull(setId: string, miniId: number) {
   if (mastery.miniStatus[String(miniId)]) {
     delete mastery.miniStatus[String(miniId)];
     writeJson(masteryKey(setId), mastery);
+  }
+
+  window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+}
+
+type FullQbankStep = 'practice' | 'flashcards' | 'exam';
+
+type FullQbankStatus = {
+  completed: boolean;
+  completedAt?: string;
+  bestScore?: number;
+  lastScore?: number;
+  attempts?: number;
+};
+
+type FullQbankMastery = {
+  setId: string;
+  practice: FullQbankStatus;
+  flashcards: FullQbankStatus;
+  exam: FullQbankStatus;
+};
+
+export function readFullQbankMastery(setId: string): FullQbankMastery {
+  return readJson<FullQbankMastery>(fullQbankKey(setId), {
+    setId,
+    practice: { completed: false },
+    flashcards: { completed: false },
+    exam: { completed: false },
+  });
+}
+
+export function saveFullQbankStep(setId: string, step: FullQbankStep) {
+  writeJson(fullQbankStepKey(setId), step);
+}
+
+export function readFullQbankStep(setId: string): FullQbankStep | null {
+  const raw = readJson<string | null>(fullQbankStepKey(setId), null);
+  return raw === 'practice' || raw === 'flashcards' || raw === 'exam'
+    ? raw
+    : null;
+}
+
+export function clearFullQbankStep(setId: string) {
+  if (typeof window === 'undefined') return;
+  removeKeyFromBoth(fullQbankStepKey(setId));
+  window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+}
+
+export function recordFullQbankPracticeDone(setId: string) {
+  const current = readFullQbankMastery(setId);
+  writeJson(fullQbankKey(setId), {
+    ...current,
+    practice: {
+      ...current.practice,
+      completed: true,
+      completedAt: current.practice.completedAt || new Date().toISOString(),
+    },
+  });
+}
+
+export function recordFullQbankFlashcardsDone(setId: string) {
+  const current = readFullQbankMastery(setId);
+  writeJson(fullQbankKey(setId), {
+    ...current,
+    flashcards: {
+      ...current.flashcards,
+      completed: true,
+      completedAt: current.flashcards.completedAt || new Date().toISOString(),
+    },
+  });
+}
+
+export function recordFullQbankExamResult(setId: string, score: number) {
+  const current = readFullQbankMastery(setId);
+  const prevAttempts = current.exam.attempts || 0;
+
+  writeJson(fullQbankKey(setId), {
+    ...current,
+    exam: {
+      completed: true,
+      completedAt: current.exam.completedAt || new Date().toISOString(),
+      attempts: prevAttempts + 1,
+      lastScore: score,
+      bestScore: Math.max(current.exam.bestScore || 0, score),
+    },
+  });
+}
+
+export function resetFullQbank(setId: string) {
+  if (typeof window === 'undefined') return;
+
+  const normalized = (setId || 'qbank1').toLowerCase();
+
+  // 🔥 Remove full mastery + step
+  removeKeyFromBoth(fullQbankKey(normalized));
+  removeKeyFromBoth(fullQbankStepKey(normalized));
+
+  // 🔥 Remove FULL practice session
+  removeKeyFromBoth(practiceSessionKey(`mastery__${normalized}__FULL`));
+
+  // 🔥 Remove FULL flashcards session
+  removeKeyFromBoth(flashSessionKey(`${normalized}__missed__all__full`));
+
+  // 🔥 Remove FULL mock session + results
+  removeKeyFromBoth(`rtt_mock_session_mastery_${normalized}_full_0_all`);
+  removeKeyFromBoth(`rtt_mock_results_mastery_${normalized}_full_0_all`);
+
+  // 🔥 SAFETY: wipe anything related to FULL
+  for (const store of [window.localStorage, window.sessionStorage]) {
+    try {
+      for (const key of Object.keys(store)) {
+        if (key.includes(normalized) && key.includes('full')) {
+          store.removeItem(key);
+          removeFromDB(key);
+        }
+      }
+    } catch {}
   }
 
   window.dispatchEvent(new CustomEvent('rtt-progress-updated'));

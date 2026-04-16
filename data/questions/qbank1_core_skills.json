@@ -736,7 +736,7 @@
       "A": "Radiation dose",
       "B": "Patient part thickness",
       "C": "Patient BMI",
-      "D": "Patient overall body weight IMAGE PRODUCTION Questions 54–103"
+      "D": "Patient overall body weight"
     },
     "correctAnswer": "B",
     "explanation": "Correct Answer: Patient part thickness.\n\nCalipers are used to measure the thickness of the body part being imaged so the technologist can select the proper exposure factors.\n\nIncorrect Answers:\nA. Calipers do not measure radiation dose.\nC. BMI is a body composition estimate, not something measured with radiographic calipers.\nD. Calipers are not used to measure total body weight."

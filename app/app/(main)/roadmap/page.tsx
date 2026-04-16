@@ -410,12 +410,12 @@ export default function RoadmapPage() {
           <div className="mt-3 text-2xl font-semibold text-white">{averageMiniMockScore != null ? `${averageMiniMockScore}%` : 'Not enough data yet'}</div>
           <div className="mt-2 text-sm leading-6 text-white/65">{averageMiniMockScore != null ? `Based on ${miniMockAttempts.length} Mini Mock Exam score${miniMockAttempts.length === 1 ? '' : 's'}.` : 'Take a Mini Mock Exam to calculate average.'}</div>
         </div>
-        <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+        {/* <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
           <div className="text-sm font-semibold text-white">Weakest Category</div>
           <div className="mt-3 text-2xl font-semibold text-white">{weakestCategory ? weakestCategory[0] : 'Not enough data yet'}</div>
           <div className="mt-2 text-sm leading-6 text-white/65">{weakestCategory ? `Current Avg: ${weakestCategory[1]}%` : 'Take at least 5 Mini Mocks to calculate weakest category.'}</div>
           <div className="mt-2 text-sm text-white/55">Current Avg: {weakestCategory ? `${weakestCategory[1]}%` : '—'}<br />Goal: 90%+</div>
-        </div>
+        </div> */}
       </div>
 
       {!!attempts.length && (

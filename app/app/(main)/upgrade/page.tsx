@@ -11,29 +11,38 @@ const plans: Array<{
   key: PlanKey;
   name: string;
   price: string;
+  // oldPrice: string;
+  monthly?: string;
   detail: string;
   border: string;
   badge?: string;
+  helper?: string;
 }> = [
   {
     key: 'pro_1m',
     name: '1 Month',
     price: '$49',
-    detail: 'Short-term access.',
+    // oldPrice: '$49',
+    detail: 'Focused short-term prep.',
     border: 'border-white/10',
   },
   {
     key: 'pro_3m',
     name: '3 Months',
     price: '$99',
-    detail: 'Balanced prep timeline.',
+    // oldPrice: '$99',
+    monthly: 'Only $33/month',
+    detail: 'Used by most students for ideal prep time.',
     border: 'border-blue-400/80',
     badge: 'MOST POPULAR',
+    helper: 'Best balance of time and value.',
   },
   {
     key: 'pro_6m',
     name: '6 Months',
     price: '$149',
+    // oldPrice: '$149',
+    monthly: 'Only $25/month',
     detail: 'Lowest monthly cost.',
     border: 'border-teal-400/80',
   },
@@ -48,7 +57,7 @@ function UnlockCard({ title, desc }: { title: string; desc: string }) {
   );
 }
 
-function UpgradePageInner() {  
+function UpgradePageInner() {
   const searchParams = useSearchParams();
   const autobuy = searchParams.get('autobuy') as PlanKey | null;
   const autoStartedRef = useRef(false);
@@ -74,10 +83,10 @@ function UpgradePageInner() {
 
       const data = await res.json().catch(() => ({}));
 
-if (res.status === 401) {
-  window.location.href = `/app/login?next=${encodeURIComponent(`/app/upgrade?autobuy=${plan}`)}`;
-  return;
-}
+      if (res.status === 401) {
+        window.location.href = `/app/login?next=${encodeURIComponent(`/app/upgrade?autobuy=${plan}`)}`;
+        return;
+      }
 
       if (!res.ok || !data?.url) {
         setError(data?.error || 'Unable to start checkout.');
@@ -138,15 +147,33 @@ if (res.status === 401) {
 
         <section className="mt-12">
           <div className="mx-auto max-w-6xl rounded-[30px] border border-white/10 bg-white/[0.03] p-6 shadow-[0_0_60px_-28px_rgba(45,212,191,0.28)] md:p-8">
-            <h2 className="text-center text-2xl font-semibold text-white">
-              Choose Your Prep Timeline
-            </h2>
+            <div className="text-center">
+              {/* <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-yellow-300">
+                ⚡ Limited Offer — Discounted Access Available
+              </p> */}
+              {/* <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-yellow-300">
+                ⚡ Limited Offer — Discounted Access Available
+              </p> */}
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-yellow-300">
+                ⚡ Master just 20 questions per day to be ready for the Radiography ARRT in as little as 30 days ⚡
+              </p>
+
+              <p className="mb-4 text-sm text-white/60">
+                Everything you need to pass — without overpaying
+              </p>
+
+              <h2 className="text-2xl font-semibold text-white">
+                Choose Your Prep Timeline
+              </h2>
+            </div>
 
             <div className="mt-10 grid gap-6 md:grid-cols-3">
               {plans.map((plan) => (
                 <div
                   key={plan.key}
-                  className={`relative rounded-[28px] border ${plan.border} bg-white/[0.04] p-6 text-center shadow-[0_0_45px_-26px_rgba(45,212,191,0.28)]`}
+                  className={`relative rounded-[28px] border ${plan.border} bg-white/[0.04] p-6 text-center shadow-[0_0_45px_-26px_rgba(45,212,191,0.28)] ${
+                    plan.key === 'pro_3m' ? 'scale-[1.03]' : ''
+                  }`}
                 >
                   {plan.badge ? (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-blue-500 px-4 py-1 text-xs font-semibold tracking-[0.08em] text-white">
@@ -157,9 +184,29 @@ if (res.status === 401) {
                   <h3 className="text-2xl font-semibold text-white">
                     {plan.name}
                   </h3>
-                  <div className="mt-4 text-5xl font-bold tracking-tight text-white">
-                    {plan.price}
+
+                  <div className="mt-4">
+                    <div className="text-lg text-white/35 line-through">
+                      {/* {plan.oldPrice} */}
+                    </div>
+
+                    <div className="text-5xl font-bold tracking-tight text-white">
+                      {plan.price}
+                    </div>
+
+                    {plan.monthly && (
+                      <div className="mt-2 text-base font-semibold text-yellow-300">
+                        {plan.monthly}
+                      </div>
+                    )}
+
+                    {plan.helper && (
+                      <div className="mt-2 text-sm text-white/50">
+                        {plan.helper}
+                      </div>
+                    )}
                   </div>
+
                   <p className="mt-4 text-sm text-white/55">{plan.detail}</p>
 
                   <button
@@ -186,25 +233,25 @@ if (res.status === 401) {
         <section className="mt-10">
           <div className="mx-auto max-w-6xl rounded-[30px] border border-white/10 bg-white/[0.03] p-6 shadow-[0_0_60px_-28px_rgba(45,212,191,0.28)] md:p-8">
             <h2 className="text-center text-2xl font-semibold text-white">
-              What You Unlock with Pro Access
+              What Pro Helps You Do
             </h2>
 
             <div className="mx-auto mt-8 grid max-w-5xl gap-4 md:grid-cols-2">
               <UnlockCard
-                title="Full 600Q Readiness System"
-                desc="High-yield questions across every ARRT category."
+                title="Master More Questions"
+                desc="Unlock the full 600-question readiness system across every ARRT category."
               />
               <UnlockCard
-                title="3-Step Mastery Progression"
-                desc="Correct 3 times before a question leaves your deck."
+                title="Fix Weak Areas Faster"
+                desc="Auto-made flashcards from missed questions help raise your next score."
               />
               <UnlockCard
-                title="Score Builder Flashcards"
-                desc="Auto-made from missed questions to raise your next score."
+                title="Stay on Track"
+                desc="Track progress across categories and monitor your readiness over time."
               />
               <UnlockCard
-                title="Performance Tracking"
-                desc="Category analytics and readiness score trend over time."
+                title="Study with a System"
+                desc="Follow the RTT method: Practice, Flashcards, and Mini Mock progression."
               />
             </div>
 

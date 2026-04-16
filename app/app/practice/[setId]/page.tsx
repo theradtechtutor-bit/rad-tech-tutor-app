@@ -20,6 +20,7 @@ import {
   savePracticeSession,
   clearPracticeSession,
   saveMasteryMiniStep,
+  readProgress
 } from '@/lib/progressStore';
 import { buildRationale } from '@/lib/masteryContent';
 import MasteryFlowSteps from '@/app/app/_components/MasteryFlowSteps';
@@ -245,6 +246,7 @@ export default function PracticeSetPage() {
   const flowParam = (searchParams?.get('flow') || '').toLowerCase();
   const masteryMode = flowParam === 'mastery';
   const flow: 'mastery' | 'free' = masteryMode ? 'mastery' : 'free';
+  const isFullQBank = searchParams?.get('scope') === 'full';
 
   const filterValue = (searchParams?.get('filter') || 'all').toLowerCase();
   const filterIsMini = /^mini-\d+$/.test(filterValue);
@@ -272,9 +274,11 @@ export default function PracticeSetPage() {
     : typeof selectedMini === 'number'
       ? selectedMini
       : 'all';
-  const practiceSessionScopeKey = `${flow}__${setId}__${mode}__${filterValue}__${String(
-    effectiveMiniSessionKey,
-  )}`;
+const practiceSessionScopeKey = isFullQBank
+  ? `${flow}__${setId}__all__all__full`
+  : `${flow}__${setId}__${mode}__${filterValue}__${String(
+      effectiveMiniSessionKey,
+    )}`;
 
   useEffect(() => {
     if (rawMode === 'flashcards') {
@@ -358,17 +362,20 @@ export default function PracticeSetPage() {
 
       let workingQuestions = practicePool;
 
-      if (masteryMode) {
-        workingQuestions = selectQuestionsForScope(practicePool, 'mini', {
-          miniId: Number(mini),
-          category: 'all',
-        });
-      } else if (selectedMini !== 'all') {
-        workingQuestions = selectQuestionsForScope(practicePool, 'mini', {
-          miniId: Number(selectedMini),
-          category: 'all',
-        });
-      }
+if (isFullQBank) {
+  // FULL QBANK → true full set
+  workingQuestions = originalQuestions;
+} else if (masteryMode) {
+  workingQuestions = selectQuestionsForScope(practicePool, 'mini', {
+    miniId: Number(mini),
+    category: 'all',
+  });
+} else if (selectedMini !== 'all') {
+  workingQuestions = selectQuestionsForScope(practicePool, 'mini', {
+    miniId: Number(selectedMini),
+    category: 'all',
+  });
+}
 
       let ids = workingQuestions.map((q) => q.id);
 
@@ -441,7 +448,8 @@ export default function PracticeSetPage() {
         !!saved &&
         savedQueue.length > 0 &&
         !!savedCurrentId &&
-        Number(saved?.totalCount || 0) > 0;
+        Number(saved?.totalCount || 0) > 0 &&
+        saved.totalCount === originalIds.length;
 
       if (flow === 'free') {
         setFreeAnsweredIds(aggregate?.answeredIds || []);
@@ -657,12 +665,21 @@ export default function PracticeSetPage() {
   }
 
   function pick(letter: ChoiceLetter) {
+    console.log('pick fired', {
+      qid: q?.id,
+      letter,
+    });
     if (!q || revealed) return;
     setPicked(letter);
     setRevealed(true);
   }
 
   function goNext() {
+    console.log('goNext fired', {
+      qid: q?.id,
+      picked,
+      isCorrect,
+    });
     if (!q || !picked) return;
 
     const nextQueue = [...queueIds];
@@ -678,14 +695,27 @@ export default function PracticeSetPage() {
     if (isCorrect) {
       setCorrectCount(correctNext);
       markPracticeCleared(setId, q.id);
-    } else {
-      setMissedCount(missedNext);
-      markWrongFromPractice(
-        setId,
-        q.id,
-        mapToArrtMajorCategory(String((q as any).category || '')),
-      );
-    }
+      } else {
+  setMissedCount(missedNext);
+
+
+  markWrongFromPractice(
+    setId,
+    q.id,
+    mapToArrtMajorCategory(String((q as any).category || '')),
+  );
+
+  const localRaw = localStorage.getItem(`rtt_progress_${setId}`);
+  const sessionRaw = sessionStorage.getItem(`rtt_progress_${setId}`);
+
+  const localCount = Object.values(JSON.parse(localRaw || '{}')).filter(
+    (x: any) => x.practiceMissed,
+  ).length;
+
+  const sessionCount = Object.values(JSON.parse(sessionRaw || '{}')).filter(
+    (x: any) => x.practiceMissed,
+  ).length;
+}
 
     if (flow === 'free') {
       const nextAnsweredIds = Array.from(new Set([...freeAnsweredIds, q.id]));
@@ -806,19 +836,25 @@ export default function PracticeSetPage() {
       ids = ids.filter((id) => unlocked.has(id));
     }
 
-    if (masteryMode) {
-      ids = selectQuestionsForScope(
-        ids.map((id) => byId[id]).filter(Boolean) as Question[],
-        'mini',
-        { miniId: miniNumber, category: 'all' },
-      ).map((q) => q.id);
-    } else if (selectedMini !== 'all') {
-      ids = selectQuestionsForScope(
-        ids.map((id) => byId[id]).filter(Boolean) as Question[],
-        'mini',
-        { miniId: Number(selectedMini), category: 'all' },
-      ).map((q) => q.id);
-    }
+if (masteryMode && !isFullQBank) {
+  ids = selectQuestionsForScope(
+    ids.map((id) => byId[id]).filter(Boolean) as Question[],
+    'mini',
+    { miniId: miniNumber, category: 'all' },
+  ).map((q) => q.id);
+} else if (selectedMini !== 'all') {
+  ids = selectQuestionsForScope(
+    ids.map((id) => byId[id]).filter(Boolean) as Question[],
+    'mini',
+    { miniId: Number(selectedMini), category: 'all' },
+  ).map((q) => q.id);
+} else if (selectedMini !== 'all') {
+  ids = selectQuestionsForScope(
+    ids.map((id) => byId[id]).filter(Boolean) as Question[],
+    'mini',
+    { miniId: Number(selectedMini), category: 'all' },
+  ).map((q) => q.id);
+}
 
     if (selectedCategory !== 'all') {
       ids = ids.filter(
@@ -909,7 +945,7 @@ export default function PracticeSetPage() {
       if (key === 'f') {
         e.preventDefault();
         router.push(
-          `/app/flashcards?set=${setId}&mode=missed&cat=all&mini=all`,
+          `/app/flashcards?set=${setId}&mode=missed&filter=all&mini=all`,
         );
       }
     }
@@ -1009,11 +1045,16 @@ export default function PracticeSetPage() {
               </div>
               <div className="mt-5 flex flex-wrap gap-2">
                 <Link
-                  href={`/app/flashcards?set=${setId}&mode=missed&cat=all&flow=mastery&mini=${mini}`}
-                  onClick={() =>
-                    typeof mini === 'number' &&
-                    saveMasteryMiniStep(setId, mini, 'flashcards')
+                  href={
+                    isFullQBank
+                      ? `/app/flashcards?set=${setId}&mode=missed&filter=all&flow=mastery&scope=full`
+                      : `/app/flashcards?set=${setId}&mode=missed&filter=all&flow=mastery&mini=${mini}`
                   }
+                  onClick={() => {
+                    if (!isFullQBank && typeof mini === 'number') {
+                      saveMasteryMiniStep(setId, mini, 'flashcards');
+                    }
+                  }}
                   className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
                 >
                   Continue to Flashcards
@@ -1054,7 +1095,7 @@ export default function PracticeSetPage() {
                   Restart Deck
                 </button>
                 <Link
-                  href={`/app/flashcards?set=${setId}&mode=missed&cat=all&mini=all`}
+                  href={`/app/flashcards?set=${setId}&mode=missed&filter=all&mini=all`}
                   className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
                 >
                   Go to Flashcards

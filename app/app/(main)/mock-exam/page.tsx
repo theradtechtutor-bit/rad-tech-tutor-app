@@ -9,6 +9,8 @@ import {
   appendAttempt,
   getClientStorage,
   recordMiniMockResult,
+  recordFullMockResult,
+  recordFullQbankExamResult,
   syncMockResult,
 } from '@/lib/progressStore';
 import MasteryFlowSteps from '@/app/app/_components/MasteryFlowSteps';
@@ -280,7 +282,11 @@ function MockExamPageInner() {
 
   const setId = (sp.get('qbank') || 'qbank1').toLowerCase();
   const scope = (sp.get('scope') || 'mini').toLowerCase() as MockScope;
-  const miniId = Math.max(1, Math.min(10, Number(sp.get('mini') || 1)));
+  const testMode = sp.get('test') === '1';
+  const miniId =
+    scope === 'mini'
+      ? Math.max(1, Math.min(10, Number(sp.get('mini') || 1)))
+      : 0;
   const autoStart = sp.get('autostart') === '1';
   const flow: 'mastery' | 'free' =
     (sp.get('flow') || '').toLowerCase() === 'mastery' ? 'mastery' : 'free';
@@ -442,7 +448,14 @@ function MockExamPageInner() {
           categoryBreakdown,
         });
 
-        if (flow === 'mastery' && scope === 'mini') recordMiniMockResult(setId, miniId, pct);
+        if (flow === 'mastery' && scope === 'mini') {
+          recordMiniMockResult(setId, miniId, pct);
+        }
+
+        if (flow === 'mastery' && scope === 'full') {
+          recordFullMockResult(setId, pct); // keeps results page working
+          recordFullQbankExamResult(setId, pct); // updates dashboard
+        }
 
         saveResults(flow, setId, scope, miniId, activeCategoryKey, {
           questions,
@@ -646,16 +659,19 @@ function MockExamPageInner() {
         ? (data.questions as Question[])
         : [];
 
-      const selectedQuestions = selectQuestionsForScope(
-        originalQuestions,
-        scope,
-        {
-          miniId,
-          category: categoryFilter,
-          isPro,
-        }
-,
-      );
+let selectedQuestions: Question[] = [];
+
+if (scope === 'full') {
+  selectedQuestions = testMode
+    ? originalQuestions.slice(0, 5)
+    : originalQuestions;
+} else {
+  selectedQuestions = selectQuestionsForScope(originalQuestions, scope, {
+    miniId,
+    category: categoryFilter,
+    isPro,
+  });
+}
 
       if (!selectedQuestions.length) {
         throw new Error('No questions found for that selection.');
@@ -877,7 +893,14 @@ function MockExamPageInner() {
         label,
       });
 
-      if (scope === 'mini') recordMiniMockResult(setId, miniId, pct);
+      if (flow === 'mastery' && scope === 'mini') {
+        recordMiniMockResult(setId, miniId, pct);
+      }
+
+      if (flow === 'mastery' && scope === 'full') {
+        recordFullMockResult(setId, pct);
+        recordFullQbankExamResult(setId, pct);
+      }
 
       saveResults(flow, setId, scope, miniId, activeCategoryKey, {
         questions,

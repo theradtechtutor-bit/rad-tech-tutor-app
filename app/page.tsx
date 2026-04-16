@@ -114,7 +114,7 @@ export default function HomePage() {
               </p>
 
               {/* Checklist */}
-              <ul className="space-y-2.5 text-sm text-white/80 sm:text-base">
+              <ul className="space-y-2.5 text-md font-semibold text-white/80 sm:text-base">
                 {[
                   '600+ ARRT®-style practice questions',
                   '200-question full mock exams',
