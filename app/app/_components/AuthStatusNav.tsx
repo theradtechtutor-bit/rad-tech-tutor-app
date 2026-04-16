@@ -114,15 +114,14 @@ export default function AuthStatusNav({ showGetPro = true }: Props) {
           </Link>
         ))}
 
-      <span className="hidden rounded-full bg-white/10 px-3 py-2 text-sm text-white/90 md:inline-flex">
-        {email}
-      </span>
-
       <button
         onClick={onSignOut}
-        className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 hover:bg-white/10"
+        className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/90 hover:bg-white/10"
+        title="Sign Out"
       >
-        Sign Out
+        <span className="block max-w-[180px] truncate whitespace-nowrap">
+          {email}
+        </span>
       </button>
     </div>
   );

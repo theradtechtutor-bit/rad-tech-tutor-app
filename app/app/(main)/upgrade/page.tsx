@@ -135,7 +135,7 @@ function UpgradePageInner() {
           </div>
 
           <h1 className="mt-6 text-4xl font-bold tracking-tight text-white md:text-6xl">
-            Unlock the Full ARRT Readiness System
+            Unlock the Full ARRT® Readiness System
           </h1>
 
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-8 text-white/65 md:text-lg">
@@ -155,7 +155,8 @@ function UpgradePageInner() {
                 ⚡ Limited Offer — Discounted Access Available
               </p> */}
               <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-yellow-300">
-                ⚡ Master just 20 questions per day to be ready for the Radiography ARRT in as little as 30 days ⚡
+                ⚡ Master just 20 questions per day to be ready for the
+                Radiography ARRT® in as little as 30 days ⚡
               </p>
 
               <p className="mb-4 text-sm text-white/60">
@@ -239,7 +240,7 @@ function UpgradePageInner() {
             <div className="mx-auto mt-8 grid max-w-5xl gap-4 md:grid-cols-2">
               <UnlockCard
                 title="Master More Questions"
-                desc="Unlock the full 600-question readiness system across every ARRT category."
+                desc="Unlock the full 600-question readiness system across every ARRT® category."
               />
               <UnlockCard
                 title="Fix Weak Areas Faster"

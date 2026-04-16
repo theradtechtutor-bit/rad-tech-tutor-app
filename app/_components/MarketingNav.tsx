@@ -94,7 +94,7 @@ export default function MarketingNav() {
         <div className="flex items-center gap-2 sm:gap-3">
           {/* Desktop auth */}
           <div className="hidden lg:flex">
-            <AuthStatusNav showGetPro={false} />{' '}
+            <AuthStatusNav showGetPro />
           </div>
 
           {/* Mobile/tablet Get Pro */}
