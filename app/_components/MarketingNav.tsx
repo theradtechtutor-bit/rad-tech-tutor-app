@@ -4,17 +4,23 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import AuthStatusNav from '@/app/app/_components/AuthStatusNav';
+import { supabase } from '@/lib/supabaseClient';
+
+const SHOW_CE = false;
 
 const nav = [
   { href: '/app/dashboard', label: 'RTT Mastery Method' },
   { href: '/app/practice', label: 'Practice' },
   { href: '/app/roadmap', label: 'Roadmap' },
-  { href: '/app/ce', label: 'CE' },
+  ...(SHOW_CE ? [{ href: '/app/ce', label: 'CE' }] : []),
 ];
 
 export default function MarketingNav() {
   const pathname = usePathname() || '';
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const [isPro, setIsPro] = useState(false);
+  const [isAuthed, setIsAuthed] = useState(false);
 
   useEffect(() => {
     setMobileOpen(false);
@@ -30,6 +36,41 @@ export default function MarketingNav() {
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [mobileOpen]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadMobileAuthState() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!mounted) return;
+
+      if (!user) {
+        setIsAuthed(false);
+        setIsPro(false);
+        return;
+      }
+
+      setIsAuthed(true);
+
+      const { data } = await supabase
+        .from('user_access')
+        .select('is_pro')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (!mounted) return;
+      setIsPro(Boolean(data?.is_pro));
+    }
+
+    loadMobileAuthState();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   return (
     <header className="sticky top-0 z-30 border-b border-[color:var(--rtt-border)] bg-[color:var(--rtt-bg)]/85 backdrop-blur">
@@ -98,12 +139,14 @@ export default function MarketingNav() {
           </div>
 
           {/* Mobile/tablet Get Pro */}
-          <Link
-            href="/app/upgrade"
-            className="inline-flex rounded-full bg-yellow-400 px-4 py-2 text-sm font-semibold text-black transition hover:bg-yellow-300 lg:hidden"
-          >
-            Get Pro
-          </Link>
+          {(!isAuthed || !isPro) && (
+            <Link
+              href="/app/upgrade"
+              className="inline-flex rounded-full bg-yellow-400 px-4 py-2 text-sm font-semibold text-black transition hover:bg-yellow-300 lg:hidden"
+            >
+              Get Pro
+            </Link>
+          )}
 
           {/* Mobile/tablet hamburger */}
           <button
