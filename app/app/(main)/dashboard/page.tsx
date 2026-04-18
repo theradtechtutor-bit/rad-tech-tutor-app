@@ -45,7 +45,20 @@ function cx(...classes: Array<string | false | null | undefined>) {
 }
 
 function labelForBank(setId: string) {
-  return setId.toUpperCase().replace('QBANK', 'Practice Bank ');
+  const id = Number(setId.replace('qbank', ''));
+
+  if (id === 1) return 'Core Skills';
+  if (id === 2) return 'Advanced Training';
+  if (id === 3) return 'Registry Ready';
+
+  return 'Practice Bank';
+}
+
+function tierForBank(setId: string) {
+  const id = Number(setId.replace('qbank', ''));
+
+  if (id === 1) return 'Free';
+  return 'Pro';
 }
 
 function scrollToElementById(id: string) {
@@ -1450,7 +1463,7 @@ if (savedStep === 'exam' || full.exam.completed) {
                     >
                       {challenge.qualifies
                         ? 'Reward Unlocked'
-                        : 'This Week Only'}
+                        : 'Limited Time Only'}
                     </div>
                   </div>
                 </div>
@@ -1674,21 +1687,15 @@ if (savedStep === 'exam' || full.exam.completed) {
                           : undefined
                       }
                     >
-                      <span className="font-semibold">
-                        {labelForBank(bank.setId)}
-                      </span>
+                      <div className="flex items-center gap-2 font-semibold">
+                        <span>{labelForBank(bank.setId)}</span>
+                        <span className="text-xs text-yellow-400">
+                          {tierForBank(bank.setId)}
+                        </span>
+                      </div>
 
                       <span className="flex items-center gap-1 text-xs font-semibold text-white/60">
                         <span>200 Questions</span>
-                        <span>•</span>
-
-                        {idx === 0 ? (
-                          <span className="font-extrabold text-white">
-                            Starts Free
-                          </span>
-                        ) : (
-                          <span className="text-yellow-400">PRO</span>
-                        )}
                       </span>
                     </button>
                   );
