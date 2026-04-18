@@ -14,7 +14,7 @@ const ALLOWED_PATHS = [
 ];
 
 const MESSAGE =
-  '🚀 Follow the system. 1–2 Mini Mocks/day → finish all banks + full exams to pass the ARRT® in as little as 30 days';
+  '🎯 5 Mock Challenge: Complete 5 Mini Mocks + 90% avg to unlock 10% off Pro. Tap to view challenge ↓';
   // '🩻 Practice. Fix mistakes. Repeat. Score higher. Pass the Radiology ARRT®  with confidence.';
   // '🚧 Improving daily based on real student feedback. We’re aware of a few issues and working to resolve them soon. Your core study tools should still work smoothly. We appreciate your patience. 🚧';
 
@@ -59,10 +59,23 @@ export default function BetaBanner() {
   return (
     <div className="border-b border-yellow-400/20 bg-[#12161b]">
       <div className="mx-auto flex max-w-7xl items-center gap-3 px-3 py-2 md:px-6">
-        <div className="relative min-w-0 flex-1 overflow-hidden">
+        <div
+          className="relative min-w-0 flex-1 overflow-hidden cursor-pointer"
+          onClick={() => {
+            const el = document.getElementById('mock-challenge');
+            if (!el) return;
+
+            const yOffset = -80; // adjust this
+            const y =
+              el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+            window.scrollTo({ top: y, behavior: 'smooth' });
+          }}
+        >
+          {' '}
           <div className="rtt-beta-marquee-track">
             <div className="rtt-beta-marquee-content">
-              <span className="text-xs font-medium tracking-wide text-amber-300 md:text-sm">
+              <span className="text-sm font-medium tracking-wide text-amber-300 md:text-sm">
                 {MESSAGE}
               </span>
               <span
@@ -73,10 +86,7 @@ export default function BetaBanner() {
               </span>
             </div>
 
-            <div
-              className="rtt-beta-marquee-content"
-              aria-hidden="true"
-            >
+            <div className="rtt-beta-marquee-content" aria-hidden="true">
               <span className="text-xs font-medium tracking-wide text-amber-300 md:text-sm">
                 {MESSAGE}
               </span>

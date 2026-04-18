@@ -12,6 +12,7 @@ import {
   recordFullMockResult,
   recordFullQbankExamResult,
   syncMockResult,
+  getMiniMockChallengeStats,
 } from '@/lib/progressStore';
 import MasteryFlowSteps from '@/app/app/_components/MasteryFlowSteps';
 import StartHereTour from '@/app/app/_components/StartHereTour';
@@ -158,7 +159,9 @@ function clearSession(
   category: string,
 ) {
   try {
-    window.localStorage.removeItem(sessionKey(flow, setId, scope, miniId, category));
+    window.localStorage.removeItem(
+      sessionKey(flow, setId, scope, miniId, category),
+    );
   } catch {}
   try {
     window.sessionStorage.removeItem(
@@ -323,6 +326,7 @@ function MockExamPageInner() {
   const [done, setDone] = useState(false);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [startedAt, setStartedAt] = useState<number>(Date.now());
+  const [showChallengeModal, setShowChallengeModal] = useState(false);
 
   const examAnchorRef = useRef<HTMLDivElement | null>(null);
   const isPausingRef = useRef(false);
@@ -335,6 +339,7 @@ function MockExamPageInner() {
   const total = questions?.length || 0;
   const categoryLabel =
     allCategories.find((c) => c.key === categoryFilter)?.label || 'Category';
+  const challenge = getMiniMockChallengeStats(setId);
 
   const categoryCounts = useMemo(() => {
     const totalCount = allQuestions.filter(
@@ -372,6 +377,12 @@ function MockExamPageInner() {
   }, [sp, setId, scope, miniId, activeCategoryKey]);
 
   useEffect(() => {
+    if (done && scope === 'mini' && challenge.qualifies) {
+      setShowChallengeModal(true);
+    }
+  }, [done, scope, challenge.qualifies]);
+
+  useEffect(() => {
     if (timeLeft === null || done || !questions) return;
 
     if (timeLeft <= 0) {
@@ -405,7 +416,10 @@ function MockExamPageInner() {
           );
         }
 
-        const categoryStats: Record<string, { correct: number; total: number }> = {};
+        const categoryStats: Record<
+          string,
+          { correct: number; total: number }
+        > = {};
 
         questions.forEach((item, idx) => {
           const cat = mapToArrtMajorCategory(String(item.category || ''));
@@ -428,25 +442,28 @@ function MockExamPageInner() {
         const categoryBreakdown: Record<string, number> = {};
         Object.entries(categoryStats).forEach(([cat, stats]) => {
           categoryBreakdown[cat] =
-            stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+            stats.total > 0
+              ? Math.round((stats.correct / stats.total) * 100)
+              : 0;
         });
 
-        if (flow === 'mastery') appendAttempt({
-          bankId: bankIdFromSet(setId),
-          score: pct,
-          correct,
-          total: totalQ,
-          category: scope === 'category' ? scopeLabel : label,
-          type: scope,
-          miniId: scope === 'mini' ? miniId : undefined,
-          questionsTaken: totalQ,
-          timeSpentSeconds: Math.max(
-            0,
-            Math.round((Date.now() - startedAt) / 1000),
-          ),
-          label,
-          categoryBreakdown,
-        });
+        if (flow === 'mastery')
+          appendAttempt({
+            bankId: bankIdFromSet(setId),
+            score: pct,
+            correct,
+            total: totalQ,
+            category: scope === 'category' ? scopeLabel : label,
+            type: scope,
+            miniId: scope === 'mini' ? miniId : undefined,
+            questionsTaken: totalQ,
+            timeSpentSeconds: Math.max(
+              0,
+              Math.round((Date.now() - startedAt) / 1000),
+            ),
+            label,
+            categoryBreakdown,
+          });
 
         if (flow === 'mastery' && scope === 'mini') {
           recordMiniMockResult(setId, miniId, pct);
@@ -516,7 +533,6 @@ function MockExamPageInner() {
   //   }, 250);
   //   return () => window.clearTimeout(t);
   // }, [questions?.length, done]);
-
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -659,19 +675,19 @@ function MockExamPageInner() {
         ? (data.questions as Question[])
         : [];
 
-let selectedQuestions: Question[] = [];
+      let selectedQuestions: Question[] = [];
 
-if (scope === 'full') {
-  selectedQuestions = testMode
-    ? originalQuestions.slice(0, 5)
-    : originalQuestions;
-} else {
-  selectedQuestions = selectQuestionsForScope(originalQuestions, scope, {
-    miniId,
-    category: categoryFilter,
-    isPro,
-  });
-}
+      if (scope === 'full') {
+        selectedQuestions = testMode
+          ? originalQuestions.slice(0, 5)
+          : originalQuestions;
+      } else {
+        selectedQuestions = selectQuestionsForScope(originalQuestions, scope, {
+          miniId,
+          category: categoryFilter,
+          isPro,
+        });
+      }
 
       if (!selectedQuestions.length) {
         throw new Error('No questions found for that selection.');
@@ -708,10 +724,8 @@ if (scope === 'full') {
     const saved = loadSession(flow, setId, scope, miniId, activeCategoryKey);
     const hasSavedProgress =
       !!saved &&
-      (
-        (Array.isArray(saved.questions) && saved.questions.length > 0) ||
-        Object.keys(saved.answers || {}).length > 0
-      );
+      ((Array.isArray(saved.questions) && saved.questions.length > 0) ||
+        Object.keys(saved.answers || {}).length > 0);
 
     if (hasSavedProgress) {
       resumeSaved();
@@ -720,7 +734,6 @@ if (scope === 'full') {
 
     void startNew();
   }, [sp, loading, setId, scope, miniId, activeCategoryKey]);
-  
 
   function resumeSaved() {
     const saved = loadSession(flow, setId, scope, miniId, activeCategoryKey);
@@ -850,7 +863,8 @@ if (scope === 'full') {
         uniq,
       );
 
-      const categoryStats: Record<string, { correct: number; total: number }> = {};
+      const categoryStats: Record<string, { correct: number; total: number }> =
+        {};
 
       questions.forEach((item, idx) => {
         const cat = mapToArrtMajorCategory(String(item.category || ''));
@@ -977,7 +991,10 @@ if (scope === 'full') {
             </div>
           </div>
 
-          {flow === 'mastery' && scope === 'mini' && autoStart && hasExplicitMini ? (
+          {flow === 'mastery' &&
+          scope === 'mini' &&
+          autoStart &&
+          hasExplicitMini ? (
             <div className="mt-5 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-4 text-sm text-white/80">
               <div className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200/70">
                 Step 3 of the RTT Mastery Method
@@ -991,7 +1008,8 @@ if (scope === 'full') {
             </div>
           ) : null}
 
-          {hasSaved && !(scope === 'mini' && flow === 'free' && !hasExplicitMini) ? (
+          {hasSaved &&
+          !(scope === 'mini' && flow === 'free' && !hasExplicitMini) ? (
             <div className="mt-5 rounded-2xl border border-yellow-400/20 bg-yellow-400/10 px-5 py-4 text-sm text-yellow-100">
               Saved mock found. You answered up to question{' '}
               {savedMeta?.answeredCount ?? 0} of {savedMeta?.total ?? '—'}.
@@ -1000,7 +1018,10 @@ if (scope === 'full') {
             </div>
           ) : null}
 
-          {(flow !== 'mastery' || scope !== 'mini' || !autoStart || !hasExplicitMini) ? (
+          {flow !== 'mastery' ||
+          scope !== 'mini' ||
+          !autoStart ||
+          !hasExplicitMini ? (
             <>
               <div className="mt-5 grid gap-4 md:grid-cols-3">
                 <label className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/80">
@@ -1123,7 +1144,10 @@ if (scope === 'full') {
 
           {err ? <div className="mt-4 text-sm text-red-300">{err}</div> : null}
 
-          {flow === 'mastery' && scope === 'mini' && autoStart && hasExplicitMini ? (
+          {flow === 'mastery' &&
+          scope === 'mini' &&
+          autoStart &&
+          hasExplicitMini ? (
             <div className="mt-6">
               <MasteryFlowSteps
                 currentStep={3}
@@ -1141,7 +1165,8 @@ if (scope === 'full') {
                   onClick={resumeSaved}
                   className="cursor-pointer rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
                 >
-                  Resume Saved {scope === 'mini' ? `Mini Mock ${miniId}` : 'Mock'}
+                  Resume Saved{' '}
+                  {scope === 'mini' ? `Mini Mock ${miniId}` : 'Mock'}
                 </button>
                 {flow === 'free' ? (
                   <button
@@ -1186,6 +1211,44 @@ if (scope === 'full') {
             )}
           </div>
         </div>
+
+        {showChallengeModal ? (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/72 p-4">
+            <div className="w-full max-w-md rounded-3xl border border-emerald-400/20 bg-zinc-950 p-6 shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-200/85">
+                Challenge Completed
+              </div>
+              <div className="mt-2 text-2xl font-semibold text-white">
+                You unlocked 10% off Pro
+              </div>
+              <div className="mt-3 text-sm leading-6 text-white/70">
+                You completed the 5 Mock Challenge at a 90% average or higher.
+                Use code{' '}
+                <span className="font-semibold text-yellow-300">MINI10</span>{' '}
+                at checkout.
+              </div>
+              <div className="mt-2 text-sm font-medium text-red-300">
+                Expires in 24 hours
+              </div>
+
+              <div className="mt-5 flex flex-col gap-2">
+                <Link
+                  href="/app/upgrade"
+                  className="rounded-2xl bg-emerald-400 px-4 py-3 text-center text-sm font-semibold text-black hover:brightness-95"
+                >
+                  Upgrade Now
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setShowChallengeModal(false)}
+                  className="rounded-2xl bg-white/8 px-4 py-3 text-sm font-semibold text-white hover:bg-white/12"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </div>
     );
   }
@@ -1246,6 +1309,60 @@ if (scope === 'full') {
                 currentMini={miniId}
                 compact
               />
+            </div>
+          ) : null}
+
+          {scope === 'mini' ? (
+            <div className="mt-5 rounded-2xl border border-emerald-400/15 bg-[linear-gradient(180deg,rgba(16,185,129,0.08),rgba(255,255,255,0.02))] p-5">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-200/85">
+                    5 Mock Challenge
+                  </div>
+                  <div className="mt-2 text-lg font-semibold text-white">
+                    Complete 5 Mini Mocks + average 90%
+                  </div>
+                  <div className="mt-3 space-y-1 text-sm text-white/68">
+                    <div>Mocks Completed: {challenge.completed} / 5</div>
+                    <div>Average Score: {challenge.avg}%</div>
+                    <div>Target: 90%</div>
+                  </div>
+                </div>
+                <div
+                  className={
+                    challenge.qualifies
+                      ? 'rounded-full bg-emerald-400/15 px-3 py-1 text-xs font-semibold text-emerald-200'
+                      : 'rounded-full bg-yellow-400/10 px-3 py-1 text-xs font-semibold text-yellow-200'
+                  }
+                >
+                  {challenge.qualifies ? 'Reward Unlocked' : 'In Progress'}
+                </div>
+              </div>
+
+              <div className="mt-4 h-2 overflow-hidden rounded-full bg-black/25">
+                <div
+                  className="h-full rounded-full bg-[linear-gradient(90deg,rgba(45,212,191,0.98),rgba(16,185,129,0.65))]"
+                  style={{
+                    width: `${Math.min(100, Math.round((challenge.completed / 5) * 100))}%`,
+                  }}
+                />
+              </div>
+
+              <div className="mt-3 text-sm font-medium">
+                {challenge.qualifies ? (
+                  <span className="text-yellow-300">
+                    ✅ Challenge completed — use code MINI10 for 10% off Pro.
+                  </span>
+                ) : challenge.completed < 5 ? (
+                  <span className="text-yellow-300">
+                    {5 - challenge.completed} mocks left to unlock your reward.
+                  </span>
+                ) : (
+                  <span className="text-yellow-300">
+                    {90 - challenge.avg}% away from the 90% target.
+                  </span>
+                )}
+              </div>
             </div>
           ) : null}
 
@@ -1424,7 +1541,9 @@ if (scope === 'full') {
         </div>
       ) : null}
 
-      {!session && Object.keys(answers).length >= Math.min(15, Math.ceil(total * 0.6)) && !done ? (
+      {!session &&
+      Object.keys(answers).length >= Math.min(15, Math.ceil(total * 0.6)) &&
+      !done ? (
         <div className="mt-4">
           <SaveProgressPrompt
             nextPath={`${pathname}?${sp?.toString() || ''}`}
@@ -1434,7 +1553,10 @@ if (scope === 'full') {
         </div>
       ) : null}
 
-      {flow === 'mastery' && scope === 'mini' && autoStart && hasExplicitMini ? (
+      {flow === 'mastery' &&
+      scope === 'mini' &&
+      autoStart &&
+      hasExplicitMini ? (
         <div
           data-tour="mock-info"
           className="mt-4 rounded-3xl border border-white/10 bg-white/5 p-5"

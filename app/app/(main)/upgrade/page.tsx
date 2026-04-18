@@ -4,6 +4,7 @@ import { Suspense, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { captureEvent } from '@/lib/analytics';
+import { getMiniMockChallengeStats } from '@/lib/progressStore';
 
 type PlanKey = 'pro_1m' | 'pro_3m' | 'pro_6m';
 
@@ -65,6 +66,29 @@ function UpgradePageInner() {
   const [busyPlan, setBusyPlan] = useState<PlanKey | null>(null);
   const [error, setError] = useState('');
 
+  const [challenge, setChallenge] = useState({ qualifies: false });
+
+
+  useEffect(() => {
+    captureEvent('upgrade_viewed', {
+      source: 'upgrade_page',
+    });
+
+    fetch('/api/events/upgrade-viewed', {
+      method: 'POST',
+    }).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    try {
+const stored = JSON.parse(localStorage.getItem('rtt-progress') || '{}');
+      const result = getMiniMockChallengeStats(stored);
+      setChallenge(result);
+    } catch {
+      setChallenge({ qualifies: false });
+    }
+  }, []);
+
   async function startCheckout(plan: PlanKey) {
     captureEvent('clicked_get_pro', {
       plan,
@@ -75,11 +99,14 @@ function UpgradePageInner() {
     setError('');
 
     try {
-      const res = await fetch('/api/stripe/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan }),
-      });
+const res = await fetch('/api/stripe/checkout', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    plan,
+    challengeQualified: challenge?.qualifies ?? false, // 👈 ADD THIS
+  }),
+});
 
       const data = await res.json().catch(() => ({}));
 

@@ -17,6 +17,7 @@ import {
   getMasterySummary,
   readAttempts,
   saveFullQbankStep,
+  getMiniMockChallengeStats,
 } from '@/lib/progressStore';
 
 const BANKS = ['qbank1', 'qbank2', 'qbank3'] as const;
@@ -1174,6 +1175,10 @@ function confirmSkipExam() {
     [bankSummaries, selectedBank],
   );
 
+  const challenge = currentBank
+    ? getMiniMockChallengeStats(currentBank.setId)
+    : { completed: 0, avg: 0, qualifies: false };
+
 useEffect(() => {
   if (!currentBank) return;
 
@@ -1415,6 +1420,224 @@ if (savedStep === 'exam' || full.exam.completed) {
                   />
                 </div>
               </div>
+
+              <div
+                id="mock-challenge"
+                className="mt-6 overflow-hidden rounded-[28px] border border-emerald-300/25 bg-[linear-gradient(135deg,rgba(16,185,129,0.22),rgba(5,8,12,0.96)_55%,rgba(0,0,0,0.98))] shadow-[0_20px_80px_rgba(16,185,129,0.18)]"
+              >
+                <div className="border-b border-white/10 bg-black/20 px-5 py-3">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                      <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-emerald-400/20 text-lg">
+                        🎯
+                      </span>
+                      <div>
+                        <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-200/85">
+                          Limited-Time Challenge
+                        </div>
+                        <div className="text-lg font-semibold text-white">
+                          5 Mock Challenge
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                        challenge.qualifies
+                          ? 'bg-emerald-400/20 text-emerald-200'
+                          : 'bg-yellow-400/15 text-yellow-300'
+                      }`}
+                    >
+                      {challenge.qualifies
+                        ? 'Reward Unlocked'
+                        : 'This Week Only'}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="px-5 py-5 md:px-6 md:py-6">
+                  <div className="max-w-3xl">
+                    <h3 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">
+                      Complete 5 Mini Mocks + average 90%
+                    </h3>
+
+                    <p className="mt-2 text-sm leading-6 text-white/72 md:text-base">
+                      Earn{' '}
+                      <span className="font-semibold text-yellow-300">
+                        10% off Pro
+                      </span>{' '}
+                      by averaging 90% across your first 5 Mini Mocks.
+                    </p>
+                  </div>
+
+                  <div className="mt-5 grid gap-3 md:grid-cols-3">
+                    <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
+                      <div className="text-[11px] uppercase tracking-[0.18em] text-white/45">
+                        Mocks Completed
+                      </div>
+                      <div className="mt-1 text-2xl font-semibold text-white">
+                        {challenge.completed}{' '}
+                        <span className="text-white/35">/ 5</span>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
+                      <div className="text-[11px] uppercase tracking-[0.18em] text-white/45">
+                        Average Score
+                      </div>
+                      <div className="mt-1 text-2xl font-semibold text-white">
+                        {challenge.avg}%
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
+                      <div className="text-[11px] uppercase tracking-[0.18em] text-white/45">
+                        Reward
+                      </div>
+                      <div className="mt-1 text-2xl font-semibold text-yellow-300">
+                        10% OFF
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-5">
+                    <div className="mb-2 flex items-center justify-between text-sm">
+                      <span className="text-white/65">Challenge Progress</span>
+                      <span className="font-semibold text-white">
+                        {challenge.completed < 5
+                          ? `${challenge.completed}/5 complete`
+                          : `${challenge.avg}% average`}
+                      </span>
+                    </div>
+
+                    <div className="h-3 overflow-hidden rounded-full bg-black/35">
+                      <div
+                        className="h-full rounded-full bg-[linear-gradient(90deg,rgba(250,204,21,0.95),rgba(16,185,129,0.95))] transition-all duration-500"
+                        style={{
+                          width: `${
+                            challenge.completed < 5
+                              ? (challenge.completed / 5) * 100
+                              : Math.min(100, (challenge.avg / 90) * 100)
+                          }%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <div>
+                      {challenge.qualifies ? (
+                        <>
+                          <div className="text-lg font-semibold text-white">
+                            ✅ Reward unlocked — use code{' '}
+                            <span className="text-yellow-300">MINI10</span>
+                          </div>
+                          <div className="text-sm text-white/65">
+                            Get 10% off Pro right now before this offer ends.
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="text-lg font-semibold text-yellow-300">
+                            {challenge.completed < 5
+                              ? `${5 - challenge.completed} mocks left to unlock 10% off`
+                              : `${90 - challenge.avg}% away from unlocking your reward`}
+                          </div>
+                          <div className="text-sm text-white/65">
+                            Stay consistent — you’re closer than you think.
+                          </div>
+                        </>
+                      )}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (challenge.qualifies) {
+                          window.location.href = '/app/upgrade';
+                          return;
+                        }
+
+                        const nextMiniRaw =
+                          currentBank?.currentMini &&
+                          currentBank.currentMini <= 10
+                            ? currentBank.currentMini
+                            : 1;
+
+                        const nextMini = !isPro
+                          ? Math.min(nextMiniRaw, 5)
+                          : nextMiniRaw;
+
+                        setSelectedLesson(`mini-${nextMini}` as LessonKey);
+
+                        requestAnimationFrame(() => {
+                          requestAnimationFrame(() => {
+                            document
+                              .getElementById(`mini-${nextMini}`)
+                              ?.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start',
+                              });
+                          });
+                        });
+                      }}
+                      className="rounded-xl bg-yellow-400 px-5 py-3 text-sm font-semibold text-black hover:bg-yellow-300"
+                    >
+                      {challenge.qualifies
+                        ? 'Upgrade Now'
+                        : challenge.completed > 0
+                          ? 'Continue Challenge'
+                          : 'Start Challenge'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* <div className="mt-6 rounded-[24px] border border-emerald-400/15 bg-[linear-gradient(180deg,rgba(16,185,129,0.08),rgba(255,255,255,0.02))] p-5 shadow-[0_12px_36px_rgba(0,0,0,0.22)]">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-200/85">
+                      5 Mock Challenge (This Week)
+                    </div>
+                    <div className="mt-2 text-lg font-semibold text-white">
+                      Complete 5 Mini Mocks + average 90%
+                    </div>
+                    <div className="mt-3 space-y-1 text-sm text-white/68">
+                      <div>Mocks Completed: {challenge.completed} / 5</div>
+                      <div>Average Score: {challenge.avg}%</div>
+                      <div>Target: 90%</div>
+                    </div>
+                  </div>
+
+                  <div
+                    className={cx(
+                      'shrink-0 rounded-full px-3 py-1 text-xs font-semibold',
+                      challenge.qualifies
+                        ? 'bg-emerald-400/15 text-emerald-200'
+                        : 'bg-yellow-400/10 text-yellow-200',
+                    )}
+                  >
+                    {challenge.qualifies ? 'Reward Unlocked' : 'In Progress'}
+                  </div>
+                </div>
+
+                <div className="mt-4 h-2 overflow-hidden rounded-full bg-black/25">
+                  <div
+                    className="h-full rounded-full bg-[linear-gradient(90deg,rgba(45,212,191,0.98),rgba(16,185,129,0.65))]"
+                    style={{ width: `${Math.min(100, Math.round((challenge.completed / 5) * 100))}%` }}
+                  />
+                </div>
+
+                <div className="mt-3 text-sm font-medium">
+                  {challenge.qualifies ? (
+                    <span className="text-emerald-300">✅ Reward unlocked — use code MINI10 for 10% off Pro</span>
+                  ) : challenge.completed < 5 ? (
+                    <span className="text-yellow-300">{5 - challenge.completed} mocks left to unlock your reward.</span>
+                  ) : (
+                    <span className="text-yellow-300">{90 - challenge.avg}% away from the 90% target.</span>
+                  )}
+                </div>
+              </div> */}
             </div>
 
             <div className="flex flex-col gap-3 xl:items-end">
@@ -1551,7 +1774,8 @@ if (savedStep === 'exam' || full.exam.completed) {
                           : 'practice';
 
                     return (
-                      <div key={mini}>
+                      <div key={mini} id={`mini-${mini}`}>
+                        {' '}
                         <div className="block w-full text-left">
                           <SidebarMiniMock
                             mini={mini}
@@ -1599,11 +1823,11 @@ if (savedStep === 'exam' || full.exam.completed) {
                             onRestart={() => handleRestartMini(mini)}
                           />
                         </div>
-
                         {mini === 5 && !isPro && (
                           <div className="mt-2 flex items-center justify-between rounded-lg border border-yellow-400/20 bg-yellow-400/5 px-3 py-2 text-xs">
                             <div className="text-white/70">
-                              🔒 Continue your progress — unlock all Mini Mocks and QBanks
+                              🔒 Continue your progress — unlock all Mini Mocks
+                              and QBanks
                             </div>
 
                             <button

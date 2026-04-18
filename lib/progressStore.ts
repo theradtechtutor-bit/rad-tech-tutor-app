@@ -973,3 +973,57 @@ export function resetFullQbank(setId: string) {
 
   window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
 }
+
+function miniMockChallengeUnlockKey(setId: string) {
+  return `rtt_mini_mock_challenge_unlocked_${(setId || 'qbank1').toLowerCase()}`;
+}
+
+export function hasMiniMockChallengeUnlocked(setId: string) {
+  return readJson<boolean>(miniMockChallengeUnlockKey(setId), false);
+}
+
+export function unlockMiniMockChallenge(setId: string) {
+  writeJson(miniMockChallengeUnlockKey(setId), true);
+}
+
+export function clearMiniMockChallengeUnlock(setId: string) {
+  if (typeof window === 'undefined') return;
+  removeKeyFromBoth(miniMockChallengeUnlockKey(setId));
+  window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+}
+
+export function getMiniMockChallengeStats(setId: string) {
+  const bank = readBankMastery(setId);
+  const alreadyUnlocked = hasMiniMockChallengeUnlocked(setId);
+
+  const firstFive = [1, 2, 3, 4, 5];
+
+  let completedNow = 0;
+  let totalScoreNow = 0;
+
+  for (const id of firstFive) {
+    const mock = bank.miniStatus[String(id)];
+
+    if (mock && mock.bestScore != null) {
+      completedNow++;
+      totalScoreNow += mock.bestScore;
+    }
+  }
+
+  const avgNow =
+    completedNow > 0 ? Math.round(totalScoreNow / completedNow) : 0;
+  const qualifiesNow = completedNow >= 5 && avgNow >= 90;
+
+  if (qualifiesNow && !alreadyUnlocked) {
+    unlockMiniMockChallenge(setId);
+  }
+
+  const unlocked = alreadyUnlocked || qualifiesNow;
+
+  return {
+    completed: unlocked ? 5 : completedNow,
+    avg: unlocked ? Math.max(avgNow, 90) : avgNow,
+    qualifies: unlocked,
+    unlocked,
+  };
+}

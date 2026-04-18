@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
 
 export async function POST(req: Request) {
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     event = stripe.webhooks.constructEvent(
       body,
       sig,
-      process.env.STRIPE_WEBHOOK_SECRET!
+      process.env.STRIPE_WEBHOOK_SECRET!,
     );
   } catch (err: any) {
     console.error('Webhook signature error:', err.message);
@@ -31,7 +31,13 @@ export async function POST(req: Request) {
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session;
 
-    const userId = session.metadata?.user_id;
+    const userId = session.metadata?.user_id ?? null;
+    const userEmail =
+      session.metadata?.user_email ??
+      session.customer_details?.email ??
+      session.customer_email ??
+      '';
+    const plan = session.metadata?.plan_key ?? null;
 
     if (!userId) {
       console.error('Missing user_id in metadata');
@@ -44,6 +50,17 @@ export async function POST(req: Request) {
       user_id: userId,
       is_pro: true,
       updated_at: new Date().toISOString(),
+    });
+
+    await supabase.from('user_events').insert({
+      user_id: userId,
+      event_type: 'purchase_completed',
+      metadata: {
+        plan,
+        user_email: userEmail,
+        stripe_session_id: session.id,
+        source: 'stripe_webhook',
+      },
     });
   }
 
