@@ -152,7 +152,7 @@ function getSavedFullPracticeMeta(setId: string) {
   if (typeof window === 'undefined') return null;
 
 const keys = [
-  `mastery__${setId}__FULL`,
+  `mastery__${setId}__full`,
   `mastery__${setId}__all__all__full`,
   `${setId}__all__all__full`,
 ];

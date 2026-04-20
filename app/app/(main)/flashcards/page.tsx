@@ -15,7 +15,7 @@ import StartHereTour from '@/app/app/_components/StartHereTour';
 import SaveProgressPrompt from '@/app/app/_components/SaveProgressPrompt';
 import { useSupabaseSession } from '@/app/app/_hooks/useSupabaseSession';
 import { usePro } from '@/app/app/_lib/usePro';
-import { selectQuestionsForScope } from '@/lib/mockPlan';
+import { buildMiniMocks, selectQuestionsForScope } from '@/lib/mockPlan';
 import {
   clearFlashSession,
   getFlashcardRemainingIds,
@@ -112,15 +112,19 @@ function stackTileClass(kind: 'missed' | 'yellow' | 'green' | 'gold') {
 
 function FlashcardsPageInner() {
   const sp = useSearchParams();
+  const idsFromSession = (sp?.get('ids') || '')
+    .split(',')
+    .map((id) => id.trim())
+    .filter(Boolean);
+  const isSessionDeck = idsFromSession.length > 0;
   const router = useRouter();
   const pathname = usePathname();
   const { session } = useSupabaseSession();
 
   const setId = (sp?.get('set') || 'qbank1').toLowerCase();
-  const mode =
-    ((sp?.get('mode') || 'missed').toLowerCase() === 'all' ? 'all' : 'missed') as
-      | 'all'
-      | 'missed';
+  const mode = (
+    (sp?.get('mode') || 'missed').toLowerCase() === 'all' ? 'all' : 'missed'
+  ) as 'all' | 'missed';
   const masteryMode = (sp?.get('flow') || '').toLowerCase() === 'mastery';
 
   const scope = (sp?.get('scope') || '').toLowerCase();
@@ -128,29 +132,42 @@ function FlashcardsPageInner() {
 
   const filterValue = (sp?.get('filter') || 'all').toLowerCase();
   const filterIsMini = /^mini-\d+$/.test(filterValue);
-  const selectedMini = filterIsMini ? Number(filterValue.replace('mini-', '')) : 'all';
-  const selectedCategory = !filterIsMini && filterValue !== 'all' ? filterValue : 'all';
+  const selectedMini = filterIsMini
+    ? Number(filterValue.replace('mini-', ''))
+    : 'all';
+  const selectedCategory =
+    !filterIsMini && filterValue !== 'all' ? filterValue : 'all';
 
   const rawMini = (sp?.get('mini') || 'all').toLowerCase();
   const mini = Math.max(1, Number(sp?.get('mini') || '1'));
-const effectiveMiniSessionKey = isFullQBank
-  ? 'full'
-  : masteryMode
-    ? mini
-    : typeof selectedMini === 'number'
-      ? selectedMini
-      : 'all';
-const flashSessionScopeKey = isFullQBank
-  ? `${setId}__FULL`
-  : `${setId}__${mode}__${filterValue}__${String(effectiveMiniSessionKey)}`;
+  const effectiveMiniSessionKey = isFullQBank
+    ? 'full'
+    : masteryMode
+      ? mini
+      : typeof selectedMini === 'number'
+        ? selectedMini
+        : 'all';
+
+  //broken:
+  // const flashSessionScopeKey = isFullQBank
+  //   ? `${setId}__FULL`
+  //   : `${setId}__${mode}__${filterValue}__${String(effectiveMiniSessionKey)}`;
+
+  // fixed:
+  const flashSessionScopeKey = isFullQBank
+    ? `${setId}__full`
+    : `${setId}__${mode}__${filterValue}__${String(effectiveMiniSessionKey)}`;
 
   const [loading, setLoading] = useState(false);
-  const [questionById, setQuestionById] = useState<Record<string, Question>>({});
+  const [questionById, setQuestionById] = useState<Record<string, Question>>(
+    {},
+  );
   const [allCards, setAllCards] = useState<FlashcardState[]>([]);
-  const [filterOptions, setFilterOptions] = useState<Array<{ key: string; label: string }>>([
-    { key: 'all', label: 'All' },
-  ]);
+  const [filterOptions, setFilterOptions] = useState<
+    Array<{ key: string; label: string }>
+  >([{ key: 'all', label: 'All' }]);
   const proStatus = usePro();
+  const proLoaded = proStatus !== undefined && proStatus !== null;
   const isPro = proStatus ?? false;
   const [deck, setDeck] = useState<FlashcardState[]>([]);
   const [mastered, setMastered] = useState<FlashcardState[]>([]);
@@ -163,17 +180,45 @@ const flashSessionScopeKey = isFullQBank
   const savePromptRef = useRef<HTMLDivElement | null>(null);
   const hasScrolledToSavePromptRef = useRef(false);
 
-//   useEffect(() => {
-// if (!deck.length) return;
-//     if (savePromptRef.current) return;
-//     const t = window.setTimeout(() => {
-//       deckAnchorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-//     }, 250);
-//     return () => window.clearTimeout(t);
-//   }, [deck.length]);
+  function openDeck(nextMode: 'all' | 'missed', nextFilter: string) {
+    const params = new URLSearchParams(sp?.toString());
+
+    params.delete('ids');
+    params.delete('cat');
+    params.delete('mini');
+
+    params.set('set', setId);
+    params.set('mode', nextMode);
+    params.set('filter', nextFilter);
+    params.set('refresh', String(Date.now()));
+
+    clearFlashSession(flashSessionScopeKey);
+
+    window.location.assign(`/app/flashcards?${params.toString()}`);
+  }
+
+  function exitSessionDeck() {
+    openDeck(mode, filterValue);
+  }
+
+  //   function exitSessionDeck() {
+  //   const params = new URLSearchParams(sp?.toString());
+  //   params.delete('ids');
+  //   clearFlashSession(flashSessionScopeKey);
+  //   router.replace(`/app/flashcards?${params.toString()}`);
+  // }
+
+  //   useEffect(() => {
+  // if (!deck.length) return;
+  //     if (savePromptRef.current) return;
+  //     const t = window.setTimeout(() => {
+  //       deckAnchorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  //     }, 250);
+  //     return () => window.clearTimeout(t);
+  //   }, [deck.length]);
 
   useEffect(() => {
-if (session) {
+    if (session) {
       hasScrolledToSavePromptRef.current = false;
       return;
     }
@@ -196,11 +241,12 @@ if (session) {
     return () => clearTimeout(t);
   }, [session, deck.length, mastered.length]);
 
-
   useEffect(() => {
-  let cancelled = false;
+    let cancelled = false;
 
-  async function load() {
+    async function load() {
+      if (!proLoaded) return;
+
       setLoading(true);
       try {
         const res = await fetch(apiForSetId(setId), { cache: 'no-store' });
@@ -232,22 +278,31 @@ if (session) {
         ];
         setFilterOptions(fullFilterOptions);
 
-let filteredQuestions = questions;
+        const miniMap = buildMiniMocks(questions);
 
-if (isFullQBank) {
-  // ✅ FULL QBANK — DO NOT FILTER TO MINI
-  filteredQuestions = questions;
-} else if (masteryMode) {
-  filteredQuestions = selectQuestionsForScope(questions, 'mini', {
-    miniId: Number(mini),
-    category: 'all',
-  });
-} else if (selectedMini !== 'all') {
-  filteredQuestions = selectQuestionsForScope(questions, 'mini', {
-    miniId: Number(selectedMini),
-    category: 'all',
-  });
-}
+        const unlockedIds = new Set(
+          [1, 2, 3, 4, 5].flatMap((m) => (miniMap[m] || []).map((q) => q.id)),
+        );
+
+        const flashcardPool = isPro
+          ? questions
+          : questions.filter((q) => unlockedIds.has(q.id));
+
+        let filteredQuestions = flashcardPool;
+
+        if (isFullQBank) {
+          filteredQuestions = flashcardPool;
+        } else if (masteryMode) {
+          filteredQuestions = selectQuestionsForScope(flashcardPool, 'mini', {
+            miniId: Number(mini),
+            category: 'all',
+          });
+        } else if (selectedMini !== 'all') {
+          filteredQuestions = selectQuestionsForScope(flashcardPool, 'mini', {
+            miniId: Number(selectedMini),
+            category: 'all',
+          });
+        }
 
         let cards = filteredQuestions.map((q) =>
           toFlashcard({
@@ -257,46 +312,78 @@ if (isFullQBank) {
         );
 
         if (!masteryMode && selectedCategory !== 'all') {
-          cards = cards.filter((card) => cardCategory(card).toLowerCase() === selectedCategory);
+          cards = cards.filter(
+            (card) => cardCategory(card).toLowerCase() === selectedCategory,
+          );
         }
 
         setAllCards(cards);
 
-const remainingMissedIds = isFullQBank
-  ? getFlashcardRemainingIds(setId, 'all')
-  : getFlashcardRemainingIds(
-      setId,
-      selectedCategory === 'all' ? 'all' : selectedCategory,
-    );
+        //broken:
+        // const remainingMissedIds = isFullQBank
+        //   ? getFlashcardRemainingIds(setId, 'all')
+        //   : getFlashcardRemainingIds(
+        //       setId,
+        //       selectedCategory === 'all' ? 'all' : selectedCategory,
+        //     );
+
+        //fixed:
+        const remainingMissedIds = isFullQBank
+          ? getFlashcardRemainingIds(setId, 'full')
+          : getFlashcardRemainingIds(
+              setId,
+              selectedCategory === 'all' ? 'all' : selectedCategory,
+            );
 
         const saved = readFlashSession(flashSessionScopeKey);
         const allowedIds = new Set(cards.map((card) => card.id));
-        const savedDeck = (saved?.deck || []).filter((card) => allowedIds.has(card.id));
-        const savedMastered = (saved?.mastered || []).filter((card) => allowedIds.has(card.id));
+        const savedDeck = (saved?.deck || []).filter((card) =>
+          allowedIds.has(card.id),
+        );
+        const savedMastered = (saved?.mastered || []).filter((card) =>
+          allowedIds.has(card.id),
+        );
 
-        const savedLooksFresh =
-          !!saved &&
-          saved.setId === setId &&
-          saved.mode === mode &&
-          saved.cat === filterValue &&
-          String(saved.mini ?? 'all') === String(effectiveMiniSessionKey) &&
-          savedDeck.length + savedMastered.length > 0;
+        const savedLooksFresh = false;
+        // const savedLooksFresh =
+        //   idsFromSession.length === 0 &&
+        //   !!saved &&
+        //   saved.setId === setId &&
+        //   saved.mode === mode &&
+        //   saved.cat === filterValue &&
+        //   String(saved.mini ?? 'all') === String(effectiveMiniSessionKey) &&
+        //   savedDeck.length + savedMastered.length > 0;
 
+        if (idsFromSession.length > 0) {
+          clearFlashSession(flashSessionScopeKey);
+        }
         if (savedLooksFresh) {
           setHasSavedSession(true);
           setDeck(savedDeck);
           setMastered(savedMastered);
-          setCursor(Math.min(saved?.cursor || 0, Math.max(0, savedDeck.length - 1)));
+          setCursor(
+            Math.min(saved?.cursor || 0, Math.max(0, savedDeck.length - 1)),
+          );
           setFlipped(false);
           return;
         }
 
+        const activeMissedIds =
+          idsFromSession.length > 0 ? idsFromSession : remainingMissedIds;
+
         const initialDeck =
           mode === 'missed' || masteryMode
             ? cards
-                .filter((card) => remainingMissedIds.includes(card.id))
+                .filter((card) => activeMissedIds.includes(card.id))
                 .map((card) => ({ ...card, stage: 1 as const }))
             : cards.slice();
+
+        // const initialDeck =
+        //   mode === 'missed' || masteryMode
+        //     ? cards
+        //         .filter((card) => remainingMissedIds.includes(card.id))
+        //         .map((card) => ({ ...card, stage: 1 as const }))
+        //     : cards.slice();
 
         setHasSavedSession(false);
         setDeck(initialDeck);
@@ -325,11 +412,10 @@ const remainingMissedIds = isFullQBank
       } finally {
         if (!cancelled) setLoading(false);
       }
-    
-  }
+    }
 
-  load();
-return () => {
+    load();
+    return () => {
       cancelled = true;
     };
   }, [
@@ -342,10 +428,13 @@ return () => {
     masteryMode,
     mini,
     effectiveMiniSessionKey,
+    idsFromSession.join(','),
+    proLoaded,
+    isPro,
   ]);
 
   useEffect(() => {
-if (loading) return;
+    if (loading) return;
     if (!deck.length && !mastered.length) return;
 
     saveFlashSession(flashSessionScopeKey, {
@@ -382,20 +471,19 @@ if (loading) return;
     return { missed, yellow, green, gold: mastered.length };
   }, [deck, mastered]);
 
-
   useEffect(() => {
-if (!deck.length) setCursor(0);
+    if (!deck.length) setCursor(0);
     else if (cursor >= deck.length) setCursor(0);
   }, [deck.length, cursor]);
 
   useEffect(() => {
-setFlipped(false);
+    setFlipped(false);
   }, [cursor, deck.length]);
 
   const reviewedCount = mastered.length + Math.min(cursor, deck.length);
 
   useEffect(() => {
-if (session || reviewedCount === 0) return;
+    if (session || reviewedCount === 0) return;
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
       e.returnValue = '';
@@ -416,7 +504,8 @@ if (session || reviewedCount === 0) return;
       const masteredCard = { ...card, stage: 3 as const };
       setDeck(remaining);
       setMastered((prev) => [...prev, masteredCard]);
-      if (mode === 'missed' || masteryMode) markFlashcardCleared(setId, card.id);
+      if (mode === 'missed' || masteryMode)
+        markFlashcardCleared(setId, card.id);
       setFlipped(false);
       return;
     }
@@ -426,18 +515,27 @@ if (session || reviewedCount === 0) return;
   }
 
   function restartDeck() {
+    const activeMissedIds =
+      idsFromSession.length > 0
+        ? idsFromSession
+        : getFlashcardRemainingIds(
+            setId,
+            isFullQBank
+              ? 'full'
+              : selectedCategory === 'all'
+                ? 'all'
+                : selectedCategory,
+          );
+
     const cards =
       mode === 'missed' || masteryMode
         ? allCards
-            .filter((c) =>
-              getFlashcardRemainingIds(
-                setId,
-                selectedCategory === 'all' ? 'all' : selectedCategory,
-              ).includes(c.id),
-            )
+            .filter((c) => activeMissedIds.includes(c.id))
             .map((c) => ({ ...c, stage: 1 as const }))
         : allCards.filter(
-            (c) => selectedCategory === 'all' || cardCategory(c).toLowerCase() === selectedCategory,
+            (c) =>
+              selectedCategory === 'all' ||
+              cardCategory(c).toLowerCase() === selectedCategory,
           );
 
     setDeck(cards);
@@ -453,6 +551,14 @@ if (session || reviewedCount === 0) return;
       ? 'No missed-question flashcards yet. Only questions missed on Practice Tests should show up here.'
       : 'No flashcards found.';
 
+  // all your hooks + state above...
+
+  if (!proLoaded) {
+    return (
+      <div className="mx-auto max-w-6xl text-sm text-white/70">Loading…</div>
+    );
+  }
+  
   return (
     <div className="mx-auto max-w-6xl">
       <StartHereTour
@@ -471,54 +577,57 @@ if (session || reviewedCount === 0) return;
         ]}
       />
 
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <div className="text-sm text-white/60">
-            Flashcards • {titleForSetId(setId)}
-          </div>
-          <h1 className="mt-1 text-3xl font-semibold tracking-tight text-white">
-            {masteryMode
-              ? 'RTT Mastery Flashcards'
-              : mode === 'missed'
-                ? 'Missed Deck Flashcards'
-                : 'All Flashcards'}
-          </h1>
-        </div>
+      <div className="flex flex-wrap items-center gap-2">
+        {masteryMode ? null : (
+          <>
+            <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
+              <select
+                className="bg-transparent text-sm text-white/80 outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                value={filterValue}
+                disabled={isSessionDeck}
+                // onChange={(e) => {
+                //   if (isSessionDeck) return;
+                onChange={(e) => {
+                  if (isSessionDeck) return;
+                  openDeck(mode, e.target.value);
+                }}
+              >
+                {/* const params = new URLSearchParams(sp?.toString());
+                  params.set('filter', e.target.value);
+                  params.delete('cat');
+                  params.delete('mini');
+                  router.replace(`/app/flashcards?${params.toString()}`);
+                }}
+              > */}
+                {filterOptions.map((option) => {
+                  const isMini = option.key.startsWith('mini-');
+                  const num = isMini ? Number(option.key.split('-')[1]) : 0;
+                  const locked = isMini && num > 5 && !isPro;
+                  return (
+                    <option
+                      key={option.key}
+                      value={option.key}
+                      disabled={locked}
+                    >
+                      {locked ? `${option.label} PRO 🔒` : option.label}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          {masteryMode ? null : (
-            <>
-              <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
-                <select
-                  className="bg-transparent text-sm text-white/80 outline-none"
-                  value={filterValue}
-                  onChange={(e) => {
-                    const params = new URLSearchParams(sp?.toString());
-                    params.set('filter', e.target.value);
-                    params.delete('cat');
-                    params.delete('mini');
-                    router.replace(`/app/flashcards?${params.toString()}`);
-                  }}
-                >
-                  {filterOptions.map((option) => {
-                    const isMini = option.key.startsWith('mini-');
-                    const num = isMini ? Number(option.key.split('-')[1]) : 0;
-                    const locked = isMini && num > 5 && !isPro;
-                    return (
-                      <option
-                        key={option.key}
-                        value={option.key}
-                        disabled={locked}
-                      >
-                        {locked ? `${option.label} PRO 🔒` : option.label}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
-
+            {isSessionDeck ? (
+              <button
+                type="button"
+                disabled
+                className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black opacity-60 cursor-not-allowed"
+                title="Finish or exit this review session first"
+              >
+                Missed Deck
+              </button>
+            ) : (
               <Link
-                href={`/app/flashcards?set=${setId}&mode=missed&filter=${filterValue}`}
+                href={`/app/flashcards?set=${setId}&mode=missed&filter=all`}
                 className={
                   mode === 'missed'
                     ? 'rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black'
@@ -527,9 +636,20 @@ if (session || reviewedCount === 0) return;
               >
                 Missed Deck
               </Link>
+            )}
 
+            {isSessionDeck ? (
+              <button
+                type="button"
+                disabled
+                className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white opacity-50 cursor-not-allowed"
+                title="Finish or exit this review session first"
+              >
+                All Flashcards
+              </button>
+            ) : (
               <Link
-                href={`/app/flashcards?set=${setId}&mode=all&filter=${filterValue}`}
+                href={`/app/flashcards?set=${setId}&mode=all&filter=all`}
                 className={
                   mode === 'all'
                     ? 'rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black'
@@ -538,29 +658,39 @@ if (session || reviewedCount === 0) return;
               >
                 All Flashcards
               </Link>
+            )}
 
+            {isSessionDeck ? (
               <button
-                onClick={() => {
-                  const href =
-                    selectedMini !== 'all'
-                      ? `/app/mock-exam?qbank=${setId}&scope=mini&mini=${selectedMini}&flow=free`
-                      : `/app/mock-exam?qbank=${setId}&scope=mini&flow=free`;
-
-                  if (deck.length > 0) {
-                    setPendingMockHref(href);
-                    setShowMockSkipModal(true);
-                    return;
-                  }
-
-                  router.push(href);
-                }}
-                className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
+                type="button"
+                onClick={exitSessionDeck}
+                className="rounded-2xl border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"
               >
-                Mini Mock Exam
+                Exit Review Session
               </button>
-            </>
-          )}
-        </div>
+            ) : null}
+
+            <button
+              onClick={() => {
+                const href =
+                  selectedMini !== 'all'
+                    ? `/app/mock-exam?qbank=${setId}&scope=mini&mini=${selectedMini}&flow=free`
+                    : `/app/mock-exam?qbank=${setId}&scope=mini&flow=free`;
+
+                if (deck.length > 0) {
+                  setPendingMockHref(href);
+                  setShowMockSkipModal(true);
+                  return;
+                }
+
+                router.push(href);
+              }}
+              className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
+            >
+              Mini Mock Exam
+            </button>
+          </>
+        )}
       </div>
 
       {masteryMode ? (

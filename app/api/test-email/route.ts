@@ -16,9 +16,10 @@ export async function GET() {
   try {
     const { data, error } = await resend.emails.send({
       from: 'Rad Tech Tutor <support@theradtechtutor.com>',
+      replyTo: 'theradtechtutor@gmail.com', // 👈 ADD THIS
       to: 'jamesbaptiste@yahoo.com',
       subject: 'Test Email',
-      html: '<p>Email system is working ✅</p>',
+      html: '<p>Email system is working 2 ✅</p>',
     });
 
     if (error) {

@@ -225,6 +225,11 @@ function clearFreePracticeAggregate(setId: string, mode: 'all' | 'missed') {
 }
 
 export default function PracticeSetPage() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams<{ setId: string }>();
@@ -361,21 +366,89 @@ const practiceSessionScopeKey = isFullQBank
       ]);
 
       let workingQuestions = practicePool;
+      
+      if (isFullQBank) {
+        workingQuestions = originalQuestions;
+      } else if (masteryMode) {
+        workingQuestions = selectQuestionsForScope(practicePool, 'mini', {
+          miniId: Number(mini),
+          category: 'all',
+        });
+      } else if (selectedMini !== 'all') {
+        workingQuestions = selectQuestionsForScope(practicePool, 'mini', {
+          miniId: Number(selectedMini),
+          category: 'all',
+        });
+      } else {
+        workingQuestions = practicePool;
+      }
+// TEMP: for now, if not full qbank, just use first 20 questions to speed up development. Will implement proper pagination/queuing later.
+// if (isFullQBank) {
+//   workingQuestions = originalQuestions.slice(0, 5);
+// } else if (masteryMode) {
+//   workingQuestions = selectQuestionsForScope(practicePool, 'mini', {
+//     miniId: Number(mini),
+//     category: 'all',
+//   }).slice(0, 5);
+// } else if (selectedMini !== 'all') {
+//   workingQuestions = selectQuestionsForScope(practicePool, 'mini', {
+//     miniId: Number(selectedMini),
+//     category: 'all',
+//   }).slice(0, 5);
+// } else {
+//   workingQuestions = practicePool.slice(0, 5);
+// }
 
-if (isFullQBank) {
-  // FULL QBANK → true full set
-  workingQuestions = originalQuestions;
-} else if (masteryMode) {
-  workingQuestions = selectQuestionsForScope(practicePool, 'mini', {
-    miniId: Number(mini),
-    category: 'all',
-  });
-} else if (selectedMini !== 'all') {
-  workingQuestions = selectQuestionsForScope(practicePool, 'mini', {
-    miniId: Number(selectedMini),
-    category: 'all',
-  });
-}
+
+
+//       let workingQuestions = practicePool;
+
+// if (isFullQBank) {
+//   workingQuestions = originalQuestions.slice(0, 10);
+// } else if (masteryMode) {
+//   workingQuestions = selectQuestionsForScope(practicePool, 'mini', {
+//     miniId: Number(mini),
+//     category: 'all',
+//   }).slice(0, 10);
+// } else if (selectedMini !== 'all') {
+//   workingQuestions = selectQuestionsForScope(practicePool, 'mini', {
+//     miniId: Number(selectedMini),
+//     category: 'all',
+//   }).slice(0, 10);
+// } else {
+//   // TEMP TEST: free all-mode route like /app/practice/qbank1?mode=all&cat=all&flow=free
+//   workingQuestions = practicePool.slice(0, 10);
+// }
+
+// if (isFullQBank) {
+//   // TEMP TEST: only use first 20 questions for full qbank
+//   workingQuestions = originalQuestions.slice(0, 3);
+// } else if (masteryMode) {
+//   workingQuestions = selectQuestionsForScope(practicePool, 'mini', {
+//     miniId: Number(mini),
+//     category: 'all',
+//   });
+// } else if (selectedMini !== 'all') {
+//   workingQuestions = selectQuestionsForScope(practicePool, 'mini', {
+//     miniId: Number(selectedMini),
+//     category: 'all',
+//   });
+// }
+
+      // if (isFullQBank) {
+//   // FULL QBANK → true full set
+//   workingQuestions = originalQuestions;
+// } else if (masteryMode) {
+//   workingQuestions = selectQuestionsForScope(practicePool, 'mini', {
+//     miniId: Number(mini),
+//     category: 'all',
+//   });
+// } else if (selectedMini !== 'all') {
+//   workingQuestions = selectQuestionsForScope(practicePool, 'mini', {
+//     miniId: Number(selectedMini),
+//     category: 'all',
+//   });
+// }
 
       let ids = workingQuestions.map((q) => q.id);
 
@@ -848,12 +921,6 @@ if (masteryMode && !isFullQBank) {
     'mini',
     { miniId: Number(selectedMini), category: 'all' },
   ).map((q) => q.id);
-} else if (selectedMini !== 'all') {
-  ids = selectQuestionsForScope(
-    ids.map((id) => byId[id]).filter(Boolean) as Question[],
-    'mini',
-    { miniId: Number(selectedMini), category: 'all' },
-  ).map((q) => q.id);
 }
 
     if (selectedCategory !== 'all') {
@@ -915,45 +982,47 @@ if (masteryMode && !isFullQBank) {
     void initBank();
   }
 
-  useEffect(() => {
-    if (locked) return;
+useEffect(() => {
+  if (locked) return;
 
-    function onKey(e: KeyboardEvent) {
-      const key = e.key.toLowerCase();
-      const t = e.target as HTMLElement | null;
-      const tag = t?.tagName?.toLowerCase();
-      if (
-        tag === 'input' ||
-        tag === 'textarea' ||
-        (t as any)?.isContentEditable
-      ) {
-        return;
-      }
+  function onKey(e: KeyboardEvent) {
+    const key = e.key.toLowerCase();
+    const t = e.target as HTMLElement | null;
+    const tag = t?.tagName?.toLowerCase();
 
-      if (!revealed && q) {
-        if (key === 'a' || key === '1') return void pick('A');
-        if (key === 'b' || key === '2') return void pick('B');
-        if (key === 'c' || key === '3') return void pick('C');
-        if (key === 'd' || key === '4') return void pick('D');
-      }
-
-      if (revealed && picked && (key === 'enter' || key === ' ')) {
-        e.preventDefault();
-        return void goNext();
-      }
-
-      if (key === 'f') {
-        e.preventDefault();
-        router.push(
-          `/app/flashcards?set=${setId}&mode=missed&filter=all&mini=all`,
-        );
-      }
+    if (
+      tag === 'input' ||
+      tag === 'textarea' ||
+      (t as any)?.isContentEditable
+    ) {
+      return;
     }
 
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [revealed, q, locked, router, picked, setId, queueIds]);
+    if (!revealed && q) {
+      if (key === 'a' || key === '1') return void pick('A');
+      if (key === 'b' || key === '2') return void pick('B');
+      if (key === 'c' || key === '3') return void pick('C');
+      if (key === 'd' || key === '4') return void pick('D');
+    }
 
+    if (revealed && picked && (key === 'enter' || key === ' ')) {
+      e.preventDefault();
+      return void goNext();
+    }
+
+    if (key === 'f') {
+      e.preventDefault();
+      router.push(
+        `/app/flashcards?set=${setId}&mode=missed&filter=all&mini=all&ids=${freeMissedIds.join(',')}`,
+      );
+    }
+  }
+
+  window.addEventListener('keydown', onKey);
+  return () => window.removeEventListener('keydown', onKey);
+}, [revealed, q, locked, router, picked, setId, freeMissedIds]);
+
+  if (!mounted) return null;
   if (locked) {
     return (
       <div className="mx-auto max-w-4xl">
@@ -1095,7 +1164,7 @@ if (masteryMode && !isFullQBank) {
                   Restart Deck
                 </button>
                 <Link
-                  href={`/app/flashcards?set=${setId}&mode=missed&filter=all&mini=all`}
+                  href={`/app/flashcards?set=${setId}&mode=missed&filter=all&mini=all&ids=${freeMissedIds.join(',')}`}
                   className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
                 >
                   Go to Flashcards
@@ -1188,11 +1257,17 @@ if (masteryMode && !isFullQBank) {
               </div>
 
               <Link
-                href={`/app/flashcards?set=${setId}&mode=missed&cat=all&mini=all`}
+                href={`/app/flashcards?set=${setId}&mode=missed&filter=all&mini=all&ids=${freeMissedIds.join(',')}`}
                 className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
               >
                 Flashcards
               </Link>
+              {/* <Link
+                href={`/app/flashcards?set=${setId}&mode=missed&cat=all&mini=all`}
+                className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
+              >
+                Flashcards
+              </Link> */}
             </>
           )}
         </div>
