@@ -10,11 +10,10 @@
   <title>The Rad Tech Tutor</title>
   <desc>BIMI logo for The Rad Tech Tutor</desc>
 
+  <!-- Background -->
   <rect
-    x="3"
-    y="3"
-    width="506"
-    height="506"
+    width="512"
+    height="512"
     rx="80"
     ry="80"
     fill="#0b0f14"
@@ -22,15 +21,46 @@
     stroke-width="6"
   />
 
-  <!-- R -->
-  <path
-    fill="#e5e7eb"
-    d="M126 120H210C262 120 300 154 300 205C300 241 280 269 246 282L297 392H248L201 294H174V392H126V120ZM174 160V255H207C241 255 252 250 262 241C272 232 278 220 278 205C278 190 272 178 262 169C252 160 241 160 207 160H174Z"
-  />
+  <!-- Centered group -->
+  <g fill="#e5e7eb">
 
-  <!-- T -->
-  <path
-    fill="#e5e7eb"
-    d="M312 120H470V160H415V392H367V160H312V120Z"
-  />
+    <!-- R (uniform stroke style) -->
+    <path d="
+      M140 130
+      H240
+      Q290 130 290 180
+      Q290 220 250 240
+      L300 380
+      H250
+      L210 260
+      H180
+      V380
+      H140
+      Z
+
+      M180 170
+      V230
+      H230
+      Q250 230 260 220
+      Q270 210 270 190
+      Q270 170 260 165
+      Q250 160 230 160
+      H180
+      Z
+    "/>
+
+    <!-- T (matched weight) -->
+    <path d="
+      M300 130
+      H460
+      V170
+      H390
+      V380
+      H350
+      V170
+      H300
+      Z
+    "/>
+
+  </g>
 </svg>
