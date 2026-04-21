@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { getBankMasterySummary } from '@/lib/progressStore';
 
-type Bank = { id: 1 | 2 | 3; label: string; locked: boolean };
+type Bank = { id: 1 | 2 | 3 | 4 | 5; label: string; locked: boolean };
 type AccessRow = { is_pro: boolean };
 
 type ResumeLinkState = {
@@ -280,12 +280,16 @@ function BankCard({ bank, isPro, mounted }: { bank: Bank; isPro: boolean; mounte
   const locked = bank.locked && !isPro;
   const unlocked = !locked;
   const mastery = useMemo(() => (mounted && unlocked ? getBankMasterySummary(`qbank${bank.id}`) : null), [mounted, unlocked, bank.id]);
-  const title =
-    bank.id === 1
-      ? 'Practice Bank 1 – Core Skills (Free)'
-      : bank.id === 2
-        ? 'Practice Bank 2 – Advanced'
-        : 'Practice Bank 3 – Registry Ready';
+const title =
+  bank.id === 1
+    ? 'Practice Bank 1 – Starting (Free)'
+    : bank.id === 2
+      ? 'Practice Bank 2 – Building'
+      : bank.id === 3
+        ? 'Practice Bank 3 – Applying'
+        : bank.id === 4
+          ? 'Practice Bank 4 – Mastering'
+          : 'Practice Bank 5 – Registry Ready';
 
   return (
     <div className="group rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.2)] transition hover:-translate-y-0.5 hover:border-white/15 hover:shadow-[0_24px_60px_rgba(0,0,0,0.24)]">
@@ -368,14 +372,16 @@ export default function QBankSection() {
     };
   }, []);
 
-  const banks: Bank[] = useMemo(
-    () => [
-      { id: 1, label: 'Core Skills', locked: false },
-      { id: 2, label: 'Advanced', locked: true },
-      { id: 3, label: 'Registry Ready', locked: true },
-    ],
-    []
-  );
+const banks: Bank[] = useMemo(
+  () => [
+    { id: 1, label: 'Starting', locked: false },
+    { id: 2, label: 'Building', locked: true },
+    { id: 3, label: 'Applying', locked: true },
+    { id: 4, label: 'Mastering', locked: true },
+    { id: 5, label: 'Registry Ready', locked: true },
+  ],
+  [],
+);
 
   return (
     <div data-tour="practice-banks" className="mt-6 overflow-hidden rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(45,212,191,0.05),rgba(255,255,255,0.02))] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.25)] md:p-8">

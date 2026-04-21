@@ -61,20 +61,24 @@ function apiForSetId(setId: string) {
   if (s === 'qbank1') return '/api/questions/qbank1';
   if (s === 'qbank2') return '/api/questions/qbank2';
   if (s === 'qbank3') return '/api/questions/qbank3';
+  if (s === 'qbank4') return '/api/questions/qbank4';
+  if (s === 'qbank5') return '/api/questions/qbank5';
   return '/api/questions/qbank1';
 }
 
 function titleForSetId(setId: string) {
   const s = (setId || '').toLowerCase();
-  if (s === 'qbank1') return 'QBank 1 — Core Skills';
-  if (s === 'qbank2') return 'QBank 2 — Advanced';
-  if (s === 'qbank3') return 'QBank 3 — Registry Ready';
+  if (s === 'qbank1') return 'QBank 1 — Starting';
+  if (s === 'qbank2') return 'QBank 2 — Building';
+  if (s === 'qbank3') return 'QBank 3 — Applying';
+  if (s === 'qbank4') return 'QBank 4 — Mastering';
+  if (s === 'qbank5') return 'QBank 5 — Registry Ready';
   return 'Practice Set';
 }
 
 function isPaidSet(setId: string) {
   const s = (setId || '').toLowerCase();
-  return s === 'qbank2' || s === 'qbank3';
+  return s === 'qbank2' || s === 'qbank3' || s === 'qbank4' || s === 'qbank5';
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -1039,7 +1043,7 @@ useEffect(() => {
           </div>
         ) : null}
         <div className="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 text-sm text-white/70">
-          This set is locked. Upgrade to unlock QBank 2–3.
+          This set is locked. Upgrade to unlock QBank 2–5.
           <div className="mt-4 flex gap-2">
             <Link
               href="/app/upgrade"

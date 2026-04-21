@@ -20,7 +20,7 @@ import {
   getMiniMockChallengeStats,
 } from '@/lib/progressStore';
 
-const BANKS = ['qbank1', 'qbank2', 'qbank3'] as const;
+const BANKS = ['qbank1', 'qbank2', 'qbank3', 'qbank4', 'qbank5'] as const;
 
 type BankId = (typeof BANKS)[number];
 type LessonKey = `mini-${number}` | 'full-qbank';
@@ -47,11 +47,27 @@ function cx(...classes: Array<string | false | null | undefined>) {
 function labelForBank(setId: string) {
   const id = Number(setId.replace('qbank', ''));
 
-  if (id === 1) return 'Core Skills';
-  if (id === 2) return 'Advanced Training';
-  if (id === 3) return 'Registry Ready';
+  if (id === 1) return 'Start';
+  if (id === 2) return 'Building';
+  if (id === 3) return 'Applying';
+  if (id === 4) return 'Mastering';
+  if (id === 5) return 'Registry Ready';
 
   return 'Practice Bank';
+}
+
+function bankDescription(setId: string) {
+  const id = Number(setId.replace('qbank', ''));
+
+if (id === 1) return 'Begin your journey to earning RT(R) after your name.';
+if (id === 2) return 'Build the foundation you’ll rely on.';
+if (id === 3) return 'Connect concepts and answer with confidence.';
+if (id === 4)
+  return 'New question formats to expose weak spots most students miss.';
+if (id === 5)
+  return 'You’ve seen it all. Nothing on exam day will surprise you.';
+
+  return 'Progress one level at a time.';
 }
 
 function tierForBank(setId: string) {
@@ -1110,6 +1126,8 @@ export default function DashboardPage() {
   );
   const [selectedBank, setSelectedBank] = useState<BankId>('qbank1');
   const [selectedLesson, setSelectedLesson] = useState<LessonKey>('mini-1');
+  const activeBankLabel = labelForBank(selectedBank);
+  const activeBankDescription = bankDescription(selectedBank);
   const [showSkipExamModal, setShowSkipExamModal] = useState(false);
   const [pendingExamHref, setPendingExamHref] = useState<string | null>(null);
   const [lockedStepMessage, setLockedStepMessage] = useState<string | null>(
@@ -1129,6 +1147,42 @@ function handleRestartMini(mini: number) {
     resetFullQbank(currentBank.setId);
     setSelectedLesson('full-qbank');
   }
+
+// function devMarkBankReady(setId: BankId) {
+//   const fakeSummary = {
+//     setId,
+//     completedMiniMocks: 10,
+//     totalMiniMocks: 10,
+//     currentMini: 10,
+//     bankMastered: true,
+//     miniStatus: Object.fromEntries(
+//       Array.from({ length: 10 }, (_, idx) => {
+//         const miniId = idx + 1;
+//         return [
+//           String(miniId),
+//           {
+//             miniId,
+//             bestScore: 95,
+//             lastScore: 95,
+//             attempts: 1,
+//             completed: true,
+//             completedAt: new Date().toISOString(),
+//           },
+//         ];
+//       }),
+//     ),
+//   };
+
+//   try {
+//     localStorage.setItem(
+//       `dev_bank_summary_${setId}`,
+//       JSON.stringify(fakeSummary),
+//     );
+//     window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+//   } catch (err) {
+//     console.error('Failed to seed dev bank summary', err);
+//   }
+// }
 
   function openSkipExamModal(href: string) {
     setPendingExamHref(href);
@@ -1371,6 +1425,52 @@ if (savedStep === 'exam' || full.exam.completed) {
     );
   }, [cumulative.latest, miniScores]);
 
+const readiness = useMemo(() => {
+  const bankAverages = bankSummaries.map((bank) => {
+    const scores = Array.from({ length: 10 }, (_, idx) => {
+      const mini = idx + 1;
+      const status = bank.miniStatus[String(mini)];
+      return status?.attempts ? Number(status.lastScore) : null;
+    }).filter((score): score is number => score != null);
+
+    const average = scores.length
+      ? Math.round(
+          scores.reduce((sum, score) => sum + score, 0) / scores.length,
+        )
+      : null;
+
+    return {
+      setId: bank.setId,
+      label: labelForBank(bank.setId),
+      average,
+      completedMocks: scores.length,
+      ready: average != null && average >= 90,
+    };
+  });
+
+  const completedBankAverages = bankAverages
+    .map((bank) => bank.average)
+    .filter((avg): avg is number => avg != null);
+
+  const overallAverage = completedBankAverages.length
+    ? Math.round(
+        completedBankAverages.reduce((sum, avg) => sum + avg, 0) /
+          completedBankAverages.length,
+      )
+    : 0;
+
+  const banksReady = bankAverages.filter((bank) => bank.ready).length;
+  const readinessPct = Math.round((banksReady / 5) * 100);
+
+  return {
+    bankAverages,
+    overallAverage,
+    banksReady,
+    readinessPct,
+    fullyReady: banksReady === 5,
+  };
+}, [bankSummaries]);
+
   if (!mounted || !currentBank || !currentMiniAction || !selectedLessonData) {
     return <div className="max-w-7xl" />;
   }
@@ -1605,62 +1705,17 @@ if (savedStep === 'exam' || full.exam.completed) {
                   </div>
                 </div>
               </div>
-
-              {/* <div className="mt-6 rounded-[24px] border border-emerald-400/15 bg-[linear-gradient(180deg,rgba(16,185,129,0.08),rgba(255,255,255,0.02))] p-5 shadow-[0_12px_36px_rgba(0,0,0,0.22)]">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-200/85">
-                      5 Mock Challenge (This Week)
-                    </div>
-                    <div className="mt-2 text-lg font-semibold text-white">
-                      Complete 5 Mini Mocks + average 90%
-                    </div>
-                    <div className="mt-3 space-y-1 text-sm text-white/68">
-                      <div>Mocks Completed: {challenge.completed} / 5</div>
-                      <div>Average Score: {challenge.avg}%</div>
-                      <div>Target: 90%</div>
-                    </div>
-                  </div>
-
-                  <div
-                    className={cx(
-                      'shrink-0 rounded-full px-3 py-1 text-xs font-semibold',
-                      challenge.qualifies
-                        ? 'bg-emerald-400/15 text-emerald-200'
-                        : 'bg-yellow-400/10 text-yellow-200',
-                    )}
-                  >
-                    {challenge.qualifies ? 'Reward Unlocked' : 'In Progress'}
-                  </div>
-                </div>
-
-                <div className="mt-4 h-2 overflow-hidden rounded-full bg-black/25">
-                  <div
-                    className="h-full rounded-full bg-[linear-gradient(90deg,rgba(45,212,191,0.98),rgba(16,185,129,0.65))]"
-                    style={{ width: `${Math.min(100, Math.round((challenge.completed / 5) * 100))}%` }}
-                  />
-                </div>
-
-                <div className="mt-3 text-sm font-medium">
-                  {challenge.qualifies ? (
-                    <span className="text-emerald-300">✅ Reward unlocked — use code MINI10 for 10% off Pro</span>
-                  ) : challenge.completed < 5 ? (
-                    <span className="text-yellow-300">{5 - challenge.completed} mocks left to unlock your reward.</span>
-                  ) : (
-                    <span className="text-yellow-300">{90 - challenge.avg}% away from the 90% target.</span>
-                  )}
-                </div>
-              </div> */}
             </div>
 
             <div className="flex flex-col gap-3 xl:items-end">
               <div className="flex w-full max-w-[380px] flex-col gap-3">
                 {bankSummaries.map((bank, idx) => {
                   const locked = idx > 0 && !isPro;
-                  const bankMeta =
-                    idx === 0
-                      ? '200 Questions • Starts Free'
-                      : '200 Questions • PRO';
+                  const bankData = readiness.bankAverages.find(
+                    (b) => b.setId === bank.setId,
+                  );
+                  const isReady = Boolean(bankData?.ready);
+                  const isFullyReady = readiness.fullyReady;
 
                   return (
                     <button
@@ -1675,11 +1730,50 @@ if (savedStep === 'exam' || full.exam.completed) {
                       }}
                       className={cx(
                         'flex items-center justify-between rounded-full border px-4 py-3 text-left text-sm transition',
-                        selectedBank === bank.setId
-                          ? 'border-emerald-400/30 bg-emerald-500/10 text-white'
-                          : 'border-white/10 bg-black/15 text-white/60',
-                        locked &&
-                          'cursor-pointer opacity-90 hover:border-yellow-400/30 hover:bg-yellow-400/5 hover:text-white',
+
+                        // ALL BANKS READY → full gold victory state
+                        isFullyReady &&
+                          (selectedBank === bank.setId
+                            ? 'border-yellow-400/60 bg-[linear-gradient(90deg,rgba(250,204,21,0.24),rgba(234,179,8,0.22))] text-white shadow-[0_0_30px_rgba(250,204,21,0.28)]'
+                            : 'border-yellow-400/30 bg-[linear-gradient(90deg,rgba(250,204,21,0.14),rgba(234,179,8,0.12))] text-yellow-100 hover:border-yellow-400/45 hover:bg-[linear-gradient(90deg,rgba(250,204,21,0.18),rgba(234,179,8,0.16))] hover:text-white hover:shadow-[0_0_24px_rgba(250,204,21,0.18)]'),
+
+                        // INDIVIDUAL BANK READY → green to gold earned state
+                        !isFullyReady &&
+                          isReady &&
+                          (selectedBank === bank.setId
+                            ? 'border-yellow-400/50 bg-[linear-gradient(90deg,rgba(45,212,191,0.18),rgba(250,204,21,0.18))] text-white shadow-[0_0_26px_rgba(250,204,21,0.2)]'
+                            : 'border-yellow-400/25 bg-[linear-gradient(90deg,rgba(45,212,191,0.10),rgba(250,204,21,0.10))] text-white/90 hover:border-yellow-400/40 hover:bg-[linear-gradient(90deg,rgba(45,212,191,0.14),rgba(250,204,21,0.14))] hover:text-white hover:shadow-[0_0_20px_rgba(250,204,21,0.16)]'),
+
+                        // ACTIVE START bank before ready
+                        !isFullyReady &&
+                          !isReady &&
+                          selectedBank === bank.setId &&
+                          bank.setId === 'qbank1' &&
+                          'border-emerald-400/30 bg-emerald-500/10 text-white shadow-[0_0_18px_rgba(45,212,191,0.14)]',
+
+                        // ACTIVE Pro bank before ready
+                        !isFullyReady &&
+                          !isReady &&
+                          selectedBank === bank.setId &&
+                          bank.setId !== 'qbank1' &&
+                          'border-yellow-400/40 bg-yellow-500/10 text-white shadow-[0_0_30px_rgba(250,204,21,0.25)]',
+
+                        // INACTIVE default start bank
+                        !isFullyReady &&
+                          !isReady &&
+                          selectedBank !== bank.setId &&
+                          bank.setId === 'qbank1' &&
+                          'border-white/10 bg-black/15 text-white/60 hover:border-emerald-400/20 hover:bg-emerald-500/5 hover:text-white',
+
+                        // INACTIVE default pro banks
+                        !isFullyReady &&
+                          !isReady &&
+                          selectedBank !== bank.setId &&
+                          bank.setId !== 'qbank1' &&
+                          'border-yellow-400/10 bg-black/15 text-yellow-200/80 hover:border-yellow-400/30 hover:bg-yellow-400/5 hover:text-white hover:shadow-[0_0_25px_rgba(250,204,21,0.2)]',
+
+                        // LOCKED STATE
+                        locked && 'cursor-pointer opacity-90',
                       )}
                       title={
                         locked
@@ -1687,19 +1781,196 @@ if (savedStep === 'exam' || full.exam.completed) {
                           : undefined
                       }
                     >
-                      <div className="flex items-center gap-2 font-semibold">
-                        <span>{labelForBank(bank.setId)}</span>
-                        <span className="text-xs text-yellow-400">
-                          {tierForBank(bank.setId)}
-                        </span>
-                      </div>
+                      <div className="w-full flex flex-col items-center">
+                        {/* TOP ROW */}
+                        <div className="flex items-center justify-between w-full">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="text-[16px] font-semibold tracking-[-0.01em] text-white">
+                              {labelForBank(bank.setId)}
+                            </span>
 
-                      <span className="flex items-center gap-1 text-xs font-semibold text-white/60">
-                        <span>200 Questions</span>
-                      </span>
+                            {(bank.setId === 'qbank1' || !isPro) && (
+                              <span
+                                className={cx(
+                                  'rounded-full px-2 py-0.5 text-[11px] font-semibold',
+                                  bank.setId === 'qbank1'
+                                    ? 'border border-emerald-400/25 bg-emerald-400/10 text-emerald-300'
+                                    : 'border border-yellow-400/25 bg-yellow-400/10 text-yellow-300',
+                                )}
+                              >
+                                {bank.setId === 'qbank1' ? 'Free' : 'Pro'}
+                              </span>
+                            )}
+
+                            {isReady && (
+                              <span className="text-[12px] font-semibold text-emerald-300">
+                                ✓
+                              </span>
+                            )}
+                          </div>
+
+                          <span className="text-[12px] text-white/50">
+                            200 Qs
+                          </span>
+                        </div>
+
+                        <div className="mt-1 w-full text-left text-[12px] italic leading-snug text-white/70">
+                          {bankDescription(bank.setId)}
+                        </div>
+
+                        {/* 👇 THIS IS WHAT YOU WANTED */}
+                      </div>
                     </button>
                   );
                 })}
+              </div>
+
+              {/* {process.env.NODE_ENV === 'development' && (
+                <div className="w-full max-w-[380px] rounded-2xl border border-red-400/20 bg-red-500/5 p-3">
+                  <div className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-red-200/80">
+                    Dev tools
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      [
+                        'qbank1',
+                        'qbank2',
+                        'qbank3',
+                        'qbank4',
+                        'qbank5',
+                      ].forEach((id) =>
+                        localStorage.removeItem(`dev_bank_summary_${id}`),
+                      );
+                      window.dispatchEvent(
+                        new CustomEvent('rtt-progress-updated'),
+                      );
+                    }}
+                    className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs font-semibold text-white"
+                  >
+                    Reset Dev Banks
+                  </button>
+
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => devMarkBankReady('qbank1')}
+                      className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs font-semibold text-white"
+                    >
+                      Mark Start Ready
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => devMarkBankReady('qbank2')}
+                      className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs font-semibold text-white"
+                    >
+                      Mark Building Ready
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => devMarkBankReady('qbank3')}
+                      className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs font-semibold text-white"
+                    >
+                      Mark Applying Ready
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => devMarkBankReady('qbank4')}
+                      className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs font-semibold text-white"
+                    >
+                      Mark Mastering Ready
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => devMarkBankReady('qbank5')}
+                      className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs font-semibold text-white"
+                    >
+                      Mark Registry Ready
+                    </button>
+                  </div>
+                </div>
+              )} */}
+
+              <div
+                className={cx(
+                  'w-full max-w-[380px] rounded-[24px] p-4 transition-all duration-500',
+                  readiness.fullyReady
+                    ? 'border-yellow-400/40 bg-[linear-gradient(135deg,rgba(16,185,129,0.10),rgba(250,204,21,0.10),rgba(255,255,255,0.04))] shadow-[0_0_30px_rgba(250,204,21,0.20),0_18px_40px_rgba(0,0,0,0.22)] border'
+                    : 'border border-white/10 bg-white/[0.04] shadow-[0_18px_40px_rgba(0,0,0,0.18)]',
+                )}
+              >
+                <div className="text-[11px] font-bold text-white uppercase tracking-[0.2em]">
+                  ARRT Registry Readiness
+                </div>
+
+                {readiness.fullyReady && (
+                  <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-yellow-300/35 bg-yellow-300/12 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-yellow-100 shadow-[0_0_18px_rgba(250,204,21,0.18)]">
+                    <span>🏅</span>
+                    <span>ARRT Ready</span>
+                  </div>
+                )}
+
+                <div className="mt-3">
+                  <div className="flex items-end justify-between">
+                    <div>
+                      <div className="text-3xl font-semibold tracking-tight text-white">
+                        {readiness.banksReady} / 5
+                      </div>
+                      <div className="mt-1 text-sm text-white/60">
+                        Banks at 90%+
+                      </div>
+                    </div>
+
+                    <div
+                      className={cx(
+                        'rounded-full px-3 py-1 text-xs font-semibold',
+                        readiness.fullyReady
+                          ? 'bg-emerald-400/15 text-emerald-300'
+                          : 'bg-yellow-400/10 text-yellow-300',
+                      )}
+                    >
+                      {readiness.fullyReady ? 'Registry Ready' : 'In Progress'}
+                    </div>
+                  </div>
+
+                  <div className="mt-2 text-xs text-white/50">
+                    Avg: {readiness.overallAverage}%
+                  </div>
+
+                  <div className="mt-2 text-sm text-white/70">
+                    {readiness.banksReady < 5
+                      ? `${5 - readiness.banksReady} banks left to reach exam readiness`
+                      : 'All banks complete — you’re ready for the ARRT'}
+                  </div>
+                </div>
+
+                <div className="mt-4 text-sm text-white/68">
+                  Goal:{' '}
+                  <span className="font-semibold text-white">
+                    90%+ in all 5 banks
+                  </span>
+                </div>
+
+                <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-black/25">
+                  <div
+                    className={cx(
+                      'h-full rounded-full transition-all duration-500',
+                      readiness.fullyReady
+                        ? 'bg-[linear-gradient(90deg,rgba(45,212,191,0.98),rgba(16,185,129,0.7))]'
+                        : 'bg-[linear-gradient(90deg,rgba(250,204,21,0.95),rgba(234,179,8,0.65))]',
+                    )}
+                    style={{ width: `${readiness.readinessPct}%` }}
+                  />
+                </div>
+
+                <div className="mt-2 text-xs text-white/50 text-right">
+                  {readiness.readinessPct}% to exam readiness
+                </div>
               </div>
 
               <button

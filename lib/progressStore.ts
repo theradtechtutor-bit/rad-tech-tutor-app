@@ -533,7 +533,9 @@ export function getPracticeRemainingIds(setId: string, cat = 'all'): string[] {
 
 export function getMasterySummary(setId?: string) {
   const attempts = readAttempts();
-  const ids = setId ? [setId] : ['qbank1', 'qbank2', 'qbank3'];
+  const ids = setId
+    ? [setId]
+    : ['qbank1', 'qbank2', 'qbank3', 'qbank4', 'qbank5'];
   let flashRemaining = 0;
   let practiceRemaining = 0;
   let totalMissed = 0;
@@ -656,6 +658,14 @@ export function recordFullMockResult(setId: string, score: number) {
 }
 
 export function getBankMasterySummary(setId: string) {
+  // if (typeof window !== 'undefined') {
+  //   const devRaw = localStorage.getItem(`dev_bank_summary_${setId}`);
+  //   if (devRaw) {
+  //     try {
+  //       return JSON.parse(devRaw);
+  //     } catch {}
+  //   }
+  // }
   const current = readBankMastery(setId);
   const values = Object.values(current.miniStatus);
   const completed = values.filter((v) => v.completed).length;
@@ -678,9 +688,9 @@ export function getBankMasterySummary(setId: string) {
 }
 
 export function getBanksMasteredCount() {
-  return ['qbank1', 'qbank2', 'qbank3'].filter(
-    (id) => getBankMasterySummary(id).bankMastered,
-  ).length;
+    return ['qbank1', 'qbank2', 'qbank3', 'qbank4', 'qbank5'].filter(
+      (id) => getBankMasterySummary(id).bankMastered,
+    ).length;
 }
 
 export function estimatePassProbability() {

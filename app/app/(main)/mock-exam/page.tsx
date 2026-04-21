@@ -1077,6 +1077,12 @@ function MockExamPageInner() {
                       <option value="qbank3">
                         {!isPro ? 'Full Mock 3 PRO 🔒' : 'Full Mock 3'}
                       </option>
+                      <option value="qbank4">
+                        {!isPro ? 'Full Mock 4 PRO 🔒' : 'Full Mock 4'}
+                      </option>
+                      <option value="qbank5">
+                        {!isPro ? 'Full Mock 5 PRO 🔒' : 'Full Mock 5'}
+                      </option>
                     </select>
                   </label>
                 ) : scope === 'category' ? (
@@ -1224,8 +1230,8 @@ function MockExamPageInner() {
               <div className="mt-3 text-sm leading-6 text-white/70">
                 You completed the 5 Mock Challenge at a 90% average or higher.
                 Use code{' '}
-                <span className="font-semibold text-yellow-300">MINI10</span>{' '}
-                at checkout.
+                <span className="font-semibold text-yellow-300">MINI10</span> at
+                checkout.
               </div>
               <div className="mt-2 text-sm font-medium text-red-300">
                 Expires in 24 hours

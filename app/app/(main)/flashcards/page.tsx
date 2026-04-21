@@ -88,6 +88,8 @@ function apiForSetId(setId: string) {
   if (s === 'qbank1') return '/api/questions/qbank1';
   if (s === 'qbank2') return '/api/questions/qbank2';
   if (s === 'qbank3') return '/api/questions/qbank3';
+  if (s === 'qbank4') return '/api/questions/qbank4';
+  if (s === 'qbank5') return '/api/questions/qbank5';
   return '/api/questions/qbank1';
 }
 
@@ -96,6 +98,8 @@ function titleForSetId(setId: string) {
   if (s === 'qbank1') return 'QBank 1';
   if (s === 'qbank2') return 'QBank 2';
   if (s === 'qbank3') return 'QBank 3';
+  if (s === 'qbank4') return 'QBank 4';
+  if (s === 'qbank5') return 'QBank 5';
   return 'Set';
 }
 

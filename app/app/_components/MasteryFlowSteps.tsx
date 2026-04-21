@@ -69,13 +69,17 @@ export default function MasteryFlowSteps({
 }) {
   const activeStep = currentStep >= 3 ? 3 : currentStep;
 
-  const setId = (currentBankLabel || 'QBank 1')
-    .toLowerCase()
-    .includes('qbank 2')
-    ? 'qbank2'
-    : (currentBankLabel || 'QBank 1').toLowerCase().includes('qbank 3')
+const label = (currentBankLabel || 'QBank 1').toLowerCase();
+
+const setId = label.includes('qbank 5')
+  ? 'qbank5'
+  : label.includes('qbank 4')
+    ? 'qbank4'
+    : label.includes('qbank 3')
       ? 'qbank3'
-      : 'qbank1';
+      : label.includes('qbank 2')
+        ? 'qbank2'
+        : 'qbank1';
 
   const mini = currentMini || 1;
 
@@ -99,14 +103,7 @@ const [remainingFlashcards, setRemainingFlashcards] = useState(0);
     {
       id: 1,
       title: currentMini
-        ? hasSavedPracticeSession(
-            currentBankLabel?.toLowerCase()?.includes('qbank2')
-              ? 'qbank2'
-              : currentBankLabel?.toLowerCase()?.includes('qbank3')
-                ? 'qbank3'
-                : 'qbank1',
-            currentMini,
-          )
+        ? hasSavedPracticeSession(setId, currentMini)
           ? `Continue Practice Test ${currentMini}`
           : `Take Practice Test ${currentMini}`
         : 'Take Practice Test',
