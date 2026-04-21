@@ -279,30 +279,44 @@ function PracticeActions({ bankId }: { bankId: number }) {
 function BankCard({ bank, isPro, mounted }: { bank: Bank; isPro: boolean; mounted: boolean }) {
   const locked = bank.locked && !isPro;
   const unlocked = !locked;
-  const mastery = useMemo(() => (mounted && unlocked ? getBankMasterySummary(`qbank${bank.id}`) : null), [mounted, unlocked, bank.id]);
-const title =
-  bank.id === 1
-    ? 'Practice Bank 1 – Starting (Free)'
-    : bank.id === 2
-      ? 'Practice Bank 2 – Building'
-      : bank.id === 3
-        ? 'Practice Bank 3 – Applying'
-        : bank.id === 4
-          ? 'Practice Bank 4 – Mastering'
-          : 'Practice Bank 5 – Registry Ready';
+
+  const mastery = useMemo(
+    () =>
+      mounted && unlocked ? getBankMasterySummary(`qbank${bank.id}`) : null,
+    [mounted, unlocked, bank.id],
+  );
+
+  const BANK_COPY: Record<number, { title: string; description: string }> = {
+    1: {
+      title: 'Question Bank 1 – Start (Free)',
+      description: 'Build your foundation and learn how the ARRT tests you.',
+    },
+    2: {
+      title: 'Question Bank 2 – Building',
+      description: 'Increase exposure and start closing knowledge gaps.',
+    },
+    3: {
+      title: 'Question Bank 3 – Applying',
+      description: 'Apply what you know and reduce mistakes under pressure.',
+    },
+    4: {
+      title: 'Question Bank 4 – Mastering',
+      description: 'Refine accuracy and eliminate weak spots.',
+    },
+    5: {
+      title: 'Question Bank 5 – Registry Ready',
+      description: 'Perform at a passing level consistently.',
+    },
+  };
+
+  const { title, description } = BANK_COPY[bank.id];
 
   return (
     <div className="group rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.2)] transition hover:-translate-y-0.5 hover:border-white/15 hover:shadow-[0_24px_60px_rgba(0,0,0,0.24)]">
       <div className="flex items-start justify-between gap-3">
         <div>
           <div className="text-sm font-semibold text-white">{title}</div>
-          <div className="mt-1 text-xs text-white/60">
-            {bank.id === 1
-              ? 'Use every question, every flashcard, and the full mock freely.'
-              : bank.id === 2
-                ? 'Increase exposure with more ARRT-style questions and added repetition.'
-                : 'Final practice bank for stronger registry confidence and less surprise on test day.'}
-          </div>
+          <div className="mt-1 text-xs text-white/60">{description}</div>
         </div>
 
         {locked ? (
@@ -315,10 +329,11 @@ const title =
       {unlocked ? (
         <>
           <PracticeActions bankId={bank.id} />
-
         </>
       ) : (
-        <div className="mt-4 text-xs text-white/55">Locked in Free. Upgrade to unlock this Practice Bank.</div>
+        <div className="mt-4 text-xs text-white/55">
+          Locked in Free. Upgrade to unlock this Practice Bank.
+        </div>
       )}
     </div>
   );
