@@ -11,8 +11,10 @@
   <desc>BIMI logo for The Rad Tech Tutor</desc>
 
   <rect
-    width="512"
-    height="512"
+    x="3"
+    y="3"
+    width="506"
+    height="506"
     rx="80"
     ry="80"
     fill="#0b0f14"
@@ -20,15 +22,15 @@
     stroke-width="6"
   />
 
-  <text
-    x="256"
-    y="300"
-    text-anchor="middle"
-    font-family="Arial, Helvetica, sans-serif"
-    font-size="240"
-    font-weight="600"
+  <!-- R -->
+  <path
     fill="#e5e7eb"
-  >RT</text>
+    d="M126 120H210C262 120 300 154 300 205C300 241 280 269 246 282L297 392H248L201 294H174V392H126V120ZM174 160V255H207C241 255 252 250 262 241C272 232 278 220 278 205C278 190 272 178 262 169C252 160 241 160 207 160H174Z"
+  />
+
+  <!-- T -->
+  <path
+    fill="#e5e7eb"
+    d="M312 120H470V160H415V392H367V160H312V120Z"
+  />
 </svg>
-
-
