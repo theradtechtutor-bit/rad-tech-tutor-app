@@ -330,9 +330,9 @@ function BankCard({
 
   return (
     <div className="group rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.2)] transition hover:-translate-y-0.5 hover:border-white/15 hover:shadow-[0_24px_60px_rgba(0,0,0,0.24)]">
-      <div className="flex items-start justify-between gap-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <div className="text-sm font-bold text-white">{leftTitle}</div>
             {bank.id === 1 ? (
               <span className="rounded-full border border-emerald-400/25 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-300">
@@ -345,7 +345,9 @@ function BankCard({
             )}
           </div>
 
-          <div className="mt-1 text-sm italic text-white/60">{description}</div>
+          <div className="mt-1 text-sm italic leading-snug text-white/60">
+            {description}
+          </div>
 
           {!unlocked ? (
             <div className="mt-4 text-xs text-white/55">
@@ -354,8 +356,8 @@ function BankCard({
           ) : null}
         </div>
 
-        <div className="shrink-0 flex flex-col items-end">
-          <div className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] font-semibold text-white/80">
+        <div className="min-w-0 sm:shrink-0">
+          <div className="inline-flex max-w-full whitespace-normal break-words rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] font-semibold leading-tight text-white/80">
             {rightLabel}
           </div>
         </div>

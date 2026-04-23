@@ -2567,7 +2567,7 @@ const readiness = useMemo(() => {
                         )}
                       >
                         <div className="text-[11px] font-semibold uppercase tracking-[0.16em] leading-none text-white/45">
-                          {item.score != null ? 'Score' : 'Pending'}
+                          {item.score != null ? 'Score' : 'TBD'}
                         </div>
                         <div className="mt-3 flex items-center justify-center text-base font-semibold leading-none">
                           {item.score != null ? `${item.score}%` : '—'}
