@@ -289,7 +289,7 @@ function BankCard({ bank, isPro, mounted }: { bank: Bank; isPro: boolean; mounte
   const BANK_COPY: Record<number, { title: string; description: string }> = {
     1: {
       title: 'Question Bank 1 – Start (Free)',
-      description: 'Build your foundation and learn how the ARRT tests you.',
+      description: 'Begin your journey to earning RT(R) behind your name.',
     },
     2: {
       title: 'Question Bank 2 – Building',
@@ -297,15 +297,16 @@ function BankCard({ bank, isPro, mounted }: { bank: Bank; isPro: boolean; mounte
     },
     3: {
       title: 'Question Bank 3 – Applying',
-      description: 'Apply what you know and reduce mistakes under pressure.',
+      description: 'The patterns are becoming familiar.',
     },
     4: {
       title: 'Question Bank 4 – Mastering',
-      description: 'Refine accuracy and eliminate weak spots.',
+      description: "You've seen it asked enough ways to feel confident.",
     },
     5: {
       title: 'Question Bank 5 – Registry Ready',
-      description: 'Perform at a passing level consistently.',
+      description:
+        "You've seen it all. Walk in knowing nothing will surprise you",
     },
   };
 

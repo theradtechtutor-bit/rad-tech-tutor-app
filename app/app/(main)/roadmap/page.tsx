@@ -331,54 +331,89 @@ export default function RoadmapPage() {
       <StartHereTour
         storageKey="rtt_tour_roadmap"
         steps={[
-          { selector: '[data-tour="roadmap-header"]', title: 'Roadmap', body: 'Use this page to track your score trend as you move through the RTT Mastery Method.' },
-          { selector: '[data-tour="roadmap-date"]', title: 'Set your exam date', body: 'Add your exam date so your roadmap has a finish line.' },
-          { selector: '[data-tour="roadmap-chart"]', title: 'Track your trend', body: 'This chart shows whether your scores are moving toward ARRT readiness.' },
-          { selector: '[data-tour="roadmap-metrics"]', title: 'Watch your metrics', body: 'These metrics match the RTT Mastery Method page so the platform feels consistent.' },
+          {
+            selector: '[data-tour="roadmap-header"]',
+            title: 'Roadmap',
+            body: 'Use this page to track your score trend as you move through the RTT Mastery Method.',
+          },
+          {
+            selector: '[data-tour="roadmap-date"]',
+            title: 'Set your exam date',
+            body: 'Add your exam date so your roadmap has a finish line.',
+          },
+          {
+            selector: '[data-tour="roadmap-chart"]',
+            title: 'Track your trend',
+            body: 'This chart shows whether your scores are moving toward ARRT® readiness.',
+          },
+          {
+            selector: '[data-tour="roadmap-metrics"]',
+            title: 'Watch your metrics',
+            body: 'These metrics match the RTT Mastery Method page so the platform feels consistent.',
+          },
         ]}
       />
 
-      <section data-tour="roadmap-header" className="rounded-[32px] border border-emerald-400/15 bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.14),transparent_42%),linear-gradient(to_bottom,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] p-7 shadow-[0_24px_80px_rgba(0,0,0,0.28)] md:p-8">
+      <section
+        data-tour="roadmap-header"
+        className="rounded-[32px] border border-emerald-400/15 bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.14),transparent_42%),linear-gradient(to_bottom,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] p-7 shadow-[0_24px_80px_rgba(0,0,0,0.28)] md:p-8"
+      >
         <div className="max-w-4xl">
-          <div className="inline-flex items-center rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-200">Roadmap</div>
-          <h1 className="mt-4 text-3xl font-semibold tracking-tight text-white md:text-5xl">Your path to test-ready</h1>
+          <div className="inline-flex items-center rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-200">
+            Roadmap
+          </div>
+          <h1 className="mt-4 text-3xl font-semibold tracking-tight text-white md:text-5xl">
+            Your path to test-ready
+          </h1>
           <p className="mt-4 max-w-4xl text-lg leading-8 text-white/72 md:text-xl md:leading-9">
-            Track your exam date, watch your score trend, and use this page as the analytics view of your RTT Mastery Method progress.
+            Track your exam date, watch your score trend, and use this page as
+            the analytics view of your RTT Mastery Method progress.
           </p>
         </div>
 
-        <div data-tour="roadmap-date" className="mt-8 rounded-[28px] border border-white/10 bg-black/20 p-5">
+        <div
+          data-tour="roadmap-date"
+          className="mt-8 rounded-[28px] border border-white/10 bg-black/20 p-5"
+        >
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <div className="text-sm font-semibold text-white">ARRT exam date</div>
+              <div className="text-sm font-semibold text-white">
+                ARRT® exam date
+              </div>
               <div className="mt-1 text-sm text-white/70">
                 {examDate ? (
                   <>
                     {formatInputDate(examDate)}
-                    {typeof daysLeft === 'number' ? <span className="ml-2 text-white/60">({daysLeft} days left)</span> : null}
+                    {typeof daysLeft === 'number' ? (
+                      <span className="ml-2 text-white/60">
+                        ({daysLeft} days left)
+                      </span>
+                    ) : null}
                   </>
                 ) : (
-                  <>Add your target exam date so your roadmap has a finish line.</>
+                  <>
+                    Add your target exam date so your roadmap has a finish line.
+                  </>
                 )}
               </div>
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-<input
-  type="date"
-  value={examDate}
-  min={new Date().toISOString().split('T')[0]}
-  onChange={(e) => {
-    const today = new Date().toISOString().split('T')[0];
-    const next = e.target.value;
+              <input
+                type="date"
+                value={examDate}
+                min={new Date().toISOString().split('T')[0]}
+                onChange={(e) => {
+                  const today = new Date().toISOString().split('T')[0];
+                  const next = e.target.value;
 
-    const safeDate = next < today ? today : next;
+                  const safeDate = next < today ? today : next;
 
-    setExamDate(safeDate);
-    writeExamDate(safeDate);
-  }}
-  className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none"
-/>
+                  setExamDate(safeDate);
+                  writeExamDate(safeDate);
+                }}
+                className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none"
+              />
               {examDate ? (
                 <button
                   type="button"
@@ -397,18 +432,43 @@ export default function RoadmapPage() {
       </section>
 
       <div className="mt-8 rounded-[28px] border border-white/10 bg-black/20 p-5">
-        <div className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">How roadmap works</div>
-        <div className="mt-3 text-sm text-white/70">Your scores are tracked here over time. <span className="font-semibold text-white">Practice Test</span> shows your baseline before review.</div>
-        <div className="mt-2 text-sm text-white/60"><span className="font-semibold text-white">Mini Mock Exam</span> shows how much you improved after flashcards. Use this page to see whether your scores are moving toward ARRT readiness.</div>
+        <div className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">
+          How roadmap works
+        </div>
+        <div className="mt-3 text-sm text-white/70">
+          Your scores are tracked here over time.{' '}
+          <span className="font-semibold text-white">Practice Test</span> shows
+          your baseline before review.
+        </div>
+        <div className="mt-2 text-sm text-white/60">
+          <span className="font-semibold text-white">Mini Mock Exam</span> shows
+          how much you improved after flashcards. Use this page to see whether
+          your scores are moving toward ARRT® readiness.
+        </div>
       </div>
 
-      <div data-tour="roadmap-chart" className="mt-8"><TrendChart data={attempts} examDate={examDate} /></div>
+      <div data-tour="roadmap-chart" className="mt-8">
+        <TrendChart data={attempts} examDate={examDate} />
+      </div>
 
-      <div data-tour="roadmap-metrics" className="mt-8 grid gap-4 xl:grid-cols-2">
+      <div
+        data-tour="roadmap-metrics"
+        className="mt-8 grid gap-4 xl:grid-cols-2"
+      >
         <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
-          <div className="text-sm font-semibold text-white">Average Mini Mock Score</div>
-          <div className="mt-3 text-2xl font-semibold text-white">{averageMiniMockScore != null ? `${averageMiniMockScore}%` : 'Not enough data yet'}</div>
-          <div className="mt-2 text-sm leading-6 text-white/65">{averageMiniMockScore != null ? `Based on ${miniMockAttempts.length} Mini Mock Exam score${miniMockAttempts.length === 1 ? '' : 's'}.` : 'Take a Mini Mock Exam to calculate average.'}</div>
+          <div className="text-sm font-semibold text-white">
+            Average Mini Mock Score
+          </div>
+          <div className="mt-3 text-2xl font-semibold text-white">
+            {averageMiniMockScore != null
+              ? `${averageMiniMockScore}%`
+              : 'Not enough data yet'}
+          </div>
+          <div className="mt-2 text-sm leading-6 text-white/65">
+            {averageMiniMockScore != null
+              ? `Based on ${miniMockAttempts.length} Mini Mock Exam score${miniMockAttempts.length === 1 ? '' : 's'}.`
+              : 'Take a Mini Mock Exam to calculate average.'}
+          </div>
         </div>
         {/* <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
           <div className="text-sm font-semibold text-white">Weakest Category</div>
@@ -421,16 +481,36 @@ export default function RoadmapPage() {
       {!!attempts.length && (
         <div className="mt-8 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           {attempts.map((d, i) => (
-            <div key={`${d.attempt}-${i}`} className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/75">
+            <div
+              key={`${d.attempt}-${i}`}
+              className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/75"
+            >
               <div className="flex items-center justify-between gap-3">
-                <div className="font-semibold text-white">{getAttemptDisplayName(d, i)}</div>
+                <div className="font-semibold text-white">
+                  {getAttemptDisplayName(d, i)}
+                </div>
                 <div style={{ color: colorForAttempt(d) }}>{d.score}%</div>
               </div>
-              <div className="mt-2 text-xs text-white/55">{formatDate(d.dateISO)}</div>
-              <div className="mt-2 text-xs text-white/65">Bank: QBank {d.bankId ?? 1}</div>
-              <div className="mt-1 text-xs text-white/65">Type: {getAttemptKind(d) === 'Practice Test' ? 'Pre-Test' : getAttemptKind(d) === 'Mini Mock' ? 'Post-Test' : getAttemptKind(d)}</div>
-                <div className="mt-1 text-xs text-white/65">Attempt: {getOrdinal(getAttemptIteration(attempts, i))}</div>
-              <div className="mt-1 text-xs text-white/65">Questions: {d.questionsTaken || d.total}</div>
+              <div className="mt-2 text-xs text-white/55">
+                {formatDate(d.dateISO)}
+              </div>
+              <div className="mt-2 text-xs text-white/65">
+                Bank: QBank {d.bankId ?? 1}
+              </div>
+              <div className="mt-1 text-xs text-white/65">
+                Type:{' '}
+                {getAttemptKind(d) === 'Practice Test'
+                  ? 'Pre-Test'
+                  : getAttemptKind(d) === 'Mini Mock'
+                    ? 'Post-Test'
+                    : getAttemptKind(d)}
+              </div>
+              <div className="mt-1 text-xs text-white/65">
+                Attempt: {getOrdinal(getAttemptIteration(attempts, i))}
+              </div>
+              <div className="mt-1 text-xs text-white/65">
+                Questions: {d.questionsTaken || d.total}
+              </div>
             </div>
           ))}
         </div>

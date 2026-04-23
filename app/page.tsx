@@ -340,7 +340,7 @@ export default function HomePage() {
 
         <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-3">
           <FeatureCard
-            title="Practice ARRT® Question Banks"
+            title="Practice ARRT®-style Question Banks"
             desc="High-yield practice designed around the exam categories you actually need to master."
           />
           <FeatureCard

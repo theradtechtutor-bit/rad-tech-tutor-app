@@ -23,7 +23,8 @@ export default function SignInPage() {
           </h1>
 
           <p className="mt-3 text-sm leading-6 text-white/65">
-            Save your ARRT-style question progress, flashcards, and mini mock progress to your account.
+            Save your ARRT®-style question progress, flashcards, and mini mock
+            progress to your account.
           </p>
 
           <form className="mt-8 space-y-4">

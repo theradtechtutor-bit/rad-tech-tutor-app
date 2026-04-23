@@ -59,13 +59,13 @@ function labelForBank(setId: string) {
 function bankDescription(setId: string) {
   const id = Number(setId.replace('qbank', ''));
 
-if (id === 1) return 'Begin your journey to earning RT(R) after your name.';
-if (id === 2) return 'Build the foundation you’ll rely on.';
-if (id === 3) return 'Connect concepts and answer with confidence.';
+if (id === 1) return 'Begin your journey to earning RT(R) behind your name.';
+if (id === 2) return 'Increase exposure and start closing knowledge gaps.';
+if (id === 3) return 'The patterns are becoming familiar.';
 if (id === 4)
-  return 'New question formats to expose weak spots most students miss.';
+  return 'You\'ve seen it asked enough ways to feel confident.';
 if (id === 5)
-  return 'You’ve seen it all. Nothing on exam day will surprise you.';
+  return 'You\'ve seen it all. Walk in knowing nothing will surprise you';
 
   return 'Progress one level at a time.';
 }
@@ -1514,9 +1514,12 @@ const readiness = useMemo(() => {
                 RTT Mastery Method
               </h1>
               <p className="mt-4 max-w-3xl text-base leading-7 text-white/72">
-                A structured step-by-step course that walks students through 10
-                Mini Mocks, then full-practice review, then the full registry
-                simulation.
+                5 full-length ARRT®-style Mock Exams, each broken into 10 Mini
+                Mocks. Take a practice test, missed questions automatically
+                become flashcards, then take the Mini Mock Exam to measure how
+                much your score improved. Finish all 10 and take a full registry
+                simulation. Score 90% or higher across all 5 banks and you're
+                ready for the real ARRT® exam.
               </p>
 
               <div className="mt-8">
@@ -1777,7 +1780,7 @@ const readiness = useMemo(() => {
                       )}
                       title={
                         locked
-                          ? 'Unlock 200 more ARRT-style questions'
+                          ? 'Unlock 200 more ARRT®-style questions'
                           : undefined
                       }
                     >
@@ -1809,92 +1812,20 @@ const readiness = useMemo(() => {
                             )}
                           </div>
 
-                          <span className="text-[12px] text-white/50">
-                            200 Qs
+                          <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] font-semibold text-white">
+                            Mock Exam Bank{' '}
+                            {Number(bank.setId.replace('qbank', ''))} · 200 Qs
                           </span>
                         </div>
 
                         <div className="mt-1 w-full text-left text-[12px] italic leading-snug text-white/70">
                           {bankDescription(bank.setId)}
                         </div>
-
-                        {/* 👇 THIS IS WHAT YOU WANTED */}
                       </div>
                     </button>
                   );
                 })}
               </div>
-
-              {/* {process.env.NODE_ENV === 'development' && (
-                <div className="w-full max-w-[380px] rounded-2xl border border-red-400/20 bg-red-500/5 p-3">
-                  <div className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-red-200/80">
-                    Dev tools
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      [
-                        'qbank1',
-                        'qbank2',
-                        'qbank3',
-                        'qbank4',
-                        'qbank5',
-                      ].forEach((id) =>
-                        localStorage.removeItem(`dev_bank_summary_${id}`),
-                      );
-                      window.dispatchEvent(
-                        new CustomEvent('rtt-progress-updated'),
-                      );
-                    }}
-                    className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs font-semibold text-white"
-                  >
-                    Reset Dev Banks
-                  </button>
-
-                  <div className="flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() => devMarkBankReady('qbank1')}
-                      className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs font-semibold text-white"
-                    >
-                      Mark Start Ready
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => devMarkBankReady('qbank2')}
-                      className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs font-semibold text-white"
-                    >
-                      Mark Building Ready
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => devMarkBankReady('qbank3')}
-                      className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs font-semibold text-white"
-                    >
-                      Mark Applying Ready
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => devMarkBankReady('qbank4')}
-                      className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs font-semibold text-white"
-                    >
-                      Mark Mastering Ready
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => devMarkBankReady('qbank5')}
-                      className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs font-semibold text-white"
-                    >
-                      Mark Registry Ready
-                    </button>
-                  </div>
-                </div>
-              )} */}
 
               <div
                 className={cx(
@@ -1905,13 +1836,13 @@ const readiness = useMemo(() => {
                 )}
               >
                 <div className="text-[11px] font-bold text-white uppercase tracking-[0.2em]">
-                  ARRT Registry Readiness
+                  ARRT® Registry Readiness
                 </div>
 
                 {readiness.fullyReady && (
                   <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-yellow-300/35 bg-yellow-300/12 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-yellow-100 shadow-[0_0_18px_rgba(250,204,21,0.18)]">
                     <span>🏅</span>
-                    <span>ARRT Ready</span>
+                    <span>ARRT® Ready</span>
                   </div>
                 )}
 
@@ -1945,7 +1876,7 @@ const readiness = useMemo(() => {
                   <div className="mt-2 text-sm text-white/70">
                     {readiness.banksReady < 5
                       ? `${5 - readiness.banksReady} banks left to reach exam readiness`
-                      : 'All banks complete — you’re ready for the ARRT'}
+                      : 'All banks complete — you’re ready for the Radiography ARRT® exam!'}
                   </div>
                 </div>
 

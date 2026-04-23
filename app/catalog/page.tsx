@@ -60,14 +60,15 @@ export default function CoursesPage() {
       <div className="flex items-start justify-between gap-6">
         <div>
           <h1 className="text-4xl font-semibold">
-            ARRT Radiography Content Categories
+            ARRT® Radiography Content Categories
           </h1>
           <p className="mt-3 max-w-2xl text-[color:var(--rtt-muted)]">
-            These are the four content categories tested on the ARRT Radiography
-            exam. Each category is organized into clear, exam-focused lessons
-            covering the concepts most likely to appear on the ARRT exam. Every
-            lesson connects directly to questions from our Essential 200 so you
-            can immediately test and reinforce what you just learned.
+            These are the four content categories tested on the ARRT®
+            Radiography exam. Each category is organized into clear,
+            exam-focused lessons covering the concepts most likely to appear on
+            the ARRT® exam. Every lesson connects directly to questions from our
+            Essential 200 so you can immediately test and reinforce what you
+            just learned.
           </p>
         </div>
       </div>

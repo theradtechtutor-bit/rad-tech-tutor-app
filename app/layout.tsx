@@ -5,7 +5,7 @@ import PostHogProvider from './posthog-provider';
 
 export const metadata: Metadata = {
   title: 'Rad Tech Tutor',
-  description: 'Master the ARRT with a structured, mastery-first system.',
+  description: 'Master the ARRT® with a structured, mastery-first system.',
 };
 
 export default function RootLayout({

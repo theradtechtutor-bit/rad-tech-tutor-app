@@ -658,14 +658,6 @@ export function recordFullMockResult(setId: string, score: number) {
 }
 
 export function getBankMasterySummary(setId: string) {
-  // if (typeof window !== 'undefined') {
-  //   const devRaw = localStorage.getItem(`dev_bank_summary_${setId}`);
-  //   if (devRaw) {
-  //     try {
-  //       return JSON.parse(devRaw);
-  //     } catch {}
-  //   }
-  // }
   const current = readBankMastery(setId);
   const values = Object.values(current.miniStatus);
   const completed = values.filter((v) => v.completed).length;
