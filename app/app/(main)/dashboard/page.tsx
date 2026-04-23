@@ -1514,7 +1514,7 @@ const readiness = useMemo(() => {
                 RTT Mastery Method
               </h1>
               <p className="mt-4 max-w-3xl text-base leading-7 text-white/72">
-                5 full-length ARRT®-style Mock Exams built on the official ARRT
+                5 full-length ARRT®-style Mock Exams built on the official ARRT®
                 Examination Content Specifications, each broken into 10 Mini
                 Mocks. Take a practice test, missed questions automatically
                 become flashcards, then take the Mini Mock Exam to measure how
