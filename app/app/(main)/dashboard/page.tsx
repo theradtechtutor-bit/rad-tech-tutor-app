@@ -1837,7 +1837,10 @@ const readiness = useMemo(() => {
                 )}
               >
                 <div className="text-[11px] font-bold text-white uppercase tracking-[0.2em]">
-                  ARRT® Registry Readiness
+                  Radiography ARRT® Registry Readiness
+                </div>
+                <div className="mt-2 text-xs text-white/50">
+                  Complete all 5 Mock Exam Banks with 90%+ average to be ready for the ARRT® exam.
                 </div>
 
                 {readiness.fullyReady && (
