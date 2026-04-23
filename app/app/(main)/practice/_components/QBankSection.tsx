@@ -276,7 +276,15 @@ function PracticeActions({ bankId }: { bankId: number }) {
   );
 }
 
-function BankCard({ bank, isPro, mounted }: { bank: Bank; isPro: boolean; mounted: boolean }) {
+function BankCard({
+  bank,
+  isPro,
+  mounted,
+}: {
+  bank: Bank;
+  isPro: boolean;
+  mounted: boolean;
+}) {
   const locked = bank.locked && !isPro;
   const unlocked = !locked;
 
@@ -286,56 +294,74 @@ function BankCard({ bank, isPro, mounted }: { bank: Bank; isPro: boolean; mounte
     [mounted, unlocked, bank.id],
   );
 
-  const BANK_COPY: Record<number, { title: string; description: string }> = {
+  const BANK_COPY: Record<
+    number,
+    { leftTitle: string; description: string; rightLabel: string }
+  > = {
     1: {
-      title: 'Question Bank 1 – Start (Free)',
+      leftTitle: 'Start',
       description: 'Begin your journey to earning RT(R) behind your name.',
+      rightLabel: 'Mock Exam Bank 1 · 200 Questions',
     },
     2: {
-      title: 'Question Bank 2 – Building',
+      leftTitle: 'Building',
       description: 'Increase exposure and start closing knowledge gaps.',
+      rightLabel: 'Mock Exam Bank 2 · 200 Questions',
     },
     3: {
-      title: 'Question Bank 3 – Applying',
+      leftTitle: 'Applying',
       description: 'The patterns are becoming familiar.',
+      rightLabel: 'Mock Exam Bank 3 · 200 Questions',
     },
     4: {
-      title: 'Question Bank 4 – Mastering',
+      leftTitle: 'Mastering',
       description: "You've seen it asked enough ways to feel confident.",
+      rightLabel: 'Mock Exam Bank 4 · 200 Questions',
     },
     5: {
-      title: 'Question Bank 5 – Registry Ready',
+      leftTitle: 'Registry Ready',
       description:
-        "You've seen it all. Walk in knowing nothing will surprise you",
+        "You've seen it all. Walk in knowing nothing will surprise you.",
+      rightLabel: 'Mock Exam Bank 5 · 200 Questions',
     },
   };
 
-  const { title, description } = BANK_COPY[bank.id];
+  const { leftTitle, description, rightLabel } = BANK_COPY[bank.id];
 
   return (
     <div className="group rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.2)] transition hover:-translate-y-0.5 hover:border-white/15 hover:shadow-[0_24px_60px_rgba(0,0,0,0.24)]">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <div className="text-sm font-semibold text-white">{title}</div>
-          <div className="mt-1 text-xs text-white/60">{description}</div>
+      <div className="flex items-start justify-between gap-6">
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2">
+            <div className="text-sm font-bold text-white">{leftTitle}</div>
+            {bank.id === 1 ? (
+              <span className="rounded-full border border-emerald-400/25 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-300">
+                Free
+              </span>
+            ) : (
+              <span className="rounded-full border border-yellow-400/25 bg-yellow-500/10 px-2 py-0.5 text-[11px] font-semibold text-yellow-300">
+                Pro
+              </span>
+            )}
+          </div>
+
+          <div className="mt-1 text-sm italic text-white/60">{description}</div>
+
+          {!unlocked ? (
+            <div className="mt-4 text-xs text-white/55">
+              Locked in Free. Upgrade to unlock this Practice Bank.
+            </div>
+          ) : null}
         </div>
 
-        {locked ? (
-          <PillLink href="/app/upgrade" variant="pro">
-            Get Pro
-          </PillLink>
-        ) : null}
+        <div className="shrink-0 flex flex-col items-end">
+          <div className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] font-semibold text-white/80">
+            {rightLabel}
+          </div>
+        </div>
       </div>
 
-      {unlocked ? (
-        <>
-          <PracticeActions bankId={bank.id} />
-        </>
-      ) : (
-        <div className="mt-4 text-xs text-white/55">
-          Locked in Free. Upgrade to unlock this Practice Bank.
-        </div>
-      )}
+      {unlocked ? <PracticeActions bankId={bank.id} /> : null}
     </div>
   );
 }
