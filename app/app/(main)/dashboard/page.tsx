@@ -1514,12 +1514,13 @@ const readiness = useMemo(() => {
                 RTT Mastery Method
               </h1>
               <p className="mt-4 max-w-3xl text-base leading-7 text-white/72">
-                5 full-length ARRT®-style Mock Exams, each broken into 10 Mini
+                5 full-length ARRT®-style Mock Exams built on the official ARRT
+                Examination Content Specifications, each broken into 10 Mini
                 Mocks. Take a practice test, missed questions automatically
                 become flashcards, then take the Mini Mock Exam to measure how
-                much your score improved. Finish all 10 and take a full registry
-                simulation. Score 90% or higher across all 5 banks and you're
-                ready for the real ARRT® exam.
+                much your score improved. Finish all 10 Mini Mocks, then take
+                the full registry simulation. Score 90% or higher across all 5
+                banks and you're ready for the real ARRT® exam.
               </p>
 
               <div className="mt-8">
