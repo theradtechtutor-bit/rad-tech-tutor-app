@@ -1742,12 +1742,14 @@ const readiness = useMemo(() => {
 
                       {!challenge.qualifies && !challengeExpired && (
                         <div
-                          className={`mt-3 inline-flex rounded-full border px-4 py-2 text-sm font-semibold ${challengeTimeLeft.urgencyClass}`}
+                          className={`mt-3 inline-flex max-w-full flex-wrap items-center justify-center gap-x-1 gap-y-1 rounded-full border px-4 py-2 text-center text-sm font-semibold leading-tight ${challengeTimeLeft.urgencyClass}`}
                         >
-                          Discount expires in: {challengeTimeLeft.days}d{' '}
-                          {challengeTimeLeft.hours}h {challengeTimeLeft.minutes}
-                          m
-                          <span className="ml-1 opacity-80">
+                          <span className="whitespace-nowrap">
+                            Discount expires in:
+                          </span>
+                          <span className="whitespace-nowrap">
+                            {challengeTimeLeft.days}d {challengeTimeLeft.hours}h{' '}
+                            {challengeTimeLeft.minutes}m{' '}
                             {challengeDeadline
                               ? Math.floor(
                                   (challengeDeadline - challengeNow) / 1000,
