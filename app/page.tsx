@@ -301,7 +301,7 @@ export default function HomePage() {
 
             <div className="flex h-full flex-col justify-between text-center">
               {' '}
-              <div className="text-base font-bold text-teal-300">2 Weeks</div>
+              <div className="text-base font-bold text-teal-300">2 Weeks Access</div>
               <div className="mt-2 text-xs text-white/65">
                 Short on time? Raise your score fast.
               </div>
