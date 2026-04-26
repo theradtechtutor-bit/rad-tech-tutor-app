@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { captureEvent } from '@/lib/analytics';
 import { getMiniMockChallengeStats } from '@/lib/progressStore';
 
-type PlanKey = 'pro_1m' | 'pro_3m' | 'pro_6m';
+type PlanKey = 'pro_2w' | 'pro_1m' | 'pro_3m' | 'pro_6m';
 
 const plans: Array<{
   key: PlanKey;
@@ -19,6 +19,15 @@ const plans: Array<{
   badge?: string;
   helper?: string;
 }> = [
+  {
+    key: 'pro_2w',
+    name: '2 Weeks',
+    price: '$29',
+    detail: 'Everything you need before your ARRT exam.',
+    border: 'border-yellow-400/50',
+    badge: 'TEST SOON?',
+    helper: 'Perfect if your exam is coming up.',
+  },
   {
     key: 'pro_1m',
     name: '1 Month',
@@ -136,9 +145,14 @@ const res = await fetch('/api/stripe/checkout', {
   useEffect(() => {
     if (!autobuy || autoStartedRef.current) return;
 
-    if (autobuy !== 'pro_1m' && autobuy !== 'pro_3m' && autobuy !== 'pro_6m') {
-      return;
-    }
+if (
+  autobuy !== 'pro_2w' &&
+  autobuy !== 'pro_1m' &&
+  autobuy !== 'pro_3m' &&
+  autobuy !== 'pro_6m'
+) {
+  return;
+}
 
     autoStartedRef.current = true;
     startCheckout(autobuy);
@@ -195,7 +209,8 @@ const res = await fetch('/api/stripe/checkout', {
               </h2>
             </div>
 
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
+            <div className="mt-10 grid gap-6 md:grid-cols-4">
+              {' '}
               {plans.map((plan) => (
                 <div
                   key={plan.key}

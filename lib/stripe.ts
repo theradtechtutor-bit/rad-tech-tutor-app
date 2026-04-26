@@ -17,17 +17,27 @@ export function getStripe() {
   return stripeClient;
 }
 
-export type ProPlanKey = 'pro_1m' | 'pro_3m' | 'pro_6m';
+export type ProPlanKey = 'pro_2w' | 'pro_1m' | 'pro_3m' | 'pro_6m';
 
-export const PRO_PLANS: Record<ProPlanKey, {
-  key: ProPlanKey;
-  label: string;
-  mode: 'payment' | 'subscription';
-  amount: number;
-  interval?: 'month';
-  intervalCount?: number;
-  priceIdEnv: string;
-}> = {
+export const PRO_PLANS: Record<
+  ProPlanKey,
+  {
+    key: ProPlanKey;
+    label: string;
+    mode: 'payment' | 'subscription';
+    amount: number;
+    interval?: 'month';
+    intervalCount?: number;
+    priceIdEnv: string;
+  }
+> = {
+  pro_2w: {
+    key: 'pro_2w',
+    label: '2 Weeks',
+    mode: 'payment',
+    amount: 2900,
+    priceIdEnv: 'STRIPE_PRICE_PRO_2W',
+  },
   pro_1m: {
     key: 'pro_1m',
     label: '1 Month',
