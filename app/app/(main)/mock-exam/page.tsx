@@ -1,5 +1,4 @@
 'use client';
-
 import Link from 'next/link';
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -26,6 +25,8 @@ import {
   shuffleQuestionChoices,
   type MockScope,
 } from '@/lib/mockPlan';
+
+import posthog from 'posthog-js';
 
 type Choice =
   | string
@@ -277,6 +278,195 @@ function buildReviewItem(q: Question, selectedKeyRaw: string): ReviewItem {
   };
 }
 
+type FeedbackKind = 'free' | 'pro';
+type FeedbackAnswer = 'yes' | 'no';
+
+type FeedbackModalProps = {
+  kind: FeedbackKind;
+  surveyUrl: string;
+  onClose: () => void;
+};
+
+function MiniMockFeedbackModal({
+  kind,
+  surveyUrl,
+  onClose,
+}: FeedbackModalProps) {
+  const [freeAnswer, setFreeAnswer] = useState<FeedbackAnswer | null>(null);
+  const [rating, setRating] = useState<number | null>(null);
+  const [recommend, setRecommend] = useState<string | null>(null);
+  const [helpedMost, setHelpedMost] = useState<string | null>(null);
+  const [improvement, setImprovement] = useState('');
+
+const openSurvey = () => {
+  posthog.capture(
+    kind === 'pro'
+      ? 'pro_feedback_survey_clicked'
+      : 'free_feedback_survey_clicked',
+  );
+
+  if (kind === 'pro') {
+    localStorage.setItem('rtt_pro_feedback_completed', 'true');
+  } else {
+    localStorage.setItem('rtt_free_feedback_completed', 'true');
+  }
+
+  window.open(surveyUrl, '_blank', 'noopener,noreferrer');
+};
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-6 backdrop-blur-sm">
+      <div className="w-full max-w-lg rounded-3xl border border-white/10 bg-[#10131a] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-yellow-300/80">
+              Quick feedback
+            </div>
+            <h2 className="mt-2 text-xl font-semibold text-white">
+              {kind === 'free'
+                ? 'Quick question 👋'
+                : 'Quick feedback (5 seconds)'}
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full bg-white/8 px-3 py-1 text-sm font-semibold text-white/70 hover:bg-white/12 hover:text-white"
+          >
+            ×
+          </button>
+        </div>
+
+        {kind === 'free' ? (
+          <div className="mt-5">
+            {!freeAnswer ? (
+              <>
+                <p className="text-sm leading-6 text-white/75">
+                  Are you enjoying studying with The Rad Tech Tutor so far?
+                </p>
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      localStorage.setItem('rtt_enjoying', 'yes');
+                      posthog.capture('rtt_enjoying', { answer: 'yes' });
+
+                      setFreeAnswer('yes');
+                    }}
+                    className="rounded-2xl bg-emerald-400 px-4 py-3 text-sm font-semibold text-black hover:brightness-95"
+                  >
+                    Yes, it’s helping
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      localStorage.setItem('rtt_enjoying', 'no');
+                      posthog.capture('rtt_enjoying', { answer: 'no' });
+
+                      setFreeAnswer('no');
+                    }}
+                    className="rounded-2xl bg-white/10 px-4 py-3 text-sm font-semibold text-white hover:bg-white/15"
+                  >
+                    Not really yet
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="text-sm leading-6 text-white/75">
+                  {freeAnswer === 'yes'
+                    ? 'That’s great to hear. Would you take a quick 1-minute survey and tell us why this has been helpful for you so far?'
+                    : 'Thanks for being honest. Would you take a quick 1-minute survey and tell us what we can improve?'}
+                </p>
+                <div className="mt-4 rounded-2xl border border-yellow-400/20 bg-yellow-400/10 p-4 text-sm text-white/75">
+                  As a thank-you, you’ll get{' '}
+                  <span className="font-semibold text-yellow-300">
+                    10% off Pro
+                  </span>{' '}
+                  after completing it.
+                  {/* <div className="mt-2 text-xs text-white/55">
+                    Coupon code:{' '}
+                    <span className="font-semibold text-yellow-300">
+                      FEEDBACK10
+                    </span>
+                  </div> */}
+                </div>
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  <button
+                    type="button"
+                    onClick={openSurvey}
+                    className="rounded-2xl bg-yellow-400 px-4 py-3 text-sm font-semibold text-black hover:brightness-95"
+                  >
+                    Take Survey & Get 10% Off
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="rounded-2xl bg-white/10 px-4 py-3 text-sm font-semibold text-white hover:bg-white/15"
+                  >
+                    Maybe later
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        ) : (
+          <div className="mt-5">
+            <p className="text-sm leading-6 text-white/75">
+              How would you rate The Rad Tech Tutor so far?
+            </p>
+
+            <div className="mt-4 flex gap-2">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() => {
+                    setRating(star);
+                    posthog.capture('pro_feedback_rating', { rating: star });
+                  }}
+                  className={`text-3xl transition hover:scale-110 ${
+                    rating && star <= rating
+                      ? 'text-yellow-300'
+                      : 'text-white/25'
+                  }`}
+                  aria-label={`Rate ${star} stars`}
+                >
+                  ★
+                </button>
+              ))}
+            </div>
+
+            {rating && (
+              <div className="mt-5">
+                <p className="text-sm text-white/70 mb-3">
+                  Help us improve this for future students
+                </p>
+
+                <button
+                  type="button"
+                  onClick={openSurvey}
+                  className="w-full rounded-2xl bg-yellow-400 px-4 py-3 text-sm font-semibold text-black hover:brightness-95"
+                >
+                  Take 1-Minute Survey
+                </button>
+
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="mt-3 w-full text-sm text-white/50 hover:text-white/70"
+                >
+                  Skip
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function MockExamPageInner() {
   const sp = useSearchParams();
   const pathname = usePathname();
@@ -327,6 +517,9 @@ function MockExamPageInner() {
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [startedAt, setStartedAt] = useState<number>(Date.now());
   const [showChallengeModal, setShowChallengeModal] = useState(false);
+  const [feedbackModalKind, setFeedbackModalKind] =
+    useState<FeedbackKind | null>(null);
+  const feedbackPromptCheckedRef = useRef(false);
 
   const examAnchorRef = useRef<HTMLDivElement | null>(null);
   const isPausingRef = useRef(false);
@@ -381,6 +574,49 @@ function MockExamPageInner() {
       setShowChallengeModal(true);
     }
   }, [done, scope, challenge.qualifies]);
+
+useEffect(() => {
+  if (feedbackPromptCheckedRef.current) return;
+  if (!done && sp.get('done') !== '1') return;
+  if (scope !== 'mini') return;
+  if (!questions?.length) return;
+
+  feedbackPromptCheckedRef.current = true;
+
+  try {
+    const countKey = 'rtt_mini_mock_count';
+    const currentCount = Number(localStorage.getItem(countKey) || '0') + 1;
+
+    localStorage.setItem(countKey, String(currentCount));
+
+    // 🚨 ONLY SHOW AFTER 2 MINI MOCKS
+    if (currentCount < 2) return;
+
+if (isPro) {
+  const completed = localStorage.getItem('rtt_pro_feedback_completed');
+  if (completed) return;
+
+  const shownKey = 'rtt_pro_feedback_last_shown_count';
+  const lastShown = Number(localStorage.getItem(shownKey) || '0');
+
+  if (lastShown === 0 || currentCount - lastShown >= 2) {
+    localStorage.setItem(shownKey, String(currentCount));
+    setFeedbackModalKind('pro');
+  }
+} else {
+  const completed = localStorage.getItem('rtt_free_feedback_completed');
+  if (completed) return;
+
+  const shownKey = 'rtt_free_feedback_last_shown_count';
+  const lastShown = Number(localStorage.getItem(shownKey) || '0');
+
+  if (lastShown === 0 || currentCount - lastShown >= 2) {
+    localStorage.setItem(shownKey, String(currentCount));
+    setFeedbackModalKind('free');
+  }
+}
+  } catch {}
+}, [done, sp, scope, questions, isPro]);
 
   useEffect(() => {
     if (timeLeft === null || done || !questions) return;
@@ -1266,6 +1502,17 @@ function MockExamPageInner() {
 
     return (
       <div className="mx-auto max-w-4xl">
+        {feedbackModalKind ? (
+          <MiniMockFeedbackModal
+            kind={feedbackModalKind}
+            surveyUrl={
+              isPro
+                ? 'https://forms.gle/6WNGxk8d4TLgqtELA'
+                : 'https://forms.gle/39kTfpVSGB3j6pC57'
+            }
+            onClose={() => setFeedbackModalKind(null)}
+          />
+        ) : null}
         <div className="rtt-card rounded-3xl p-6 shadow-[0_20px_60px_rgba(0,0,0,0.22)]">
           <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/45">
             Mock Exam Results
@@ -1369,6 +1616,13 @@ function MockExamPageInner() {
                   </span>
                 )}
               </div>
+            </div>
+          ) : null}
+
+          {scope === 'mini' && pct >= 70 ? (
+            <div className="mt-5 rounded-2xl border border-emerald-400/15 bg-emerald-400/10 p-4 text-sm font-medium text-emerald-100">
+              You’re improving. Most students who pass the ARRT reach this level
+              by continuing through the mock exams and reviewing what they miss.
             </div>
           ) : null}
 

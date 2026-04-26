@@ -149,12 +149,17 @@ function saveToDB(key: string, value: unknown) {
   void getCachedUserId().then((userId) => {
     if (!userId) return;
 
-    return supabase.from('user_progress').upsert({
-      user_id: userId,
-      key,
-      value,
-      updated_at: new Date().toISOString(),
-    });
+    return supabase.from('user_progress').upsert(
+      {
+        user_id: userId,
+        key,
+        value,
+        updated_at: new Date().toISOString(),
+      },
+      {
+        onConflict: 'user_id,key',
+      },
+    );
   });
 }
 
