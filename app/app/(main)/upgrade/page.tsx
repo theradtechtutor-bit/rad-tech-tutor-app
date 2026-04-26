@@ -23,10 +23,10 @@ const plans: Array<{
     key: 'pro_2w',
     name: '2 Weeks',
     price: '$29',
-    detail: 'Everything you need before your ARRT exam.',
+    detail: 'Perfect if you\'re short on time.',
     border: 'border-yellow-400/50',
     badge: 'TEST SOON?',
-    helper: 'Perfect if your exam is coming up.',
+    helper: 'Testing soon? Raise your score fast.',
   },
   {
     key: 'pro_1m',
@@ -214,9 +214,7 @@ if (
               {plans.map((plan) => (
                 <div
                   key={plan.key}
-                  className={`relative rounded-[28px] border ${plan.border} bg-white/[0.04] p-6 text-center shadow-[0_0_45px_-26px_rgba(45,212,191,0.28)] ${
-                    plan.key === 'pro_3m' ? 'scale-[1.03]' : ''
-                  }`}
+                  className={`relative flex flex-col rounded-[28px] border ${plan.border} bg-white/[0.04] p-6 text-center ...`}
                 >
                   {plan.badge ? (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-blue-500 px-4 py-1 text-xs font-semibold tracking-[0.08em] text-white">
@@ -228,26 +226,20 @@ if (
                     {plan.name}
                   </h3>
 
-                  <div className="mt-4">
+                  <div className="mt-4 flex flex-col items-center justify-center min-h-[120px]">
+                    {' '}
                     <div className="text-lg text-white/35 line-through">
                       {/* {plan.oldPrice} */}
                     </div>
-
                     <div className="text-5xl font-bold tracking-tight text-white">
                       {plan.price}
                     </div>
-
-                    {plan.monthly && (
-                      <div className="mt-2 text-base font-semibold text-yellow-300">
-                        {plan.monthly}
-                      </div>
-                    )}
-
-                    {plan.helper && (
-                      <div className="mt-2 text-sm text-white/50">
-                        {plan.helper}
-                      </div>
-                    )}
+                    <div className="mt-2 h-[20px] flex items-center justify-center text-base font-semibold text-yellow-300">
+                      {plan.monthly || ''}
+                    </div>
+                    <div className="mt-2 h-[18px] flex items-center justify-center text-sm text-white/50">
+                      {plan.helper || ''}
+                    </div>
                   </div>
 
                   <p className="mt-4 text-sm text-white/55">{plan.detail}</p>
@@ -255,7 +247,7 @@ if (
                   <button
                     onClick={() => startCheckout(plan.key)}
                     disabled={busyPlan === plan.key}
-                    className="mt-8 w-full rounded-2xl bg-yellow-400 px-4 py-4 text-base font-semibold text-black transition hover:bg-yellow-300 disabled:opacity-60"
+                    className="mt-auto w-full rounded-2xl bg-yellow-400 px-4 py-4 text-base font-semibold text-black transition hover:bg-yellow-300 disabled:opacity-60"
                   >
                     {busyPlan === plan.key
                       ? 'Redirecting…'

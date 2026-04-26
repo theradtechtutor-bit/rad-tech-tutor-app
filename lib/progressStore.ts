@@ -685,9 +685,14 @@ export function getBankMasterySummary(setId: string) {
 }
 
 export function getBanksMasteredCount() {
-    return ['qbank1', 'qbank2', 'qbank3', 'qbank4', 'qbank5'].filter(
-      (id) => getBankMasterySummary(id).bankMastered,
-    ).length;
+  return ['qbank1', 'qbank2', 'qbank3', 'qbank4', 'qbank5'].filter((id) => {
+    const current = readFullQbankMastery(id);
+
+    return (
+      current?.exam?.completed === true &&
+      Number(current?.exam?.lastScore || 0) >= 90
+    );
+  }).length;
 }
 
 export function estimatePassProbability() {

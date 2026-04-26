@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useSupabaseSession } from '@/app/app/_hooks/useSupabaseSession';
 import { getBankMasterySummary } from '@/lib/progressStore';
+import { captureEvent } from '@/lib/analytics';
 
 
 function getResumeHref() {
@@ -90,7 +91,8 @@ export default function HomePage() {
           }}
         />
 
-        <div className="relative mx-auto grid max-w-6xl grid-cols-1 gap-12 px-5 pb-16 pt-6 md:grid-cols-2 md:items-start md:pb-24 md:pt-16">
+        <div className="relative mx-auto grid max-w-6xl grid-cols-1 gap-12 px-5 pb-6 pt-6 md:grid-cols-2 md:items-start md:pb-8 md:pt-16">
+          {' '}
           <div>
             <div className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
               ARRT® Radiography Exam Prep
@@ -162,7 +164,7 @@ export default function HomePage() {
               </div>
             ) : null}
 
-            <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {/* <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-3">
               <div className="rtt-card rounded-2xl p-4">
                 <div className="text-xs font-semibold uppercase tracking-[0.14em] text-white/45">
                   Step 01
@@ -200,9 +202,8 @@ export default function HomePage() {
                   concepts are truly understood.
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
-
           <div className="relative">
             <div className="rtt-card rounded-[28px] p-7 md:p-8">
               <div className="text-xs uppercase tracking-[0.18em] text-teal-300/80">
@@ -277,14 +278,119 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* HOMEPAGE PRICING TEST */}
+      <section className="relative mx-auto max-w-6xl px-5 pb-4">
+        {' '}
+        <div className="mt-6 mb-4 flex items-center gap-3 md:mt-8">
+          {' '}
+          <div className="h-px flex-1 bg-teal-300/20" />
+          <div className="text-center text-[11px] font-bold uppercase tracking-[0.22em] text-teal-300">
+            Unlock the full RTT Mastery Method
+          </div>
+          <div className="h-px flex-1 bg-teal-300/20" />
+        </div>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+          <Link
+            href="/app/upgrade?autobuy=pro_2w"
+            onClick={() => captureEvent('checkout_started', { plan: 'pro_2w' })}
+            className="relative rounded-3xl border border-white/10 bg-white/[0.04] p-5 min-h-[220px] shadow-[0_0_25px_rgba(20,184,166,0.25)] transition hover:border-teal-300/40 hover:shadow-[0_0_40px_rgba(20,184,166,0.4)]"
+          >
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-blue-500 px-3 py-1 text-[10px] font-bold uppercase text-white">
+              TEST SOON?
+            </div>
+
+            <div className="flex h-full flex-col justify-between text-center">
+              {' '}
+              <div className="text-base font-bold text-teal-300">2 Weeks</div>
+              <div className="mt-2 text-xs text-white/65">
+                Short on time? Raise your score fast.
+              </div>
+              <div className="mt-4 text-4xl font-black text-white">$29</div>
+              <div className="text-xs text-white/60">one-time</div>
+            </div>
+          </Link>
+
+          <Link
+            href="/app/upgrade?autobuy=pro_1m"
+            onClick={() => captureEvent('checkout_started', { plan: 'pro_1m' })}
+            className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 min-h-[220px] shadow-[0_0_25px_rgba(20,184,166,0.25)] transition hover:border-teal-300/40 hover:shadow-[0_0_40px_rgba(20,184,166,0.4)]"
+          >
+            <div className="flex h-full flex-col justify-between text-center">
+              {' '}
+              <div className="text-base font-bold text-teal-300">
+                1 Month Access
+              </div>
+              <div className="mt-2 text-xs text-white/65">
+                Focused short-term preparation.
+              </div>
+              <div className="mt-4 text-4xl font-black text-white">$49</div>
+              <div className="text-xs text-white/60">one-time</div>
+            </div>
+          </Link>
+
+          <Link
+            href="/app/upgrade?autobuy=pro_3m"
+            onClick={() => captureEvent('checkout_started', { plan: 'pro_3m' })}
+            className="relative rounded-3xl border border-yellow-400/70 bg-yellow-400/[0.06] p-5 min-h-[220px] shadow-[0_0_25px_rgba(250,204,21,0.25)] transition hover:shadow-[0_0_40px_rgba(250,204,21,0.45)]"
+          >
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-yellow-400 px-3 py-1 text-[10px] font-bold uppercase text-black">
+              MOST POPULAR
+            </div>
+            <div className="flex h-full flex-col justify-between text-center">
+              {' '}
+              <div className="text-base font-bold text-yellow-300">
+                3 Month Access
+              </div>
+              <div className="mt-2 text-xs text-white/65">
+                Best balance of time and value.
+              </div>
+              <div className="mt-2 text-xs text-white/65">
+                Used by most students for ideal prep time.
+              </div>
+              <div className="mt-4 text-4xl font-black text-yellow-300">
+                $99
+              </div>
+              <div className="mt-1 text-sm font-semibold text-yellow-300">
+                Only $33/month
+              </div>
+              <div className="text-xs text-white/60">one-time</div>
+            </div>
+          </Link>
+
+          <Link
+            href="/app/upgrade?autobuy=pro_6m"
+            onClick={() => captureEvent('checkout_started', { plan: 'pro_6m' })}
+            className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 min-h-[220px] shadow-[0_0_25px_rgba(20,184,166,0.25)] transition hover:border-teal-300/40 hover:shadow-[0_0_40px_rgba(20,184,166,0.4)]"
+          >
+            <div className="flex h-full flex-col justify-between text-center">
+              {' '}
+              <div className="text-base font-bold text-teal-300">
+                6 Month Access
+              </div>
+              <div className="mt-2 text-xs text-white/65">
+                Lowest monthly cost.
+              </div>
+              <div className="mt-2 text-xs text-white/65">
+                Start early and stay ready.
+              </div>
+              <div className="mt-4 text-4xl font-black text-white">$149</div>
+              <div className="mt-1 text-sm font-semibold text-teal-300">
+                Only $25/month
+              </div>
+              <div className="text-xs text-white/60">one-time</div>
+            </div>
+          </Link>
+        </div>
+      </section>
+
       {/* METHOD */}
-      <section className="mx-auto max-w-6xl px-5 py-18 md:py-24">
+      <section className="mx-auto max-w-6xl px-5 pt-6 pb-18 md:pt-8 md:pb-24">
+        {' '}
         <SectionHeading
           eyebrow="Why It Works"
           title="A smarter way to prepare for the ARRT® exam."
           desc="Rereading and highlighting feel productive, but they rarely improve exam performance. What works is targeted practice, feedback, and focused review."
         />
-
         <div className="mt-12 grid gap-6 md:grid-cols-2">
           <div className="rtt-card rounded-[28px] p-7">
             <div className="text-sm font-semibold uppercase tracking-[0.16em] text-white/40">

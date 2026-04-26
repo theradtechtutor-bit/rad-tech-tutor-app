@@ -856,11 +856,7 @@ function SidebarFullQbank({
   const practiceTotal = Number(practiceMeta?.total || 0);
   const flashcardsComplete = full.flashcards.completed;
   const completed = full.exam.completed;
-  console.log('FULL MOCK STATE:', {
-    completed,
-    lastScore: full.exam.lastScore,
-    exam: full.exam,
-  });
+
 
   const practiceSkipped = examInProgress && !practiceComplete && !practiceMeta;
   const flashcardsSkipped = examInProgress && !flashcardsComplete && !flashMeta;
@@ -1094,10 +1090,20 @@ const activeStep: StepKey = completed
                   <div className="mb-1 flex items-center justify-between gap-2">
                     <span>Full Mock Exam</span>
                     {completed ? (
-                      <span className="font-semibold text-yellow-300">
+                      <span
+                        className={cx(
+                          'font-semibold',
+                          Number(full.exam.lastScore || 0) >= 90
+                            ? 'text-emerald-300'
+                            : 'text-yellow-300',
+                        )}
+                      >
                         Complete
                         {full.exam.lastScore != null
                           ? ` • ${full.exam.lastScore}%`
+                          : ''}
+                        {Number(full.exam.lastScore || 0) < 90
+                          ? ' • Retake needed'
                           : ''}
                       </span>
                     ) : examMeta ? (
@@ -1134,8 +1140,21 @@ const activeStep: StepKey = completed
                   <span className="text-yellow-300">Flashcards: Skipped</span>
                 ) : null}
                 {completed ? (
-                  <span className="font-semibold text-yellow-300">
+                  <span
+                    className={cx(
+                      'font-semibold',
+                      Number(full.exam.lastScore || 0) >= 90
+                        ? 'text-emerald-300'
+                        : 'text-yellow-300',
+                    )}
+                  >
                     Complete
+                    {full.exam.lastScore != null
+                      ? ` • ${full.exam.lastScore}%`
+                      : ''}
+                    {Number(full.exam.lastScore || 0) < 90
+                      ? ' • Retake needed'
+                      : ''}
                   </span>
                 ) : null}
               </div>
@@ -1500,36 +1519,36 @@ if (savedStep === 'exam' || full.exam.completed) {
   }, [cumulative.latest, miniScores]);
 
 const readiness = useMemo(() => {
-  const bankAverages = bankSummaries.map((bank) => {
-    const scores = Array.from({ length: 10 }, (_, idx) => {
-      const mini = idx + 1;
-      const status = bank.miniStatus[String(mini)];
-      return status?.attempts ? Number(status.lastScore) : null;
-    }).filter((score): score is number => score != null);
+  const bankAverages = BANKS.map((setId) => {
+    const full = readFullQbankMastery(setId);
 
-    const average = scores.length
-      ? Math.round(
-          scores.reduce((sum, score) => sum + score, 0) / scores.length,
-        )
-      : null;
+    const completed = full.exam.completed === true;
+    const score =
+      completed && full.exam.lastScore != null
+        ? Number(full.exam.lastScore)
+        : null;
+
+    const passed = completed && Number(full.exam.lastScore || 0) >= 90;
+    const failed = completed && Number(full.exam.lastScore || 0) < 90;
 
     return {
-      setId: bank.setId,
-      label: labelForBank(bank.setId),
-      average,
-      completedMocks: scores.length,
-      ready: average != null && average >= 90,
+      setId,
+      label: labelForBank(setId),
+      average: score,
+      completedMocks: completed ? 1 : 0,
+      ready: passed,
+      failed,
     };
   });
 
-  const completedBankAverages = bankAverages
+  const completedScores = bankAverages
     .map((bank) => bank.average)
-    .filter((avg): avg is number => avg != null);
+    .filter((score): score is number => score != null);
 
-  const overallAverage = completedBankAverages.length
+  const overallAverage = completedScores.length
     ? Math.round(
-        completedBankAverages.reduce((sum, avg) => sum + avg, 0) /
-          completedBankAverages.length,
+        completedScores.reduce((sum, score) => sum + score, 0) /
+          completedScores.length,
       )
     : 0;
 
@@ -1985,11 +2004,15 @@ const readiness = useMemo(() => {
                               </span>
                             )}
 
-                            {isReady && (
+                            {isReady ? (
                               <span className="text-[12px] font-semibold text-emerald-300">
-                                ✓
+                                ✓ Ready
                               </span>
-                            )}
+                            ) : bankData?.failed ? (
+                              <span className="text-[11px] font-semibold text-red-300">
+                                Retake
+                              </span>
+                            ) : null}
                           </div>
 
                           <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] font-semibold text-white">
@@ -2019,8 +2042,10 @@ const readiness = useMemo(() => {
                   Radiography ARRT® Registry Readiness
                 </div>
                 <div className="mt-2 text-xs text-white/50">
-                  Complete all 5 Mock Exam Banks with 90%+ average to be ready
-                  for the ARRT® exam.
+                  Pass all 5 full-length mock exams with a score of 90% or
+                  higher to be ready for the ARRT® exam. Mini Mocks are for
+                  practice — they help you improve, but only full mock exams
+                  count toward readiness.
                 </div>
 
                 {readiness.fullyReady && (
