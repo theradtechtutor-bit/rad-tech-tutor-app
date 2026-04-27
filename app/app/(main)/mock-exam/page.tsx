@@ -581,6 +581,8 @@ useEffect(() => {
   if (scope !== 'mini') return;
   if (!questions?.length) return;
 
+  if (proStatus == null) return;
+
   feedbackPromptCheckedRef.current = true;
 
   try {
@@ -592,31 +594,31 @@ useEffect(() => {
     // 🚨 ONLY SHOW AFTER 2 MINI MOCKS
     if (currentCount < 2) return;
 
-if (isPro) {
-  const completed = localStorage.getItem('rtt_pro_feedback_completed');
-  if (completed) return;
+    if (isPro) {
+      const completed = localStorage.getItem('rtt_pro_feedback_completed');
+      if (completed) return;
 
-  const shownKey = 'rtt_pro_feedback_last_shown_count';
-  const lastShown = Number(localStorage.getItem(shownKey) || '0');
+      const shownKey = 'rtt_pro_feedback_last_shown_count';
+      const lastShown = Number(localStorage.getItem(shownKey) || '0');
 
-  if (lastShown === 0 || currentCount - lastShown >= 2) {
-    localStorage.setItem(shownKey, String(currentCount));
-    setFeedbackModalKind('pro');
-  }
-} else {
-  const completed = localStorage.getItem('rtt_free_feedback_completed');
-  if (completed) return;
+      if (lastShown === 0 || currentCount - lastShown >= 2) {
+        localStorage.setItem(shownKey, String(currentCount));
+        setFeedbackModalKind('pro');
+      }
+    } else {
+      const completed = localStorage.getItem('rtt_free_feedback_completed');
+      if (completed) return;
 
-  const shownKey = 'rtt_free_feedback_last_shown_count';
-  const lastShown = Number(localStorage.getItem(shownKey) || '0');
+      const shownKey = 'rtt_free_feedback_last_shown_count';
+      const lastShown = Number(localStorage.getItem(shownKey) || '0');
 
-  if (lastShown === 0 || currentCount - lastShown >= 2) {
-    localStorage.setItem(shownKey, String(currentCount));
-    setFeedbackModalKind('free');
-  }
-}
+      if (lastShown === 0 || currentCount - lastShown >= 2) {
+        localStorage.setItem(shownKey, String(currentCount));
+        setFeedbackModalKind('free');
+      }
+    }
   } catch {}
-}, [done, sp, scope, questions, isPro]);
+}, [done, sp, scope, questions, isPro, proStatus]);
 
   useEffect(() => {
     if (timeLeft === null || done || !questions) return;
