@@ -684,6 +684,7 @@ const practiceSessionScopeKey = isFullQBank
   }, [session, answeredCount]);
 
   const q = currentId ? questionsById[currentId] : null;
+  const currentQuestionNumber = totalCount - queueIds.length + 1;
   const choiceList = q ? normalizeChoices((q as any).choices) : [];
   const correctKey = String(
     (q as any)?.correctAnswer ||
@@ -1352,7 +1353,7 @@ useEffect(() => {
             </div>
             <div className="mt-3 space-y-1">
               <div>
-                Progress: {answeredCount} / {totalCount}
+                Completed: {answeredCount} / {totalCount}
               </div>
               <div>Correct: {correctCount}</div>
               <div>Missed: {missedCount}</div>
@@ -1389,8 +1390,14 @@ useEffect(() => {
           </div>
         </div>
 
-        <div className="mt-5 text-sm font-semibold uppercase tracking-[0.2em] text-white/45">
-          {mapToArrtMajorCategory(String((q as any).category || ''))}
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-2">
+          <div className="text-sm font-semibold uppercase tracking-[0.2em] text-white/45">
+            {mapToArrtMajorCategory(String((q as any).category || ''))}
+          </div>
+
+          <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-white/65">
+            Question {currentQuestionNumber} of {totalCount}
+          </div>
         </div>
 
         <div className="mt-3 whitespace-pre-wrap text-xl font-semibold text-white">
