@@ -586,7 +586,7 @@ useEffect(() => {
   feedbackPromptCheckedRef.current = true;
 
   try {
-    const countKey = 'rtt_mini_mock_count';
+    const countKey = 'rtt_mini_mock_count_DISABLED';
     const currentCount = Number(localStorage.getItem(countKey) || '0') + 1;
 
     localStorage.setItem(countKey, String(currentCount));

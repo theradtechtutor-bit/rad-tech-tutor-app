@@ -22,6 +22,7 @@ import {
   saveMasteryMiniStep,
   readProgress
 } from '@/lib/progressStore';
+
 import { buildRationale } from '@/lib/masteryContent';
 import MasteryFlowSteps from '@/app/app/_components/MasteryFlowSteps';
 import StartHereTour from '@/app/app/_components/StartHereTour';
@@ -30,6 +31,8 @@ import { useSupabaseSession } from '@/app/app/_hooks/useSupabaseSession';
 import { usePro } from '@/app/app/_lib/usePro';
 import { buildMiniMocks, selectQuestionsForScope } from '@/lib/mockPlan';
 import { captureEvent } from '@/lib/analytics';
+
+import posthog from 'posthog-js';
 
 type PracticeSession = {
   setId: string;
@@ -228,6 +231,190 @@ function clearFreePracticeAggregate(setId: string, mode: 'all' | 'missed') {
   window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
 }
 
+type FeedbackKind = 'free' | 'pro';
+type FeedbackAnswer = 'yes' | 'no';
+
+type FeedbackModalProps = {
+  kind: FeedbackKind;
+  surveyUrl: string;
+  onClose: () => void;
+};
+
+function MiniMockFeedbackModal({
+  kind,
+  surveyUrl,
+  onClose,
+}: FeedbackModalProps) {
+  const [freeAnswer, setFreeAnswer] = useState<FeedbackAnswer | null>(null);
+  const [rating, setRating] = useState<number | null>(null);
+
+  const openSurvey = () => {
+    posthog.capture(
+      kind === 'pro'
+        ? 'pro_feedback_survey_clicked'
+        : 'free_feedback_survey_clicked',
+    );
+
+    if (kind === 'pro') {
+      localStorage.setItem('rtt_pro_feedback_completed', 'true');
+    } else {
+      localStorage.setItem('rtt_free_feedback_completed', 'true');
+    }
+
+    window.open(surveyUrl, '_blank', 'noopener,noreferrer');
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-6 backdrop-blur-sm">
+      <div className="w-full max-w-lg rounded-3xl border border-white/10 bg-[#10131a] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-yellow-300/80">
+              Quick feedback
+            </div>
+            <h2 className="mt-2 text-xl font-semibold text-white">
+              {kind === 'free'
+                ? 'Quick question 👋'
+                : 'Quick feedback (5 seconds)'}
+            </h2>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full bg-white/8 px-3 py-1 text-sm font-semibold text-white/70 hover:bg-white/12 hover:text-white"
+          >
+            ×
+          </button>
+        </div>
+
+        {kind === 'free' ? (
+          <div className="mt-5">
+            {!freeAnswer ? (
+              <>
+                <p className="text-sm leading-6 text-white/75">
+                  Are you enjoying studying with The Rad Tech Tutor so far?
+                </p>
+
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      localStorage.setItem('rtt_enjoying', 'yes');
+                      posthog.capture('rtt_enjoying', { answer: 'yes' });
+                      setFreeAnswer('yes');
+                    }}
+                    className="rounded-2xl bg-emerald-400 px-4 py-3 text-sm font-semibold text-black hover:brightness-95"
+                  >
+                    Yes, it’s helping
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      localStorage.setItem('rtt_enjoying', 'no');
+                      posthog.capture('rtt_enjoying', { answer: 'no' });
+                      setFreeAnswer('no');
+                    }}
+                    className="rounded-2xl bg-white/10 px-4 py-3 text-sm font-semibold text-white hover:bg-white/15"
+                  >
+                    Not really yet
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="text-sm leading-6 text-white/75">
+                  {freeAnswer === 'yes'
+                    ? 'That’s great to hear. Would you take a quick 1-minute survey and tell us why this has been helpful for you so far?'
+                    : 'Thanks for being honest. Would you take a quick 1-minute survey and tell us what we can improve?'}
+                </p>
+
+                <div className="mt-4 rounded-2xl border border-yellow-400/20 bg-yellow-400/10 p-4 text-sm text-white/75">
+                  As a thank-you, you’ll get{' '}
+                  <span className="font-semibold text-yellow-300">
+                    10% off Pro
+                  </span>{' '}
+                  after completing it.
+                </div>
+
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  <button
+                    type="button"
+                    onClick={openSurvey}
+                    className="rounded-2xl bg-yellow-400 px-4 py-3 text-sm font-semibold text-black hover:brightness-95"
+                  >
+                    Take Survey & Get 10% Off
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="rounded-2xl bg-white/10 px-4 py-3 text-sm font-semibold text-white hover:bg-white/15"
+                  >
+                    Maybe later
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        ) : (
+          <div className="mt-5">
+            <p className="text-sm leading-6 text-white/75">
+              How would you rate The Rad Tech Tutor so far?
+            </p>
+
+            <div className="mt-4 flex gap-2">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() => {
+                    setRating(star);
+                    posthog.capture('pro_feedback_rating', { rating: star });
+                  }}
+                  className={`text-3xl transition hover:scale-110 ${
+                    rating && star <= rating
+                      ? 'text-yellow-300'
+                      : 'text-white/25'
+                  }`}
+                  aria-label={`Rate ${star} stars`}
+                >
+                  ★
+                </button>
+              ))}
+            </div>
+
+            {rating ? (
+              <div className="mt-5">
+                <p className="mb-3 text-sm text-white/70">
+                  Help us improve this for future students.
+                </p>
+
+                <button
+                  type="button"
+                  onClick={openSurvey}
+                  className="w-full rounded-2xl bg-yellow-400 px-4 py-3 text-sm font-semibold text-black hover:brightness-95"
+                >
+                  Take 1-Minute Survey
+                </button>
+
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="mt-3 w-full text-sm text-white/50 hover:text-white/70"
+                >
+                  Skip
+                </button>
+              </div>
+            ) : null}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function PracticeSetPage() {
   const [mounted, setMounted] = useState(false);
 
@@ -247,6 +434,7 @@ export default function PracticeSetPage() {
   const skipNextAutosaveRef = useRef(true);
   const trackedPracticeStartRef = useRef(false);
   const trackedPracticeCompleteRef = useRef(false);
+  const feedbackPromptCheckedRef = useRef(false);
 
   const { session, loading: sessionLoading } = useSupabaseSession();
 
@@ -320,6 +508,9 @@ const practiceSessionScopeKey = isFullQBank
   const [freeAnsweredIds, setFreeAnsweredIds] = useState<string[]>([]);
   const [freeCorrectIds, setFreeCorrectIds] = useState<string[]>([]);
   const [freeMissedIds, setFreeMissedIds] = useState<string[]>([]);
+
+  const [feedbackModalKind, setFeedbackModalKind] =
+    useState<FeedbackKind | null>(null);
 
   const isMiniLocked =
     !!requestedMiniNumber && requestedMiniNumber > 5 && !isPro;
@@ -857,10 +1048,43 @@ const practiceSessionScopeKey = isFullQBank
           total_count: totalCount || answeredNext,
           correct_count: correctNext,
           missed_count: missedNext,
-          score_percent: (totalCount || answeredNext)
-            ? Math.round((correctNext / (totalCount || answeredNext)) * 100)
-            : 0,
+          score_percent:
+            totalCount || answeredNext
+              ? Math.round((correctNext / (totalCount || answeredNext)) * 100)
+              : 0,
         });
+        // 🔥 FEEDBACK TRIGGER (practice-based)
+        try {
+          const countKey = 'rtt_practice_test_count';
+          const currentCount =
+            Number(localStorage.getItem(countKey) || '0') + 1;
+
+          localStorage.setItem(countKey, String(currentCount));
+
+          if (currentCount >= 2) {
+            const completedKey = isPro
+              ? 'rtt_pro_feedback_completed'
+              : 'rtt_free_feedback_completed';
+
+            const lastShownKey = isPro
+              ? 'rtt_pro_feedback_last_shown_count'
+              : 'rtt_free_feedback_last_shown_count';
+
+            const completed = localStorage.getItem(completedKey);
+
+            if (!completed) {
+              const lastShown = Number(
+                localStorage.getItem(lastShownKey) || '0',
+              );
+
+              if (lastShown === 0 || currentCount - lastShown >= 2) {
+                localStorage.setItem(lastShownKey, String(currentCount));
+
+                setFeedbackModalKind(isPro ? 'pro' : 'free');
+              }
+            }
+          }
+        } catch {}
       }
 
       clearPracticeSession(practiceSessionScopeKey);
@@ -1076,6 +1300,17 @@ useEffect(() => {
   if (!q) {
     return (
       <div className="mx-auto max-w-4xl">
+        {feedbackModalKind && (
+          <MiniMockFeedbackModal
+            kind={feedbackModalKind}
+            surveyUrl={
+              feedbackModalKind === 'pro'
+                ? 'https://forms.gle/6WNGxk8d4TLgqtELA'
+                : 'https://forms.gle/39kTfpVSGB3j6pC57'
+            }
+            onClose={() => setFeedbackModalKind(null)}
+          />
+        )}
         <div className="text-sm text-white/70">{title}</div>
         <div className="mt-4 rounded-3xl border border-white/10 bg-gradient-to-b from-white/8 to-white/4 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.22)]">
           {masteryMode ? (
@@ -1182,333 +1417,341 @@ useEffect(() => {
     );
   }
 
-  return (
-    <div className="mx-auto max-w-5xl">
-      <StartHereTour
-        storageKey="rtt_tour_practice"
-        steps={[
-          {
-            selector: '[data-tour="practice-flow"]',
-            title: 'Your study path',
-            body: 'Start here. This page is your pre-test. You answer questions first, then move to flashcards, then the mini mock exam.',
-          },
-          {
-            selector: '[data-tour="practice-question"]',
-            title: 'Answer questions here',
-            body: 'This is the main question area. Just start answering. Wrong answers are tracked automatically.',
-          },
-          {
-            selector: '[data-tour="practice-info"]',
-            title: 'Why this matters',
-            body: 'This section reminds users that missed questions turn into flashcards, then the mini mock checks improvement.',
-          },
-        ]}
+return (
+  <div className="mx-auto max-w-5xl">
+    {feedbackModalKind && (
+      <MiniMockFeedbackModal
+        kind={feedbackModalKind}
+        surveyUrl={
+          feedbackModalKind === 'pro'
+            ? 'https://forms.gle/6WNGxk8d4TLgqtELA'
+            : 'https://forms.gle/39kTfpVSGB3j6pC57'
+        }
+        onClose={() => setFeedbackModalKind(null)}
       />
+    )}
 
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <div className="text-sm text-white/60">{title}</div>
-          <h1 className="mt-1 text-3xl font-semibold tracking-tight text-white">
-            Practice Questions
-          </h1>
-        </div>
+    <StartHereTour
+      
+      storageKey="rtt_tour_practice"
+      steps={[
+        {
+          selector: '[data-tour="practice-flow"]',
+          title: 'Your study path',
+          body: 'Start here. This page is your pre-test. You answer questions first, then move to flashcards, then the mini mock exam.',
+        },
+        {
+          selector: '[data-tour="practice-question"]',
+          title: 'Answer questions here',
+          body: 'This is the main question area. Just start answering. Wrong answers are tracked automatically.',
+        },
+        {
+          selector: '[data-tour="practice-info"]',
+          title: 'Why this matters',
+          body: 'This section reminds users that missed questions turn into flashcards, then the mini mock checks improvement.',
+        },
+      ]}
+    />
 
-        <div className="flex flex-wrap items-center gap-2">
-          {masteryMode ? null : (
-            <>
-              <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
-                <select
-                  className="bg-transparent text-sm text-white/80 outline-none"
-                  value={filterValue}
-                  onChange={(e) => {
-                    persistCurrentPracticeSession();
-                    const params = new URLSearchParams(
-                      searchParams?.toString(),
-                    );
-                    const val = e.target.value;
-                    if (val.startsWith('mini-')) {
-                      const miniNum = Number(val.replace('mini-', ''));
-                      if (miniNum > 5 && !isPro) {
-                        router.push('/app/upgrade');
-                        return;
-                      }
+    <div className="flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <div className="text-sm text-white/60">{title}</div>
+        <h1 className="mt-1 text-3xl font-semibold tracking-tight text-white">
+          Practice Questions
+        </h1>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-2">
+        {masteryMode ? null : (
+          <>
+            <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
+              <select
+                className="bg-transparent text-sm text-white/80 outline-none"
+                value={filterValue}
+                onChange={(e) => {
+                  persistCurrentPracticeSession();
+                  const params = new URLSearchParams(searchParams?.toString());
+                  const val = e.target.value;
+                  if (val.startsWith('mini-')) {
+                    const miniNum = Number(val.replace('mini-', ''));
+                    if (miniNum > 5 && !isPro) {
+                      router.push('/app/upgrade');
+                      return;
                     }
-                    params.set('filter', val);
-                    params.delete('cat');
-                    params.delete('mini');
-                    router.replace(
-                      `/app/practice/${setId}?${params.toString()}`,
-                    );
-                  }}
-                >
-                  {allCategories.map((option) => {
-                    const isMini = option.key.startsWith('mini-');
-                    const miniNum = isMini
-                      ? Number(option.key.replace('mini-', ''))
-                      : null;
-                    const lockedMini = !!(miniNum && miniNum > 5 && !isPro);
-
-                    return (
-                      <option
-                        key={option.key}
-                        value={option.key}
-                        disabled={lockedMini}
-                      >
-                        {lockedMini ? `${option.label} (Pro 🔒)` : option.label}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
-
-              <Link
-                href={`/app/flashcards?set=${setId}&mode=missed&filter=all&mini=all&ids=${freeMissedIds.join(',')}`}
-                className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
+                  }
+                  params.set('filter', val);
+                  params.delete('cat');
+                  params.delete('mini');
+                  router.replace(`/app/practice/${setId}?${params.toString()}`);
+                }}
               >
-                Flashcards
-              </Link>
-              {/* <Link
+                {allCategories.map((option) => {
+                  const isMini = option.key.startsWith('mini-');
+                  const miniNum = isMini
+                    ? Number(option.key.replace('mini-', ''))
+                    : null;
+                  const lockedMini = !!(miniNum && miniNum > 5 && !isPro);
+
+                  return (
+                    <option
+                      key={option.key}
+                      value={option.key}
+                      disabled={lockedMini}
+                    >
+                      {lockedMini ? `${option.label} (Pro 🔒)` : option.label}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+
+            <Link
+              href={`/app/flashcards?set=${setId}&mode=missed&filter=all&mini=all&ids=${freeMissedIds.join(',')}`}
+              className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
+            >
+              Flashcards
+            </Link>
+            {/* <Link
                 href={`/app/flashcards?set=${setId}&mode=missed&cat=all&mini=all`}
                 className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
               >
                 Flashcards
               </Link> */}
-            </>
-          )}
-        </div>
+          </>
+        )}
       </div>
+    </div>
 
-      {masteryMode ? (
-        <div data-tour="practice-flow" className="mt-6">
-          <MasteryFlowSteps
-            currentStep={1}
-            currentBankLabel={title}
-            currentMini={miniNumber}
-          />
-        </div>
-      ) : null}
+    {masteryMode ? (
+      <div data-tour="practice-flow" className="mt-6">
+        <MasteryFlowSteps
+          currentStep={1}
+          currentBankLabel={title}
+          currentMini={miniNumber}
+        />
+      </div>
+    ) : null}
 
-      {/* <div className="mt-4 text-xs text-white/55">
+    {/* <div className="mt-4 text-xs text-white/55">
         Question sessions save on this device. Use Pause & Save to leave and
         resume later from the same spot.
       </div> */}
 
-      {!session && answeredCount >= 10 ? (
-        <div ref={savePromptRef} className="mt-4">
-          <SaveProgressPrompt
-            nextPath={`${pathname}?${searchParams?.toString() || ''}`}
-            title="Create a free account to save this session"
-            body="Keep practicing for free right now. Create a free account when you want your progress saved and you want to continue where you left off later."
-          />
-        </div>
-      ) : null}
+    {!session && answeredCount >= 10 ? (
+      <div ref={savePromptRef} className="mt-4">
+        <SaveProgressPrompt
+          nextPath={`${pathname}?${searchParams?.toString() || ''}`}
+          title="Create a free account to save this session"
+          body="Keep practicing for free right now. Create a free account when you want your progress saved and you want to continue where you left off later."
+        />
+      </div>
+    ) : null}
 
-      <div
-        data-tour="practice-info"
-        className="mt-6 rounded-3xl border border-white/10 bg-white/5 p-5"
-      >
-        <div className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">
-          How practice works
-        </div>
-        <div className="mt-3 text-sm text-white/70">
-          This is your{' '}
-          <span className="font-semibold text-white">pre-test</span>. Answer
-          questions with instant feedback so the system can find your weak
-          areas.
-        </div>
-        <div className="mt-2 text-sm text-white/60">
-          Wrong answers turn into flashcards. After that, take the{' '}
-          <span className="font-semibold text-white">Mini Mock Exam</span> to
-          measure improvement.
-        </div>
-        {/* {!isPro ? (
+    <div
+      data-tour="practice-info"
+      className="mt-6 rounded-3xl border border-white/10 bg-white/5 p-5"
+    >
+      <div className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">
+        How practice works
+      </div>
+      <div className="mt-3 text-sm text-white/70">
+        This is your <span className="font-semibold text-white">pre-test</span>.
+        Answer questions with instant feedback so the system can find your weak
+        areas.
+      </div>
+      <div className="mt-2 text-sm text-white/60">
+        Wrong answers turn into flashcards. After that, take the{' '}
+        <span className="font-semibold text-white">Mini Mock Exam</span> to
+        measure improvement.
+      </div>
+      {/* {!isPro ? (
           <div className="mt-3 rounded-2xl border border-yellow-400/20 bg-yellow-400/10 px-4 py-3 text-sm text-yellow-100">
             Free version: Practice uses unlocked questions from Mini Mocks 1–5
             only. Pro unlocks the full bank of questions.
           </div>
         ) : null} */}
-      </div>
-
-      <div
-        data-tour="practice-question"
-        ref={questionAnchorRef}
-        className="mt-6 rounded-3xl border border-white/10 bg-gradient-to-b from-white/8 to-white/4 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
-      >
-        <div className="flex flex-wrap items-start justify-between gap-3 text-xs text-white/55">
-          <div className="w-full md:w-auto">
-            <div className="h-2 w-full overflow-hidden rounded-full bg-white/10 md:w-64">
-              <div
-                className="h-full rounded-full bg-yellow-400 transition-all"
-                style={{
-                  width: `${
-                    totalCount
-                      ? Math.min(
-                          100,
-                          Math.round((answeredCount / totalCount) * 100),
-                        )
-                      : 0
-                  }%`,
-                }}
-              />
-            </div>
-            <div className="mt-3 space-y-1">
-              <div>
-                Completed: {answeredCount} / {totalCount}
-              </div>
-              <div>Correct: {correctCount}</div>
-              <div>Missed: {missedCount}</div>
-            </div>
-          </div>
-
-          <div className="flex flex-col items-end gap-2">
-            <div className="flex flex-wrap justify-end gap-2">
-              {!masteryMode ? (
-                <>
-                  <button
-                    onClick={clearCurrentFilterAnswers}
-                    className="rounded-2xl border border-white/10 bg-black/20 px-4 py-2 text-sm font-semibold text-white/85 hover:bg-white/10"
-                  >
-                    Clear This Filter
-                  </button>
-
-                  <button
-                    onClick={clearAllSavedAnswers}
-                    className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-300 hover:bg-red-500/20"
-                  >
-                    Clear All
-                  </button>
-                </>
-              ) : null}
-              <button
-                onClick={pauseAndSave}
-                className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"
-              >
-                Save & Exit
-              </button>
-            </div>
-            {/* <div>Keyboard: 1-4 or A-D • Enter = next</div> */}
-          </div>
-        </div>
-
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-2">
-          <div className="text-sm font-semibold uppercase tracking-[0.2em] text-white/45">
-            {mapToArrtMajorCategory(String((q as any).category || ''))}
-          </div>
-
-          <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-white/65">
-            Question {currentQuestionNumber} of {totalCount}
-          </div>
-        </div>
-
-        <div className="mt-3 whitespace-pre-wrap text-xl font-semibold text-white">
-          {String(
-            (q as any).stem || (q as any).question || (q as any).prompt || '',
-          )}
-        </div>
-
-        <div className="mt-5 grid gap-2">
-          {choiceList.map(({ key, text }) => {
-            const chosen = picked === key;
-            const isAnswer = correctKey === key;
-            const cls = [
-              'w-full rounded-2xl px-4 py-3 text-left text-sm transition',
-              !revealed && chosen
-                ? 'bg-white/15 ring-2 ring-white/30'
-                : 'bg-white/5 hover:bg-white/10',
-              revealed && isAnswer
-                ? 'bg-emerald-500/20 ring-2 ring-emerald-400/60'
-                : '',
-              revealed && chosen && !isAnswer
-                ? 'bg-red-500/20 ring-2 ring-red-400/60'
-                : '',
-            ].join(' ');
-
-            return (
-              <button
-                key={key}
-                onClick={() => pick(key)}
-                disabled={revealed}
-                className={cls}
-              >
-                {key}. {text}
-              </button>
-            );
-          })}
-        </div>
-
-        {revealed ? (
-          <div
-            ref={explanationAnchorRef}
-            className="mt-4 rounded-2xl border border-white/10 bg-black/10 p-4 text-sm text-white/75"
-          >
-            {isCorrect ? (
-              <div className="font-semibold text-emerald-300">Correct</div>
-            ) : (
-              <div className="font-semibold text-red-300">Incorrect</div>
-            )}
-
-            <div className="mt-3">
-              <div className="font-semibold text-white/85">Explanation</div>
-              <div className="mt-1 whitespace-pre-line leading-relaxed text-white/75">
-                {buildRationale(q)}
-              </div>
-            </div>
-
-            <div className="mt-4 flex items-center justify-between">
-              <div className="text-xs text-white/55">
-                {isCorrect
-                  ? 'Nice work — lock in why this was right.'
-                  : 'This question has been saved to your Missed Deck in Flashcards for review.'}
-              </div>
-              <button
-                onClick={goNext}
-                className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
-              >
-                Next Question →
-              </button>
-            </div>
-          </div>
-        ) : null}
-      </div>
-      {showSkipPracticeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
-          <div className="w-full max-w-md rounded-2xl bg-zinc-900 p-6">
-            <h2 className="text-lg font-semibold text-white">
-              Skip Practice Test?
-            </h2>
-
-            <p className="mt-3 text-sm text-white/70">
-              You haven’t completed the Practice Test yet. This may affect your
-              Mini Mock score. Are you sure you want to continue?
-            </p>
-
-            <div className="mt-5 flex justify-end gap-3">
-              <button
-                onClick={() => {
-                  setShowSkipPracticeModal(false);
-                  setPendingMockHref(null);
-                }}
-                className="rounded-lg bg-white/10 px-4 py-2 text-white"
-              >
-                Stay Here
-              </button>
-
-              <button
-                onClick={() => {
-                  const href = pendingMockHref;
-                  setShowSkipPracticeModal(false);
-                  setPendingMockHref(null);
-                  if (href) router.push(href);
-                }}
-                className="rounded-lg bg-yellow-400 px-4 py-2 font-semibold text-black"
-              >
-                Continue Anyway
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
-  );
+
+    <div
+      data-tour="practice-question"
+      ref={questionAnchorRef}
+      className="mt-6 rounded-3xl border border-white/10 bg-gradient-to-b from-white/8 to-white/4 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
+    >
+      <div className="flex flex-wrap items-start justify-between gap-3 text-xs text-white/55">
+        <div className="w-full md:w-auto">
+          <div className="h-2 w-full overflow-hidden rounded-full bg-white/10 md:w-64">
+            <div
+              className="h-full rounded-full bg-yellow-400 transition-all"
+              style={{
+                width: `${
+                  totalCount
+                    ? Math.min(
+                        100,
+                        Math.round((answeredCount / totalCount) * 100),
+                      )
+                    : 0
+                }%`,
+              }}
+            />
+          </div>
+          <div className="mt-3 space-y-1">
+            <div>
+              Completed: {answeredCount} / {totalCount}
+            </div>
+            <div>Correct: {correctCount}</div>
+            <div>Missed: {missedCount}</div>
+          </div>
+        </div>
+
+        <div className="flex flex-col items-end gap-2">
+          <div className="flex flex-wrap justify-end gap-2">
+            {!masteryMode ? (
+              <>
+                <button
+                  onClick={clearCurrentFilterAnswers}
+                  className="rounded-2xl border border-white/10 bg-black/20 px-4 py-2 text-sm font-semibold text-white/85 hover:bg-white/10"
+                >
+                  Clear This Filter
+                </button>
+
+                <button
+                  onClick={clearAllSavedAnswers}
+                  className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-300 hover:bg-red-500/20"
+                >
+                  Clear All
+                </button>
+              </>
+            ) : null}
+            <button
+              onClick={pauseAndSave}
+              className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"
+            >
+              Save & Exit
+            </button>
+          </div>
+          {/* <div>Keyboard: 1-4 or A-D • Enter = next</div> */}
+        </div>
+      </div>
+
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-2">
+        <div className="text-sm font-semibold uppercase tracking-[0.2em] text-white/45">
+          {mapToArrtMajorCategory(String((q as any).category || ''))}
+        </div>
+
+        <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-white/65">
+          Question {currentQuestionNumber} of {totalCount}
+        </div>
+      </div>
+
+      <div className="mt-3 whitespace-pre-wrap text-xl font-semibold text-white">
+        {String(
+          (q as any).stem || (q as any).question || (q as any).prompt || '',
+        )}
+      </div>
+
+      <div className="mt-5 grid gap-2">
+        {choiceList.map(({ key, text }) => {
+          const chosen = picked === key;
+          const isAnswer = correctKey === key;
+          const cls = [
+            'w-full rounded-2xl px-4 py-3 text-left text-sm transition',
+            !revealed && chosen
+              ? 'bg-white/15 ring-2 ring-white/30'
+              : 'bg-white/5 hover:bg-white/10',
+            revealed && isAnswer
+              ? 'bg-emerald-500/20 ring-2 ring-emerald-400/60'
+              : '',
+            revealed && chosen && !isAnswer
+              ? 'bg-red-500/20 ring-2 ring-red-400/60'
+              : '',
+          ].join(' ');
+
+          return (
+            <button
+              key={key}
+              onClick={() => pick(key)}
+              disabled={revealed}
+              className={cls}
+            >
+              {key}. {text}
+            </button>
+          );
+        })}
+      </div>
+
+      {revealed ? (
+        <div
+          ref={explanationAnchorRef}
+          className="mt-4 rounded-2xl border border-white/10 bg-black/10 p-4 text-sm text-white/75"
+        >
+          {isCorrect ? (
+            <div className="font-semibold text-emerald-300">Correct</div>
+          ) : (
+            <div className="font-semibold text-red-300">Incorrect</div>
+          )}
+
+          <div className="mt-3">
+            <div className="font-semibold text-white/85">Explanation</div>
+            <div className="mt-1 whitespace-pre-line leading-relaxed text-white/75">
+              {buildRationale(q)}
+            </div>
+          </div>
+
+          <div className="mt-4 flex items-center justify-between">
+            <div className="text-xs text-white/55">
+              {isCorrect
+                ? 'Nice work — lock in why this was right.'
+                : 'This question has been saved to your Missed Deck in Flashcards for review.'}
+            </div>
+            <button
+              onClick={goNext}
+              className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
+            >
+              Next Question →
+            </button>
+          </div>
+        </div>
+      ) : null}
+    </div>
+    {showSkipPracticeModal && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+        <div className="w-full max-w-md rounded-2xl bg-zinc-900 p-6">
+          <h2 className="text-lg font-semibold text-white">
+            Skip Practice Test?
+          </h2>
+
+          <p className="mt-3 text-sm text-white/70">
+            You haven’t completed the Practice Test yet. This may affect your
+            Mini Mock score. Are you sure you want to continue?
+          </p>
+
+          <div className="mt-5 flex justify-end gap-3">
+            <button
+              onClick={() => {
+                setShowSkipPracticeModal(false);
+                setPendingMockHref(null);
+              }}
+              className="rounded-lg bg-white/10 px-4 py-2 text-white"
+            >
+              Stay Here
+            </button>
+
+            <button
+              onClick={() => {
+                const href = pendingMockHref;
+                setShowSkipPracticeModal(false);
+                setPendingMockHref(null);
+                if (href) router.push(href);
+              }}
+              className="rounded-lg bg-yellow-400 px-4 py-2 font-semibold text-black"
+            >
+              Continue Anyway
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
+);
 }
 
