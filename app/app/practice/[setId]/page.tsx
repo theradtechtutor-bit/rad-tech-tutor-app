@@ -1087,6 +1087,10 @@ const practiceSessionScopeKey = isFullQBank
         } catch {}
       }
 
+if (masteryMode && typeof mini === 'number') {
+  saveMasteryMiniStep(setId, mini, 'flashcards');
+}
+
       clearPracticeSession(practiceSessionScopeKey);
     }
 
