@@ -6,10 +6,7 @@ import supabase from '@/lib/supabaseClient';
 
 function LoginPageInner() {
   const searchParams = useSearchParams();
-  const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
-  const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
   const nextParam = searchParams.get('next') || '/app/dashboard';
@@ -19,35 +16,9 @@ function LoginPageInner() {
     return `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextParam)}`;
   }, [nextParam]);
 
-  async function onMagicLinkSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    setMessage('');
-
-    try {
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo: redirectTo,
-        },
-      });
-
-      if (error) {
-        setError(error.message);
-        return;
-      }
-
-      setMessage('Magic link sent. Check your email.');
-    } finally {
-      setLoading(false);
-    }
-  }
-
   async function onGoogleLogin() {
     setGoogleLoading(true);
     setError('');
-    setMessage('');
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -80,7 +51,7 @@ function LoginPageInner() {
             <h1 className="text-2xl font-semibold text-white md:text-4xl">Sign in</h1>
 
             <p className="mt-3 text-sm leading-7 text-white/65">
-              Continue with Google or enter your email to get a magic link.
+              Continue with Google to access your account
             </p>
 
             <button
@@ -91,37 +62,6 @@ function LoginPageInner() {
             >
               {googleLoading ? 'Redirecting…' : 'Continue with Google'}
             </button>
-
-            <div className="my-6 flex items-center gap-3 text-xs uppercase tracking-[0.18em] text-white/35">
-              <div className="h-px flex-1 bg-white/10" />
-              <span>or</span>
-              <div className="h-px flex-1 bg-white/10" />
-            </div>
-
-            <form onSubmit={onMagicLinkSubmit} className="space-y-3">
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@email.com"
-                className="w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-4 text-sm text-white outline-none placeholder:text-white/35"
-              />
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4 text-base font-semibold text-white transition hover:bg-white/[0.08] disabled:opacity-60"
-              >
-                {loading ? 'Sending…' : 'Send Magic Link'}
-              </button>
-            </form>
-
-            {message ? (
-              <div className="mt-4 rounded-2xl border border-green-500/20 bg-green-500/10 px-4 py-3 text-sm text-green-300">
-                {message}
-              </div>
-            ) : null}
 
             {error ? (
               <div className="mt-4 rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
