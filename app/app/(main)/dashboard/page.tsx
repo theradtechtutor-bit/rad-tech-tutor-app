@@ -1606,7 +1606,38 @@ const readiness = useMemo(() => {
               <h1 className="mt-5 text-4xl font-semibold tracking-tight text-white md:text-5xl">
                 RTT Mastery Method
               </h1>
-              <p className="mt-4 max-w-3xl text-base leading-7 text-white/72">
+
+              <div className="mt-4 max-w-3xl space-y-4 text-base leading-7 text-white/72">
+  <p>
+    <span className="font-semibold text-white">
+      5 full-length 200-question ARRT®-level mock exams built to replicate the real test
+    </span>{' '}
+    — so nothing on exam day feels unfamiliar.
+  </p>
+
+  <p>
+    <span className="font-semibold text-white">
+      You don’t just practice. You improve.
+    </span>{' '}
+    Every missed question becomes a flashcard, turning your weak areas into
+    your study plan automatically.
+  </p>
+
+<p>
+  Progress through 10 Mini Mocks (20 questions each) and build confidence step by step, then take the full-length
+  200-question mock exam to prove you’re ready.
+</p>
+
+<p>
+  <span className="font-semibold text-white">
+    If you can consistently score 90%+ across all 5 full length mock exams, you are ready
+    for the real ARRT®.
+  </span>
+</p>
+</div>
+
+
+              {/* <p className="mt-4 max-w-3xl text-base leading-7 text-white/72">
                 5 full-length ARRT®-style Mock Exams built on the official ARRT®
                 Examination Content Specifications, each broken into 10 Mini
                 Mocks. Take a practice test, missed questions automatically
@@ -1614,7 +1645,7 @@ const readiness = useMemo(() => {
                 much your score improved. Finish all 10 Mini Mocks, then take
                 the full registry simulation. Score 90% or higher across all 5
                 banks and you're ready for the real ARRT® exam.
-              </p>
+              </p> */}
 
               <div className="mt-8">
                 <div className="mb-2 flex items-center justify-between gap-4 text-sm text-white/65">

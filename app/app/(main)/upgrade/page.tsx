@@ -274,7 +274,7 @@ if (
             <div className="mx-auto mt-8 grid max-w-5xl gap-4 md:grid-cols-2">
               <UnlockCard
                 title="Master More Questions"
-                desc="Unlock the full 600-question readiness system across every ARRT® category."
+                desc="Unlock the full 1,000+ question readiness system across every ARRT® category."
               />
               <UnlockCard
                 title="Fix Weak Areas Faster"

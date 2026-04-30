@@ -105,9 +105,14 @@ export default function HomePage() {
             </h1>
 
             <p className="mt-2 max-w-xl text-sm text-white/75 md:text-base">
+           <span className="font-extrabold text-white"> Everything </span> 
+           you need to pass — no wasted studying, no guesswork.
+            </p>
+
+                        {/* <p className="mt-2 max-w-xl text-sm text-white/75 md:text-base">
               Go from overwhelmed to registry-ready in as little as
               <span className="font-extrabold text-white"> one month.</span>
-            </p>
+            </p> */}
 
             <div className="mt-5 space-y-3">
               {/* Hook */}
@@ -118,8 +123,8 @@ export default function HomePage() {
               {/* Checklist */}
               <ul className="space-y-2.5 text-md font-semibold text-white/80 sm:text-base">
                 {[
-                  '600+ ARRT®-style practice questions',
-                  '200-question full mock exams',
+                  '1,000+ ARRT®-style practice questions',
+                  '5 full-length 200-question mock exams (designed to mirror the real ARRT® exam)',
                   'Auto-generated flashcards from what you miss to target your weak areas',
                   'Based on official ARRT® exam categories',
                 ].map((item) => (
