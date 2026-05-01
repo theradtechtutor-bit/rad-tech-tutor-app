@@ -1070,19 +1070,23 @@ const practiceSessionScopeKey = isFullQBank
               ? 'rtt_pro_feedback_last_shown_count'
               : 'rtt_free_feedback_last_shown_count';
 
-            const completed = localStorage.getItem(completedKey);
+            const completed =
+  localStorage.getItem(completedKey) === 'true';
 
-            if (!completed) {
-              const lastShown = Number(
-                localStorage.getItem(lastShownKey) || '0',
-              );
+// 🚫 HARD STOP → if they clicked survey before, never show again
+if (completed) return;
 
-              if (lastShown === 0 || currentCount - lastShown >= 2) {
-                localStorage.setItem(lastShownKey, String(currentCount));
+const lastShown = Number(
+  localStorage.getItem(lastShownKey) || '0',
+);
 
-                setFeedbackModalKind(isPro ? 'pro' : 'free');
-              }
-            }
+const repeatGap = isPro ? 5 : 2;
+
+if (lastShown === 0 || currentCount - lastShown >= repeatGap) {
+  localStorage.setItem(lastShownKey, String(currentCount));
+
+  setFeedbackModalKind(isPro ? 'pro' : 'free');
+}
           }
         } catch {}
       }
