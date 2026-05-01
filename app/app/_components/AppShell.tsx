@@ -117,6 +117,15 @@ export default function AppShell({
             </div>
           </div> */}
         </main>
+        {/* <footer className="border-t border-white/10">
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 text-[11px] text-white/45 md:px-10">
+            <span>© 2026 The Rad Tech Tutor</span>
+
+            <a href="/help" className="transition hover:text-white/80">
+              Help / Contact
+            </a>
+          </div>
+        </footer> */}
       </div>
     </div>
   );
