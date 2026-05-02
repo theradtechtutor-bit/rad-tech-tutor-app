@@ -21,7 +21,46 @@ export default function RootLayout({
         <MarketingNav />
         {/* <main>{children}</main> */}
         <main className="flex-1">{children}</main>
-<footer className="border-t border-white/10 px-6 py-4 text-center text-xs text-white/45">
+
+        <footer className="border-t border-white/10 px-6 py-4 text-center text-xs text-white/45">
+  <div className="mx-auto max-w-5xl space-y-3">
+    <div>
+      Disclaimer: The Rad Tech Tutor LLC provides original ARRT®-style
+      practice questions and educational materials created by The Rad Tech
+      Tutor LLC. The ARRT® is a registered trademark of The American Registry
+      of Radiologic Technologists and is not affiliated with this platform.
+    </div>
+
+    <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-white/50">
+      <span>© 2026 The Rad Tech Tutor LLC</span>
+      <span>·</span>
+      <a href="/help" className="text-white/70 underline underline-offset-2 transition hover:text-white">
+        Contact
+      </a>
+      <span>·</span>
+      <a href="/terms" className="text-white/70 underline underline-offset-2 transition hover:text-white">
+        Terms
+      </a>
+      <span>·</span>
+      <a href="/refund-policy" className="text-white/70 underline underline-offset-2 transition hover:text-white">
+        Refund Policy
+      </a>
+      <span>·</span>
+      <a href="/privacy-policy" className="text-white/70 underline underline-offset-2 transition hover:text-white">
+        Privacy Policy
+      </a>
+    </div>
+
+    <div>
+      ARRT® and The American Registry of Radiologic Technologists® are
+      registered trademarks of The American Registry of Radiologic
+      Technologists. The Rad Tech Tutor is not affiliated with, endorsed by, or
+      sponsored by The American Registry of Radiologic Technologists.
+    </div>
+  </div>
+</footer>
+
+{/* <footer className="border-t border-white/10 px-6 py-4 text-center text-xs text-white/45">
   <div className="mx-auto max-w-5xl space-y-3">
     <div>
       Disclaimer: The Rad Tech Tutor LLC provides original ARRT®-style
@@ -47,7 +86,7 @@ className="text-white/70 hover:text-white transition underline underline-offset-
       sponsored by The American Registry of Radiologic Technologists.
     </div>
   </div>
-</footer>
+</footer> */}
       </body>
     </html>
   );

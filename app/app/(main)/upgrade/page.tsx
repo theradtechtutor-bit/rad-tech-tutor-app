@@ -75,6 +75,8 @@ function UpgradePageInner() {
   const [busyPlan, setBusyPlan] = useState<PlanKey | null>(null);
   const [error, setError] = useState('');
 
+  // const [agreed, setAgreed] = useState(false);
+
   const [challenge, setChallenge] = useState({ qualifies: false });
 
 
@@ -99,6 +101,10 @@ const stored = JSON.parse(localStorage.getItem('rtt-progress') || '{}');
   }, []);
 
   async function startCheckout(plan: PlanKey) {
+//     if (!agreed) {
+//   setError('Please check the box to agree to the Terms and Refund Policy.');
+//   return;
+// }
     captureEvent('clicked_get_pro', {
       plan,
       source: autobuy === plan ? 'upgrade_page_autobuy' : 'upgrade_page',
@@ -244,18 +250,42 @@ if (
 
                   <p className="mt-4 text-sm text-white/55">{plan.detail}</p>
 
-                  <button
-                    onClick={() => startCheckout(plan.key)}
-                    disabled={busyPlan === plan.key}
-                    className="mt-auto w-full rounded-2xl bg-yellow-400 px-4 py-4 text-base font-semibold text-black transition hover:bg-yellow-300 disabled:opacity-60"
-                  >
-                    {busyPlan === plan.key
-                      ? 'Redirecting…'
-                      : `Get ${plan.name} Access`}
-                  </button>
+<button
+  onClick={() => startCheckout(plan.key)}
+  disabled={busyPlan === plan.key}
+  className="mt-auto w-full rounded-2xl bg-yellow-400 px-4 py-4 text-base font-semibold text-black transition hover:bg-yellow-300 disabled:opacity-60"
+>
+  {busyPlan === plan.key
+    ? 'Redirecting…'
+    : `Get ${plan.name} Access`}
+</button>
                 </div>
               ))}
             </div>
+
+            <div className="mx-auto mt-8 max-w-2xl text-center">
+  <p className="text-xs leading-6 text-white/50">
+    Instant access digital product. By purchasing, you agree to our{' '}
+    <a href="/terms" className="text-white/70 underline underline-offset-2 hover:text-white">
+      Terms
+    </a>{' '}
+    and{' '}
+    <a href="/refund-policy" className="text-white/70 underline underline-offset-2 hover:text-white">
+      Refund Policy
+    </a>
+    .
+  </p>
+
+  {/* <label className="mt-4 flex items-center justify-center gap-2 text-sm text-white/70">
+    <input
+      type="checkbox"
+      checked={agreed}
+      onChange={(e) => setAgreed(e.target.checked)}
+      className="h-4 w-4 accent-yellow-400"
+    />
+    <span>I agree to the Terms of Service and Refund Policy.</span>
+  </label> */}
+</div>
 
             {error ? (
               <div className="mx-auto mt-6 max-w-xl rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
