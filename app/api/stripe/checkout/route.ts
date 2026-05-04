@@ -27,6 +27,43 @@ export async function POST(req: Request) {
       );
     }
 
+    const { data: accessByUserId, error: accessByUserIdError } = await supabaseAdmin()
+  .from('user_access')
+  .select('is_pro, email')
+  .eq('user_id', user.id)
+  .maybeSingle();
+
+if (accessByUserIdError) {
+  console.error('Checkout access check user_id error:', accessByUserIdError);
+}
+
+let alreadyPro = accessByUserId?.is_pro === true;
+
+if (!alreadyPro && user.email) {
+  const { data: accessByEmail, error: accessByEmailError } = await supabaseAdmin()
+    .from('user_access')
+    .select('is_pro, email')
+    .eq('email', user.email.toLowerCase())
+    .maybeSingle();
+
+  if (accessByEmailError) {
+    console.error('Checkout access check email error:', accessByEmailError);
+  }
+
+  alreadyPro = accessByEmail?.is_pro === true;
+}
+
+if (alreadyPro) {
+  return NextResponse.json(
+    {
+      error:
+        'You already have Pro access. Please go back to the dashboard and refresh.',
+      alreadyPro: true,
+    },
+    { status: 409 },
+  );
+}
+
     const origin = new URL(req.url).origin;
     const stripe = getStripe();
     const priceId = process.env[plan.priceIdEnv];
