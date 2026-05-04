@@ -1681,7 +1681,7 @@ const readiness = useMemo(() => {
 
                   <p className="mt-3 max-w-2xl text-sm leading-6 text-white/70 md:text-base">
                     You can keep using the free bank, but Pro unlocks the full
-                    path: more mock banks, more ARRT-style questions, and more
+                    path: more mock banks, more ARRT®-style questions, and more
                     chances to expose weak spots before exam day.
                   </p>
 

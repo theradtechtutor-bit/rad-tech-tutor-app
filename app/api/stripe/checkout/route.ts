@@ -53,8 +53,7 @@ export async function POST(req: Request) {
         user_email: user.email ?? '',
         plan_key: plan.key,
       },
-      // allow_promotion_codes: true,
-      discounts: [{ promotion_code: 'promo_1TNWpnQWzkAYyzOJpkHXx3GC' }],
+      allow_promotion_codes: true,
     });
 
     console.log('ABOUT TO INSERT EVENT');

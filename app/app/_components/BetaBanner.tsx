@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 // const STORAGE_KEY = 'rtt_beta_banner_dismissed_v1';
-const SHOW_BANNER = true;
+const SHOW_BANNER = false;
 
 const ALLOWED_PATHS = [
   '/app/dashboard',
@@ -54,8 +54,7 @@ export default function BetaBanner() {
     setDismissed(true);
   };
 
-  if (!mounted || dismissed || !shouldShowOnPath) return null;
-
+if (!SHOW_BANNER || !mounted || dismissed || !shouldShowOnPath) return null;
   return (
     <div className="border-b border-yellow-400/20 bg-[#12161b]">
       <div className="mx-auto flex max-w-7xl items-center gap-3 px-3 py-2 md:px-6">
