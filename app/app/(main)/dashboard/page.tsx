@@ -1188,8 +1188,13 @@ function hasSavedPracticeSession(setId: string, mini?: number) {
 }
 export default function DashboardPage() {
   const [mounted, setMounted] = useState(false);
-  const proStatus = usePro();
-  const isPro = proStatus ?? false;
+const proStatus = usePro();
+const isProLoading = proStatus === null;
+const isPro = proStatus === true;
+
+// Only lock/redirect after we KNOW the user is not Pro.
+// This prevents paid users from being treated as free while access is still loading.
+const shouldGatePro = proStatus === false;
   const [attempts, setAttempts] = useState<Attempts>([]);
   const [summary, setSummary] = useState<Summary>(getMasterySummary('qbank1'));
   const [cumulative, setCumulative] = useState<Cumulative>(
@@ -1344,7 +1349,7 @@ useEffect(() => {
 
   const nextLesson = lessonForCurrentProgress(summary, currentBank);
   const lockedFullPhase =
-    !isPro &&
+    shouldGatePro &&
     (nextLesson === 'full-qbank');
 
   const fallbackLesson = lockedFullPhase
@@ -1372,7 +1377,7 @@ useEffect(() => {
   }
 
   setSelectedLesson(fallbackLesson);
-}, [currentBank, summary, isPro, selectedLesson]);
+}, [currentBank, summary, shouldGatePro, selectedLesson]);
 
   const currentMiniState = currentBank
     ? getMiniState(currentBank, attempts, currentBank.currentMini)
@@ -1909,9 +1914,9 @@ const readiness = useMemo(() => {
                               ? currentBank.currentMini
                               : 1;
 
-                          const nextMini = !isPro
-                            ? Math.min(nextMiniRaw, 5)
-                            : nextMiniRaw;
+                          const nextMini = shouldGatePro
+                          ? Math.min(nextMiniRaw, 5)
+                          : nextMiniRaw;
 
                           setSelectedLesson(`mini-${nextMini}` as LessonKey);
 
@@ -1943,7 +1948,7 @@ const readiness = useMemo(() => {
             <div className="flex flex-col gap-3 xl:items-end">
               <div className="flex w-full max-w-[380px] flex-col gap-3">
                 {bankSummaries.map((bank, idx) => {
-                  const locked = idx > 0 && !isPro;
+                  const locked = idx > 0 && shouldGatePro;
                   const bankData = readiness.bankAverages.find(
                     (b) => b.setId === bank.setId,
                   );
@@ -2022,7 +2027,7 @@ const readiness = useMemo(() => {
                               {labelForBank(bank.setId)}
                             </span>
 
-                            {(bank.setId === 'qbank1' || !isPro) && (
+                            {(bank.setId === 'qbank1' || shouldGatePro) && (
                               <span
                                 className={cx(
                                   'rounded-full px-2 py-0.5 text-[11px] font-semibold',
@@ -2231,19 +2236,19 @@ const readiness = useMemo(() => {
                             bank={currentBank}
                             isActive={selectedLesson === miniLessonKey}
                             isCurrent={mini === currentBank.currentMini}
-                            isPro={isPro}
+                              isPro={isPro || isProLoading}
                             summary={summary}
                             attempts={attempts}
                             onSelect={() => {
-                              if (mini > 5 && !isPro) {
-                                window.location.href = '/app/upgrade';
-                                return;
-                              }
+                              if (mini > 5 && shouldGatePro) {
+                              window.location.href = '/app/upgrade';
+                              return;
+}
                               setSelectedLesson(miniLessonKey);
                               setPendingScrollTarget(null);
                             }}
                             onStart={() => {
-                              if (mini > 5 && !isPro) {
+                              if (mini > 5 && shouldGatePro) {
                                 window.location.href = '/app/upgrade';
                                 return;
                               }
@@ -2255,7 +2260,7 @@ const readiness = useMemo(() => {
                               });
                             }}
                             onResume={() => {
-                              if (mini > 5 && !isPro) {
+                              if (mini > 5 && shouldGatePro) {
                                 window.location.href = '/app/upgrade';
                                 return;
                               }
@@ -2272,7 +2277,7 @@ const readiness = useMemo(() => {
                             onRestart={() => handleRestartMini(mini)}
                           />
                         </div>
-                        {mini === 5 && !isPro && (
+                        {mini === 5 && shouldGatePro && (
                           <div className="mt-2 flex items-center justify-between rounded-lg border border-yellow-400/20 bg-yellow-400/5 px-3 py-2 text-xs">
                             <div className="text-white/70">
                               🔒 Continue your progress — unlock all Mini Mocks
@@ -2296,7 +2301,7 @@ const readiness = useMemo(() => {
                   <SidebarFullQbank
                     bank={currentBank}
                     isActive={selectedLesson === 'full-qbank'}
-                    isPro={isPro} // ✅ THIS MUST EXIST
+                    isPro={isPro || isProLoading}
                     onSelect={() => {
                       setSelectedLesson('full-qbank');
                     }}
