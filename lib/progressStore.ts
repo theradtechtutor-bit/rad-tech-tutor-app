@@ -39,6 +39,10 @@ function fullQbankStepKey(setId: string) {
   return `rtt_full_qbank_step_${(setId || 'qbank1').toLowerCase()}`;
 }
 
+function fullQbankLatestMissedKey(setId: string) {
+  return `rtt_full_qbank_latest_missed_${(setId || 'qbank1').toLowerCase()}`;
+}
+
 function ensureAuthSync() {
   if (typeof window === 'undefined') return;
   if (authSyncInitialized) return;
@@ -318,6 +322,7 @@ export type PracticeSession = {
   answeredCount: number;
   correctCount: number;
   missedCount: number;
+  missedIds?: string[];
   totalCount: number;
   savedAt: number;
 };
@@ -869,6 +874,21 @@ export function resetMiniMockFull(setId: string, miniId: number) {
   window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
 }
 
+export function saveFullQbankLatestMissedIds(setId: string, ids: string[]) {
+  const uniqueIds = Array.from(new Set((ids || []).filter(Boolean)));
+  writeJson(fullQbankLatestMissedKey(setId), uniqueIds);
+}
+
+export function readFullQbankLatestMissedIds(setId: string): string[] {
+  const parsed = readJson<string[]>(fullQbankLatestMissedKey(setId), []);
+  return Array.isArray(parsed) ? parsed.filter(Boolean) : [];
+}
+
+export function clearFullQbankLatestMissedIds(setId: string) {
+  if (typeof window === 'undefined') return;
+  removeKeyFromBoth(fullQbankLatestMissedKey(setId));
+}
+
 type FullQbankStep = 'practice' | 'flashcards' | 'exam';
 
 type FullQbankStatus = {
@@ -877,6 +897,8 @@ type FullQbankStatus = {
   bestScore?: number;
   lastScore?: number;
   attempts?: number;
+  skipped?: boolean;
+  skippedAt?: string;
 };
 
 type FullQbankMastery = {
@@ -932,6 +954,21 @@ export function recordFullQbankFlashcardsDone(setId: string) {
       ...current.flashcards,
       completed: true,
       completedAt: current.flashcards.completedAt || new Date().toISOString(),
+      skipped: false,
+      skippedAt: undefined,
+    },
+  });
+}
+
+export function recordFullQbankFlashcardsSkipped(setId: string) {
+  const current = readFullQbankMastery(setId);
+  writeJson(fullQbankKey(setId), {
+    ...current,
+    flashcards: {
+      ...current.flashcards,
+      completed: false,
+      skipped: true,
+      skippedAt: current.flashcards.skippedAt || new Date().toISOString(),
     },
   });
 }
@@ -960,6 +997,7 @@ export function resetFullQbank(setId: string) {
   // 🔥 Remove full mastery + step
   removeKeyFromBoth(fullQbankKey(normalized));
   removeKeyFromBoth(fullQbankStepKey(normalized));
+  removeKeyFromBoth(fullQbankLatestMissedKey(normalized));
 
   // 🔥 Remove FULL practice session
   removeKeyFromBoth(practiceSessionKey(`mastery__${normalized}__FULL`));

@@ -22,6 +22,9 @@ import {
   markFlashcardCleared,
   readFlashSession,
   saveFlashSession,
+  readFullQbankLatestMissedIds,
+  recordFullQbankFlashcardsDone,
+  saveFullQbankStep,
 } from '@/lib/progressStore';
 
 function mapToArrtMajorCategory(raw: string): string {
@@ -333,7 +336,7 @@ function FlashcardsPageInner() {
 
         //fixed:
         const remainingMissedIds = isFullQBank
-          ? getFlashcardRemainingIds(setId, 'full')
+          ? readFullQbankLatestMissedIds(setId)
           : getFlashcardRemainingIds(
               setId,
               selectedCategory === 'all' ? 'all' : selectedCategory,
@@ -508,8 +511,15 @@ function FlashcardsPageInner() {
       const masteredCard = { ...card, stage: 3 as const };
       setDeck(remaining);
       setMastered((prev) => [...prev, masteredCard]);
-      if (mode === 'missed' || masteryMode)
+      if (mode === 'missed' || masteryMode) {
         markFlashcardCleared(setId, card.id);
+      }
+
+      if (masteryMode && isFullQBank && remaining.length === 0) {
+        recordFullQbankFlashcardsDone(setId);
+        saveFullQbankStep(setId, 'exam');
+      }
+
       setFlipped(false);
       return;
     }
@@ -522,14 +532,12 @@ function FlashcardsPageInner() {
     const activeMissedIds =
       idsFromSession.length > 0
         ? idsFromSession
-        : getFlashcardRemainingIds(
-            setId,
-            isFullQBank
-              ? 'full'
-              : selectedCategory === 'all'
-                ? 'all'
-                : selectedCategory,
-          );
+        : isFullQBank
+          ? readFullQbankLatestMissedIds(setId)
+          : getFlashcardRemainingIds(
+              setId,
+              selectedCategory === 'all' ? 'all' : selectedCategory,
+            );
 
     const cards =
       mode === 'missed' || masteryMode
@@ -702,7 +710,8 @@ function FlashcardsPageInner() {
           <MasteryFlowSteps
             currentStep={2}
             currentBankLabel={titleForSetId(setId)}
-            currentMini={mini}
+            currentMini={isFullQBank ? undefined : mini}
+            isFullQBank={isFullQBank}
           />
         </div>
       ) : null}
@@ -792,7 +801,9 @@ function FlashcardsPageInner() {
                 <div className="mt-4">
                   <button
                     onClick={() => {
-                      const href = `/app/mock-exam?qbank=${setId}&scope=mini&mini=${mini}&flow=mastery&autostart=1`;
+                      const href = isFullQBank
+                        ? `/app/mock-exam?qbank=${setId}&scope=full&flow=mastery&autostart=1`
+                        : `/app/mock-exam?qbank=${setId}&scope=mini&mini=${mini}&flow=mastery&autostart=1`;
 
                       if (deck.length > 0) {
                         setPendingMockHref(href);
@@ -800,11 +811,16 @@ function FlashcardsPageInner() {
                         return;
                       }
 
+                      if (isFullQBank) {
+                        recordFullQbankFlashcardsDone(setId);
+                        saveFullQbankStep(setId, 'exam');
+                      }
+
                       router.push(href);
                     }}
                     className="inline-flex rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
                   >
-                    Start Mini Mock Exam
+                    {isFullQBank ? 'Start Full Mock Exam' : 'Start Mini Mock Exam'}
                   </button>
                 </div>
               ) : null}

@@ -20,7 +20,11 @@ import {
   savePracticeSession,
   clearPracticeSession,
   saveMasteryMiniStep,
-  readProgress
+  saveFullQbankStep,
+  recordFullQbankPracticeDone,
+  saveFullQbankLatestMissedIds,
+  clearFullQbankLatestMissedIds,
+  readProgress,
 } from '@/lib/progressStore';
 
 import { buildRationale } from '@/lib/masteryContent';
@@ -46,6 +50,7 @@ type PracticeSession = {
   answeredCount: number;
   correctCount: number;
   missedCount: number;
+  missedIds?: string[];
   totalCount: number;
   savedAt: number;
 };
@@ -503,6 +508,7 @@ const practiceSessionScopeKey = isFullQBank
   const [answeredCount, setAnsweredCount] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [missedCount, setMissedCount] = useState(0);
+  const [masteryMissedIds, setMasteryMissedIds] = useState<string[]>([]);
   const [showSkipPracticeModal, setShowSkipPracticeModal] = useState(false);
   const [pendingMockHref, setPendingMockHref] = useState<string | null>(null);
   const [freeAnsweredIds, setFreeAnsweredIds] = useState<string[]>([]);
@@ -749,6 +755,7 @@ const practiceSessionScopeKey = isFullQBank
         setMissedCount(
           flow === 'free' ? missedInThisFilter.length : saved.missedCount || 0,
         );
+        setMasteryMissedIds(Array.isArray((saved as any).missedIds) ? (saved as any).missedIds : []);
       } else {
         setQueueIds(remainingIds);
         setCurrentId(remainingIds[0] || null);
@@ -757,6 +764,11 @@ const practiceSessionScopeKey = isFullQBank
         setAnsweredCount(flow === 'free' ? answeredInThisFilter.length : 0);
         setCorrectCount(flow === 'free' ? correctInThisFilter.length : 0);
         setMissedCount(flow === 'free' ? missedInThisFilter.length : 0);
+        setMasteryMissedIds([]);
+
+        if (masteryMode && isFullQBank) {
+          clearFullQbankLatestMissedIds(setId);
+        }
 
         if (!session?.user?.id) {
           clearPracticeSession(practiceSessionScopeKey);
@@ -902,20 +914,22 @@ const practiceSessionScopeKey = isFullQBank
       answeredCount,
       correctCount,
       missedCount,
+      missedIds: masteryMissedIds,
       totalCount,
       savedAt: Date.now(),
     });
   }
 
-  function persistPracticeSnapshot(snapshot: {
-    queueIds: string[];
-    currentId: string | null;
-    picked: ChoiceLetter | null;
-    revealed: boolean;
-    answeredCount: number;
-    correctCount: number;
-    missedCount: number;
-  }) {
+function persistPracticeSnapshot(snapshot: {
+  queueIds: string[];
+  currentId: string | null;
+  picked: ChoiceLetter | null;
+  revealed: boolean;
+  answeredCount: number;
+  correctCount: number;
+  missedCount: number;
+  missedIds?: string[];
+}) {
     savePracticeSession(practiceSessionScopeKey, {
       setId,
       mode: mode as 'all' | 'missed',
@@ -928,6 +942,9 @@ const practiceSessionScopeKey = isFullQBank
       answeredCount: snapshot.answeredCount,
       correctCount: snapshot.correctCount,
       missedCount: snapshot.missedCount,
+      missedIds: Array.isArray(snapshot.missedIds)
+        ? snapshot.missedIds
+        : masteryMissedIds,
       totalCount,
       savedAt: Date.now(),
     });
@@ -958,8 +975,14 @@ const practiceSessionScopeKey = isFullQBank
     const answeredNext = answeredCount + 1;
     const correctNext = correctCount + (isCorrect ? 1 : 0);
     const missedNext = missedCount + (isCorrect ? 0 : 1);
+    const nextMasteryMissedIds = masteryMode
+      ? isCorrect
+        ? masteryMissedIds.filter((id) => id !== q.id)
+        : Array.from(new Set([...masteryMissedIds, q.id]))
+      : masteryMissedIds;
 
     setAnsweredCount(answeredNext);
+    setMasteryMissedIds(nextMasteryMissedIds);
 
     if (isCorrect) {
       setCorrectCount(correctNext);
@@ -1018,12 +1041,16 @@ const practiceSessionScopeKey = isFullQBank
         score: pct,
         correct: correctNext,
         total,
-        category: `Mini Mock ${mini} Practice Test`,
+        category: isFullQBank
+          ? 'Full QBank Practice Test'
+          : `Mini Mock ${mini} Practice Test`,
         type: 'practice',
-        miniId: miniNumber,
+        miniId: isFullQBank ? undefined : miniNumber,
         questionsTaken: total,
         timeSpentSeconds: 0,
-        label: `Mini Mock ${mini} Practice Test`,
+        label: isFullQBank
+          ? 'Full QBank Practice Test'
+          : `Mini Mock ${mini} Practice Test`,
       });
     }
 
@@ -1036,6 +1063,7 @@ const practiceSessionScopeKey = isFullQBank
         answeredCount: answeredNext,
         correctCount: correctNext,
         missedCount: missedNext,
+        missedIds: nextMasteryMissedIds,
       });
     } else {
       if (!trackedPracticeCompleteRef.current) {
@@ -1091,7 +1119,11 @@ if (lastShown === 0 || currentCount - lastShown >= repeatGap) {
         } catch {}
       }
 
-if (masteryMode && typeof mini === 'number') {
+if (masteryMode && isFullQBank) {
+  saveFullQbankLatestMissedIds(setId, nextMasteryMissedIds);
+  recordFullQbankPracticeDone(setId);
+  saveFullQbankStep(setId, 'flashcards');
+} else if (masteryMode && typeof mini === 'number') {
   saveMasteryMiniStep(setId, mini, 'flashcards');
 }
 
@@ -1271,7 +1303,8 @@ useEffect(() => {
             <MasteryFlowSteps
               currentStep={3}
               currentBankLabel={title}
-              currentMini={miniNumber}
+              currentMini={isFullQBank ? undefined : miniNumber}
+              isFullQBank={isFullQBank}
             />
           </div>
         ) : null}
@@ -1357,7 +1390,9 @@ useEffect(() => {
               </div>
               <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/70">
                 Next step: review your flashcards, then take the{' '}
-                <span className="font-semibold text-white">Mini Mock Exam</span>
+                <span className="font-semibold text-white">
+                  {isFullQBank ? 'Full Mock Exam' : 'Mini Mock Exam'}
+                </span>
                 .
               </div>
               <div className="mt-5 flex flex-wrap gap-2">
@@ -1368,7 +1403,11 @@ useEffect(() => {
                       : `/app/flashcards?set=${setId}&mode=missed&filter=all&flow=mastery&mini=${mini}`
                   }
                   onClick={() => {
-                    if (!isFullQBank && typeof mini === 'number') {
+                    if (isFullQBank) {
+                      saveFullQbankLatestMissedIds(setId, masteryMissedIds);
+                      recordFullQbankPracticeDone(setId);
+                      saveFullQbankStep(setId, 'flashcards');
+                    } else if (typeof mini === 'number') {
                       saveMasteryMiniStep(setId, mini, 'flashcards');
                     }
                   }}
@@ -1535,7 +1574,8 @@ return (
         <MasteryFlowSteps
           currentStep={1}
           currentBankLabel={title}
-          currentMini={miniNumber}
+          currentMini={isFullQBank ? undefined : miniNumber}
+          isFullQBank={isFullQBank}
         />
       </div>
     ) : null}

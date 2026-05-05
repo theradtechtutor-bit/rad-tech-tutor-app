@@ -859,7 +859,9 @@ function SidebarFullQbank({
 
 
   const practiceSkipped = examInProgress && !practiceComplete && !practiceMeta;
-  const flashcardsSkipped = examInProgress && !flashcardsComplete && !flashMeta;
+  const flashcardsSkipped =
+    full.flashcards.skipped === true ||
+    (examInProgress && !flashcardsComplete && !flashMeta);
 
   const hasStarted =
     completed ||
@@ -2402,11 +2404,12 @@ const readiness = useMemo(() => {
                       !getSavedFullPracticeMeta(currentBank.setId);
 
                     const isFullFlashcardsSkipped =
-                      isFullExamFlow &&
-                      !fullStateForCard?.full.flashcards.completed &&
-                      !readFlashSession(
-                        `${currentBank.setId}__missed__all__full`,
-                      );
+                      fullStateForCard?.full.flashcards.skipped === true ||
+                      (isFullExamFlow &&
+                        !fullStateForCard?.full.flashcards.completed &&
+                        !readFlashSession(
+                          `${currentBank.setId}__missed__all__full`,
+                        ));
 
                     const isSkippedFlow =
                       miniStateForCard?.practiceSkipped === true;

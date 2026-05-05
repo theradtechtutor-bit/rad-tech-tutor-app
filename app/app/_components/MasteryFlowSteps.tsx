@@ -2,7 +2,12 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { readMasteryMiniStep, saveMasteryMiniStep } from '@/lib/progressStore';
+import {
+  readMasteryMiniStep,
+  saveMasteryMiniStep,
+  saveFullQbankStep,
+  recordFullQbankFlashcardsSkipped,
+} from '@/lib/progressStore';
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -56,6 +61,7 @@ export default function MasteryFlowSteps({
   currentStep,
   currentBankLabel,
   currentMini,
+  isFullQBank = false,
   compact = false,
   showIntro = true,
   showUpgrade = true,
@@ -63,6 +69,7 @@ export default function MasteryFlowSteps({
   currentStep: Step;
   currentBankLabel?: string;
   currentMini?: number;
+  isFullQBank?: boolean;
   compact?: boolean;
   showIntro?: boolean;
   showUpgrade?: boolean;
@@ -102,28 +109,39 @@ const [remainingFlashcards, setRemainingFlashcards] = useState(0);
   const steps = [
     {
       id: 1,
-      title: currentMini
-        ? hasSavedPracticeSession(setId, currentMini)
-          ? `Continue Practice Test ${currentMini}`
-          : `Take Practice Test ${currentMini}`
-        : 'Take Practice Test',
+      title: isFullQBank
+        ? 'Take Full QBank Practice Test'
+        : currentMini
+          ? hasSavedPracticeSession(setId, currentMini)
+            ? `Continue Practice Test ${currentMini}`
+            : `Take Practice Test ${currentMini}`
+          : 'Take Practice Test',
       desc: 'Pre-test to assess what you know',
-      href: `/app/practice/${setId}?mode=all&cat=all&flow=mastery&mini=${mini}`,
+      href: isFullQBank
+        ? `/app/practice/${setId}?mode=all&cat=all&flow=mastery&scope=full`
+        : `/app/practice/${setId}?mode=all&cat=all&flow=mastery&mini=${mini}`,
     },
     {
       id: 2,
       title: 'Flashcards',
       desc: 'Clear your missed concepts',
-      href: `/app/flashcards?set=${setId}&mode=missed&cat=all&flow=mastery&mini=${mini}`,
+      href: isFullQBank
+        ? `/app/flashcards?set=${setId}&mode=missed&filter=all&flow=mastery&scope=full`
+        : `/app/flashcards?set=${setId}&mode=missed&cat=all&flow=mastery&mini=${mini}`,
     },
     {
       id: 3,
-      title: currentMini ? `Mini Mock Exam ${currentMini}` : 'Mini Mock Exam',
+      title: isFullQBank
+        ? 'Full Mock Exam'
+        : currentMini
+          ? `Mini Mock Exam ${currentMini}`
+          : 'Mini Mock Exam',
       desc: 'Post-test to apply what you just reviewed',
-      href: `/app/mock-exam?qbank=${setId}&scope=mini&mini=${mini}&flow=mastery&autostart=1`,
+      href: isFullQBank
+        ? `/app/mock-exam?qbank=${setId}&scope=full&flow=mastery&autostart=1`
+        : `/app/mock-exam?qbank=${setId}&scope=mini&mini=${mini}&flow=mastery&autostart=1`,
     },
   ];
-
   return (
     <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
       {showIntro ? (
@@ -176,9 +194,9 @@ const [remainingFlashcards, setRemainingFlashcards] = useState(0);
           if (locked) {
 const lockedReason =
   activeStep === 3 && step.id === 1
-    ? 'Practice Test is locked once you reach the Mini Mock Exam. Restart this Mini Mock to begin again from Step 1.'
+    ? 'Practice Test is locked once you reach the exam step. Restart this flow to begin again from Step 1.'
     : activeStep === 3 && step.id === 2
-      ? 'Flashcards are locked once you reach the Mini Mock Exam. Restart this Mini Mock to unlock the full study flow again.'
+      ? 'Flashcards are locked once you reach the exam step. Restart this flow to unlock the full study flow again.'
       : step.id === 2
         ? 'Flashcards are made from the questions you get wrong in the Practice Test. Complete the Practice Test first to generate your flashcards.'
         : step.id === 3
@@ -271,7 +289,9 @@ if (activeStep === 3) {
               {skipMode === 'to_flashcards'
                 ? 'Return to Flashcards?'
                 : activeStep === 1
-                  ? 'Skip Ahead to Mini Mock Exam?'
+                  ? isFullQBank
+                  ? 'Skip Ahead to Full Mock Exam?'
+                  : 'Skip Ahead to Mini Mock Exam?'
                   : 'Skip Flashcards?'}
             </h2>
 
@@ -279,8 +299,8 @@ if (activeStep === 3) {
               {skipMode === 'to_flashcards'
                 ? `You still have ${remainingFlashcards} flashcards left to review. Going back now will pause your Mini Mock. Are you sure you want to return to Flashcards?`
                 : activeStep === 1
-                  ? 'You can skip ahead to the Mini Mock Exam, but without completing the Practice Test and Flashcards first, your score may be lower since your weak areas won’t be reviewed.'
-                  : 'You can skip ahead to the Mini Mock Exam, but without completing the Practice Test and Flashcards first, your score may be lower since your weak areas won’t be reviewed.'}
+                  ? `You can skip ahead to the ${isFullQBank ? 'Full Mock Exam' : 'Mini Mock Exam'}, but without completing the Practice Test and Flashcards first, your score may be lower since your weak areas won’t be reviewed.`
+                  : `You can skip ahead to the ${isFullQBank ? 'Full Mock Exam' : 'Mini Mock Exam'}, but without completing the Practice Test and Flashcards first, your score may be lower since your weak areas won’t be reviewed.`}
             </p>
 
             <div className="mt-5 flex justify-end gap-3">
@@ -304,7 +324,12 @@ if (activeStep === 3) {
                   const mode = skipMode;
 
                   if (mode === 'to_exam') {
-                    saveMasteryMiniStep(setId, mini, 'exam');
+                    if (isFullQBank) {
+                      recordFullQbankFlashcardsSkipped(setId);
+                      saveFullQbankStep(setId, 'exam');
+                    } else {
+                      saveMasteryMiniStep(setId, mini, 'exam');
+                    }
                   }
 
                   setShowSkipModal(false);
@@ -318,7 +343,7 @@ if (activeStep === 3) {
               >
                 {skipMode === 'to_flashcards'
                   ? 'Go to Flashcards'
-                  : 'Continue to Mini Mock Exam'}
+                  : isFullQBank ? 'Continue to Full Mock Exam' : 'Continue to Mini Mock Exam'}
               </button>
             </div>
           </div>
