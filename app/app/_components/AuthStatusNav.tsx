@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import { clearRttClientState } from '@/lib/progressStore';
+import { identifyUser, resetAnalyticsUser } from '@/lib/analytics';
 
 type AccessRow = {
   is_pro: boolean;
@@ -58,8 +59,16 @@ export default function AuthStatusNav({
       .eq('user_id', user.id)
       .maybeSingle<AccessRow>();
 
-    setIsPro(Boolean(data?.is_pro));
-    setLoading(false);
+const userIsPro = Boolean(data?.is_pro);
+
+setIsPro(userIsPro);
+
+identifyUser(user.id, {
+  email: user.email ?? null,
+  is_pro: userIsPro,
+});
+
+setLoading(false);
   }
 
   useEffect(() => {
@@ -104,6 +113,7 @@ export default function AuthStatusNav({
     setMenuOpen(false);
     await supabase.auth.signOut();
     clearRttClientState();
+    resetAnalyticsUser();
     setEmail(null);
     setAvatarUrl(null);
     setIsGoogleUser(false);
