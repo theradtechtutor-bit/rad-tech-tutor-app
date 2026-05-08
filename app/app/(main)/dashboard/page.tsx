@@ -22,6 +22,8 @@ import {
   getMiniMockChallengeStats,
 } from '@/lib/progressStore';
 
+import MothersDaySaleBanner from '@/app/app/_components/MothersDaySaleBanner';
+
 const BANKS = ['qbank1', 'qbank2', 'qbank3', 'qbank4', 'qbank5'] as const;
 
 type BankId = (typeof BANKS)[number];
@@ -1642,7 +1644,9 @@ const readiness = useMemo(() => {
       <StartHereTour storageKey="rtt_mastery_course_player" steps={tourSteps} />
 
       <div className="max-w-7xl space-y-6">
-        <section className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(45,212,191,0.08),rgba(255,255,255,0.02))] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.28)] md:p-8">
+  <MothersDaySaleBanner />
+
+  <section className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(45,212,191,0.08),rgba(255,255,255,0.02))] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.28)] md:p-8">
           <div className="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
             <div>
               <div className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-500/10 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-emerald-200/90">
