@@ -164,7 +164,7 @@ export default function HomePage() {
             </div>
             {isReturning ? (
               <div className="mt-2 text-xs text-emerald-200/80">
-                You're already in progress — we'll pick you up where you left
+                You&apos;re already in progress — we&apos;ll pick you up where you left
                 off.
               </div>
             ) : null}
@@ -251,7 +251,7 @@ export default function HomePage() {
 
                 <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
                   <div className="text-sm font-semibold text-white">
-                    3. Why it's different
+                    3. Why it&apos;s different
                   </div>
                   <div className="mt-1 text-sm text-white/70">
                     It finds your weak spots automatically.

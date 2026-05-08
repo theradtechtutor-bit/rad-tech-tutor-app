@@ -424,6 +424,39 @@ function progressPercent(completed: number, total: number) {
   return Math.max(0, Math.min(100, Math.round((completed / total) * 100)));
 }
 
+const ARRT_CATEGORY_ORDER = [
+  'Patient Care',
+  'Safety',
+  'Image Production',
+  'Procedures',
+];
+
+function getAverageMiniMockCategoryBreakdown(attempts: any[]) {
+  const miniAttempts = attempts.filter(
+    (item) => item.type === 'mini' && item.categoryBreakdown,
+  );
+
+  return ARRT_CATEGORY_ORDER.map((category) => {
+    const values = miniAttempts
+      .map((item) => item.categoryBreakdown?.[category])
+      .filter((value) => typeof value === 'number');
+
+    if (!values.length) {
+      return {
+        category,
+        average: null as number | null,
+      };
+    }
+
+    return {
+      category,
+      average: Math.round(
+        values.reduce((sum, value) => sum + value, 0) / values.length,
+      ),
+    };
+  });
+}
+
 function getChallengeDeadline() {
   return GLOBAL_CHALLENGE_DEADLINE;
 }
@@ -1507,6 +1540,11 @@ if (savedStep === 'exam' || full.exam.completed) {
       values.reduce((sum, value) => sum + value, 0) / values.length,
     );
   }, [miniScores]);
+
+  const miniMockCategoryAverages = useMemo(
+  () => getAverageMiniMockCategoryBreakdown(attempts),
+  [attempts],
+);
 
   const weakestCategory = useMemo(() => {
     const entries = Object.entries(cumulative.latest).filter(
@@ -2826,20 +2864,52 @@ const readiness = useMemo(() => {
 
                 <div data-tour="metrics" className="grid gap-4 xl:grid-cols-2">
                   <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
-                    <div className="text-sm font-semibold text-white">
-                      Average Mini Mock Score
-                    </div>
-                    <div className="mt-3 text-2xl font-semibold text-white">
-                      {averageMiniScore != null
-                        ? `${averageMiniScore}%`
-                        : 'Not enough data yet'}
-                    </div>
-                    <div className="mt-2 text-sm leading-6 text-white/65">
-                      {averageMiniScore != null
-                        ? `Based on ${miniScores.filter((item) => item.score != null).length} Mini Mock Exam score${miniScores.filter((item) => item.score != null).length === 1 ? '' : 's'}.`
-                        : 'Take a Mini Mock Exam to calculate average.'}
-                    </div>
-                  </div>
+  <div className="text-sm font-semibold text-white">
+    Average Mini Mock Score
+  </div>
+
+  <div className="mt-3 text-2xl font-semibold text-white">
+    {averageMiniScore != null
+      ? `${averageMiniScore}%`
+      : 'Not enough data yet'}
+  </div>
+
+  <div className="mt-2 text-sm leading-6 text-white/65">
+    {averageMiniScore != null
+      ? `Based on ${miniScores.filter((item) => item.score != null).length} Mini Mock Exam score${miniScores.filter((item) => item.score != null).length === 1 ? '' : 's'}.`
+      : 'Take a Mini Mock Exam to calculate average.'}
+  </div>
+
+  {averageMiniScore != null ? (
+    <div className="mt-5 overflow-hidden rounded-2xl border border-white/10">
+      <table className="w-full border-collapse text-sm">
+        <thead>
+          <tr className="border-b border-white/10 bg-white/[0.06] text-left text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45">
+            <th className="px-3 py-2">Content Category</th>
+            <th className="px-3 py-2 text-right">Avg</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {miniMockCategoryAverages.map((row) => (
+            <tr
+              key={row.category}
+              className="border-b border-white/10 bg-black/20 last:border-b-0"
+            >
+              <td className="px-3 py-2 font-medium text-white/80">
+                {row.category}
+              </td>
+
+              <td className="px-3 py-2 text-right font-semibold text-yellow-200">
+                {row.average != null ? `${row.average}%` : '—'}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ) : null}
+</div>
 
                   {/* <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
                     <div className="text-sm font-semibold text-white">

@@ -16,6 +16,7 @@ import {
 import MasteryFlowSteps from '@/app/app/_components/MasteryFlowSteps';
 import StartHereTour from '@/app/app/_components/StartHereTour';
 import SaveProgressPrompt from '@/app/app/_components/SaveProgressPrompt';
+import PerformanceBreakdown from '@/app/app/_components/PerformanceBreakdown';
 import { useSupabaseSession } from '@/app/app/_hooks/useSupabaseSession';
 import { usePro } from '@/app/app/_lib/usePro';
 import {
@@ -27,6 +28,8 @@ import {
 } from '@/lib/mockPlan';
 
 import posthog from 'posthog-js';
+
+const ENABLE_5_MOCK_CHALLENGE = false;
 
 type Choice =
   | string
@@ -212,6 +215,27 @@ function loadResults(
   } catch {
     return null;
   }
+}
+
+function buildCorrectByIdFromMock(
+  questions: Question[],
+  answers: Record<string, string>,
+  missed: Set<string>,
+) {
+  const result: Record<string, boolean> = {};
+
+  for (const item of questions) {
+    const selected = String(answers[item.id] || '').trim().toUpperCase();
+    const correct = getCorrectKey(item).trim().toUpperCase();
+
+    if (selected) {
+      result[item.id] = selected === correct;
+    } else {
+      result[item.id] = !missed.has(item.id);
+    }
+  }
+
+  return result;
 }
 
 function buildReviewItem(q: Question, selectedKeyRaw: string): ReviewItem {
@@ -532,7 +556,13 @@ function MockExamPageInner() {
   const total = questions?.length || 0;
   const categoryLabel =
     allCategories.find((c) => c.key === categoryFilter)?.label || 'Category';
-  const challenge = getMiniMockChallengeStats(setId);
+  const challenge = ENABLE_5_MOCK_CHALLENGE
+  ? getMiniMockChallengeStats(setId)
+  : {
+      completed: 0,
+      avg: 0,
+      qualifies: false,
+    };
 
   const categoryCounts = useMemo(() => {
     const totalCount = allQuestions.filter(
@@ -569,11 +599,13 @@ function MockExamPageInner() {
     setDone(true);
   }, [sp, setId, scope, miniId, activeCategoryKey]);
 
-  useEffect(() => {
-    if (done && scope === 'mini' && challenge.qualifies) {
-      setShowChallengeModal(true);
-    }
-  }, [done, scope, challenge.qualifies]);
+useEffect(() => {
+  if (!ENABLE_5_MOCK_CHALLENGE) return;
+
+  if (done && scope === 'mini' && challenge.qualifies) {
+    setShowChallengeModal(true);
+  }
+}, [done, scope, challenge.qualifies]);
 
 useEffect(() => {
   if (feedbackPromptCheckedRef.current) return;
@@ -671,8 +703,8 @@ useEffect(() => {
             typeof item.answer === 'string'
               ? item.answer
               : String(item.answer ?? '');
-          const picked = answers[idx];
-          if (picked === normalizedCorrect) {
+          const picked = answers[item.id];
+          if (String(picked || '').toUpperCase() === String(normalizedCorrect || '').toUpperCase()) {
             categoryStats[cat].correct += 1;
           }
         });
@@ -1116,8 +1148,8 @@ useEffect(() => {
           typeof item.answer === 'string'
             ? item.answer
             : String(item.answer ?? '');
-        const picked = answers[idx] ?? nextAnswers?.[idx];
-        if (picked === normalizedCorrect) {
+        const picked = nextAnswers[item.id] ?? answers[item.id];
+        if (String(picked || '').toUpperCase() === String(normalizedCorrect || '').toUpperCase()) {
           categoryStats[cat].correct += 1;
         }
       });
@@ -1456,7 +1488,7 @@ useEffect(() => {
           </div>
         </div>
 
-        {showChallengeModal ? (
+        {ENABLE_5_MOCK_CHALLENGE && showChallengeModal ? (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/72 p-4">
             <div className="w-full max-w-md rounded-3xl border border-emerald-400/20 bg-zinc-950 p-6 shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
               <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-200/85">
@@ -1556,6 +1588,13 @@ useEffect(() => {
             </div>
           </div>
 
+          <PerformanceBreakdown
+            questions={questions}
+            isCorrectById={buildCorrectByIdFromMock(questions, answers, missed)}
+            variant="mock"
+            scope={scope}
+          />
+
           {scope === 'mini' ? (
             <div className="mt-5">
               <MasteryFlowSteps
@@ -1567,7 +1606,7 @@ useEffect(() => {
             </div>
           ) : null}
 
-          {scope === 'mini' ? (
+          {ENABLE_5_MOCK_CHALLENGE && scope === 'mini' ? (
             <div className="mt-5 rounded-2xl border border-emerald-400/15 bg-[linear-gradient(180deg,rgba(16,185,129,0.08),rgba(255,255,255,0.02))] p-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
@@ -1697,8 +1736,13 @@ useEffect(() => {
                         className="rounded-2xl border border-white/10 bg-black/20 p-4"
                       >
                         <div className="text-sm font-semibold text-white">
-                          #{i + 1} • {getStem(item)}
-                        </div>
+  #{i + 1} • {getStem(item)}
+</div>
+
+<div className="mt-2 inline-flex rounded-full border border-yellow-400/20 bg-yellow-400/10 px-3 py-1 text-xs font-semibold text-yellow-200">
+  {mapToArrtMajorCategory(String(item.category || ''))}
+</div>
+
 
                         <div className="mt-3 text-sm text-white/70">
                           Your answer:{' '}

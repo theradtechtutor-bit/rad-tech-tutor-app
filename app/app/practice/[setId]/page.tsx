@@ -22,8 +22,6 @@ import {
   saveMasteryMiniStep,
   saveFullQbankStep,
   recordFullQbankPracticeDone,
-  saveFullQbankLatestMissedIds,
-  clearFullQbankLatestMissedIds,
   readProgress,
 } from '@/lib/progressStore';
 
@@ -31,6 +29,7 @@ import { buildRationale } from '@/lib/masteryContent';
 import MasteryFlowSteps from '@/app/app/_components/MasteryFlowSteps';
 import StartHereTour from '@/app/app/_components/StartHereTour';
 import SaveProgressPrompt from '@/app/app/_components/SaveProgressPrompt';
+import PerformanceBreakdown from '@/app/app/_components/PerformanceBreakdown';
 import { useSupabaseSession } from '@/app/app/_hooks/useSupabaseSession';
 import { usePro } from '@/app/app/_lib/usePro';
 import { buildMiniMocks, selectQuestionsForScope } from '@/lib/mockPlan';
@@ -50,8 +49,8 @@ type PracticeSession = {
   answeredCount: number;
   correctCount: number;
   missedCount: number;
-  missedIds?: string[];
   totalCount: number;
+  resultById?: Record<string, boolean>;
   savedAt: number;
 };
 
@@ -508,7 +507,7 @@ const practiceSessionScopeKey = isFullQBank
   const [answeredCount, setAnsweredCount] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [missedCount, setMissedCount] = useState(0);
-  const [masteryMissedIds, setMasteryMissedIds] = useState<string[]>([]);
+  const [practiceCorrectById, setPracticeCorrectById] = useState<Record<string, boolean>>({});
   const [showSkipPracticeModal, setShowSkipPracticeModal] = useState(false);
   const [pendingMockHref, setPendingMockHref] = useState<string | null>(null);
   const [freeAnsweredIds, setFreeAnsweredIds] = useState<string[]>([]);
@@ -729,10 +728,17 @@ const practiceSessionScopeKey = isFullQBank
         setFreeAnsweredIds(aggregate?.answeredIds || []);
         setFreeCorrectIds(aggregate?.correctIds || []);
         setFreeMissedIds(aggregate?.missedIds || []);
+
+        const freeResultById: Record<string, boolean> = {};
+        for (const id of aggregate?.answeredIds || []) {
+          freeResultById[id] = aggregateCorrect.has(id);
+        }
+        setPracticeCorrectById(freeResultById);
       } else {
         setFreeAnsweredIds([]);
         setFreeCorrectIds([]);
         setFreeMissedIds([]);
+        setPracticeCorrectById(saved?.resultById || {});
       }
 
       skipNextAutosaveRef.current = true;
@@ -755,7 +761,6 @@ const practiceSessionScopeKey = isFullQBank
         setMissedCount(
           flow === 'free' ? missedInThisFilter.length : saved.missedCount || 0,
         );
-        setMasteryMissedIds(Array.isArray((saved as any).missedIds) ? (saved as any).missedIds : []);
       } else {
         setQueueIds(remainingIds);
         setCurrentId(remainingIds[0] || null);
@@ -764,11 +769,7 @@ const practiceSessionScopeKey = isFullQBank
         setAnsweredCount(flow === 'free' ? answeredInThisFilter.length : 0);
         setCorrectCount(flow === 'free' ? correctInThisFilter.length : 0);
         setMissedCount(flow === 'free' ? missedInThisFilter.length : 0);
-        setMasteryMissedIds([]);
-
-        if (masteryMode && isFullQBank) {
-          clearFullQbankLatestMissedIds(setId);
-        }
+        if (flow !== 'free') setPracticeCorrectById({});
 
         if (!session?.user?.id) {
           clearPracticeSession(practiceSessionScopeKey);
@@ -914,22 +915,22 @@ const practiceSessionScopeKey = isFullQBank
       answeredCount,
       correctCount,
       missedCount,
-      missedIds: masteryMissedIds,
       totalCount,
+      resultById: practiceCorrectById,
       savedAt: Date.now(),
     });
   }
 
-function persistPracticeSnapshot(snapshot: {
-  queueIds: string[];
-  currentId: string | null;
-  picked: ChoiceLetter | null;
-  revealed: boolean;
-  answeredCount: number;
-  correctCount: number;
-  missedCount: number;
-  missedIds?: string[];
-}) {
+  function persistPracticeSnapshot(snapshot: {
+    queueIds: string[];
+    currentId: string | null;
+    picked: ChoiceLetter | null;
+    revealed: boolean;
+    answeredCount: number;
+    correctCount: number;
+    missedCount: number;
+    resultById?: Record<string, boolean>;
+  }) {
     savePracticeSession(practiceSessionScopeKey, {
       setId,
       mode: mode as 'all' | 'missed',
@@ -942,10 +943,8 @@ function persistPracticeSnapshot(snapshot: {
       answeredCount: snapshot.answeredCount,
       correctCount: snapshot.correctCount,
       missedCount: snapshot.missedCount,
-      missedIds: Array.isArray(snapshot.missedIds)
-        ? snapshot.missedIds
-        : masteryMissedIds,
       totalCount,
+      resultById: practiceCorrectById,
       savedAt: Date.now(),
     });
   }
@@ -975,14 +974,13 @@ function persistPracticeSnapshot(snapshot: {
     const answeredNext = answeredCount + 1;
     const correctNext = correctCount + (isCorrect ? 1 : 0);
     const missedNext = missedCount + (isCorrect ? 0 : 1);
-    const nextMasteryMissedIds = masteryMode
-      ? isCorrect
-        ? masteryMissedIds.filter((id) => id !== q.id)
-        : Array.from(new Set([...masteryMissedIds, q.id]))
-      : masteryMissedIds;
+    const nextPracticeCorrectById = {
+      ...practiceCorrectById,
+      [q.id]: Boolean(isCorrect),
+    };
 
     setAnsweredCount(answeredNext);
-    setMasteryMissedIds(nextMasteryMissedIds);
+    setPracticeCorrectById(nextPracticeCorrectById);
 
     if (isCorrect) {
       setCorrectCount(correctNext);
@@ -1063,7 +1061,7 @@ function persistPracticeSnapshot(snapshot: {
         answeredCount: answeredNext,
         correctCount: correctNext,
         missedCount: missedNext,
-        missedIds: nextMasteryMissedIds,
+        resultById: nextPracticeCorrectById,
       });
     } else {
       if (!trackedPracticeCompleteRef.current) {
@@ -1120,7 +1118,6 @@ if (lastShown === 0 || currentCount - lastShown >= repeatGap) {
       }
 
 if (masteryMode && isFullQBank) {
-  saveFullQbankLatestMissedIds(setId, nextMasteryMissedIds);
   recordFullQbankPracticeDone(setId);
   saveFullQbankStep(setId, 'flashcards');
 } else if (masteryMode && typeof mini === 'number') {
@@ -1303,8 +1300,7 @@ useEffect(() => {
             <MasteryFlowSteps
               currentStep={3}
               currentBankLabel={title}
-              currentMini={isFullQBank ? undefined : miniNumber}
-              isFullQBank={isFullQBank}
+              currentMini={miniNumber}
             />
           </div>
         ) : null}
@@ -1388,6 +1384,13 @@ useEffect(() => {
                   </div>
                 </div>
               </div>
+              <PerformanceBreakdown
+                questions={Object.values(questionsById)}
+                isCorrectById={practiceCorrectById}
+                variant="practice"
+                scope={isFullQBank ? 'full' : 'mini'}
+              />
+
               <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/70">
                 Next step: review your flashcards, then take the{' '}
                 <span className="font-semibold text-white">
@@ -1404,7 +1407,6 @@ useEffect(() => {
                   }
                   onClick={() => {
                     if (isFullQBank) {
-                      saveFullQbankLatestMissedIds(setId, masteryMissedIds);
                       recordFullQbankPracticeDone(setId);
                       saveFullQbankStep(setId, 'flashcards');
                     } else if (typeof mini === 'number') {
@@ -1438,25 +1440,101 @@ useEffect(() => {
             </>
           ) : (
             <>
-              <div className="text-sm text-white/70">
-                {mode === 'missed'
-                  ? 'No missed-question practice deck yet. Miss questions in the mock exam first, then come back here.'
-                  : 'No questions found for this filter.'}
-              </div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                <button
-                  onClick={restartDeck}
-                  className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold hover:bg-white/15"
-                >
-                  Restart Deck
-                </button>
-                <Link
-                  href={`/app/flashcards?set=${setId}&mode=missed&filter=all&mini=all&ids=${freeMissedIds.join(',')}`}
-                  className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
-                >
-                  Go to Flashcards
-                </Link>
-              </div>
+              {totalCount > 0 && answeredCount >= totalCount ? (
+                <>
+                  <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/45">
+                    Practice Test Results
+                  </div>
+
+                  <div className="mt-4 grid gap-4 md:grid-cols-[1.2fr_1fr]">
+                    <div className="rounded-2xl border border-yellow-400/20 bg-yellow-400/10 p-5">
+                      <div className="text-sm text-white/70">Score</div>
+
+                      <div className="mt-2 text-4xl font-bold text-yellow-300">
+                        {totalCount
+                          ? Math.round((correctCount / totalCount) * 100)
+                          : 0}
+                        %
+                      </div>
+
+                      <div className="mt-2 text-sm text-white/65">
+                        Practice Freely results for this question set.
+                      </div>
+                    </div>
+
+                    <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-1">
+                      <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                        <div className="text-xs text-white/55">Correct</div>
+
+                        <div className="mt-1 text-2xl font-semibold text-white">
+                          {correctCount} / {totalCount}
+                        </div>
+                      </div>
+
+                      <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                        <div className="text-xs text-white/55">Missed</div>
+
+                        <div className="mt-1 text-2xl font-semibold text-white">
+                          {missedCount}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <PerformanceBreakdown
+                    questions={Object.values(questionsById)}
+                    isCorrectById={practiceCorrectById}
+                    variant="practice"
+                    scope={
+                      isFullQBank
+                        ? 'full'
+                        : selectedMini !== 'all'
+                          ? 'mini'
+                          : 'practice'
+                    }
+                  />
+
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    <button
+                      onClick={restartDeck}
+                      className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
+                    >
+                      Restart Practice
+                    </button>
+
+                    <Link
+                      href={`/app/flashcards?set=${setId}&mode=missed&filter=all&mini=all&ids=${freeMissedIds.join(',')}`}
+                      className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"
+                    >
+                      Review Missed Flashcards
+                    </Link>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="text-sm text-white/70">
+                    {mode === 'missed'
+                      ? 'No missed-question practice deck yet. Miss questions in the mock exam first, then come back here.'
+                      : 'No questions found for this filter.'}
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <button
+                      onClick={restartDeck}
+                      className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold hover:bg-white/15"
+                    >
+                      Restart Deck
+                    </button>
+
+                    <Link
+                      href={`/app/flashcards?set=${setId}&mode=missed&filter=all&mini=all&ids=${freeMissedIds.join(',')}`}
+                      className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
+                    >
+                      Go to Flashcards
+                    </Link>
+                  </div>
+                </>
+              )}
             </>
           )}
         </div>
@@ -1574,8 +1652,7 @@ return (
         <MasteryFlowSteps
           currentStep={1}
           currentBankLabel={title}
-          currentMini={isFullQBank ? undefined : miniNumber}
-          isFullQBank={isFullQBank}
+          currentMini={miniNumber}
         />
       </div>
     ) : null}

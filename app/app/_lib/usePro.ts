@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import supabase from '@/lib/supabaseClient';
 
 export function usePro() {
   const [isPro, setIsPro] = useState<boolean | null>(null);
@@ -9,63 +9,79 @@ export function usePro() {
   useEffect(() => {
     let mounted = true;
 
-    const load = async () => {
-      // null means: still checking. Do NOT treat this as free.
-      if (mounted) setIsPro(null);
+    async function load() {
+      try {
+        // null means still checking
+        if (mounted) setIsPro(null);
 
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession();
 
-      if (userError) {
-        console.error('usePro auth error:', userError);
-      }
+        if (sessionError) {
+          console.warn('usePro session check error:', sessionError.message);
+          if (mounted) setIsPro(false);
+          return;
+        }
 
-      if (!user) {
-        if (mounted) setIsPro(false);
-        return;
-      }
+        const user = session?.user ?? null;
 
-      const { data, error } = await supabase
-        .from('user_access')
-        .select('is_pro, email')
-        .eq('user_id', user.id)
-        .maybeSingle();
+        // No logged-in user = free user.
+        // Do NOT call getUser() here.
+        if (!user) {
+          if (mounted) setIsPro(false);
+          return;
+        }
 
-      if (error) {
-        console.error('usePro user_access user_id error:', error);
-      }
-
-      if (data?.is_pro === true) {
-        if (mounted) setIsPro(true);
-        return;
-      }
-
-      // Fallback: if user_id lookup fails or returns no pro,
-      // check the same logged-in email too.
-      if (user.email) {
-        const normalizedEmail = user.email.toLowerCase();
-
-        const { data: emailData, error: emailError } = await supabase
+        const { data, error } = await supabase
           .from('user_access')
-          .select('is_pro, email')
-          .eq('email', normalizedEmail)
+          .select('is_pro, email, pro_expires_at')
+          .eq('user_id', user.id)
           .maybeSingle();
 
-        if (emailError) {
-          console.error('usePro user_access email fallback error:', emailError);
+        if (error) {
+          console.warn('usePro user_id lookup error:', error.message);
         }
 
-        if (mounted) {
-          setIsPro(Boolean(emailData?.is_pro));
+        const userIdProActive =
+          data?.is_pro === true &&
+          (!data?.pro_expires_at ||
+            new Date(data.pro_expires_at).getTime() > Date.now());
+
+        if (userIdProActive) {
+          if (mounted) setIsPro(true);
+          return;
         }
 
-        return;
+        if (user.email) {
+          const normalizedEmail = user.email.toLowerCase();
+
+          const { data: emailData, error: emailError } = await supabase
+            .from('user_access')
+            .select('is_pro, email, pro_expires_at')
+            .eq('email', normalizedEmail)
+            .maybeSingle();
+
+          if (emailError) {
+            console.warn('usePro email lookup error:', emailError.message);
+          }
+
+          const emailProActive =
+            emailData?.is_pro === true &&
+            (!emailData?.pro_expires_at ||
+              new Date(emailData.pro_expires_at).getTime() > Date.now());
+
+          if (mounted) setIsPro(emailProActive);
+          return;
+        }
+
+        if (mounted) setIsPro(false);
+      } catch (error) {
+        console.warn('usePro failed:', error);
+        if (mounted) setIsPro(false);
       }
-
-      if (mounted) setIsPro(false);
-    };
+    }
 
     load();
 
