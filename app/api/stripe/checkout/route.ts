@@ -3,6 +3,19 @@ import { getPlan, getStripe } from '@/lib/stripe';
 import { createClient } from '@/lib/supabaseServer';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
+type AccessRow = {
+  is_pro: boolean | null;
+  email?: string | null;
+  pro_expires_at?: string | null;
+};
+
+function isActivePro(row: AccessRow | null | undefined) {
+  return (
+    row?.is_pro === true &&
+    (!row.pro_expires_at || new Date(row.pro_expires_at).getTime() > Date.now())
+  );
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
@@ -29,7 +42,7 @@ export async function POST(req: Request) {
 
     const { data: accessByUserId, error: accessByUserIdError } = await supabaseAdmin()
   .from('user_access')
-  .select('is_pro, email')
+  .select('is_pro, email, pro_expires_at')
   .eq('user_id', user.id)
   .maybeSingle();
 
@@ -37,12 +50,12 @@ if (accessByUserIdError) {
   console.error('Checkout access check user_id error:', accessByUserIdError);
 }
 
-let alreadyPro = accessByUserId?.is_pro === true;
+let alreadyPro = isActivePro(accessByUserId);
 
 if (!alreadyPro && user.email) {
   const { data: accessByEmail, error: accessByEmailError } = await supabaseAdmin()
     .from('user_access')
-    .select('is_pro, email')
+    .select('is_pro, email, pro_expires_at')
     .eq('email', user.email.toLowerCase())
     .maybeSingle();
 
@@ -50,7 +63,7 @@ if (!alreadyPro && user.email) {
     console.error('Checkout access check email error:', accessByEmailError);
   }
 
-  alreadyPro = accessByEmail?.is_pro === true;
+  alreadyPro = isActivePro(accessByEmail);
 }
 
 if (alreadyPro) {

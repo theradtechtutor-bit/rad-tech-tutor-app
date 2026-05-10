@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
+import { getProExpiresAt } from '@/lib/stripe'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-08-27.basil',
@@ -30,7 +31,10 @@ export async function GET(req: Request) {
     }
 
     const userId = session.metadata?.user_id
-    const email =
+const plan = session.metadata?.plan_key ?? null
+const proExpiresAt = getProExpiresAt(plan)
+
+const email =
       session.metadata?.user_email ||
       session.customer_details?.email ||
       null
@@ -44,11 +48,12 @@ export async function GET(req: Request) {
 
     const { error } = await admin.from('user_access').upsert(
       {
-        user_id: userId,
-        email,
-        is_pro: true,
-        updated_at: new Date().toISOString(),
-      },
+  user_id: userId,
+  email,
+  is_pro: true,
+  pro_expires_at: proExpiresAt,
+  updated_at: new Date().toISOString(),
+},
       { onConflict: 'user_id' }
     )
 

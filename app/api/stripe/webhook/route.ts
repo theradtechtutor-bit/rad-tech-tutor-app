@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { getProExpiresAt } from '@/lib/stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-08-27.basil',
@@ -40,16 +41,18 @@ export async function POST(req: Request) {
 
       const plan = session.metadata?.plan_key ?? null;
       const now = new Date().toISOString();
+      const proExpiresAt = getProExpiresAt(plan);
 
       if (userId) {
         console.log('Granting PRO by user_id:', userId);
 
         await supabase.from('user_access').upsert({
-          user_id: userId,
-          email: userEmail.toLowerCase(),
-          is_pro: true,
-          updated_at: now,
-        });
+  user_id: userId,
+  email: userEmail.toLowerCase(),
+  is_pro: true,
+  pro_expires_at: proExpiresAt,
+  updated_at: now,
+});
 
         await supabase.from('user_events').insert({
           user_id: userId,
@@ -71,9 +74,10 @@ export async function POST(req: Request) {
         const { data, error } = await supabase
           .from('user_access')
           .update({
-            is_pro: true,
-            updated_at: now,
-          })
+  is_pro: true,
+  pro_expires_at: proExpiresAt,
+  updated_at: now,
+})
           .eq('email', userEmail.toLowerCase())
           .select('user_id')
           .maybeSingle();
