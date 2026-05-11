@@ -26,21 +26,19 @@ export default function SuccessClient() {
 
         if (data.success) {
           try {
-            const purchaseKey = `rtt_purchase_completed_${sessionId}`;
-            if (window.sessionStorage.getItem(purchaseKey) !== '1') {
-              captureEvent('purchase_completed', {
+            const successViewKey = `rtt_checkout_success_viewed_${sessionId}`;
+
+            if (window.sessionStorage.getItem(successViewKey) !== '1') {
+              captureEvent('checkout_success_page_viewed', {
                 source: 'stripe_success_page',
                 session_id: sessionId,
               });
-              window.sessionStorage.setItem(purchaseKey, '1');
+
+              window.sessionStorage.setItem(successViewKey, '1');
             }
           } catch {
-            captureEvent('purchase_completed', {
-              source: 'stripe_success_page',
-              session_id: sessionId,
-            });
+            // Do not fire purchase_completed from the frontend.
           }
-
           setReady(true);
           setMessage('Your Pro access has been unlocked.');
         } else {
