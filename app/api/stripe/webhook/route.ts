@@ -12,6 +12,46 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
 
+async function capturePosthogPurchase({
+  userId,
+  email,
+  plan,
+  sessionId,
+}: {
+  userId: string;
+  email: string;
+  plan: string | null;
+  sessionId: string;
+}) {
+  const key = process.env.POSTHOG_API_KEY;
+  const host = process.env.POSTHOG_HOST ?? 'https://us.i.posthog.com';
+
+  if (!key) return;
+
+  try {
+    await fetch(`${host.replace(/\/$/, '')}/capture/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        api_key: key,
+        event: 'purchase_completed',
+        distinct_id: userId,
+        properties: {
+          source: 'stripe_webhook',
+          user_email: email,
+          plan,
+          stripe_session_id: sessionId,
+          $set: {
+            email,
+          },
+        },
+      }),
+    });
+  } catch (error) {
+    console.error('PostHog purchase capture failed:', error);
+  }
+}
+
 export async function POST(req: Request) {
   const body = await req.text();
   const sig = req.headers.get('stripe-signature')!;
@@ -29,89 +69,98 @@ export async function POST(req: Request) {
     return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
-    if (event.type === 'checkout.session.completed') {
-      const session = event.data.object as Stripe.Checkout.Session;
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object as Stripe.Checkout.Session;
 
-      const userId = session.metadata?.user_id ?? null;
-      const userEmail =
-        session.metadata?.user_email ??
-        session.customer_details?.email ??
-        session.customer_email ??
-        '';
+    const userId = session.metadata?.user_id ?? null;
+    const userEmail =
+      session.metadata?.user_email ??
+      session.customer_details?.email ??
+      session.customer_email ??
+      '';
 
-      const plan = session.metadata?.plan_key ?? null;
-      const now = new Date().toISOString();
-      const proExpiresAt = getProExpiresAt(plan);
+    const email = userEmail.toLowerCase();
+    const plan = session.metadata?.plan_key ?? null;
+    const now = new Date().toISOString();
+    const proExpiresAt = getProExpiresAt(plan);
 
-      if (userId) {
-        console.log('Granting PRO by user_id:', userId);
+    if (userId) {
+      console.log('Granting PRO by user_id:', userId);
 
-        await supabase.from('user_access').upsert({
-  user_id: userId,
-  email: userEmail.toLowerCase(),
-  is_pro: true,
-  pro_expires_at: proExpiresAt,
-  updated_at: now,
-});
+      await supabase.from('user_access').upsert({
+        user_id: userId,
+        email,
+        is_pro: true,
+        pro_expires_at: proExpiresAt,
+        updated_at: now,
+      });
 
+      await supabase.from('user_events').insert({
+        user_id: userId,
+        event_type: 'purchase_completed',
+        metadata: {
+          plan,
+          user_email: email,
+          stripe_session_id: session.id,
+          source: 'stripe_webhook_user_id',
+        },
+      });
+
+      await capturePosthogPurchase({
+        userId,
+        email,
+        plan,
+        sessionId: session.id,
+      });
+
+      return NextResponse.json({ received: true });
+    }
+
+    if (email) {
+      console.warn('Missing user_id. Granting PRO by email:', email);
+
+      const { data, error } = await supabase
+        .from('user_access')
+        .update({
+          is_pro: true,
+          pro_expires_at: proExpiresAt,
+          updated_at: now,
+        })
+        .eq('email', email)
+        .select('user_id')
+        .maybeSingle();
+
+      if (error) {
+        console.error('Email fallback update failed:', error);
+      }
+
+      if (data?.user_id) {
         await supabase.from('user_events').insert({
-          user_id: userId,
+          user_id: data.user_id,
           event_type: 'purchase_completed',
           metadata: {
             plan,
-            user_email: userEmail,
+            user_email: email,
             stripe_session_id: session.id,
-            source: 'stripe_webhook_user_id',
+            source: 'stripe_webhook_email_fallback',
           },
         });
 
-        return NextResponse.json({ received: true });
+        await capturePosthogPurchase({
+          userId: data.user_id,
+          email,
+          plan,
+          sessionId: session.id,
+        });
+      } else {
+        console.error('No matching user_access row for paid email:', email);
       }
 
-      if (userEmail) {
-        console.warn('Missing user_id. Granting PRO by email:', userEmail);
-
-        const { data, error } = await supabase
-          .from('user_access')
-          .update({
-  is_pro: true,
-  pro_expires_at: proExpiresAt,
-  updated_at: now,
-})
-          .eq('email', userEmail.toLowerCase())
-          .select('user_id')
-          .maybeSingle();
-
-        if (error) {
-          console.error('Email fallback update failed:', error);
-        }
-
-        if (data?.user_id) {
-          await supabase.from('user_events').insert({
-            user_id: data.user_id,
-            event_type: 'purchase_completed',
-            metadata: {
-              plan,
-              user_email: userEmail,
-              stripe_session_id: session.id,
-              source: 'stripe_webhook_email_fallback',
-            },
-          });
-        } else {
-          console.error(
-            'No matching user_access row for paid email:',
-            userEmail,
-          );
-        }
-
-        return NextResponse.json({ received: true });
-      }
-
-      console.error(
-        'No user_id or email found for completed checkout:',
-        session.id,
-      );
+      return NextResponse.json({ received: true });
     }
+
+    console.error('No user_id or email found for completed checkout:', session.id);
+  }
 
   return NextResponse.json({ received: true });
 }
