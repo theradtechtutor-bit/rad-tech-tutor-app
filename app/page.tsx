@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSupabaseSession } from '@/app/app/_hooks/useSupabaseSession';
 import { getBankMasterySummary } from '@/lib/progressStore';
 import { captureEvent } from '@/lib/analytics';
+import SocialLinks from './_components/SocialLinks';
 
 
 function getResumeHref() {
@@ -651,287 +652,23 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+            {/* SOCIAL LINKS */}
+      <section className="mx-auto max-w-5xl px-5 pb-20 text-center">
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-[0_0_40px_rgba(16,185,129,0.08)]">
+          <p className="text-sm font-semibold text-white">
+            Follow The Rad Tech Tutor
+          </p>
+
+          <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-white/55">
+            Watch quick ARRT tips on TikTok, full breakdowns on YouTube, then practice on the official website.
+          </p>
+
+          <div className="mt-5">
+            <SocialLinks />
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
-
-// import Link from 'next/link';
-// // import MarketingNav from './_components/MarketingNav';
-
-// function Stat({ value, label }: { value: string; label: string }) {
-//   return (
-//     <div className="rounded-2xl border border-[color:var(--rtt-border)] bg-[color:var(--rtt-card)] px-5 py-4">
-//       <div className="text-2xl font-semibold">{value}</div>
-//       <div className="mt-1 text-sm text-[color:var(--rtt-muted)]">{label}</div>
-//     </div>
-//   );
-// }
-
-// function Feature({ title, desc }: { title: string; desc: string }) {
-//   return (
-//     <div className="rounded-2xl border border-[color:var(--rtt-border)] bg-[color:var(--rtt-card)] p-5">
-//       <div className="text-sm font-semibold">{title}</div>
-//       <div className="mt-2 text-sm text-[color:var(--rtt-muted)]">{desc}</div>
-//     </div>
-//   );
-// }
-
-// export default function HomePage() {
-//   return (
-//     <div className="min-h-screen bg-[color:var(--rtt-bg)] text-[color:var(--rtt-text)]">
-//       {/* <MarketingNav /> */}
-
-//       {/* Hero */}
-//       <section className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-5 py-12 md:grid-cols-2 md:py-16 relative z-10">
-//         <div>
-//           <div className="relative inline-block">
-//             {/* Glow behind hero text */}
-//             <div
-//               aria-hidden="true"
-//               className="pointer-events-none absolute -inset-x-16 -inset-y-12 -z-10 blur-2xl"
-//               style={{
-//                 background:
-//                   'radial-gradient(closest-side, rgba(20, 184, 166, 0.40), rgba(20, 184, 166, 0.24), rgba(0,0,0,0))',
-//               }}
-//             />
-
-//             <h1 className="text-5xl font-bold leading-tight md:text-5xl">
-//               A Better Way
-//               <br />
-//               to Prepare for the
-//               <br />
-//               ARRT Radiography
-//               <br />
-//               Registry Exam
-//             </h1>
-//           </div>
-//           {/* <p className="mt-4 max-w-xl text-base text-[color:var(--rtt-muted)] md:text-lg">
-//             Stop over-studying and focus on what actually moves your score.
-//             Practice the essentials, identify weak areas, and strengthen them to
-//             quickly pass the ARRT Radiography exam with confidence.
-//           </p> */}
-//           <p className="mt-4 max-w-xl text-base text-[color:var(--rtt-muted)] md:text-lg">
-//             Preparation doesn’t have to feel overwhelming. With structured,
-//             targeted practice, you can identify weak areas early, improve your
-//             score, and walk into the ARRT exam confident and prepared.
-//           </p>
-
-//           <div className="mt-7 flex flex-wrap items-center gap-3">
-//             <a href="/app/upgrade" className="rtt-btn rtt-btn-cta">
-//               Get Pro
-//             </a>
-//             <Link
-//               href="/app/practice"
-//               className="rtt-btn rounded-full border  border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 transition hover:bg-teal-200/10"
-//             >
-//               Start Free
-//             </Link>
-//           </div>
-//           {/* <div className="mt-5 text-sm text-[color:var(--rtt-muted)]">
-//             Free: Essential 100 + 20Q diagnostic. Paid: mastery engine (200Q) +
-//             full bank (600Q).
-//           </div> */}
-//           {/* RTT_PROGRESS_START */}
-//           <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-3">
-//             <div className="rtt-card relative rounded-2xl p-4 sm:after:content-['→'] sm:after:absolute sm:after:-right-5 sm:after:top-1/2 sm:after:-translate-y-1/2 sm:after:text-xl sm:after:text-white/30">
-//               <div className="flex items-center justify-center gap-2">
-//                 <span className="text-xs font-semibold text-white/50">01</span>
-//                 <span className="text-sm font-semibold text-white">
-//                   Baseline
-//                 </span>
-//               </div>
-//               <div className="mt-2 text-center text-sm text-white/70">
-//                 Identify your starting score and expose weak spots.
-//               </div>
-//             </div>
-
-//             <div className="rtt-card relative rounded-2xl p-4 sm:after:content-['→'] sm:after:absolute sm:after:-right-5 sm:after:top-1/2 sm:after:-translate-y-1/2 sm:after:text-xl sm:after:text-white/30">
-//               <div className="flex items-center justify-center gap-2">
-//                 <span className="text-xs font-semibold text-white/50">02</span>
-//                 <span className="text-sm font-semibold text-white">Train</span>
-//               </div>
-//               <div className="mt-2 text-center text-sm text-white/70">
-//                 Systematically eliminate weak spots with the Mastery Engine.
-//               </div>
-//             </div>
-
-//             <div className="rtt-card rounded-2xl p-4">
-//               <div className="flex items-center justify-center gap-2">
-//                 <span className="text-xs font-semibold text-white/50">03</span>
-//                 <span className="text-sm font-semibold text-white">
-//                   Test-Ready
-//                 </span>
-//               </div>
-//               <div className="mt-2 text-center text-sm text-white/70">
-//                 Walk into the ARRT exam confident, prepared, and test-ready.
-//               </div>
-//             </div>
-//           </div>
-//           {/* RTT_PROGRESS_END */}
-//         </div>
-
-//         {/* Simple “roadmap” visual */}
-//         <div className="relative">
-//           <div className="absolute inset-0 pointer-events-none rounded-3xl bg-[radial-gradient(600px_circle_at_30%_30%,rgba(45,212,191,0.10),transparent_60%),radial-gradient(600px_circle_at_70%_70%,rgba(250,204,21,0.08),transparent_55%)]" />
-
-//           <div className="rtt-card rtt-glow rounded-2xl p-6">
-//             <div className="text-sm font-semibold">
-//               Already a certified X-ray Tech?
-//             </div>
-//             <div className="mt-1 text-xs rtt-muted">
-//               Complete your ARRT continuing education requirements quickly and
-//               efficiently.
-//             </div>
-//             <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-//               <div className="text-sm font-semibold">
-//                 ARRT Continuing Education Made Simple
-//               </div>
-//               <div className="mt-1 text-xs rtt-muted">
-//                 Complete CE modules, pass the test, and download your
-//                 certificate.
-//               </div>
-//             </div>
-//             <div className="mt-4 grid gap-3">
-//               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-//                 <div className="text-sm font-semibold">
-//                   Built for Renewal Season
-//                 </div>
-//                 <div className="mt-1 text-xs rtt-muted">
-//                   Designed for technologists who need credits done fast —
-//                   without overpaying.
-//                 </div>
-//               </div>
-
-//               {/* <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-//                 <div className="text-sm font-semibold">
-//                   Multi-Credit Modules
-//                 </div>
-//                 <div className="mt-1 text-xs rtt-muted">
-//                   Earn multiple credits per course to finish faster.
-//                 </div>
-//               </div> */}
-
-//               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-//                 <div className="text-sm font-semibold">
-//                   Simple End-of-Course Test
-//                 </div>
-//                 <div className="mt-1 text-xs rtt-muted">
-//                   Straightforward assessment with no unnecessary steps.
-//                 </div>
-//               </div>
-
-//               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-//                 <div className="text-sm font-semibold">
-//                   Instant Completion Certificate
-//                 </div>
-//                 <div className="mt-1 text-xs rtt-muted">
-//                   Download your certificate immediately after passing.
-//                 </div>
-//               </div>
-//             </div>
-//             {/* <div className="mt-4 rounded-2xl border border-yellow-400/25 bg-yellow-400/10 p-4">
-//               <div className="text-sm font-semibold">
-//                 24-Credit Continuing Education Biennium Bundle — $100
-//               </div>
-//               <div className="mt-1 text-xs rtt-muted">
-//                 Or choose individual modules to complete only the credits you
-//                 need.
-//               </div>
-//             </div> */}
-
-//             <div className="mt-4 rounded-2xl border border-yellow-400/25 bg-yellow-400/10 p-4">
-//               <div className="text-sm font-semibold">
-//                 Complete Your ARRT Continuing Education Online
-//               </div>
-//               <div className="mt-1 text-xs rtt-muted">
-//                 Structured modules with simple end-of-course tests.
-//               </div>
-//             </div>
-//             <div className="mt-5">
-//               <Link
-//                 href="/app/ce"
-//                 className="rtt-btn rtt-btn-cta w-full justify-center"
-//               >
-//                 Get Continuing Education
-//               </Link>
-//             </div>
-//           </div>
-//         </div>
-//       </section>
-
-//       {/* ARRT Testimonials */}
-//       {/* <div className="mx-auto max-w-6xl px-5 pb-16">
-//         <div className="text-2xl pb-16 font-semibold text-center">
-//           Students Who Used Rad Tech Tutor
-//         </div>
-
-//         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-//           <div className="rtt-card rounded-2xl p-6">
-//             <div className="text-sm text-white/90">
-//               “I passed the ARRT on my first attempt after using the Essential
-//               100 and mastery system. It helped me focus on exactly what I was
-//               missing.”
-//             </div>
-//             <div className="mt-4 text-xs rtt-muted">— Alyssa Martinez</div>
-//           </div>
-
-//           <div className="rtt-card rounded-2xl p-6">
-//             <div className="text-sm text-white/90">
-//               “The weak-spot repetition system forced me to actually learn the
-//               material instead of memorizing answers.”
-//             </div>
-//             <div className="mt-4 text-xs rtt-muted">— Danielle Brooks</div>
-//           </div>
-
-//           <div className="rtt-card rounded-2xl p-6">
-//             <div className="text-sm text-white/90">
-//               “This felt different from other prep tools. It showed me where I
-//               was weak and helped me close those gaps.”
-//             </div>
-//             <div className="mt-4 text-xs rtt-muted">— Michael Carter</div>
-//           </div>
-//         </div>
-//       </div> */}
-
-//       {/* Feature grid */}
-//       {/* <section className="mx-auto max-w-6xl px-5 pb-16">
-//         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-//           <Feature
-//             title="Teal = Correct"
-//             desc="I passed the ARRT on my first attempt after using the Essential
-//               100 and mastery system. It helped me focus on exactly what I was
-//               missing."
-//           />
-//           <Feature
-//             title="Yellow = Next step"
-//             desc="CTAs and neutral prompts stay yellow so your eye always finds the action."
-//           />
-//           <Feature
-//             title="Red = Wrong / risk"
-//             desc="Mistakes and locked boundaries use red when needed—clear, not noisy."
-//           />
-//         </div>
-
-//         <div className="mt-10 rounded-3xl border border-[color:var(--rtt-border)] bg-[color:var(--rtt-card)] p-6">
-//           <div className="text-lg font-semibold">Start Practicing for Free</div>
-//           <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[color:var(--rtt-muted)]">
-//             <li>Free diagnostic flow with results + breakdown.</li>
-//             <li>
-//               Organized study plans: Essential 100 Questions, Mastery 250
-//               Questions, 500+ High Yield Question Bank
-//             </li>
-//             <li>Track your progress from Day 1 of studying till Test date</li>
-//           </ul>
-//           <div className="mt-5 flex flex-wrap gap-3">
-//             <Link href="/diagnostic/free" className="rtt-btn rtt-btn-cta">
-//               Take the Free Diagnostic
-//             </Link>
-//             <Link href="/app/practice" className="rtt-btn rtt-btn-secondary">
-//               Go to Practice
-//             </Link>
-//           </div>
-//         </div>
-//       </section> */}
-//     </div>
-//   );
-// }

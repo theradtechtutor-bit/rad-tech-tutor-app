@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import MarketingNav from './_components/MarketingNav';
 import PostHogProvider from './posthog-provider';
+import SocialLinks from './_components/SocialLinks';
 
 export const metadata: Metadata = {
   title: 'Rad Tech Tutor',
@@ -24,6 +25,7 @@ export default function RootLayout({
 
         <footer className="border-t border-white/10 px-6 py-4 text-center text-xs text-white/45">
   <div className="mx-auto max-w-5xl space-y-3">
+    <SocialLinks />
     <div>
       Disclaimer: The Rad Tech Tutor LLC provides original ARRT®-style
       practice questions and educational materials created by The Rad Tech

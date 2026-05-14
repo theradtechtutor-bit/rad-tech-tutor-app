@@ -1679,8 +1679,9 @@ const readiness = useMemo(() => {
 
 <p>
   <span className="font-semibold text-white">
-    If you can consistently score 90%+ across all 5 full length mock exams, you are ready
-    for the real ARRT®.
+    If you can consistently score 90%+ across all 5 full-length mock exams, 
+    you are demonstrating strong ARRT® readiness. These percentages are meant 
+    to reflect preparedness and readiness — not predict your exact registry score.
   </span>
 </p>
 </div>
@@ -2122,10 +2123,11 @@ const readiness = useMemo(() => {
                   Radiography ARRT® Registry Readiness
                 </div>
                 <div className="mt-2 text-xs text-white/50">
-                  Pass all 5 full-length mock exams with a score of 90% or
-                  higher to be ready for the ARRT® exam. Mini Mocks are for
-                  practice — they help you improve, but only full mock exams
-                  count toward readiness.
+                  Pass all 5 full-length mock exams with a score of 90% or 
+                  higher to build ARRT® exam readiness. These scores are designed 
+                  to measure how prepared you are to pass — not predict the exact 
+                  score you’ll receive on the registry. Mini Mocks are for practice 
+                  and improvement, but only full mock exams count toward readiness.
                 </div>
 
                 {readiness.fullyReady && (
