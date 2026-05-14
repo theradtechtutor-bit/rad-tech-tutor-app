@@ -369,7 +369,9 @@ function MiniMockFeedbackModal({
             </p>
 
             <div className="mt-4 flex gap-2">
-              {[1, 2, 3, 4, 5].map((star) => (
+              {/* {[1, 2, 3, 4, 5].map((star) => ( */}
+              {[1, 2, 3].map((star) => (
+
                 <button
                   key={star}
                   type="button"
@@ -518,7 +520,9 @@ const practiceSessionScopeKey = isFullQBank
     useState<FeedbackKind | null>(null);
 
   const isMiniLocked =
-    !!requestedMiniNumber && requestedMiniNumber > 5 && !isPro;
+    // !!requestedMiniNumber && requestedMiniNumber > 5 && !isPro;
+    !!requestedMiniNumber && requestedMiniNumber > 3 && !isPro;
+
 
   const locked = (isPaidSet(setId) && !isPro) || isMiniLocked;
 
@@ -538,8 +542,11 @@ const practiceSessionScopeKey = isFullQBank
       setQuestionsById(byId);
 
       const miniMap = buildMiniMocks(originalQuestions);
-      const unlockedIds = new Set(
-        [1, 2, 3, 4, 5].flatMap((m) => miniMap[m] || []).map((q) => q.id),
+      // const unlockedIds = new Set(
+      //   [1, 2, 3, 4, 5].flatMap((m) => miniMap[m] || []).map((q) => q.id),
+      // );
+            const unlockedIds = new Set(
+        [1, 2, 3].flatMap((m) => miniMap[m] || []).map((q) => q.id),
       );
       const practicePool = isPro
         ? originalQuestions
@@ -1169,8 +1176,11 @@ if (masteryMode && isFullQBank) {
       const miniMap = buildMiniMocks(
         ids.map((id) => byId[id]).filter(Boolean) as Question[],
       );
-      const unlocked = new Set(
-        [1, 2, 3, 4, 5].flatMap((m) => (miniMap[m] || []).map((q) => q.id)),
+      // const unlocked = new Set(
+      //   [1, 2, 3, 4, 5].flatMap((m) => (miniMap[m] || []).map((q) => q.id)),
+      // );
+            const unlocked = new Set(
+        [1, 2, 3].flatMap((m) => (miniMap[m] || []).map((q) => q.id)),
       );
       ids = ids.filter((id) => unlocked.has(id));
     }
@@ -1599,7 +1609,9 @@ return (
                   const val = e.target.value;
                   if (val.startsWith('mini-')) {
                     const miniNum = Number(val.replace('mini-', ''));
-                    if (miniNum > 5 && !isPro) {
+                    // if (miniNum > 5 && !isPro) {
+                    if (miniNum > 3 && !isPro) {
+
                       router.push('/app/upgrade');
                       return;
                     }
@@ -1615,7 +1627,9 @@ return (
                   const miniNum = isMini
                     ? Number(option.key.replace('mini-', ''))
                     : null;
-                  const lockedMini = !!(miniNum && miniNum > 5 && !isPro);
+                  // const lockedMini = !!(miniNum && miniNum > 5 && !isPro);
+                  const lockedMini = !!(miniNum && miniNum > 3 && !isPro);
+
 
                   return (
                     <option
@@ -1689,12 +1703,6 @@ return (
         <span className="font-semibold text-white">Mini Mock Exam</span> to
         measure improvement.
       </div>
-      {/* {!isPro ? (
-          <div className="mt-3 rounded-2xl border border-yellow-400/20 bg-yellow-400/10 px-4 py-3 text-sm text-yellow-100">
-            Free version: Practice uses unlocked questions from Mini Mocks 1–5
-            only. Pro unlocks the full bank of questions.
-          </div>
-        ) : null} */}
     </div>
 
     <div

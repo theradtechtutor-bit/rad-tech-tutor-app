@@ -563,7 +563,9 @@ function SidebarMiniMock({
   onResume: () => void;
   onRestart: () => void;
 }) {
-  const isLocked = mini > 5 && !isPro;
+  // const isLocked = mini > 5 && !isPro;
+  const isLocked = mini > 3 && !isPro;
+
   const status = bank.miniStatus[String(mini)];
   const completed = Boolean(status?.attempts);
   const miniState = getMiniState(bank, attempts, mini);
@@ -1720,7 +1722,7 @@ const readiness = useMemo(() => {
                         Membership Advantage
                       </div>
                       <h3 className="mt-2 text-2xl font-semibold tracking-tight text-white md:text-3xl">
-                        Most students upgrade before finishing all 5 mocks
+                        Most students upgrade before completing the free mini mocks
                       </h3>
                     </div>
 
@@ -1767,8 +1769,10 @@ const readiness = useMemo(() => {
                   <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-black/20 p-4">
                     <div>
                       <div className="text-lg font-semibold text-white">
-                        Don’t stop now — you’ve completed {challenge.completed}
-                        /5 mocks.{' '}
+                        {/* Don’t stop now — you’ve completed {challenge.completed}
+                        /5 mocks.{' '} */}
+
+                        Don’t stop now — Pro unlocks the full RTT Mastery Method.
                       </div>
                       <div className="text-sm text-white/65">
                         The students who improve fastest keep testing, reviewing
@@ -1807,7 +1811,7 @@ const readiness = useMemo(() => {
                             Limited-Time Challenge
                           </div>
                           <div className="text-lg font-semibold text-white">
-                            5 Mock Challenge
+                            3 Mock Challenge
                           </div>
                         </div>
                       </div>
@@ -1829,7 +1833,9 @@ const readiness = useMemo(() => {
                   <div className="px-5 py-5 md:px-6 md:py-6">
                     <div className="max-w-3xl">
                       <h3 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">
-                        Complete 5 Mini Mocks + average 90%
+                        {/* Complete 5 Mini Mocks + average 90% */}
+                        Complete 3 Mini Mocks + average 90%
+
                       </h3>
 
                       <p className="mt-2 text-sm leading-6 text-white/72 md:text-base">
@@ -1868,7 +1874,9 @@ const readiness = useMemo(() => {
                         </div>
                         <div className="mt-1 text-2xl font-semibold text-white">
                           {challenge.completed}{' '}
-                          <span className="text-white/35">/ 5</span>
+                          {/* <span className="text-white/35">/ 5</span> */}
+                          <span className="text-white/35">/ 3</span>
+
                         </div>
                       </div>
 
@@ -1896,9 +1904,15 @@ const readiness = useMemo(() => {
                         <span className="text-white/65">
                           Challenge Progress
                         </span>
-                        <span className="font-semibold text-white">
+                        {/* <span className="font-semibold text-white">
                           {challenge.completed < 5
                             ? `${challenge.completed}/5 complete`
+                            : `${challenge.avg}% average`}
+                        </span> */}
+
+                        <span className="font-semibold text-white">
+                          {challenge.completed < 3
+                            ? `${challenge.completed}/3 complete`
                             : `${challenge.avg}% average`}
                         </span>
                       </div>
@@ -1906,10 +1920,18 @@ const readiness = useMemo(() => {
                       <div className="h-3 overflow-hidden rounded-full bg-black/35">
                         <div
                           className="h-full rounded-full bg-[linear-gradient(90deg,rgba(250,204,21,0.95),rgba(16,185,129,0.95))] transition-all duration-500"
+                          // style={{
+                          //   width: `${
+                          //     challenge.completed < 5
+                          //       ? (challenge.completed / 5) * 100
+                          //       : Math.min(100, (challenge.avg / 90) * 100)
+                          //   }%`,
+                          // }}
+
                           style={{
                             width: `${
-                              challenge.completed < 5
-                                ? (challenge.completed / 5) * 100
+                              challenge.completed < 3
+                                ? (challenge.completed / 3) * 100
                                 : Math.min(100, (challenge.avg / 90) * 100)
                             }%`,
                           }}
@@ -1931,9 +1953,15 @@ const readiness = useMemo(() => {
                           </>
                         ) : (
                           <>
-                            <div className="text-lg font-semibold text-yellow-300">
+                            {/* <div className="text-lg font-semibold text-yellow-300">
                               {challenge.completed < 5
                                 ? `${5 - challenge.completed} mocks left to unlock 10% off`
+                                : `${90 - challenge.avg}% away from unlocking your reward`}
+                            </div> */}
+
+                            <div className="text-lg font-semibold text-yellow-300">
+                              {challenge.completed < 3
+                                ? `${3 - challenge.completed} mocks left to unlock 10% off`
                                 : `${90 - challenge.avg}% away from unlocking your reward`}
                             </div>
                             <div className="text-sm text-white/65">
@@ -1959,8 +1987,12 @@ const readiness = useMemo(() => {
                               ? currentBank.currentMini
                               : 1;
 
+                          // const nextMini = shouldGatePro
+                          // ? Math.min(nextMiniRaw, 5)
+                          // : nextMiniRaw;
+
                           const nextMini = shouldGatePro
-                          ? Math.min(nextMiniRaw, 5)
+                          ? Math.min(nextMiniRaw, 3)
                           : nextMiniRaw;
 
                           setSelectedLesson(`mini-${nextMini}` as LessonKey);
@@ -2286,7 +2318,9 @@ const readiness = useMemo(() => {
                             summary={summary}
                             attempts={attempts}
                             onSelect={() => {
-                              if (mini > 5 && shouldGatePro) {
+                              // if (mini > 5 && shouldGatePro) {
+                              if (mini > 3 && shouldGatePro) {
+
                               window.location.href = '/app/upgrade';
                               return;
 }
@@ -2294,7 +2328,9 @@ const readiness = useMemo(() => {
                               setPendingScrollTarget(null);
                             }}
                             onStart={() => {
-                              if (mini > 5 && shouldGatePro) {
+                              // if (mini > 5 && shouldGatePro) {
+                              if (mini > 3 && shouldGatePro) {
+
                                 window.location.href = '/app/upgrade';
                                 return;
                               }
@@ -2306,7 +2342,9 @@ const readiness = useMemo(() => {
                               });
                             }}
                             onResume={() => {
-                              if (mini > 5 && shouldGatePro) {
+                              // if (mini > 5 && shouldGatePro) {
+                              if (mini > 3 && shouldGatePro) {
+
                                 window.location.href = '/app/upgrade';
                                 return;
                               }
@@ -2323,7 +2361,25 @@ const readiness = useMemo(() => {
                             onRestart={() => handleRestartMini(mini)}
                           />
                         </div>
-                        {mini === 5 && shouldGatePro && (
+                        {/* {mini === 5 && shouldGatePro && (
+                          <div className="mt-2 flex items-center justify-between rounded-lg border border-yellow-400/20 bg-yellow-400/5 px-3 py-2 text-xs">
+                            <div className="text-white/70">
+                              🔒 Continue your progress — unlock all Mini Mocks
+                              and QBanks
+                            </div>
+
+                            <button
+                              onClick={() => {
+                                window.location.href = '/app/upgrade';
+                              }}
+                              className="ml-3 rounded-md bg-yellow-400 px-3 py-1 text-[11px] font-semibold text-black hover:bg-yellow-300"
+                            >
+                              Upgrade
+                            </button>
+                          </div>
+                        )} */}
+
+                                                {mini === 3 && shouldGatePro && (
                           <div className="mt-2 flex items-center justify-between rounded-lg border border-yellow-400/20 bg-yellow-400/5 px-3 py-2 text-xs">
                             <div className="text-white/70">
                               🔒 Continue your progress — unlock all Mini Mocks

@@ -131,8 +131,14 @@ export function selectQuestionsForScope<T extends QuestionLike>(questions: T[], 
     const miniMap = buildMiniMocks(questions);
 
     // Build unlocked pool (Mini 1–5)
-    const unlocked = new Set(
-      [1, 2, 3, 4, 5]
+    // const unlocked = new Set(
+    //   [1, 2, 3, 4, 5]
+    //     .flatMap((m) => miniMap[m] || [])
+    //     .map((q) => q.id)
+    // );
+
+        const unlocked = new Set(
+      [1, 2, 3]
         .flatMap((m) => miniMap[m] || [])
         .map((q) => q.id)
     );

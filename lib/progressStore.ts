@@ -1057,12 +1057,14 @@ export function getMiniMockChallengeStats(setId: string) {
   const bank = readBankMastery(setId);
   const alreadyUnlocked = hasMiniMockChallengeUnlocked(setId);
 
-  const firstFive = [1, 2, 3, 4, 5];
+  // const firstFive = [1, 2, 3, 4, 5];
+  const freeMinis = [1, 2, 3];
+
 
   let completedNow = 0;
   let totalScoreNow = 0;
 
-  for (const id of firstFive) {
+  for (const id of freeMinis) {
     const mock = bank.miniStatus[String(id)];
 
     if (mock && mock.bestScore != null) {
@@ -1073,7 +1075,9 @@ export function getMiniMockChallengeStats(setId: string) {
 
   const avgNow =
     completedNow > 0 ? Math.round(totalScoreNow / completedNow) : 0;
-  const qualifiesNow = completedNow >= 5 && avgNow >= 90;
+  // const qualifiesNow = completedNow >= 5 && avgNow >= 90;
+  const qualifiesNow = completedNow >= 3 && avgNow >= 90;
+
 
   if (qualifiesNow && !alreadyUnlocked) {
     unlockMiniMockChallenge(setId);
@@ -1082,7 +1086,9 @@ export function getMiniMockChallengeStats(setId: string) {
   const unlocked = alreadyUnlocked || qualifiesNow;
 
   return {
-    completed: unlocked ? 5 : completedNow,
+    // completed: unlocked ? 5 : completedNow,
+    completed: unlocked ? 3 : completedNow,
+
     avg: unlocked ? Math.max(avgNow, 90) : avgNow,
     qualifies: unlocked,
     unlocked,

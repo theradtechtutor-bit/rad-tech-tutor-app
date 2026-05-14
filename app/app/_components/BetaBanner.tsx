@@ -14,7 +14,7 @@ const ALLOWED_PATHS = [
 ];
 
 const MESSAGE =
-  '🎯 5 Mock Challenge: Complete 5 Mini Mocks + 90% avg to unlock 10% off Pro. Tap to view challenge ↓';
+  '🎯 3 Mock Challenge: Complete 3 Mini Mocks + 90% avg to unlock 10% off Pro. Tap to view challenge ↓';
   // '🩻 Practice. Fix mistakes. Repeat. Score higher. Pass the Radiology ARRT®  with confidence.';
   // '🚧 Improving daily based on real student feedback. We’re aware of a few issues and working to resolve them soon. Your core study tools should still work smoothly. We appreciate your patience. 🚧';
 

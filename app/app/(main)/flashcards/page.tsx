@@ -287,10 +287,15 @@ function FlashcardsPageInner() {
 
         const miniMap = buildMiniMocks(questions);
 
+        // const unlockedIds = new Set(
+        //   [1, 2, 3, 4, 5].flatMap((m) => (miniMap[m] || []).map((q) => q.id)),
+        // );
         const unlockedIds = new Set(
-          [1, 2, 3, 4, 5].flatMap((m) => (miniMap[m] || []).map((q) => q.id)),
+          [1, 2, 3].flatMap((m) => (miniMap[m] || []).map((q) => q.id)),
         );
 
+
+        
         const flashcardPool = isPro
           ? questions
           : questions.filter((q) => unlockedIds.has(q.id));
@@ -614,7 +619,9 @@ function FlashcardsPageInner() {
                 {filterOptions.map((option) => {
                   const isMini = option.key.startsWith('mini-');
                   const num = isMini ? Number(option.key.split('-')[1]) : 0;
-                  const locked = isMini && num > 5 && !isPro;
+                  // const locked = isMini && num > 5 && !isPro;
+                  const locked = isMini && num > 3 && !isPro;
+
                   return (
                     <option
                       key={option.key}

@@ -441,7 +441,8 @@ const openSurvey = () => {
             </p>
 
             <div className="mt-4 flex gap-2">
-              {[1, 2, 3, 4, 5].map((star) => (
+              {/* {[1, 2, 3, 4, 5].map((star) => ( */}
+              {[1, 2, 3].map((star) => (
                 <button
                   key={star}
                   type="button"
@@ -572,8 +573,11 @@ function MockExamPageInner() {
     ).length;
 
     const miniMap = buildMiniMocks(allQuestions);
+    // const unlockedIds = new Set(
+    //   [1, 2, 3, 4, 5].flatMap((m) => miniMap[m] || []).map((item) => item.id),
+    // );
     const unlockedIds = new Set(
-      [1, 2, 3, 4, 5].flatMap((m) => miniMap[m] || []).map((item) => item.id),
+      [1, 2, 3].flatMap((m) => miniMap[m] || []).map((item) => item.id),
     );
 
     const unlockedCount = allQuestions.filter(
@@ -1386,9 +1390,17 @@ useEffect(() => {
                       }
                       className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white/85 outline-none"
                     >
-                      {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
+                      {/* {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
                         <option key={n} value={n} disabled={!isPro && n > 5}>
                           {!isPro && n > 5
+                            ? `Mini Mock ${n} PRO 🔒`
+                            : `Mini Mock ${n}`}
+                        </option>
+                      ))} */}
+
+                                            {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
+                        <option key={n} value={n} disabled={!isPro && n > 3}>
+                          {!isPro && n > 3
                             ? `Mini Mock ${n} PRO 🔒`
                             : `Mini Mock ${n}`}
                         </option>
@@ -1409,9 +1421,15 @@ useEffect(() => {
               </div>
 
               {scope === 'category' ? (
-                <div className="mt-4 text-sm text-white/70">
+                // <div className="mt-4 text-sm text-white/70">
+                //   {!isPro
+                //     ? `Free category mocks use unlocked questions from Mini Mocks 1–5 only.`
+                //     : `Pro includes the full category question pool.`}
+                // </div>
+
+                                <div className="mt-4 text-sm text-white/70">
                   {!isPro
-                    ? `Free category mocks use unlocked questions from Mini Mocks 1–5 only.`
+                    ? `Free category mocks use unlocked questions from Mini Mocks 1–3 only.`
                     : `Pro includes the full category question pool.`}
                 </div>
               ) : null}
@@ -1498,7 +1516,7 @@ useEffect(() => {
                 You unlocked 10% off Pro
               </div>
               <div className="mt-3 text-sm leading-6 text-white/70">
-                You completed the 5 Mock Challenge at a 90% average or higher.
+                You completed the 3 Mock Challenge at a 90% average or higher.
                 Use code{' '}
                 <span className="font-semibold text-yellow-300">MINI10</span> at
                 checkout.
@@ -1611,13 +1629,13 @@ useEffect(() => {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-200/85">
-                    5 Mock Challenge
+                    3 Mock Challenge
                   </div>
                   <div className="mt-2 text-lg font-semibold text-white">
-                    Complete 5 Mini Mocks + average 90%
+                    Complete 3 Mini Mocks + average 90%
                   </div>
                   <div className="mt-3 space-y-1 text-sm text-white/68">
-                    <div>Mocks Completed: {challenge.completed} / 5</div>
+                    <div>Mocks Completed: {challenge.completed} / 3</div>
                     <div>Average Score: {challenge.avg}%</div>
                     <div>Target: 90%</div>
                   </div>
@@ -1637,7 +1655,7 @@ useEffect(() => {
                 <div
                   className="h-full rounded-full bg-[linear-gradient(90deg,rgba(45,212,191,0.98),rgba(16,185,129,0.65))]"
                   style={{
-                    width: `${Math.min(100, Math.round((challenge.completed / 5) * 100))}%`,
+                    width: `${Math.min(100, Math.round((challenge.completed / 3) * 100))}%`,
                   }}
                 />
               </div>
@@ -1647,9 +1665,9 @@ useEffect(() => {
                   <span className="text-yellow-300">
                     ✅ Challenge completed — use code MINI10 for 10% off Pro.
                   </span>
-                ) : challenge.completed < 5 ? (
+                ) : challenge.completed < 3 ? (
                   <span className="text-yellow-300">
-                    {5 - challenge.completed} mocks left to unlock your reward.
+                    {3 - challenge.completed} mocks left to unlock your reward.
                   </span>
                 ) : (
                   <span className="text-yellow-300">
