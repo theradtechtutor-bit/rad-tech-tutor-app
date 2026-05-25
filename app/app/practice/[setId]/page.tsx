@@ -251,20 +251,53 @@ function MiniMockFeedbackModal({
 }: FeedbackModalProps) {
   const [freeAnswer, setFreeAnswer] = useState<FeedbackAnswer | null>(null);
   const [rating, setRating] = useState<number | null>(null);
+  const [feedbackComment, setFeedbackComment] = useState('');
+
+  const feedbackCompletedKey =
+    kind === 'pro' ? 'rtt_pro_feedback_completed' : 'rtt_free_feedback_completed';
+
+  const submitInlineFeedback = () => {
+    const comment = feedbackComment.trim();
+    if (!comment) return;
+
+    if (kind === 'pro') {
+      if (!rating) return;
+
+      posthog.capture('pro_feedback_rating_comment', {
+        rating,
+        comment,
+        comment_length: comment.length,
+      });
+    } else {
+      if (!freeAnswer) return;
+
+      posthog.capture('rtt_enjoying_comment', {
+        answer: freeAnswer,
+        comment,
+        comment_length: comment.length,
+      });
+    }
+
+    localStorage.setItem(feedbackCompletedKey, 'true');
+    onClose();
+  };
 
   const openSurvey = () => {
+    const comment = feedbackComment.trim();
+
     posthog.capture(
       kind === 'pro'
         ? 'pro_feedback_survey_clicked'
         : 'free_feedback_survey_clicked',
+      {
+        rating: kind === 'pro' ? rating : undefined,
+        answer: kind === 'free' ? freeAnswer : undefined,
+        inline_comment: comment || undefined,
+        inline_comment_length: comment.length,
+      },
     );
 
-    if (kind === 'pro') {
-      localStorage.setItem('rtt_pro_feedback_completed', 'true');
-    } else {
-      localStorage.setItem('rtt_free_feedback_completed', 'true');
-    }
-
+    localStorage.setItem(feedbackCompletedKey, 'true');
     window.open(surveyUrl, '_blank', 'noopener,noreferrer');
   };
 
@@ -330,19 +363,42 @@ function MiniMockFeedbackModal({
               <>
                 <p className="text-sm leading-6 text-white/75">
                   {freeAnswer === 'yes'
-                    ? 'That’s great to hear. Would you take a quick 1-minute survey and tell us why this has been helpful for you so far?'
-                    : 'Thanks for being honest. Would you take a quick 1-minute survey and tell us what we can improve?'}
+                    ? 'That’s great to hear. Tell us why you gave that answer.'
+                    : 'Thanks for being honest. Tell us why you gave that answer.'}
                 </p>
+
+                <label className="mt-4 block text-sm font-semibold text-white/85">
+                  Tell us why you gave this rating
+                </label>
+                <textarea
+                  value={feedbackComment}
+                  onChange={(event) => setFeedbackComment(event.target.value)}
+                  placeholder={
+                    freeAnswer === 'yes'
+                      ? 'What has been helpful so far?'
+                      : 'What is missing, confusing, or not helping yet?'
+                  }
+                  className="mt-2 min-h-32 w-full resize-y rounded-2xl border border-white/10 bg-black/25 p-4 text-sm leading-6 text-white outline-none placeholder:text-white/35 focus:border-yellow-300/60"
+                />
 
                 <div className="mt-4 rounded-2xl border border-yellow-400/20 bg-yellow-400/10 p-4 text-sm text-white/75">
                   As a thank-you, you’ll get{' '}
                   <span className="font-semibold text-yellow-300">
                     10% off Pro
                   </span>{' '}
-                  after completing it.
+                  if you complete the full survey.
                 </div>
 
                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  <button
+                    type="button"
+                    onClick={submitInlineFeedback}
+                    disabled={!feedbackComment.trim()}
+                    className="rounded-2xl bg-emerald-400 px-4 py-3 text-sm font-semibold text-black hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    Submit Feedback
+                  </button>
+
                   <button
                     type="button"
                     onClick={openSurvey}
@@ -350,15 +406,15 @@ function MiniMockFeedbackModal({
                   >
                     Take Survey & Get 10% Off
                   </button>
-
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    className="rounded-2xl bg-white/10 px-4 py-3 text-sm font-semibold text-white hover:bg-white/15"
-                  >
-                    Maybe later
-                  </button>
                 </div>
+
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="mt-3 w-full text-sm text-white/50 hover:text-white/70"
+                >
+                  Maybe later
+                </button>
               </>
             )}
           </div>
@@ -369,9 +425,7 @@ function MiniMockFeedbackModal({
             </p>
 
             <div className="mt-4 flex gap-2">
-              {/* {[1, 2, 3, 4, 5].map((star) => ( */}
-              {[1, 2, 3].map((star) => (
-
+              {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
                   type="button"
@@ -394,13 +448,33 @@ function MiniMockFeedbackModal({
             {rating ? (
               <div className="mt-5">
                 <p className="mb-3 text-sm text-white/70">
-                  Help us improve this for future students.
+                  Help us understand why you gave {rating}{' '}
+                  {rating === 1 ? 'star' : 'stars'}.
                 </p>
+
+                <label className="block text-sm font-semibold text-white/85">
+                  Tell us why you gave this rating
+                </label>
+                <textarea
+                  value={feedbackComment}
+                  onChange={(event) => setFeedbackComment(event.target.value)}
+                  placeholder="What made you choose this rating? What should we keep, fix, or improve?"
+                  className="mt-2 min-h-32 w-full resize-y rounded-2xl border border-white/10 bg-black/25 p-4 text-sm leading-6 text-white outline-none placeholder:text-white/35 focus:border-yellow-300/60"
+                />
+
+                <button
+                  type="button"
+                  onClick={submitInlineFeedback}
+                  disabled={!feedbackComment.trim()}
+                  className="mt-4 w-full rounded-2xl bg-emerald-400 px-4 py-3 text-sm font-semibold text-black hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Submit Feedback
+                </button>
 
                 <button
                   type="button"
                   onClick={openSurvey}
-                  className="w-full rounded-2xl bg-yellow-400 px-4 py-3 text-sm font-semibold text-black hover:brightness-95"
+                  className="mt-3 w-full rounded-2xl bg-yellow-400 px-4 py-3 text-sm font-semibold text-black hover:brightness-95"
                 >
                   Take 1-Minute Survey
                 </button>
