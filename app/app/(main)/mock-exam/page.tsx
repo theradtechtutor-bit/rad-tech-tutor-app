@@ -368,6 +368,23 @@ function MiniMockFeedbackModal({
     window.open(surveyUrl, '_blank', 'noopener,noreferrer');
   };
 
+  const dismissFeedback = () => {
+    posthog.capture(
+      kind === 'pro'
+        ? 'pro_feedback_dismissed'
+        : 'free_feedback_dismissed',
+      {
+        rating: kind === 'pro' ? rating : undefined,
+        answer: kind === 'free' ? freeAnswer : undefined,
+        comment_started: feedbackComment.trim().length > 0,
+        comment_length: feedbackComment.trim().length,
+        answered: kind === 'pro' ? Boolean(rating) : Boolean(freeAnswer),
+      },
+    );
+
+    onClose();
+};
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-6 backdrop-blur-sm">
       <div className="w-full max-w-lg rounded-3xl border border-white/10 bg-[#10131a] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
@@ -385,7 +402,7 @@ function MiniMockFeedbackModal({
 
           <button
             type="button"
-            onClick={onClose}
+            onClick={dismissFeedback}
             className="rounded-full bg-white/8 px-3 py-1 text-sm font-semibold text-white/70 hover:bg-white/12 hover:text-white"
           >
             ×
@@ -477,7 +494,7 @@ function MiniMockFeedbackModal({
 
                 <button
                   type="button"
-                  onClick={onClose}
+                  onClick={dismissFeedback}
                   className="mt-3 w-full text-sm text-white/50 hover:text-white/70"
                 >
                   Maybe later
@@ -548,7 +565,7 @@ function MiniMockFeedbackModal({
 
                 <button
                   type="button"
-                  onClick={onClose}
+                  onClick={dismissFeedback}
                   className="mt-3 w-full text-sm text-white/50 hover:text-white/70"
                 >
                   Skip
