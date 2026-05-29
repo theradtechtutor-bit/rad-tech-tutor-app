@@ -1714,8 +1714,87 @@ const readiness = useMemo(() => {
                 </div>
               </div>
 
-              {challengeExpired ? (
+              {proStatus === true ? (
                 <div className="mt-6 overflow-hidden rounded-[28px] border border-yellow-400/20 bg-[linear-gradient(135deg,rgba(250,204,21,0.14),rgba(5,8,12,0.96)_55%,rgba(0,0,0,0.98))] p-6 shadow-[0_20px_80px_rgba(250,204,21,0.12)] md:p-8">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-yellow-300/80">
+                        PRO ACCESS ACTIVE
+                      </div>
+                      <h3 className="mt-2 text-2xl font-semibold tracking-tight text-white md:text-3xl">
+                        You have full access to the RTT Mastery Method
+                      </h3>
+                    </div>
+
+                    <div className="rounded-full border border-yellow-400/25 bg-yellow-400/10 px-3 py-1 text-xs font-semibold text-yellow-200">
+                      Active
+                    </div>
+                  </div>
+
+                  <p className="mt-3 max-w-2xl text-sm leading-6 text-white/70 md:text-base">
+                    Keep working through the mini mocks, missed flashcards, and
+                    full mock exams to build registry readiness.
+                  </p>
+
+                  <div className="mt-5 grid gap-3 md:grid-cols-3">
+                    <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
+                      <div className="text-[11px] uppercase tracking-[0.18em] text-white/45">
+                        FULL MOCKS
+                      </div>
+                      <div className="mt-1 text-lg font-semibold text-white">
+                        5 Full Mock Exams
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
+                      <div className="text-[11px] uppercase tracking-[0.18em] text-white/45">
+                        QUESTION BANK
+                      </div>
+                      <div className="mt-1 text-lg font-semibold text-white">
+                        1,000+ ARRT-Style Questions
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
+                      <div className="text-[11px] uppercase tracking-[0.18em] text-white/45">
+                        WEAK POINT REVIEW
+                      </div>
+                      <div className="mt-1 text-lg font-semibold text-white">
+                        Auto-Generated Weak-Point Flashcards
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <div>
+                      <div className="text-lg font-semibold text-white">
+                        Stay consistent — your full study path is unlocked.
+                      </div>
+                      <div className="text-sm text-white/65">
+                        Continue testing, reviewing missed concepts, and closing
+                        weak spots before exam day.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : proStatus === null ? (
+                <div className="mt-6 overflow-hidden rounded-[28px] border border-yellow-400/20 bg-[linear-gradient(135deg,rgba(250,204,21,0.08),rgba(5,8,12,0.96)_55%,rgba(0,0,0,0.98))] p-6 shadow-[0_20px_80px_rgba(250,204,21,0.08)] md:p-8">
+                  <div className="h-3 w-32 rounded-full bg-white/10" />
+                  <div className="mt-4 h-8 w-full max-w-sm rounded-full bg-white/10" />
+                  <div className="mt-4 h-4 w-full max-w-2xl rounded-full bg-white/10" />
+                  <div className="mt-5 grid gap-3 md:grid-cols-3">
+                    <div className="h-20 rounded-2xl bg-white/[0.04]" />
+                    <div className="h-20 rounded-2xl bg-white/[0.04]" />
+                    <div className="h-20 rounded-2xl bg-white/[0.04]" />
+                  </div>
+                  <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <div className="h-5 w-full max-w-md rounded-full bg-white/10" />
+                    <div className="mt-3 h-4 w-full max-w-xl rounded-full bg-white/10" />
+                  </div>
+                </div>
+              ) : (
+                challengeExpired ? (
+                  <div className="mt-6 overflow-hidden rounded-[28px] border border-yellow-400/20 bg-[linear-gradient(135deg,rgba(250,204,21,0.14),rgba(5,8,12,0.96)_55%,rgba(0,0,0,0.98))] p-6 shadow-[0_20px_80px_rgba(250,204,21,0.12)] md:p-8">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-yellow-300/80">
@@ -1794,12 +1873,12 @@ const readiness = useMemo(() => {
                       be charged again.{' '}
                     </div>
                   </div>
-                </div>
-              ) : (
-                <div
-                  id="mock-challenge"
-                  className="mt-6 overflow-hidden rounded-[28px] border border-emerald-300/25 bg-[linear-gradient(135deg,rgba(16,185,129,0.22),rgba(5,8,12,0.96)_55%,rgba(0,0,0,0.98))] shadow-[0_20px_80px_rgba(16,185,129,0.18)]"
-                >
+                  </div>
+                ) : (
+                  <div
+                    id="mock-challenge"
+                    className="mt-6 overflow-hidden rounded-[28px] border border-emerald-300/25 bg-[linear-gradient(135deg,rgba(16,185,129,0.22),rgba(5,8,12,0.96)_55%,rgba(0,0,0,0.98))] shadow-[0_20px_80px_rgba(16,185,129,0.18)]"
+                  >
                   <div className="border-b border-white/10 bg-black/20 px-5 py-3">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div className="flex items-center gap-2">
@@ -1973,52 +2052,55 @@ const readiness = useMemo(() => {
                         )}
                       </div>
 
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (challenge.qualifies) {
-                            window.location.href = '/app/upgrade';
-                            return;
-                          }
+                      {challenge.qualifies && proStatus !== false ? null : (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (challenge.qualifies && proStatus === false) {
+                              window.location.href = '/app/upgrade';
+                              return;
+                            }
 
-                          const nextMiniRaw =
-                            currentBank?.currentMini &&
-                            currentBank.currentMini <= 10
-                              ? currentBank.currentMini
-                              : 1;
+                            const nextMiniRaw =
+                              currentBank?.currentMini &&
+                              currentBank.currentMini <= 10
+                                ? currentBank.currentMini
+                                : 1;
 
-                          // const nextMini = shouldGatePro
-                          // ? Math.min(nextMiniRaw, 5)
-                          // : nextMiniRaw;
+                            // const nextMini = shouldGatePro
+                            // ? Math.min(nextMiniRaw, 5)
+                            // : nextMiniRaw;
 
-                          const nextMini = shouldGatePro
-                          ? Math.min(nextMiniRaw, 3)
-                          : nextMiniRaw;
+                            const nextMini = shouldGatePro
+                            ? Math.min(nextMiniRaw, 3)
+                            : nextMiniRaw;
 
-                          setSelectedLesson(`mini-${nextMini}` as LessonKey);
+                            setSelectedLesson(`mini-${nextMini}` as LessonKey);
 
-                          requestAnimationFrame(() => {
                             requestAnimationFrame(() => {
-                              document
-                                .getElementById(`mini-${nextMini}`)
-                                ?.scrollIntoView({
-                                  behavior: 'smooth',
-                                  block: 'start',
-                                });
+                              requestAnimationFrame(() => {
+                                document
+                                  .getElementById(`mini-${nextMini}`)
+                                  ?.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'start',
+                                  });
+                              });
                             });
-                          });
-                        }}
-                        className="rounded-xl bg-yellow-400 px-5 py-3 text-sm font-semibold text-black hover:bg-yellow-300"
-                      >
-                        {challenge.qualifies
-                          ? 'Upgrade Now'
-                          : challenge.completed > 0
-                            ? 'Continue Challenge'
-                            : 'Start Challenge'}
-                      </button>
+                          }}
+                          className="rounded-xl bg-yellow-400 px-5 py-3 text-sm font-semibold text-black hover:bg-yellow-300"
+                        >
+                          {challenge.qualifies
+                            ? 'Upgrade Now'
+                            : challenge.completed > 0
+                              ? 'Continue Challenge'
+                              : 'Start Challenge'}
+                        </button>
+                      )}
                     </div>
                   </div>
-                </div>
+                  </div>
+                )
               )}
             </div>
 

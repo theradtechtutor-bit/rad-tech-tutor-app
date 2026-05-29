@@ -1629,13 +1629,15 @@ useEffect(() => {
               </div>
 
               <div className="mt-5 flex flex-col gap-2">
-                <Link
-                  href="/app/upgrade"
-                  onClick={() => logMockUpgradeRedirect('mini_mock_challenge_upgrade_link')}
-                  className="rounded-2xl bg-emerald-400 px-4 py-3 text-center text-sm font-semibold text-black hover:brightness-95"
-                >
-                  Upgrade Now
-                </Link>
+                {proStatus === false ? (
+                  <Link
+                    href="/app/upgrade"
+                    onClick={() => logMockUpgradeRedirect('mini_mock_challenge_upgrade_link')}
+                    className="rounded-2xl bg-emerald-400 px-4 py-3 text-center text-sm font-semibold text-black hover:brightness-95"
+                  >
+                    Upgrade Now
+                  </Link>
+                ) : null}
                 <button
                   type="button"
                   onClick={() => setShowChallengeModal(false)}
