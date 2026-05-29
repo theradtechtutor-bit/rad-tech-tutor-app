@@ -19,6 +19,7 @@ import SaveProgressPrompt from '@/app/app/_components/SaveProgressPrompt';
 import PerformanceBreakdown from '@/app/app/_components/PerformanceBreakdown';
 import { useSupabaseSession } from '@/app/app/_hooks/useSupabaseSession';
 import { usePro } from '@/app/app/_lib/usePro';
+import { logUpgradeRedirect } from '@/app/app/_lib/proAccessDebug';
 import {
   buildMiniMocks,
   mapToArrtMajorCategory,
@@ -618,7 +619,8 @@ function MockExamPageInner() {
     { key: 'procedures', label: 'Procedures' },
   ]);
   const proStatus = usePro();
-  const isPro = proStatus ?? false;
+  const isProLoading = proStatus === null;
+  const isPro = proStatus === true;
 
   const [idx, setIdx] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
@@ -651,6 +653,15 @@ function MockExamPageInner() {
       avg: 0,
       qualifies: false,
     };
+
+  function logMockUpgradeRedirect(reason: string) {
+    logUpgradeRedirect({
+      reason,
+      proStatus,
+      userId: session?.user?.id ?? null,
+      email: session?.user?.email ?? null,
+    });
+  }
 
   const categoryCounts = useMemo(() => {
     const totalCount = allQuestions.filter(
@@ -1017,6 +1028,8 @@ useEffect(() => {
   ]);
 
   async function startNew() {
+    if (isProLoading) return;
+
     setErr(null);
     setLoading(true);
 
@@ -1079,6 +1092,7 @@ useEffect(() => {
     if (sp.get('autostart') !== '1') return;
     if (autostartRanRef.current) return;
     if (loading) return;
+    if (isProLoading) return;
 
     autostartRanRef.current = true;
 
@@ -1094,7 +1108,7 @@ useEffect(() => {
     }
 
     void startNew();
-  }, [sp, loading, setId, scope, miniId, activeCategoryKey]);
+  }, [sp, loading, isProLoading, setId, scope, miniId, activeCategoryKey]);
 
   function resumeSaved() {
     const saved = loadSession(flow, setId, scope, miniId, activeCategoryKey);
@@ -1306,7 +1320,7 @@ useEffect(() => {
     // 🚫 DO NOT autostart if user has not explicitly chosen a mini
     if (scope === 'mini' && flow === 'free' && !hasExplicitMini) return;
 
-    if (!autoStart || questions || loading || sp.get('done') === '1') return;
+    if (!autoStart || questions || loading || isProLoading || sp.get('done') === '1') return;
 
     const saved = loadSession(flow, setId, scope, miniId, activeCategoryKey);
     if (saved) {
@@ -1326,6 +1340,7 @@ useEffect(() => {
     sp,
     flow,
     hasExplicitMini,
+    isProLoading,
   ]);
 
   function formatTime(seconds: number | null) {
@@ -1430,19 +1445,19 @@ useEffect(() => {
                       className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white/85 outline-none"
                     >
                       <option value="qbank1">
-                        {!isPro ? 'Full Mock 1 PRO 🔒' : 'Full Mock 1'}
+                        {proStatus === false ? 'Full Mock 1 PRO 🔒' : 'Full Mock 1'}
                       </option>
                       <option value="qbank2">
-                        {!isPro ? 'Full Mock 2 PRO 🔒' : 'Full Mock 2'}
+                        {proStatus === false ? 'Full Mock 2 PRO 🔒' : 'Full Mock 2'}
                       </option>
                       <option value="qbank3">
-                        {!isPro ? 'Full Mock 3 PRO 🔒' : 'Full Mock 3'}
+                        {proStatus === false ? 'Full Mock 3 PRO 🔒' : 'Full Mock 3'}
                       </option>
                       <option value="qbank4">
-                        {!isPro ? 'Full Mock 4 PRO 🔒' : 'Full Mock 4'}
+                        {proStatus === false ? 'Full Mock 4 PRO 🔒' : 'Full Mock 4'}
                       </option>
                       <option value="qbank5">
-                        {!isPro ? 'Full Mock 5 PRO 🔒' : 'Full Mock 5'}
+                        {proStatus === false ? 'Full Mock 5 PRO 🔒' : 'Full Mock 5'}
                       </option>
                     </select>
                   </label>
@@ -1486,8 +1501,8 @@ useEffect(() => {
                       ))} */}
 
                                             {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
-                        <option key={n} value={n} disabled={!isPro && n > 3}>
-                          {!isPro && n > 3
+                        <option key={n} value={n} disabled={proStatus === false && n > 3}>
+                          {proStatus === false && n > 3
                             ? `Mini Mock ${n} PRO 🔒`
                             : `Mini Mock ${n}`}
                         </option>
@@ -1498,9 +1513,9 @@ useEffect(() => {
 
                 <div className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white/70">
                   {scope === 'full'
-                    ? `Choose a full mock bank.${!isPro ? ' Upgrade to unlock.' : ''}`
+                    ? `Choose a full mock bank.${proStatus === false ? ' Upgrade to unlock.' : ''}`
                     : scope === 'category'
-                      ? !isPro
+                      ? proStatus === false
                         ? `Free version: ${categoryCounts.unlocked} unlocked questions. Pro version: ${categoryCounts.total} total questions in this category.`
                         : `Pro version: ${categoryCounts.total} total questions in this category.`
                       : `Mini Mock Exam ${miniId} is your post-test after Practice Test and Flashcards.`}
@@ -1515,7 +1530,7 @@ useEffect(() => {
                 // </div>
 
                                 <div className="mt-4 text-sm text-white/70">
-                  {!isPro
+                  {proStatus === false
                     ? `Free category mocks use unlocked questions from Mini Mocks 1–3 only.`
                     : `Pro includes the full category question pool.`}
                 </div>
@@ -1559,9 +1574,10 @@ useEffect(() => {
                   </button>
                 ) : null}
               </>
-            ) : scope === 'full' && !isPro ? (
+            ) : scope === 'full' && proStatus === false ? (
               <Link
                 href="/app/upgrade"
+                onClick={() => logMockUpgradeRedirect(`mock_full_locked:${setId}`)}
                 className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
               >
                 Upgrade to Unlock Full Mock
@@ -1615,6 +1631,7 @@ useEffect(() => {
               <div className="mt-5 flex flex-col gap-2">
                 <Link
                   href="/app/upgrade"
+                  onClick={() => logMockUpgradeRedirect('mini_mock_challenge_upgrade_link')}
                   className="rounded-2xl bg-emerald-400 px-4 py-3 text-center text-sm font-semibold text-black hover:brightness-95"
                 >
                   Upgrade Now

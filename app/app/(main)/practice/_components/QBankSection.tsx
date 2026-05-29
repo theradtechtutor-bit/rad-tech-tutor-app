@@ -3,11 +3,10 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { useEffect, useMemo, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { usePro } from '@/app/app/_lib/usePro';
 import { getBankMasterySummary } from '@/lib/progressStore';
 
 type Bank = { id: 1 | 2 | 3 | 4 | 5; label: string; locked: boolean };
-type AccessRow = { is_pro: boolean };
 
 type ResumeLinkState = {
   href: string;
@@ -369,51 +368,13 @@ function BankCard({
 }
 
 export default function QBankSection() {
-  const [isPro, setIsPro] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const proStatus = usePro();
+  const isProLoading = proStatus === null;
+  const isPro = proStatus === true || isProLoading;
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    let active = true;
-
-    async function loadAccess() {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (!active) return;
-
-      if (!user) {
-        setIsPro(false);
-        setLoading(false);
-        return;
-      }
-
-      const { data } = await supabase
-        .from('user_access')
-        .select('is_pro')
-        .eq('user_id', user.id)
-        .maybeSingle<AccessRow>();
-
-      if (!active) return;
-      setIsPro(Boolean(data?.is_pro));
-      setLoading(false);
-    }
-
-    loadAccess();
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(() => {
-      loadAccess();
-    });
-
     setMounted(true);
-
-    return () => {
-      active = false;
-      subscription.unsubscribe();
-    };
   }, []);
 
 const banks: Bank[] = useMemo(

@@ -175,7 +175,7 @@ function FlashcardsPageInner() {
   >([{ key: 'all', label: 'All' }]);
   const proStatus = usePro();
   const proLoaded = proStatus !== undefined && proStatus !== null;
-  const isPro = proStatus ?? false;
+  const isPro = proStatus === true;
   const [deck, setDeck] = useState<FlashcardState[]>([]);
   const [mastered, setMastered] = useState<FlashcardState[]>([]);
   const [cursor, setCursor] = useState(0);
@@ -620,7 +620,7 @@ function FlashcardsPageInner() {
                   const isMini = option.key.startsWith('mini-');
                   const num = isMini ? Number(option.key.split('-')[1]) : 0;
                   // const locked = isMini && num > 5 && !isPro;
-                  const locked = isMini && num > 3 && !isPro;
+                  const locked = isMini && num > 3 && proStatus === false;
 
                   return (
                     <option

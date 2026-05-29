@@ -32,6 +32,7 @@ import SaveProgressPrompt from '@/app/app/_components/SaveProgressPrompt';
 import PerformanceBreakdown from '@/app/app/_components/PerformanceBreakdown';
 import { useSupabaseSession } from '@/app/app/_hooks/useSupabaseSession';
 import { usePro } from '@/app/app/_lib/usePro';
+import { logUpgradeRedirect } from '@/app/app/_lib/proAccessDebug';
 import { buildMiniMocks, selectQuestionsForScope } from '@/lib/mockPlan';
 import { captureEvent } from '@/lib/analytics';
 
@@ -584,7 +585,8 @@ const practiceSessionScopeKey = isFullQBank
   const title = useMemo(() => titleForSetId(setId), [setId]);
 
   const proStatus = usePro();
-  const isPro = proStatus ?? false;
+  const isProLoading = proStatus === null;
+  const isPro = proStatus === true;
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
   const [allCategories, setAllCategories] = useState<
@@ -612,13 +614,22 @@ const practiceSessionScopeKey = isFullQBank
 
   const isMiniLocked =
     // !!requestedMiniNumber && requestedMiniNumber > 5 && !isPro;
-    !!requestedMiniNumber && requestedMiniNumber > 3 && !isPro;
+    proStatus === false && !!requestedMiniNumber && requestedMiniNumber > 3;
 
 
-  const locked = (isPaidSet(setId) && !isPro) || isMiniLocked;
+  const locked = (proStatus === false && isPaidSet(setId)) || isMiniLocked;
+
+  function logPracticeUpgradeRedirect(reason: string) {
+    logUpgradeRedirect({
+      reason,
+      proStatus,
+      userId: session?.user?.id ?? null,
+      email: session?.user?.email ?? null,
+    });
+  }
 
   async function initBank() {
-    if (sessionLoading) return;
+    if (sessionLoading || isProLoading) return;
 
     setLoading(true);
     try {
@@ -881,6 +892,7 @@ const practiceSessionScopeKey = isFullQBank
   useEffect(() => {
     if (locked) return;
     if (sessionLoading) return;
+    if (isProLoading) return;
     void initBank();
   }, [
     sessionLoading,
@@ -895,6 +907,7 @@ const practiceSessionScopeKey = isFullQBank
     mini,
     locked,
     isPro,
+    isProLoading,
   ]);
 
   useEffect(() => {
@@ -1263,7 +1276,7 @@ if (masteryMode && isFullQBank) {
 
     if (!ids.length) return [];
 
-    if (!isPro && !masteryMode) {
+    if (proStatus === false && !masteryMode) {
       const miniMap = buildMiniMocks(
         ids.map((id) => byId[id]).filter(Boolean) as Question[],
       );
@@ -1410,6 +1423,11 @@ useEffect(() => {
           <div className="mt-4 flex gap-2">
             <Link
               href="/app/upgrade"
+              onClick={() =>
+                logPracticeUpgradeRedirect(
+                  `locked_practice_set:${setId}:mini:${String(requestedMiniNumber || 'all')}`,
+                )
+              }
               className="rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
             >
               Get Pro
@@ -1701,8 +1719,11 @@ return (
                   if (val.startsWith('mini-')) {
                     const miniNum = Number(val.replace('mini-', ''));
                     // if (miniNum > 5 && !isPro) {
-                    if (miniNum > 3 && !isPro) {
+                    if (miniNum > 3 && proStatus === false) {
 
+                      logPracticeUpgradeRedirect(
+                        `practice_filter_locked_mini:${miniNum}`,
+                      );
                       router.push('/app/upgrade');
                       return;
                     }
@@ -1719,7 +1740,11 @@ return (
                     ? Number(option.key.replace('mini-', ''))
                     : null;
                   // const lockedMini = !!(miniNum && miniNum > 5 && !isPro);
-                  const lockedMini = !!(miniNum && miniNum > 3 && !isPro);
+                  const lockedMini = !!(
+                    miniNum &&
+                    miniNum > 3 &&
+                    proStatus === false
+                  );
 
 
                   return (
@@ -1978,4 +2003,3 @@ return (
   </div>
 );
 }
-
