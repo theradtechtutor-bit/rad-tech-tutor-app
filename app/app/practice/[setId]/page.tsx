@@ -871,14 +871,47 @@ const practiceSessionScopeKey = isFullQBank
           flow === 'free' ? missedInThisFilter.length : saved.missedCount || 0,
         );
       } else {
+        const initialCurrentId = remainingIds[0] || null;
+        const initialAnsweredCount =
+          flow === 'free' ? answeredInThisFilter.length : 0;
+        const initialCorrectCount =
+          flow === 'free' ? correctInThisFilter.length : 0;
+        const initialMissedCount =
+          flow === 'free' ? missedInThisFilter.length : 0;
+        const initialResultById =
+          flow === 'free'
+            ? Object.fromEntries(
+                answeredInThisFilter.map((id) => [id, aggregateCorrect.has(id)]),
+              )
+            : {};
+
         setQueueIds(remainingIds);
-        setCurrentId(remainingIds[0] || null);
+        setCurrentId(initialCurrentId);
         setPicked(null);
         setRevealed(false);
-        setAnsweredCount(flow === 'free' ? answeredInThisFilter.length : 0);
-        setCorrectCount(flow === 'free' ? correctInThisFilter.length : 0);
-        setMissedCount(flow === 'free' ? missedInThisFilter.length : 0);
+        setAnsweredCount(initialAnsweredCount);
+        setCorrectCount(initialCorrectCount);
+        setMissedCount(initialMissedCount);
         if (flow !== 'free') setPracticeCorrectById({});
+
+        if (initialCurrentId && remainingIds.length > 0) {
+          savePracticeSession(practiceSessionScopeKey, {
+            setId,
+            mode: mode as 'all' | 'missed',
+            cat: filterValue,
+            mini: effectiveMiniSessionKey,
+            queueIds: remainingIds,
+            currentId: initialCurrentId,
+            picked: null,
+            revealed: false,
+            answeredCount: initialAnsweredCount,
+            correctCount: initialCorrectCount,
+            missedCount: initialMissedCount,
+            totalCount: originalIds.length,
+            resultById: initialResultById,
+            savedAt: Date.now(),
+          });
+        }
 
         if (!session?.user?.id) {
           clearPracticeSession(practiceSessionScopeKey);
@@ -1055,10 +1088,53 @@ const practiceSessionScopeKey = isFullQBank
       correctCount: snapshot.correctCount,
       missedCount: snapshot.missedCount,
       totalCount,
-      resultById: practiceCorrectById,
+      resultById: snapshot.resultById ?? practiceCorrectById,
       savedAt: Date.now(),
     });
   }
+
+  useEffect(() => {
+    if (skipNextAutosaveRef.current) {
+      skipNextAutosaveRef.current = false;
+      return;
+    }
+    if (locked || loading || !currentId || queueIds.length === 0) return;
+    if (totalCount <= 0) return;
+
+    savePracticeSession(practiceSessionScopeKey, {
+      setId,
+      mode: mode as 'all' | 'missed',
+      cat: filterValue,
+      mini: effectiveMiniSessionKey,
+      queueIds,
+      currentId,
+      picked,
+      revealed,
+      answeredCount,
+      correctCount,
+      missedCount,
+      totalCount,
+      resultById: practiceCorrectById,
+      savedAt: Date.now(),
+    });
+  }, [
+    answeredCount,
+    correctCount,
+    currentId,
+    effectiveMiniSessionKey,
+    filterValue,
+    loading,
+    locked,
+    missedCount,
+    mode,
+    picked,
+    practiceCorrectById,
+    practiceSessionScopeKey,
+    queueIds,
+    revealed,
+    setId,
+    totalCount,
+  ]);
 
   function pick(letter: ChoiceLetter) {
     console.log('pick fired', {
@@ -1414,7 +1490,8 @@ useEffect(() => {
             <MasteryFlowSteps
               currentStep={3}
               currentBankLabel={title}
-              currentMini={miniNumber}
+              currentMini={isFullQBank ? undefined : miniNumber}
+              isFullQBank={isFullQBank}
             />
           </div>
         ) : null}
@@ -1484,8 +1561,8 @@ useEffect(() => {
                     %
                   </div>
                   <div className="mt-2 text-sm text-white/65">
-                    This is your baseline before flashcards and the Mini Mock
-                    Exam.
+                    This is your baseline before flashcards and the{' '}
+                    {isFullQBank ? 'Full Mock Exam' : 'Mini Mock Exam'}.
                   </div>
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-1">
@@ -1782,7 +1859,8 @@ return (
         <MasteryFlowSteps
           currentStep={1}
           currentBankLabel={title}
-          currentMini={miniNumber}
+          currentMini={isFullQBank ? undefined : miniNumber}
+          isFullQBank={isFullQBank}
         />
       </div>
     ) : null}
@@ -1816,8 +1894,10 @@ return (
       </div>
       <div className="mt-2 text-sm text-white/60">
         Wrong answers turn into flashcards. After that, take the{' '}
-        <span className="font-semibold text-white">Mini Mock Exam</span> to
-        measure improvement.
+        <span className="font-semibold text-white">
+          {isFullQBank ? 'Full Mock Exam' : 'Mini Mock Exam'}
+        </span>{' '}
+        to measure improvement.
       </div>
     </div>
 
@@ -1970,8 +2050,9 @@ return (
           </h2>
 
           <p className="mt-3 text-sm text-white/70">
-            You haven’t completed the Practice Test yet. This may affect your
-            Mini Mock score. Are you sure you want to continue?
+            You haven’t completed the Practice Test yet. This may affect your{' '}
+            {isFullQBank ? 'Full Mock' : 'Mini Mock'} score. Are you sure you
+            want to continue?
           </p>
 
           <div className="mt-5 flex justify-end gap-3">
@@ -1994,7 +2075,7 @@ return (
               }}
               className="rounded-lg bg-yellow-400 px-4 py-2 font-semibold text-black"
             >
-              Continue Anyway
+              {isFullQBank ? 'Continue to Full Mock Exam' : 'Continue Anyway'}
             </button>
           </div>
         </div>

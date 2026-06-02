@@ -110,7 +110,7 @@ const [remainingFlashcards, setRemainingFlashcards] = useState(0);
     {
       id: 1,
       title: isFullQBank
-        ? 'Take Full QBank Practice Test'
+        ? 'Take Practice Test'
         : currentMini
           ? hasSavedPracticeSession(setId, currentMini)
             ? `Continue Practice Test ${currentMini}`

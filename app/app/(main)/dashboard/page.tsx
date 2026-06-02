@@ -1535,6 +1535,24 @@ if (savedStep === 'exam' || full.exam.completed) {
     });
   }, [currentBank]);
 
+  const fullMockScore = useMemo(() => {
+    if (!currentBank) {
+      return {
+        score: null as number | null,
+        completed: false,
+      };
+    }
+
+    const full = readFullQbankMastery(currentBank.setId);
+    return {
+      score:
+        full.exam.completed && full.exam.lastScore != null
+          ? Number(full.exam.lastScore)
+          : null,
+      completed: full.exam.completed === true,
+    };
+  }, [currentBank]);
+
   const averageMiniScore = useMemo(() => {
     const values = miniScores
       .filter((item) => item.score != null)
@@ -2964,7 +2982,7 @@ const readiness = useMemo(() => {
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <div className="text-sm font-semibold text-white">
-                        Mini Mock progress
+                        Mock Exam Progress
                       </div>
                       <div className="mt-1 text-sm text-white/65">
                         Each Mini Mock shows a dash until its Mini Mock Exam is
@@ -2977,7 +2995,7 @@ const readiness = useMemo(() => {
                     </div>
                   </div>
 
-                  <div className="mt-5 grid grid-cols-5 gap-3 sm:grid-cols-10">
+                  <div className="mt-5 grid grid-cols-5 gap-3 sm:grid-cols-10 xl:grid-cols-11">
                     {miniScores.map((item) => (
                       <button
                         key={item.mini}
@@ -3003,6 +3021,23 @@ const readiness = useMemo(() => {
                         </div>
                       </button>
                     ))}
+                    <button
+                      type="button"
+                      onClick={() => setSelectedLesson('full-qbank')}
+                      className="flex min-h-[96px] flex-col items-center justify-center rounded-2xl border border-yellow-400/40 bg-yellow-400/10 p-3 text-center text-white transition hover:border-yellow-300/55 hover:bg-yellow-400/15"
+                    >
+                      <div className="text-[11px] font-semibold uppercase tracking-[0.16em] leading-none text-yellow-100/55">
+                        {fullMockScore.score != null ? 'Score' : 'TBD'}
+                      </div>
+                      <div className="mt-3 flex items-center justify-center text-base font-semibold leading-none">
+                        {fullMockScore.score != null
+                          ? `${fullMockScore.score}%`
+                          : '—'}
+                      </div>
+                      <div className="mt-3 text-[11px] leading-none text-yellow-100/70">
+                        Full Mock
+                      </div>
+                    </button>
                   </div>
                 </div>
 
@@ -3054,6 +3089,24 @@ const readiness = useMemo(() => {
     </div>
   ) : null}
 </div>
+
+                  <div className="rounded-3xl border border-yellow-400/35 bg-yellow-400/10 p-6 shadow-[0_0_0_1px_rgba(250,204,21,0.08)]">
+                    <div className="text-sm font-semibold text-yellow-100">
+                      Full Mock Exam Score
+                    </div>
+
+                    <div className="mt-3 text-2xl font-semibold text-yellow-50">
+                      {fullMockScore.score != null
+                        ? `${fullMockScore.score}%`
+                        : 'Not enough data yet'}
+                    </div>
+
+                    <div className="mt-2 text-sm leading-6 text-yellow-100/70">
+                      {fullMockScore.score != null
+                        ? 'Based on your completed Full Mock Exam.'
+                        : 'Take the Full Mock Exam to calculate your score.'}
+                    </div>
+                  </div>
 
                   {/* <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
                     <div className="text-sm font-semibold text-white">
