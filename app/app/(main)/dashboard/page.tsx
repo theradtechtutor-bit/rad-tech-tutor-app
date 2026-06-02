@@ -2985,9 +2985,8 @@ const readiness = useMemo(() => {
                         Mock Exam Progress
                       </div>
                       <div className="mt-1 text-sm text-white/65">
-                        Each Mini Mock shows a dash until its Mini Mock Exam is
-                        completed. Once finished, the official score appears
-                        here.
+                        Each mock exam shows a dash until completed. Once
+                        finished, the official score appears here.
                       </div>
                     </div>
                     <div className="text-sm font-semibold text-white/70">
