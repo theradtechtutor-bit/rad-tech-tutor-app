@@ -2,7 +2,8 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import posthog from 'posthog-js';
+import { useCallback, useEffect, useState } from 'react';
 
 const successScreenshots = [
   {
@@ -52,23 +53,72 @@ const successScreenshots = [
   },
 ];
 
+function captureStudentSuccessEvent(
+  eventName:
+    | 'student_success_page_viewed'
+    | 'student_success_screenshot_opened'
+    | 'student_success_screenshot_closed',
+  properties: Record<string, unknown>
+) {
+  if (typeof window === 'undefined') return;
+  if (typeof posthog?.capture !== 'function') return;
+
+  try {
+    posthog.capture(eventName, properties);
+  } catch {
+    // Analytics should never interfere with the student success gallery.
+  }
+}
+
 export default function StudentSuccessPage() {
   const [selectedScreenshot, setSelectedScreenshot] = useState<
     (typeof successScreenshots)[number] | null
   >(null);
 
   useEffect(() => {
+    captureStudentSuccessEvent('student_success_page_viewed', {
+      sourcePage: '/app/student-success',
+      screenshotCount: successScreenshots.length,
+    });
+  }, []);
+
+  const openScreenshot = useCallback((item: (typeof successScreenshots)[number]) => {
+    captureStudentSuccessEvent('student_success_screenshot_opened', {
+      screenshotId: item.id,
+      title: item.title,
+      type: item.type,
+      imageSrc: item.src,
+      sourcePage: '/app/student-success',
+    });
+
+    setSelectedScreenshot(item);
+  }, []);
+
+  const closeScreenshot = useCallback(() => {
+    if (selectedScreenshot) {
+      captureStudentSuccessEvent('student_success_screenshot_closed', {
+        screenshotId: selectedScreenshot.id,
+        title: selectedScreenshot.title,
+        type: selectedScreenshot.type,
+        sourcePage: '/app/student-success',
+      });
+    }
+
+    setSelectedScreenshot(null);
+  }, [selectedScreenshot]);
+
+  useEffect(() => {
     if (!selectedScreenshot) return;
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
-        setSelectedScreenshot(null);
+        closeScreenshot();
       }
     }
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedScreenshot]);
+  }, [closeScreenshot, selectedScreenshot]);
 
   return (
     <div className="relative mx-auto max-w-6xl overflow-hidden pb-4">
@@ -125,7 +175,7 @@ export default function StudentSuccessPage() {
             <button
               type="button"
               key={item.id}
-              onClick={() => setSelectedScreenshot(item)}
+              onClick={() => openScreenshot(item)}
               className="group w-full cursor-pointer overflow-hidden rounded-[24px] border border-emerald-400/35 bg-emerald-500/10 text-left shadow-[0_0_0_1px_rgba(45,212,191,0.16),0_0_24px_rgba(16,185,129,0.12),0_18px_70px_rgba(0,0,0,0.24)] transition hover:-translate-y-0.5 hover:border-emerald-300/45 hover:bg-emerald-500/12"
             >
               <div className="border-b border-white/10 px-4 py-3">
@@ -163,7 +213,7 @@ export default function StudentSuccessPage() {
           role="dialog"
           aria-modal="true"
           aria-label={`${selectedScreenshot.title} enlarged screenshot`}
-          onClick={() => setSelectedScreenshot(null)}
+          onClick={closeScreenshot}
         >
           <div
             className="relative max-h-[85vh] max-w-[90vw] overflow-hidden rounded-[24px] border border-emerald-400/35 bg-black/70 p-3 shadow-[0_0_0_1px_rgba(45,212,191,0.16),0_24px_90px_rgba(0,0,0,0.55)]"
@@ -171,7 +221,7 @@ export default function StudentSuccessPage() {
           >
             <button
               type="button"
-              onClick={() => setSelectedScreenshot(null)}
+              onClick={closeScreenshot}
               className="absolute right-3 top-3 z-10 grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-black/75 text-xl leading-none text-white transition hover:border-emerald-300/45 hover:bg-emerald-500/15"
               aria-label="Close screenshot preview"
             >
