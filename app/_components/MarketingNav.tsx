@@ -12,6 +12,7 @@ const nav = [
   { href: '/app/dashboard', label: 'RTT Mastery Method' },
   { href: '/app/practice', label: 'Practice' },
   { href: '/app/roadmap', label: 'Roadmap' },
+  { href: '/app/student-success', label: 'Student Success' },
   ...(SHOW_CE ? [{ href: '/app/ce', label: 'CE' }] : []),
 ];
 
@@ -107,7 +108,7 @@ export default function MarketingNav() {
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-7 text-sm lg:flex">
+        <nav className="hidden items-center gap-5 text-sm lg:flex xl:gap-7">
           {nav.map((item) => {
             const isActive =
               pathname === item.href || pathname.startsWith(item.href + '/');
@@ -121,10 +122,10 @@ export default function MarketingNav() {
               'font-semibold relative after:absolute after:-bottom-2 after:left-0 after:h-[2px] after:w-full after:rounded-full after:bg-yellow-400';
 
             return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`transition ${
+	              <Link
+	                key={item.href}
+	                href={item.href}
+	                className={`whitespace-nowrap transition ${
                   isActive
                     ? `${active} ${
                         isCE

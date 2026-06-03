@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import TrackedYoutubeLink from '@/app/app/_components/TrackedYoutubeLink';
 import DownloadForm from './DownloadForm';
 
 export default function XrayBlueprintPage() {
@@ -9,13 +10,16 @@ export default function XrayBlueprintPage() {
           <Link href="/" className="text-sm text-white/70 hover:text-white">
             ← Back
           </Link>
-          <Link
+          <TrackedYoutubeLink
             href="https://www.youtube.com/@RadTechTutor"
+            location="xray_blueprint_header_youtube_link"
+            label="YouTube"
             target="_blank"
+            rel="noopener noreferrer"
             className="text-sm text-white/70 hover:text-white"
           >
             YouTube →
-          </Link>
+          </TrackedYoutubeLink>
         </div>
 
         <div className="mt-10 rounded-3xl border border-white/10 bg-white/[0.04] p-8 shadow-[0_0_40px_-20px_rgba(45,212,191,0.5)]">

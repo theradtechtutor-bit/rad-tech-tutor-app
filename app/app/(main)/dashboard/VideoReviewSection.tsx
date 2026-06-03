@@ -1,5 +1,7 @@
 'use client';
 
+import TrackedYoutubeLink from '@/app/app/_components/TrackedYoutubeLink';
+
 const VIDEO_URL = 'https://www.youtube.com/watch?v=Q-3Ntw8z7xk';
 const PRIMARY_THUMBNAIL_URL =
   'https://img.youtube.com/vi/Q-3Ntw8z7xk/maxresdefault.jpg';
@@ -73,7 +75,15 @@ function ClockIcon() {
   );
 }
 
-function VideoPartRow({ item }: { item: VideoPart }) {
+function VideoPartRow({
+  item,
+  bankNumber,
+  videoTitle,
+}: {
+  item: VideoPart;
+  bankNumber?: number | null;
+  videoTitle?: string;
+}) {
   const content = (
     <>
       <span className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden">
@@ -102,14 +112,18 @@ function VideoPartRow({ item }: { item: VideoPart }) {
 
   if (item.available && item.href) {
     return (
-      <a
+      <TrackedYoutubeLink
         href={item.href}
+        location="dashboard_video_review_row"
+        label={`Video ${item.part}: ${item.label}`}
+        bankNumber={bankNumber}
+        videoTitle={videoTitle}
         target="_blank"
         rel="noopener noreferrer"
         className="flex min-h-8 w-full min-w-0 items-center justify-between gap-2 overflow-hidden rounded-xl border border-yellow-400/55 bg-yellow-400/10 px-3 py-1.5 text-xs font-medium text-white transition hover:border-yellow-300/70 hover:bg-yellow-400/15"
       >
         {content}
-      </a>
+      </TrackedYoutubeLink>
     );
   }
 
@@ -143,6 +157,7 @@ export default function VideoReviewSection({
   const description = hasAvailableVideo
     ? videoReviewByBank[1].description
     : 'Once available, these videos will review ARRT®-style questions from this mock exam bank with answers, explanations, and test-taking reminders.';
+  const videoTitle = hasAvailableVideo ? videoReviewByBank[1].title : undefined;
 
   return (
     <section className="w-full overflow-hidden rounded-3xl border border-white/10 bg-black/20 p-5">
@@ -171,8 +186,12 @@ export default function VideoReviewSection({
           </div>
 
           {hasAvailableVideo ? (
-            <a
+            <TrackedYoutubeLink
               href={VIDEO_URL}
+              location="dashboard_video_review_thumbnail"
+              label="20-Question ARRT® Video Review thumbnail"
+              bankNumber={normalizedBankNumber}
+              videoTitle={videoTitle}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Watch 20-Question ARRT® Video Review"
@@ -196,7 +215,7 @@ export default function VideoReviewSection({
                   </span>
                 </div>
               </div>
-            </a>
+            </TrackedYoutubeLink>
           ) : (
             <div className="mt-4 flex aspect-video w-full max-w-[420px] flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/[0.025] p-5 text-center shadow-[inset_0_0_36px_rgba(255,255,255,0.03)]">
               <div className="text-xs font-semibold uppercase tracking-[0.28em] text-white/35">
@@ -215,15 +234,19 @@ export default function VideoReviewSection({
             {description}
           </p>
           {hasAvailableVideo ? (
-            <a
+            <TrackedYoutubeLink
               href={VIDEO_URL}
+              location="dashboard_video_review_button"
+              label="Watch Review"
+              bankNumber={normalizedBankNumber}
+              videoTitle={videoTitle}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-4 inline-flex items-center gap-2 rounded-full bg-yellow-400 px-5 py-2.5 text-sm font-bold text-black transition hover:bg-yellow-300"
             >
               <PlayIcon className="border-l-black" />
               Watch Review
-            </a>
+            </TrackedYoutubeLink>
           ) : (
             <button
               type="button"
@@ -237,7 +260,12 @@ export default function VideoReviewSection({
 
         <div className="grid w-full min-w-0 gap-1.5 overflow-hidden">
           {videoParts.map((item) => (
-            <VideoPartRow key={item.part} item={item} />
+            <VideoPartRow
+              key={item.part}
+              item={item}
+              bankNumber={normalizedBankNumber}
+              videoTitle={videoTitle}
+            />
           ))}
         </div>
       </div>

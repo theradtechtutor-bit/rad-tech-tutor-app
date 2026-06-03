@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect } from 'react';
+import TrackedYoutubeLink from '@/app/app/_components/TrackedYoutubeLink';
 
 const PDF_PATH = '/xray-blueprint.pdf';
 const YT_EMBED = 'https://www.youtube.com/embed/T7Smcvumu4w';
@@ -22,13 +23,16 @@ export default function BlueprintThankYouPage() {
           <Link href="/xray-blueprint" className="text-sm text-white/70 hover:text-white">
             ← Back
           </Link>
-          <Link
+          <TrackedYoutubeLink
             href="https://www.youtube.com/@RadTechTutor"
+            location="blueprint_thank_you_header_youtube_link"
+            label="YouTube"
             target="_blank"
+            rel="noopener noreferrer"
             className="text-sm text-white/70 hover:text-white"
           >
             YouTube →
-          </Link>
+          </TrackedYoutubeLink>
         </div>
 
         <div className="mt-10 rounded-3xl border border-white/10 bg-white/[0.04] p-8 shadow-[0_0_40px_-20px_rgba(45,212,191,0.5)]">

@@ -5,6 +5,7 @@ const NAV: NavItem[] = [
   { href: '/app/dashboard', label: 'RTT Mastery Method' },
   { href: '/app/practice', label: 'Practice' },
   { href: '/app/roadmap', label: 'Roadmap' },
+  { href: '/app/student-success', label: 'Student Success' },
   { href: '/app/upgrade', label: 'CE' },
 ];
 
