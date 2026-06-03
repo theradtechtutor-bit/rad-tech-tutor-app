@@ -3131,7 +3131,13 @@ const readiness = useMemo(() => {
                   </div> */}
                 </div>
 
-                <VideoReviewSection />
+                <VideoReviewSection
+                  bankNumber={
+                    currentBank
+                      ? Number(currentBank.setId.replace('qbank', ''))
+                      : null
+                  }
+                />
               </div>
             </div>
           </section>
