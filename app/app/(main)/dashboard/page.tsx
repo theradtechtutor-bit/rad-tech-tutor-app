@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import StartHereTour from '@/app/app/_components/StartHereTour';
 import { usePro } from '@/app/app/_lib/usePro';
+import VideoReviewSection from './VideoReviewSection';
 import {
   readFlashSession,
   readMasteryMiniStep,
@@ -3129,6 +3130,8 @@ const readiness = useMemo(() => {
                     </div>
                   </div> */}
                 </div>
+
+                <VideoReviewSection />
               </div>
             </div>
           </section>
