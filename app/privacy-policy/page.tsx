@@ -77,10 +77,10 @@ export default function PrivacyPolicyPage() {
             </h2>
             <p className="mt-2">
               We use Google Ads and related Google measurement tools to help us
-              understand how visitors interact with The Rad Tech Tutor after
-              interacting with our ads. These tools may use cookies or
-              similar technologies to measure ad performance, website visits,
-              signups, purchases, and other conversion activity.
+              understand how visitors use The Rad Tech Tutor after engaging
+              with our ads. These tools may use cookies or similar technologies
+              to measure ad performance, website visits, signups, purchases,
+              and other conversion activity.
             </p>
             <p className="mt-2">
               If enhanced conversions are enabled, certain customer-provided
