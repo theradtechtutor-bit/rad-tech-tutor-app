@@ -21,7 +21,7 @@ export default function PrivacyPolicyPage() {
         </h1>
 
         <p className="mt-3 text-sm text-white/50">
-          Last Updated: May 2, 2026
+          Last Updated: June 3, 2026
         </p>
 
         <div className="mt-10 space-y-8 leading-7 text-white/75">
@@ -73,7 +73,35 @@ export default function PrivacyPolicyPage() {
 
           <section>
             <h2 className="text-xl font-semibold text-white">
-              4. Data Security
+              4. Advertising, Analytics, and Conversion Tracking
+            </h2>
+            <p className="mt-2">
+              We use Google Ads and related Google measurement tools to help us
+              understand how visitors interact with The Rad Tech Tutor after
+              clicking or viewing our ads. These tools may use cookies or
+              similar technologies to measure ad performance, website visits,
+              signups, purchases, and other conversion activity.
+            </p>
+            <p className="mt-2">
+              If enhanced conversions are enabled, certain customer-provided
+              information, such as an email address entered during signup or
+              purchase, may be securely hashed before being sent to Google to
+              help improve conversion measurement. This helps us better
+              understand which ads are effective while protecting the original
+              information.
+            </p>
+            <p className="mt-2">
+              We do not sell personal information to advertisers.
+            </p>
+            <p className="mt-2">
+              You can manage how Google uses information for ad personalization
+              through your Google account ad settings.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-white">
+              5. Data Security
             </h2>
             <p className="mt-2">
               We use industry-standard tools, including Supabase, Stripe, and
@@ -83,7 +111,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white">5. Data Sharing</h2>
+            <h2 className="text-xl font-semibold text-white">6. Data Sharing</h2>
             <p className="mt-2">We do not sell your personal data.</p>
             <p className="mt-2">
               We only share data with service providers needed to run the
@@ -100,7 +128,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white">6. Your Rights</h2>
+            <h2 className="text-xl font-semibold text-white">7. Your Rights</h2>
             <p className="mt-2">You may request:</p>
             <ul className="mt-2 list-disc space-y-1 pl-6">
               <li>Account deletion.</li>
@@ -119,7 +147,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white">7. Updates</h2>
+            <h2 className="text-xl font-semibold text-white">8. Updates</h2>
             <p className="mt-2">
               We may update this policy as needed. Continued use means
               acceptance.
