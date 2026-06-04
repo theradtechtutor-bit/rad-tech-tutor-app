@@ -78,7 +78,7 @@ export default function PrivacyPolicyPage() {
             <p className="mt-2">
               We use Google Ads and related Google measurement tools to help us
               understand how visitors interact with The Rad Tech Tutor after
-              clicking or viewing our ads. These tools may use cookies or
+              interacting with our ads. These tools may use cookies or
               similar technologies to measure ad performance, website visits,
               signups, purchases, and other conversion activity.
             </p>
