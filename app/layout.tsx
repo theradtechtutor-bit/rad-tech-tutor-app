@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import './globals.css';
+import AttributionProvider from './AttributionProvider';
 import MarketingNav from './_components/MarketingNav';
 import PostHogProvider from './posthog-provider';
 import SocialLinks from './_components/SocialLinks';
@@ -32,6 +33,7 @@ export default function RootLayout({
           `}
         </Script>
         <PostHogProvider />
+        <AttributionProvider />
         <MarketingNav />
         {/* <main>{children}</main> */}
         <main className="flex-1">{children}</main>

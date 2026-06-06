@@ -12,16 +12,43 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
 
+const ATTRIBUTION_KEYS = [
+  'utm_source',
+  'utm_medium',
+  'utm_campaign',
+  'utm_term',
+  'utm_content',
+  'gclid',
+  'landing_page',
+  'initial_referrer',
+  'traffic_captured_at',
+] as const;
+
+function getSessionAttribution(session: Stripe.Checkout.Session) {
+  const attribution: Record<string, string> = {};
+
+  for (const key of ATTRIBUTION_KEYS) {
+    const value = session.metadata?.[key];
+    if (value) {
+      attribution[key] = value;
+    }
+  }
+
+  return attribution;
+}
+
 async function capturePosthogPurchase({
   userId,
   email,
   plan,
   sessionId,
+  attribution,
 }: {
   userId: string;
   email: string;
   plan: string | null;
   sessionId: string;
+  attribution: Record<string, string>;
 }) {
   const key = process.env.POSTHOG_API_KEY;
   const host = process.env.POSTHOG_HOST ?? 'https://us.i.posthog.com';
@@ -41,8 +68,10 @@ async function capturePosthogPurchase({
           user_email: email,
           plan,
           stripe_session_id: sessionId,
+          ...attribution,
           $set: {
             email,
+            ...attribution,
           },
         },
       }),
@@ -81,6 +110,7 @@ export async function POST(req: Request) {
 
     const email = userEmail.toLowerCase();
     const plan = session.metadata?.plan_key ?? null;
+    const attribution = getSessionAttribution(session);
     const now = new Date().toISOString();
     const proExpiresAt = getProExpiresAt(plan);
 
@@ -103,6 +133,7 @@ export async function POST(req: Request) {
           user_email: email,
           stripe_session_id: session.id,
           source: 'stripe_webhook_user_id',
+          ...attribution,
         },
       });
 
@@ -111,6 +142,7 @@ export async function POST(req: Request) {
         email,
         plan,
         sessionId: session.id,
+        attribution,
       });
 
       return NextResponse.json({ received: true });
@@ -143,6 +175,7 @@ export async function POST(req: Request) {
             user_email: email,
             stripe_session_id: session.id,
             source: 'stripe_webhook_email_fallback',
+            ...attribution,
           },
         });
 
@@ -151,6 +184,7 @@ export async function POST(req: Request) {
           email,
           plan,
           sessionId: session.id,
+          attribution,
         });
       } else {
         console.error('No matching user_access row for paid email:', email);

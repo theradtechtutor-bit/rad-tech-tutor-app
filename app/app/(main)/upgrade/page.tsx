@@ -4,6 +4,7 @@ import { Suspense, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { captureEvent } from '@/lib/analytics';
+import { getAttributionEventProps } from '@/lib/attribution';
 import { getMiniMockChallengeStats } from '@/lib/progressStore';
 
 type PlanKey = 'pro_2w' | 'pro_1m' | 'pro_3m' | 'pro_6m';
@@ -109,17 +110,23 @@ const stored = JSON.parse(localStorage.getItem('rtt-progress') || '{}');
       plan,
       source: autobuy === plan ? 'upgrade_page_autobuy' : 'upgrade_page',
     });
+    captureEvent('upgrade_clicked', {
+      plan,
+      source: autobuy === plan ? 'upgrade_page_autobuy' : 'upgrade_page',
+    });
 
     setBusyPlan(plan);
     setError('');
 
     try {
+const attribution = getAttributionEventProps();
 const res = await fetch('/api/stripe/checkout', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     plan,
     challengeQualified: challenge?.qualifies ?? false, // 👈 ADD THIS
+    attribution,
   }),
 });
 

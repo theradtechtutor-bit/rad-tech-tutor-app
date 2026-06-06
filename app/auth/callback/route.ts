@@ -4,6 +4,7 @@ import { createServerClient } from '@supabase/ssr';
 async function capturePosthogSignup(user: {
   id: string;
   email?: string | null;
+  attribution?: Record<string, string>;
 }) {
   const key = process.env.POSTHOG_API_KEY;
   const host = process.env.POSTHOG_HOST;
@@ -23,14 +24,55 @@ async function capturePosthogSignup(user: {
         timestamp: new Date().toISOString(),
         properties: {
           source: 'auth_callback',
+          ...(user.attribution ?? {}),
           $set: {
             email: user.email ?? '',
+            ...(user.attribution ?? {}),
           },
         },
       }),
     });
   } catch (error) {
     console.error('PostHog signup capture failed:', error);
+  }
+}
+
+function readAttributionFromCookie(cookieHeader: string) {
+  const cookie = cookieHeader
+    .split(/;\s*/)
+    .find((item) => item.startsWith('rtt_attribution='));
+
+  if (!cookie) return {};
+
+  try {
+    const rawValue = cookie.slice('rtt_attribution='.length);
+    const parsed = JSON.parse(decodeURIComponent(rawValue));
+    if (!parsed || typeof parsed !== 'object') return {};
+
+    const attribution: Record<string, string> = {};
+
+    for (const [key, value] of Object.entries(parsed)) {
+      if (
+        [
+          'utm_source',
+          'utm_medium',
+          'utm_campaign',
+          'utm_term',
+          'utm_content',
+          'gclid',
+          'landing_page',
+          'initial_referrer',
+          'traffic_captured_at',
+        ].includes(key) &&
+        typeof value === 'string'
+      ) {
+        attribution[key] = value;
+      }
+    }
+
+    return attribution;
+  } catch {
+    return {};
   }
 }
 
@@ -112,6 +154,7 @@ export async function GET(request: Request) {
     await capturePosthogSignup({
       id: user.id,
       email: user.email,
+      attribution: readAttributionFromCookie(requestCookies),
     });
   }
 

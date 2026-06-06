@@ -9,6 +9,18 @@ type AccessRow = {
   pro_expires_at?: string | null;
 };
 
+const ATTRIBUTION_KEYS = [
+  'utm_source',
+  'utm_medium',
+  'utm_campaign',
+  'utm_term',
+  'utm_content',
+  'gclid',
+  'landing_page',
+  'initial_referrer',
+  'traffic_captured_at',
+] as const;
+
 function isActivePro(row: AccessRow | null | undefined) {
   return (
     row?.is_pro === true &&
@@ -16,10 +28,25 @@ function isActivePro(row: AccessRow | null | undefined) {
   );
 }
 
+function cleanAttribution(input: unknown) {
+  const source = input && typeof input === 'object' ? input : {};
+  const attribution: Record<string, string> = {};
+
+  for (const key of ATTRIBUTION_KEYS) {
+    const value = (source as Record<string, unknown>)[key];
+    if (typeof value === 'string' && value.trim()) {
+      attribution[key] = value.trim().slice(0, 500);
+    }
+  }
+
+  return attribution;
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
     const plan = getPlan(String(body?.plan || ''));
+    const attribution = cleanAttribution(body?.attribution);
 
     if (!plan) {
       return NextResponse.json(
@@ -102,6 +129,7 @@ if (alreadyPro) {
         user_id: user.id,
         user_email: user.email ?? '',
         plan_key: plan.key,
+        ...attribution,
       },
       allow_promotion_codes: true,
     });
@@ -118,6 +146,7 @@ if (alreadyPro) {
           user_email: user.email ?? '',
           stripe_session_id: session.id,
           source: 'upgrade_page',
+          ...attribution,
         },
       });
 
