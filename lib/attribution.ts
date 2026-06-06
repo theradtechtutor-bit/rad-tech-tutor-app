@@ -22,6 +22,18 @@ const ATTRIBUTION_PARAM_KEYS = [
   'gclid',
 ] as const;
 
+export const ATTRIBUTION_PROPERTY_KEYS = [
+  'utm_source',
+  'utm_medium',
+  'utm_campaign',
+  'utm_term',
+  'utm_content',
+  'gclid',
+  'landing_page',
+  'initial_referrer',
+  'traffic_captured_at',
+] as const;
+
 function cleanValue(value: string | null) {
   const trimmed = value?.trim();
   return trimmed || undefined;
@@ -110,4 +122,16 @@ export function captureCurrentAttribution(): AttributionProperties {
 export function getAttributionEventProps(): AttributionProperties {
   if (typeof window === 'undefined') return {};
   return readStoredAttribution();
+}
+
+export function normalizeAttributionProperties(
+  attribution: AttributionProperties,
+) {
+  return ATTRIBUTION_PROPERTY_KEYS.reduce(
+    (properties, key) => {
+      properties[key] = attribution[key] ?? null;
+      return properties;
+    },
+    {} as Record<(typeof ATTRIBUTION_PROPERTY_KEYS)[number], string | null>,
+  );
 }
