@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import posthog from 'posthog-js';
 import {
   captureCurrentAttribution,
-  normalizeAttributionProperties,
+  shouldCaptureTrafficSourceEvent,
 } from '@/lib/attribution';
 
 export default function PostHogProvider() {
@@ -19,17 +19,15 @@ export default function PostHogProvider() {
         const attribution = captureCurrentAttribution();
         if (Object.keys(attribution).length === 0) return;
 
-        const attributionProperties =
-          normalizeAttributionProperties(attribution);
-
         try {
-          posthogInstance.register(attributionProperties);
-          posthogInstance.capture('traffic_source_captured', {
-            ...attributionProperties,
-            sourcePage: window.location.pathname,
-            $set: attributionProperties,
-            $set_once: attributionProperties,
-          });
+          posthogInstance.register(attribution);
+
+          if (shouldCaptureTrafficSourceEvent(attribution)) {
+            posthogInstance.capture('traffic_source_captured', {
+              ...attribution,
+              $set_once: attribution,
+            });
+          }
         } catch {
           // Attribution should never block app startup.
         }

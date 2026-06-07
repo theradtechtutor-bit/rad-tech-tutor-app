@@ -54,20 +54,18 @@ function readAttributionFromCookie(cookieHeader: string) {
     for (const [key, value] of Object.entries(parsed)) {
       if (
         [
-          'utm_source',
-          'utm_medium',
+          'original_source',
           'utm_campaign',
-          'utm_term',
           'utm_content',
-          'gclid',
-          'landing_page',
-          'initial_referrer',
-          'traffic_captured_at',
         ].includes(key) &&
         typeof value === 'string'
       ) {
         attribution[key] = value;
       }
+    }
+
+    if (!attribution.original_source && typeof parsed.utm_source === 'string') {
+      attribution.original_source = parsed.utm_source.trim().toLowerCase();
     }
 
     return attribution;

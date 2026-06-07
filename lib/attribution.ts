@@ -1,42 +1,83 @@
 export type AttributionProperties = {
-  utm_source?: string;
-  utm_medium?: string;
+  original_source?: string;
   utm_campaign?: string;
-  utm_term?: string;
   utm_content?: string;
-  gclid?: string;
-  landing_page?: string;
-  initial_referrer?: string;
-  traffic_captured_at?: string;
 };
 
 export const ATTRIBUTION_STORAGE_KEY = 'rtt_attribution';
 export const ATTRIBUTION_COOKIE_KEY = 'rtt_attribution';
-
-const ATTRIBUTION_PARAM_KEYS = [
-  'utm_source',
-  'utm_medium',
-  'utm_campaign',
-  'utm_term',
-  'utm_content',
-  'gclid',
-] as const;
-
-export const ATTRIBUTION_PROPERTY_KEYS = [
-  'utm_source',
-  'utm_medium',
-  'utm_campaign',
-  'utm_term',
-  'utm_content',
-  'gclid',
-  'landing_page',
-  'initial_referrer',
-  'traffic_captured_at',
-] as const;
+const TRAFFIC_SOURCE_EVENT_PREFIX = 'rtt_traffic_source_captured';
 
 function cleanValue(value: string | null) {
   const trimmed = value?.trim();
   return trimmed || undefined;
+}
+
+function normalizeSource(value: string) {
+  return value.trim().toLowerCase().replace(/^www\./, '');
+}
+
+function getReferrerSource() {
+  if (typeof window === 'undefined') return 'direct';
+  if (!document.referrer) return 'direct';
+
+  try {
+    const referrerHost = new URL(document.referrer).hostname
+      .toLowerCase()
+      .replace(/^www\./, '');
+    const currentHost = window.location.hostname
+      .toLowerCase()
+      .replace(/^www\./, '');
+
+    if (!referrerHost || referrerHost === currentHost) return 'direct';
+    if (referrerHost.includes('youtube.com') || referrerHost === 'youtu.be') {
+      return 'youtube';
+    }
+    if (
+      referrerHost.includes('facebook.com') ||
+      referrerHost === 'fb.com' ||
+      referrerHost.includes('instagram.com')
+    ) {
+      return 'facebook';
+    }
+    if (referrerHost.includes('google.')) return 'google';
+
+    return 'referral';
+  } catch {
+    return 'direct';
+  }
+}
+
+function attributionFromCurrentVisit(): AttributionProperties {
+  if (typeof window === 'undefined') return {};
+
+  const params = new URLSearchParams(window.location.search);
+  const utmSource = cleanValue(params.get('utm_source'));
+  const utmCampaign = cleanValue(params.get('utm_campaign'));
+  const utmContent = cleanValue(params.get('utm_content'));
+
+  return {
+    original_source: utmSource
+      ? normalizeSource(utmSource)
+      : getReferrerSource(),
+    ...(utmCampaign ? { utm_campaign: utmCampaign } : {}),
+    ...(utmContent ? { utm_content: utmContent } : {}),
+  };
+}
+
+function isDirectOrReferral(source: string | undefined) {
+  return !source || source === 'direct' || source === 'referral';
+}
+
+function hasUtmSource() {
+  if (typeof window === 'undefined') return false;
+  return Boolean(cleanValue(new URLSearchParams(window.location.search).get('utm_source')));
+}
+
+function pruneAttribution(attribution: AttributionProperties) {
+  return Object.fromEntries(
+    Object.entries(attribution).filter(([, value]) => value),
+  ) as AttributionProperties;
 }
 
 export function readStoredAttribution(): AttributionProperties {
@@ -49,63 +90,35 @@ export function readStoredAttribution(): AttributionProperties {
     const parsed = JSON.parse(raw);
     if (!parsed || typeof parsed !== 'object') return {};
 
-    return parsed as AttributionProperties;
+    const originalSource =
+      typeof parsed.original_source === 'string'
+        ? parsed.original_source
+        : typeof parsed.utm_source === 'string'
+          ? normalizeSource(parsed.utm_source)
+          : undefined;
+
+    return pruneAttribution({
+      original_source: originalSource,
+      utm_campaign:
+        typeof parsed.utm_campaign === 'string' ? parsed.utm_campaign : undefined,
+      utm_content:
+        typeof parsed.utm_content === 'string' ? parsed.utm_content : undefined,
+    });
   } catch {
     return {};
   }
-}
-
-export function getAttributionFromUrl(): AttributionProperties {
-  if (typeof window === 'undefined') return {};
-
-  const params = new URLSearchParams(window.location.search);
-  const attribution: AttributionProperties = {};
-
-  for (const key of ATTRIBUTION_PARAM_KEYS) {
-    const value = cleanValue(params.get(key));
-    if (value) {
-      attribution[key] = value;
-    }
-  }
-
-  return attribution;
 }
 
 export function captureCurrentAttribution(): AttributionProperties {
   if (typeof window === 'undefined') return {};
 
   const existing = readStoredAttribution();
-  const fromUrl = getAttributionFromUrl();
-  const hasUrlAttribution = Object.keys(fromUrl).length > 0;
-  const hasExistingCampaignAttribution = Boolean(
-    existing.utm_source ||
-      existing.utm_medium ||
-      existing.utm_campaign ||
-      existing.gclid,
-  );
+  const current = attributionFromCurrentVisit();
+  const shouldReplace =
+    !existing.original_source ||
+    (isDirectOrReferral(existing.original_source) && hasUtmSource());
 
-  if (!hasUrlAttribution && Object.keys(existing).length > 0) {
-    return existing;
-  }
-
-  if (hasUrlAttribution && hasExistingCampaignAttribution) {
-    return existing;
-  }
-
-  const next: AttributionProperties = {
-    ...(hasUrlAttribution ? existing : {}),
-    ...fromUrl,
-    landing_page: hasUrlAttribution
-      ? `${window.location.pathname}${window.location.search}`
-      : existing.landing_page ||
-        `${window.location.pathname}${window.location.search}`,
-    initial_referrer: hasUrlAttribution
-      ? document.referrer || ''
-      : existing.initial_referrer || document.referrer || '',
-    traffic_captured_at: hasUrlAttribution
-      ? new Date().toISOString()
-      : existing.traffic_captured_at || new Date().toISOString(),
-  };
+  const next = shouldReplace ? current : existing;
 
   try {
     window.localStorage.setItem(ATTRIBUTION_STORAGE_KEY, JSON.stringify(next));
@@ -124,14 +137,26 @@ export function getAttributionEventProps(): AttributionProperties {
   return readStoredAttribution();
 }
 
-export function normalizeAttributionProperties(
+export function shouldCaptureTrafficSourceEvent(
   attribution: AttributionProperties,
 ) {
-  return ATTRIBUTION_PROPERTY_KEYS.reduce(
-    (properties, key) => {
-      properties[key] = attribution[key] ?? null;
-      return properties;
-    },
-    {} as Record<(typeof ATTRIBUTION_PROPERTY_KEYS)[number], string | null>,
-  );
+  if (typeof window === 'undefined') return false;
+  if (!attribution.original_source || attribution.original_source === 'direct') {
+    return false;
+  }
+
+  const eventKey = [
+    TRAFFIC_SOURCE_EVENT_PREFIX,
+    attribution.original_source,
+    attribution.utm_campaign ?? '',
+    attribution.utm_content ?? '',
+  ].join(':');
+
+  try {
+    if (window.localStorage.getItem(eventKey) === '1') return false;
+    window.localStorage.setItem(eventKey, '1');
+    return true;
+  } catch {
+    return true;
+  }
 }

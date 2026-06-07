@@ -10,15 +10,9 @@ type AccessRow = {
 };
 
 const ATTRIBUTION_KEYS = [
-  'utm_source',
-  'utm_medium',
+  'original_source',
   'utm_campaign',
-  'utm_term',
   'utm_content',
-  'gclid',
-  'landing_page',
-  'initial_referrer',
-  'traffic_captured_at',
 ] as const;
 
 function isActivePro(row: AccessRow | null | undefined) {

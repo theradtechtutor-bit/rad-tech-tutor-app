@@ -32,20 +32,18 @@ https://theradtechtutor.com/?utm_source=youtube&utm_medium=channel_link&utm_camp
 
 The app captures and persists:
 
-- `utm_source`
-- `utm_medium`
+- `original_source`
 - `utm_campaign`
-- `utm_term`
 - `utm_content`
-- `gclid`
-- `landing_page`
-- `initial_referrer`
-- `traffic_captured_at`
 
-These values are stored as first-touch campaign attribution in localStorage and
-a first-party cookie. If a visitor has no campaign attribution yet, the first
-YouTube/Google campaign link they land on becomes their stored source. Later
-events can then include that same source, even after signup or checkout.
+`utm_source` is normalized into `original_source` for cleaner PostHog reporting.
+For example, `utm_source=youtube` becomes `original_source=youtube`.
+
+These values are stored as first-touch source attribution in localStorage and a
+first-party cookie. If a visitor has no source yet, the first meaningful source
+they land from becomes their stored source. A later URL with `utm_source` can
+replace an earlier `direct` or `referral` source, but it will not overwrite an
+existing `youtube`, `facebook`, or `google` source.
 
 Tracked events include:
 

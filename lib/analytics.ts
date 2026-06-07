@@ -1,19 +1,15 @@
 'use client';
 
 import posthog from 'posthog-js';
-import {
-  getAttributionEventProps,
-  normalizeAttributionProperties,
-} from '@/lib/attribution';
+import { getAttributionEventProps } from '@/lib/attribution';
 
 type EventProps = Record<string, string | number | boolean | null | undefined>;
 
 export function captureEvent(eventName: string, props?: EventProps) {
   if (typeof window === 'undefined') return;
   try {
-    const attribution = normalizeAttributionProperties(getAttributionEventProps());
     posthog.capture(eventName, {
-      ...attribution,
+      ...getAttributionEventProps(),
       ...props,
     });
   } catch {}
@@ -22,9 +18,8 @@ export function captureEvent(eventName: string, props?: EventProps) {
 export function identifyUser(userId: string, props?: EventProps) {
   if (typeof window === 'undefined' || !userId) return;
   try {
-    const attribution = normalizeAttributionProperties(getAttributionEventProps());
     posthog.identify(userId, {
-      ...attribution,
+      ...getAttributionEventProps(),
       ...props,
     });
   } catch {}
