@@ -22,6 +22,7 @@ import {
   markFlashcardCleared,
   readFlashSession,
   saveFlashSession,
+  readLatestPracticeMissedIds,
   readFullQbankLatestMissedIds,
   recordFullQbankFlashcardsDone,
   saveFullQbankStep,
@@ -340,12 +341,17 @@ function FlashcardsPageInner() {
         //     );
 
         //fixed:
-        const remainingMissedIds = isFullQBank
-          ? readFullQbankLatestMissedIds(setId)
-          : getFlashcardRemainingIds(
+        const remainingMissedIds = masteryMode
+          ? readLatestPracticeMissedIds(
               setId,
-              selectedCategory === 'all' ? 'all' : selectedCategory,
-            );
+              isFullQBank ? 'full' : mini,
+            ) ?? []
+          : isFullQBank
+            ? readFullQbankLatestMissedIds(setId)
+            : getFlashcardRemainingIds(
+                setId,
+                selectedCategory === 'all' ? 'all' : selectedCategory,
+              );
 
         const saved = readFlashSession(flashSessionScopeKey);
         const allowedIds = new Set(cards.map((card) => card.id));
@@ -452,13 +458,13 @@ function FlashcardsPageInner() {
     saveFlashSession(flashSessionScopeKey, {
       setId,
       mode,
-      cat: filterValue,
-      mini: effectiveMiniSessionKey,
-      cursor,
-      deck,
-      mastered,
-      savedAt: Date.now(),
-    });
+                        cat: filterValue,
+                        mini: effectiveMiniSessionKey,
+                        cursor,
+                        deck,
+                        mastered,
+                        savedAt: Date.now(),
+                      });
   }, [
     loading,
     flashSessionScopeKey,
@@ -537,12 +543,17 @@ function FlashcardsPageInner() {
     const activeMissedIds =
       idsFromSession.length > 0
         ? idsFromSession
-        : isFullQBank
-          ? readFullQbankLatestMissedIds(setId)
-          : getFlashcardRemainingIds(
+        : masteryMode
+          ? readLatestPracticeMissedIds(
               setId,
-              selectedCategory === 'all' ? 'all' : selectedCategory,
-            );
+              isFullQBank ? 'full' : mini,
+            ) ?? []
+          : isFullQBank
+            ? readFullQbankLatestMissedIds(setId)
+            : getFlashcardRemainingIds(
+                setId,
+                selectedCategory === 'all' ? 'all' : selectedCategory,
+              );
 
     const cards =
       mode === 'missed' || masteryMode
@@ -911,12 +922,14 @@ function FlashcardsPageInner() {
                         cat: filterValue,
                         mini: effectiveMiniSessionKey,
                         cursor,
-                        deck,
-                        mastered,
-                        savedAt: Date.now(),
+	                        deck,
+	                        mastered,
+	                        savedAt: Date.now(),
                       });
                       router.push(
-                        masteryMode ? '/app/dashboard' : '/app/practice',
+                        masteryMode
+                          ? `/app/dashboard?bank=${setId}`
+                          : '/app/practice',
                       );
                     }}
                     className="w-full cursor-pointer rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"

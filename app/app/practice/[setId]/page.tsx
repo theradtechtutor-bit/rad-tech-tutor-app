@@ -18,7 +18,9 @@ import {
   markWrongFromPractice,
   readPracticeSession,
   savePracticeSession,
+  clearFlashSession,
   clearPracticeSession,
+  saveLatestPracticeMissedIds,
   saveMasteryMiniStep,
   saveFullQbankStep,
   recordFullQbankPracticeDone,
@@ -97,6 +99,10 @@ function shuffle<T>(arr: T[]): T[] {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
+}
+
+function uniqueQuestionIds(ids: string[]) {
+  return Array.from(new Set(ids.map(String).filter(Boolean)));
 }
 
 function mapToArrtMajorCategory(raw: string): string {
@@ -257,6 +263,7 @@ export default function PracticeSetPage() {
   const trackedPracticeStartRef = useRef(false);
   const trackedPracticeCompleteRef = useRef(false);
   const feedbackPromptCheckedRef = useRef(false);
+  const attemptQuestionIdsRef = useRef<string[]>([]);
 
   const { session, loading: sessionLoading } = useSupabaseSession();
 
@@ -502,6 +509,7 @@ const practiceSessionScopeKey = isFullQBank
 
       ids = mode === 'missed' ? ids : shuffle(ids);
       const originalIds = [...ids];
+      attemptQuestionIdsRef.current = uniqueQuestionIds(originalIds);
       setTotalCount(originalIds.length);
 
       const aggregate =
@@ -889,6 +897,9 @@ const practiceSessionScopeKey = isFullQBank
       ...practiceCorrectById,
       [q.id]: Boolean(isCorrect),
     };
+    let completionTotal = totalCount || answeredNext;
+    let completionCorrect = correctNext;
+    let completionMissed = missedNext;
 
     setAnsweredCount(answeredNext);
     setPracticeCorrectById(nextPracticeCorrectById);
@@ -942,13 +953,31 @@ const practiceSessionScopeKey = isFullQBank
     }
 
     if (masteryMode && nextQueue.length === 0) {
-      const total = totalCount || answeredNext;
-      const pct = total ? Math.round((correctNext / total) * 100) : 0;
+      const attemptQuestionIds =
+        attemptQuestionIdsRef.current.length > 0
+          ? attemptQuestionIdsRef.current
+          : uniqueQuestionIds(Object.keys(nextPracticeCorrectById));
+      const latestMissedIds = attemptQuestionIds.filter(
+        (id) => nextPracticeCorrectById[id] !== true,
+      );
+      const finalCorrectCount = attemptQuestionIds.filter(
+        (id) => nextPracticeCorrectById[id] === true,
+      ).length;
+      const total = attemptQuestionIds.length || totalCount || answeredNext;
+      const finalMissedCount = latestMissedIds.length;
+      const pct = total ? Math.round((finalCorrectCount / total) * 100) : 0;
+
+      completionTotal = total;
+      completionCorrect = finalCorrectCount;
+      completionMissed = finalMissedCount;
+      setAnsweredCount(total);
+      setCorrectCount(finalCorrectCount);
+      setMissedCount(finalMissedCount);
 
       appendAttempt({
         bankId: Number((setId.match(/qbank(\d+)/i) || [])[1] || 1),
         score: pct,
-        correct: correctNext,
+        correct: finalCorrectCount,
         total,
         category: isFullQBank
           ? 'Full QBank Practice Test'
@@ -961,6 +990,15 @@ const practiceSessionScopeKey = isFullQBank
           ? 'Full QBank Practice Test'
           : `Mini Mock ${mini} Practice Test`,
       });
+
+      if (isFullQBank) {
+        saveLatestPracticeMissedIds(setId, 'full', latestMissedIds);
+        clearFlashSession(`${setId}__full`);
+        clearFlashSession(`${setId}__missed__all__full`);
+      } else if (typeof mini === 'number') {
+        saveLatestPracticeMissedIds(setId, mini, latestMissedIds);
+        clearFlashSession(`${setId}__missed__all__${mini}`);
+      }
     }
 
     if (nextQueue.length > 0) {
@@ -982,12 +1020,12 @@ const practiceSessionScopeKey = isFullQBank
           mode,
           flow,
           filter: filterValue,
-          total_count: totalCount || answeredNext,
-          correct_count: correctNext,
-          missed_count: missedNext,
+          total_count: completionTotal,
+          correct_count: completionCorrect,
+          missed_count: completionMissed,
           score_percent:
-            totalCount || answeredNext
-              ? Math.round((correctNext / (totalCount || answeredNext)) * 100)
+            completionTotal
+              ? Math.round((completionCorrect / completionTotal) * 100)
               : 0,
         });
         // 🔥 FEEDBACK TRIGGER (practice-based)
@@ -1052,7 +1090,7 @@ if (masteryMode && isFullQBank) {
     persistCurrentPracticeSession();
 
     if (masteryMode) {
-      router.push('/app/dashboard');
+      router.push(`/app/dashboard?bank=${setId}`);
       return;
     }
 

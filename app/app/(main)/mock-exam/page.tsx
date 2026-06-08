@@ -886,7 +886,7 @@ useEffect(() => {
     });
 
     const target = (() => {
-      if (flow === 'mastery') return '/app/dashboard';
+      if (flow === 'mastery') return `/app/dashboard?bank=${setId}`;
       const params = new URLSearchParams(sp.toString());
       params.delete('autostart');
       params.delete('done');
@@ -1323,7 +1323,7 @@ useEffect(() => {
                 </button>
 
                 <Link
-                  href="/app/dashboard"
+                  href={`/app/dashboard?bank=${setId}`}
                   className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15"
                 >
                   Go to Dashboard
@@ -1518,7 +1518,7 @@ useEffect(() => {
 
           <div className="mt-5 flex flex-wrap gap-2">
             <Link
-              href="/app/dashboard"
+              href={`/app/dashboard?bank=${setId}`}
               className="cursor-pointer rounded-2xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black hover:brightness-95"
             >
               Continue RTT Mastery Method

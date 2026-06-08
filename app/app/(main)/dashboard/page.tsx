@@ -4,6 +4,7 @@ const GLOBAL_CHALLENGE_DEADLINE = Date.parse('2026-05-04T05:30:00Z');
 
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import StartHereTour from '@/app/app/_components/StartHereTour';
 import { usePro } from '@/app/app/_lib/usePro';
 import VideoReviewSection from './VideoReviewSection';
@@ -26,6 +27,7 @@ import {
 // import MothersDaySaleBanner from '@/app/app/_components/MothersDaySaleBanner';
 
 const BANKS = ['qbank1', 'qbank2', 'qbank3', 'qbank4', 'qbank5'] as const;
+const SELECTED_BANK_KEY = 'rtt_selected_bank';
 
 type BankId = (typeof BANKS)[number];
 type LessonKey = `mini-${number}` | 'full-qbank';
@@ -36,6 +38,29 @@ type Cumulative = ReturnType<typeof getCategoryCumulative>;
 type BankSummary = ReturnType<typeof getBankMasterySummary>;
 
 type StepKey = 'practice' | 'flashcards' | 'exam';
+
+function parseBankId(value: string | null | undefined): BankId | null {
+  const normalized = String(value || '').toLowerCase();
+  return BANKS.includes(normalized as BankId) ? (normalized as BankId) : null;
+}
+
+function readSavedSelectedBank(): BankId | null {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    return parseBankId(window.localStorage.getItem(SELECTED_BANK_KEY));
+  } catch {
+    return null;
+  }
+}
+
+function saveSelectedBank(bank: BankId) {
+  if (typeof window === 'undefined') return;
+
+  try {
+    window.localStorage.setItem(SELECTED_BANK_KEY, bank);
+  } catch {}
+}
 
 type StepConfig = {
   key: StepKey;
@@ -241,14 +266,52 @@ function hasPracticeAttemptForMini(
   bank: BankSummary,
   mini: number,
 ) {
+  return Boolean(getLatestPracticeAttemptForMini(attempts, bank, mini));
+}
+
+function getLatestPracticeAttemptForMini(
+  attempts: Attempts,
+  bank: BankSummary,
+  mini: number,
+) {
   const bankNumber = Number(bank.setId.replace('qbank', ''));
-  return attempts.some((item) => {
+
+  for (let idx = attempts.length - 1; idx >= 0; idx -= 1) {
+    const item = attempts[idx];
     const probe = `${item.label || ''} ${item.category || ''}`.toLowerCase();
     const matchesMini = probe.includes(`mini mock ${mini}`);
-    return (
-      item.type === 'practice' && item.bankId === bankNumber && matchesMini
-    );
-  });
+
+    if (
+      item.type === 'practice' &&
+      item.bankId === bankNumber &&
+      matchesMini &&
+      typeof item.score === 'number'
+    ) {
+      return item;
+    }
+  }
+
+  return null;
+}
+
+function getLatestFullPracticeAttempt(attempts: Attempts, bank: BankSummary) {
+  const bankNumber = Number(bank.setId.replace('qbank', ''));
+
+  for (let idx = attempts.length - 1; idx >= 0; idx -= 1) {
+    const item = attempts[idx];
+    const probe = `${item.label || ''} ${item.category || ''}`.toLowerCase();
+
+    if (
+      item.type === 'practice' &&
+      item.bankId === bankNumber &&
+      probe.includes('full qbank practice test') &&
+      typeof item.score === 'number'
+    ) {
+      return item;
+    }
+  }
+
+  return null;
 }
 
 function getSavedFlashcardsMeta(setId: string, mini: number) {
@@ -359,10 +422,12 @@ function getMiniState(bank: BankSummary, attempts: Attempts, mini: number) {
   const flashMeta = getSavedFlashcardsMeta(bank.setId, mini);
   const examMeta = getSavedMiniMockSessionMeta(bank.setId, mini);
   const savedStep = readMasteryMiniStep(bank.setId, mini);
+  const practiceAttempt = getLatestPracticeAttemptForMini(attempts, bank, mini);
+  const practiceScore = practiceAttempt?.score ?? null;
 
   const practiceAnswered = Number(practiceMeta?.answeredCount || 0);
   const practiceHasWork =
-    practiceAnswered > 0 || hasPracticeAttemptForMini(attempts, bank, mini);
+    practiceAnswered > 0 || Boolean(practiceAttempt);
 
   const flashTotal = Number(flashMeta?.total || 0);
   const flashRemaining = Number(flashMeta?.remaining || 0);
@@ -406,6 +471,7 @@ function getMiniState(bank: BankSummary, attempts: Attempts, mini: number) {
     examMeta,
     savedStep,
     practiceComplete,
+    practiceScore,
     flashcardsComplete,
     practiceSkipped,
     flashcardsSkipped,
@@ -576,6 +642,7 @@ const flashMeta = miniState.flashMeta;
 const examMeta = miniState.examMeta;
 const savedStep = miniState.savedStep;
 const practiceComplete = miniState.practiceComplete;
+const practiceScore = miniState.practiceScore;
 const flashcardsComplete = miniState.flashcardsComplete;
 const practiceSkipped = miniState.practiceSkipped;
 const flashcardsSkipped = miniState.flashcardsSkipped;
@@ -752,7 +819,9 @@ const flashcardsSkipped = miniState.flashcardsSkipped;
                       </span>
                     ) : practiceComplete ? (
                       <span className="font-semibold text-emerald-300">
-                        Complete
+                        {practiceScore != null
+                          ? `Complete • ${practiceScore}%`
+                          : 'Complete'}
                       </span>
                     ) : practiceSkipped ? (
                       <span className="font-semibold text-yellow-300">
@@ -864,6 +933,7 @@ function SidebarFullQbank({
   bank,
   isActive,
   isPro,
+  attempts,
   onSelect,
   onStart,
   onResume,
@@ -872,6 +942,7 @@ function SidebarFullQbank({
   bank: BankSummary;
   isActive: boolean;
   isPro: boolean; // ✅ ADD THIS LINE
+  attempts: Attempts;
 
   onSelect: () => void;
   onStart: () => void;
@@ -882,6 +953,7 @@ function SidebarFullQbank({
   const isLocked = !isPro;
   const savedStep = readFullQbankStep(bank.setId);
   const practiceMeta = getSavedFullPracticeMeta(bank.setId);
+  const practiceScore = getLatestFullPracticeAttempt(attempts, bank)?.score ?? null;
 
   const flashMeta = readFlashSession(`${bank.setId}__missed__all__full`);
   const examMeta = getSavedFullMockSessionMeta(bank.setId);
@@ -1078,7 +1150,9 @@ const activeStep: StepKey = completed
                       </span>
                     ) : practiceComplete ? (
                       <span className="font-semibold text-yellow-300">
-                        Complete
+                        {practiceScore != null
+                          ? `Complete • ${practiceScore}%`
+                          : 'Complete'}
                       </span>
                     ) : practiceSkipped ? (
                       <span className="font-semibold text-yellow-300">
@@ -1227,6 +1301,9 @@ function hasSavedPracticeSession(setId: string, mini?: number) {
   }
 }
 export default function DashboardPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const requestedBank = searchParams?.get('bank') ?? null;
   const [mounted, setMounted] = useState(false);
 const proStatus = usePro();
 const isProLoading = proStatus === null;
@@ -1243,7 +1320,9 @@ const shouldGatePro = proStatus === false;
   const [bankSummaries, setBankSummaries] = useState<BankSummary[]>(
     BANKS.map((setId) => getBankMasterySummary(setId)),
   );
-  const [selectedBank, setSelectedBank] = useState<BankId>('qbank1');
+  const [selectedBank, setSelectedBank] = useState<BankId>(() => {
+    return parseBankId(requestedBank) ?? readSavedSelectedBank() ?? 'qbank1';
+  });
   const [selectedLesson, setSelectedLesson] = useState<LessonKey>('mini-1');
   const activeBankLabel = labelForBank(selectedBank);
   const activeBankDescription = bankDescription(selectedBank);
@@ -1257,6 +1336,15 @@ const shouldGatePro = proStatus === false;
     null,
   );
   const [challengeNow, setChallengeNow] = useState(Date.now());
+
+  function selectDashboardBank(bank: BankId) {
+    setSelectedBank(bank);
+    saveSelectedBank(bank);
+
+    if (parseBankId(requestedBank) !== bank) {
+      router.replace(`/app/dashboard?bank=${bank}`, { scroll: false });
+    }
+  }
 
 function handleRestartMini(mini: number) {
   if (!currentBank) return;
@@ -1358,6 +1446,16 @@ function confirmSkipExam() {
       );
     };
   }, []);
+
+  useEffect(() => {
+    const bankFromUrl = parseBankId(requestedBank);
+    if (!bankFromUrl) return;
+
+    setSelectedBank((current) =>
+      current === bankFromUrl ? current : bankFromUrl,
+    );
+    saveSelectedBank(bankFromUrl);
+  }, [requestedBank]);
 
   useEffect(() => {
     const deadline = getChallengeDeadline();
@@ -2133,16 +2231,16 @@ const readiness = useMemo(() => {
                   const isReady = Boolean(bankData?.ready);
                   const isFullyReady = readiness.fullyReady;
 
-                  return (
-                    <button
-                      key={bank.setId}
+	                  return (
+	                    <button
+	                      key={bank.setId}
                       type="button"
                       onClick={() => {
                         if (locked) {
                           window.location.href = '/app/upgrade';
                           return;
                         }
-                        setSelectedBank(bank.setId as BankId);
+                        selectDashboardBank(bank.setId as BankId);
                       }}
                       className={cx(
                         'flex items-center justify-between rounded-full border px-4 py-3 text-left text-sm transition',
@@ -2505,6 +2603,7 @@ const readiness = useMemo(() => {
                     bank={currentBank}
                     isActive={selectedLesson === 'full-qbank'}
                     isPro={isPro || isProLoading}
+                    attempts={attempts}
                     onSelect={() => {
                       setSelectedLesson('full-qbank');
                     }}

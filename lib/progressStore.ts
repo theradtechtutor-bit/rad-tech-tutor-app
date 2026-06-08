@@ -39,6 +39,15 @@ function fullQbankStepKey(setId: string) {
   return `rtt_full_qbank_step_${(setId || 'qbank1').toLowerCase()}`;
 }
 
+type PracticeMissScope = number | 'full';
+
+function latestPracticeMissedKey(setId: string, scope: PracticeMissScope) {
+  const normalized = (setId || 'qbank1').toLowerCase();
+  return scope === 'full'
+    ? `rtt_latest_missed_${normalized}_practice_full`
+    : `rtt_latest_missed_${normalized}_practice_mini_${scope}`;
+}
+
 function ensureAuthSync() {
   if (typeof window === 'undefined') return;
   if (authSyncInitialized) return;
@@ -580,6 +589,47 @@ export function clearFlashSession(scopeKey: string) {
   window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
 }
 
+export function saveLatestPracticeMissedIds(
+  setId: string,
+  scope: PracticeMissScope,
+  ids: string[],
+) {
+  const uniqueIds = Array.from(new Set(ids.map(String).filter(Boolean)));
+  writeJson(latestPracticeMissedKey(setId, scope), uniqueIds);
+}
+
+export function readLatestPracticeMissedIds(
+  setId: string,
+  scope: PracticeMissScope,
+): string[] | null {
+  if (typeof window === 'undefined') return null;
+  const key = latestPracticeMissedKey(setId, scope);
+
+  try {
+    const active = getClientStorage();
+    const raw =
+      active?.getItem(key) ??
+      window.localStorage.getItem(key) ??
+      window.sessionStorage.getItem(key);
+
+    if (raw == null) return null;
+
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.map(String).filter(Boolean) : [];
+  } catch {
+    return null;
+  }
+}
+
+export function clearLatestPracticeMissedIds(
+  setId: string,
+  scope: PracticeMissScope,
+) {
+  if (typeof window === 'undefined') return;
+  removeKeyFromBoth(latestPracticeMissedKey(setId, scope));
+  window.dispatchEvent(new CustomEvent('rtt-progress-updated'));
+}
+
 export function readPracticeSession(scopeKey: string): PracticeSession | null {
   return readJson<PracticeSession | null>(practiceSessionKey(scopeKey), null);
 }
@@ -860,6 +910,8 @@ export function resetMiniMockFull(setId: string, miniId: number) {
     } catch {}
   }
 
+  clearLatestPracticeMissedIds(setId, miniId);
+
   const mastery = readBankMastery(setId);
 
   if (mastery.miniStatus[String(miniId)]) {
@@ -1015,6 +1067,8 @@ export function resetFullQbank(setId: string) {
 
   // 🔥 Remove FULL flashcards session
   removeKeyFromBoth(flashSessionKey(`${normalized}__missed__all__full`));
+  removeKeyFromBoth(flashSessionKey(`${normalized}__full`));
+  clearLatestPracticeMissedIds(normalized, 'full');
 
   // 🔥 Remove FULL mock session + results
   removeKeyFromBoth(`rtt_mock_session_mastery_${normalized}_full_0_all`);
