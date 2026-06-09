@@ -16,6 +16,15 @@ const successScreenshots = [
     height: 826,
   },
   {
+    id: 'stephanie-arrt-pass-92',
+    src: '/student-success/stephanie-arrt-pass-92-name-email-blurred.png',
+    alt: 'Redacted student email sharing that they passed the ARRT exam with a 92 score.',
+    title: 'ARRT® exam follow-up',
+    type: 'email',
+    width: 1194,
+    height: 1060,
+  },
+  {
     id: 'sanaa-palmer-pass',
     src: '/student-success/sanaa-palmer-name-photo-blurred.png',
     alt: 'Redacted student message sharing that they passed the exam.',
