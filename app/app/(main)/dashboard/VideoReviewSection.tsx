@@ -13,33 +13,47 @@ import { captureEvent } from '@/lib/analytics';
 const MINI_MOCK_1_YOUTUBE_URL = 'https://www.youtube.com/watch?v=Q-3Ntw8z7xk';
 const MINI_MOCK_1_VIDEO_URL = '/review-videos/mini-mock-1-review.mp4';
 const MINI_MOCK_1_AUDIO_URL = '/review-audio/mini-mock-1-review.mp3';
+const MINI_MOCK_1_POSTER_URL =
+  '/review-videos/mini-mock-1-review-poster.jpg';
+const MEDIA_SEEK_SECONDS = 5;
 
 type ReviewStatus = 'Now Available' | 'Coming Soon';
 
 type MiniMockReview = {
+  qbankLabel: string;
+  miniMockLabel: string;
   miniMockNumber: number;
   videoTitle: string;
   audioTitle: string;
-  videoUrl: string;
-  audioUrl: string;
+  videoSrc: string;
+  audioSrc: string;
   youtubeUrl: string;
-  posterUrl: string;
+  posterSrc: string;
   videoAvailable: boolean;
   audioAvailable: boolean;
+};
+
+type WebkitFullscreenVideoElement = HTMLVideoElement & {
+  webkitEnterFullscreen?: () => void;
+  webkitEnterFullScreen?: () => void;
 };
 
 const miniMockReviews: MiniMockReview[] = Array.from({ length: 10 }, (_, idx) => {
   const miniMockNumber = idx + 1;
   const isMiniMockOne = miniMockNumber === 1;
+  const qbankLabel = 'QBank 1';
+  const miniMockLabel = `Mini Mock ${miniMockNumber}`;
 
   return {
+    qbankLabel,
+    miniMockLabel,
     miniMockNumber,
-    videoTitle: `Mini Mock ${miniMockNumber} Review`,
-    audioTitle: `Mini Mock ${miniMockNumber} Review`,
-    videoUrl: isMiniMockOne ? MINI_MOCK_1_VIDEO_URL : '',
-    audioUrl: isMiniMockOne ? MINI_MOCK_1_AUDIO_URL : '',
+    videoTitle: `${qbankLabel} ${miniMockLabel} Video Review`,
+    audioTitle: `${qbankLabel} ${miniMockLabel} Audio Review`,
+    videoSrc: isMiniMockOne ? MINI_MOCK_1_VIDEO_URL : '',
+    audioSrc: isMiniMockOne ? MINI_MOCK_1_AUDIO_URL : '',
     youtubeUrl: isMiniMockOne ? MINI_MOCK_1_YOUTUBE_URL : '',
-    posterUrl: '',
+    posterSrc: isMiniMockOne ? MINI_MOCK_1_POSTER_URL : '',
     videoAvailable: isMiniMockOne,
     audioAvailable: isMiniMockOne,
   };
@@ -56,6 +70,65 @@ function formatTime(seconds: number) {
     .toString()
     .padStart(2, '0');
   return `${minutes}:${remainingSeconds}`;
+}
+
+function clampMediaTime(time: number, duration: number) {
+  const maxTime = Number.isFinite(duration) && duration > 0 ? duration : time;
+  return Math.max(0, Math.min(time, maxTime));
+}
+
+function seekMediaBy(media: HTMLMediaElement, seconds: number) {
+  media.currentTime = clampMediaTime(media.currentTime + seconds, media.duration);
+}
+
+function isTypingTarget(target: EventTarget | null) {
+  if (!(target instanceof HTMLElement)) return false;
+  const tagName = target.tagName.toLowerCase();
+  return (
+    tagName === 'input' ||
+    tagName === 'textarea' ||
+    tagName === 'select' ||
+    target.isContentEditable
+  );
+}
+
+function updateMediaSession({
+  media,
+  title,
+  album,
+}: {
+  media: HTMLMediaElement;
+  title: string;
+  album: string;
+}) {
+  if (
+    typeof navigator === 'undefined' ||
+    !('mediaSession' in navigator) ||
+    typeof window === 'undefined' ||
+    typeof window.MediaMetadata === 'undefined'
+  ) {
+    return;
+  }
+
+  navigator.mediaSession.metadata = new window.MediaMetadata({
+    title,
+    artist: 'Rad Tech Tutor',
+    album,
+    artwork: [{ src: '/icon.png', sizes: '512x512', type: 'image/png' }],
+  });
+
+  navigator.mediaSession.setActionHandler('play', () => {
+    void media.play().catch(() => {});
+  });
+  navigator.mediaSession.setActionHandler('pause', () => {
+    media.pause();
+  });
+  navigator.mediaSession.setActionHandler('seekbackward', () => {
+    seekMediaBy(media, -MEDIA_SEEK_SECONDS);
+  });
+  navigator.mediaSession.setActionHandler('seekforward', () => {
+    seekMediaBy(media, MEDIA_SEEK_SECONDS);
+  });
 }
 
 function PlayIcon({ className = '' }: { className?: string }) {
@@ -238,7 +311,7 @@ function BrandedVideoPlayer({
     setCurrentTime(0);
     setDuration(0);
     setHasError(false);
-  }, [review.videoUrl]);
+  }, [review.videoSrc]);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -253,8 +326,43 @@ function BrandedVideoPlayer({
     };
   }, []);
 
-  if (!review.videoAvailable || !review.videoUrl) {
-    return <ComingSoonPlayer miniMockNumber={review.miniMockNumber} kind="Video" />;
+  useEffect(() => {
+    if (isPreview) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (isTypingTarget(event.target)) return;
+      const video = videoRef.current;
+      if (!video) return;
+
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        seekMediaBy(video, MEDIA_SEEK_SECONDS);
+        setCurrentTime(video.currentTime);
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        seekMediaBy(video, -MEDIA_SEEK_SECONDS);
+        setCurrentTime(video.currentTime);
+      } else if (event.key === ' ') {
+        event.preventDefault();
+        if (video.paused) {
+          void video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isPreview]);
+
+  if (!review.videoAvailable || !review.videoSrc) {
+    return (
+      <ComingSoonPlayer miniMockNumber={review.miniMockNumber} kind="Video" />
+    );
   }
 
   const togglePlay = async () => {
@@ -304,6 +412,18 @@ function BrandedVideoPlayer({
       return;
     }
 
+    const video = videoRef.current as WebkitFullscreenVideoElement | null;
+
+    if (video?.webkitEnterFullscreen) {
+      video.webkitEnterFullscreen();
+      return;
+    }
+
+    if (video?.webkitEnterFullScreen) {
+      video.webkitEnterFullScreen();
+      return;
+    }
+
     await wrapperRef.current?.requestFullscreen?.();
   };
 
@@ -328,35 +448,53 @@ function BrandedVideoPlayer({
         }`}
         onClick={isPreview ? onOpenModal : togglePlay}
       >
-        <video
-          ref={videoRef}
-          className="m-0 block h-full w-full max-h-full max-w-full object-contain object-center"
-          poster={review.posterUrl || undefined}
-          preload="metadata"
-          playsInline
-          controls={false}
-          muted={isPreview}
-          onClick={(event) => {
-            event.stopPropagation();
-            if (isPreview) {
-              onOpenModal?.();
-              return;
+        {isPreview && review.posterSrc ? (
+          <div
+            className="h-full w-full bg-contain bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${review.posterSrc})` }}
+            role="img"
+            aria-label={review.videoTitle}
+          />
+        ) : (
+          <video
+            ref={videoRef}
+            className="m-0 block h-full w-full max-h-full max-w-full object-contain object-center"
+            poster={review.posterSrc || undefined}
+            preload="metadata"
+            playsInline
+            controls={false}
+            muted={isPreview}
+            onClick={(event) => {
+              event.stopPropagation();
+              if (isPreview) {
+                onOpenModal?.();
+                return;
+              }
+              void togglePlay();
+            }}
+            onPlay={() => setIsPlaying(true)}
+            onPlaying={(event) => {
+              updateMediaSession({
+                media: event.currentTarget,
+                title: review.videoTitle,
+                album: 'Mini Mock Video Reviews',
+              });
+            }}
+            onPause={() => setIsPlaying(false)}
+            onEnded={() => setIsPlaying(false)}
+            onError={() => setHasError(true)}
+            onLoadedMetadata={(event) => {
+              setDuration(event.currentTarget.duration || 0);
+              event.currentTarget.volume = volume;
+              event.currentTarget.playbackRate = playbackRate;
+            }}
+            onTimeUpdate={(event) =>
+              setCurrentTime(event.currentTarget.currentTime)
             }
-            void togglePlay();
-          }}
-          onPlay={() => setIsPlaying(true)}
-          onPause={() => setIsPlaying(false)}
-          onEnded={() => setIsPlaying(false)}
-          onError={() => setHasError(true)}
-          onLoadedMetadata={(event) => {
-            setDuration(event.currentTarget.duration || 0);
-            event.currentTarget.volume = volume;
-            event.currentTarget.playbackRate = playbackRate;
-          }}
-          onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
-        >
-          <source src={review.videoUrl} type="video/mp4" />
-        </video>
+          >
+            <source src={review.videoSrc} type="video/mp4" />
+          </video>
+        )}
 
         <button
           type="button"
@@ -388,7 +526,7 @@ function BrandedVideoPlayer({
 
         {hasError ? (
           <div className="absolute inset-x-3 bottom-3 rounded-xl border border-yellow-400/20 bg-black/80 px-3 py-2 text-xs font-medium text-yellow-100">
-            Add the video file at {review.videoUrl} to play this review.
+            Add the video file at {review.videoSrc} to play this review.
           </div>
         ) : null}
       </div>
@@ -485,9 +623,11 @@ function VideoReviewModal({
   onClose: () => void;
 }) {
   const [selectedReview, setSelectedReview] = useState(review);
+  const [comingSoonMessage, setComingSoonMessage] = useState('');
 
   useEffect(() => {
     setSelectedReview(review);
+    setComingSoonMessage('');
   }, [review]);
 
   useEffect(() => {
@@ -518,11 +658,11 @@ function VideoReviewModal({
     >
       <div className="flex max-h-[calc(100dvh-1rem)] w-full max-w-[96vw] flex-col overflow-hidden rounded-3xl border border-yellow-400/25 bg-zinc-950 px-2.5 pb-4 pt-2.5 shadow-[0_24px_90px_rgba(0,0,0,0.65)] sm:max-h-[94dvh] sm:max-w-[94vw] sm:px-3 sm:pb-5 sm:pt-3 [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:max-h-[calc(100dvh-0.75rem)] [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:max-w-[98vw] [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:rounded-2xl [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:px-2 [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:pb-2 [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:pt-1.5">
         <div className="flex shrink-0 items-center justify-between gap-3 [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:gap-2">
-          <div>
+          <div className="min-w-0">
             <div className="text-[9px] font-semibold uppercase tracking-[0.18em] text-yellow-200/75 sm:text-[10px] [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:text-[8px]">
               Video Review
             </div>
-            <h2 className="mt-0.5 text-sm font-semibold text-white sm:text-lg [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:text-sm">
+            <h2 className="mt-0.5 truncate text-sm font-semibold text-white sm:text-lg [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:text-sm">
               {selectedReview.videoTitle}
             </h2>
           </div>
@@ -545,6 +685,11 @@ function VideoReviewModal({
             <h3 className="shrink-0 text-sm font-semibold text-white [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:text-xs">
               Mini Mock Reviews
             </h3>
+            {comingSoonMessage ? (
+              <div className="mt-2 shrink-0 rounded-xl border border-yellow-400/20 bg-yellow-400/10 px-3 py-2 text-xs font-medium text-yellow-100">
+                {comingSoonMessage}
+              </div>
+            ) : null}
             <div className="mt-2 grid max-h-[30dvh] min-h-0 gap-1.5 overflow-y-auto pr-1 md:max-h-[18dvh] xl:max-h-none xl:flex-1 [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:max-h-none [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:flex-1 [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:gap-1">
               {miniMockReviews.map((item) => (
                 <VideoModalPlaylistRow
@@ -560,6 +705,15 @@ function VideoReviewModal({
                       availability: getReviewStatus(nextReview.videoAvailable),
                       source: 'site',
                     });
+
+                    if (!nextReview.videoAvailable) {
+                      setComingSoonMessage(
+                        `${nextReview.videoTitle} is coming soon.`,
+                      );
+                      return;
+                    }
+
+                    setComingSoonMessage('');
                     setSelectedReview(nextReview);
                   }}
                 />
@@ -592,8 +746,8 @@ function VideoModalPlaylistRow({
             <ClockIcon />
           )}
         </span>
-        <span className="truncate">
-          Video {review.miniMockNumber}: {review.videoTitle}
+        <span className="truncate cursor-inherit" title={review.videoTitle}>
+          {review.videoTitle}
         </span>
       </span>
       <span
@@ -608,26 +762,21 @@ function VideoModalPlaylistRow({
     </>
   );
 
-  if (review.videoAvailable) {
-    return (
-      <button
-        type="button"
-        onClick={() => onSelect(review)}
-        className={`flex min-h-9 w-full min-w-0 items-center justify-between gap-2 overflow-hidden rounded-xl border px-3 py-2 text-left text-xs font-medium text-white transition ${
-          selected
-            ? 'border-yellow-400/65 bg-yellow-400/12'
-            : 'border-white/10 bg-white/[0.025] hover:border-yellow-300/45 hover:bg-yellow-400/10'
-        }`}
-      >
-        {content}
-      </button>
-    );
-  }
-
   return (
-    <div className="flex min-h-9 w-full min-w-0 items-center justify-between gap-2 overflow-hidden rounded-xl border border-white/10 bg-white/[0.025] px-3 py-2 text-xs text-white/55">
+    <button
+      type="button"
+      onClick={() => onSelect(review)}
+      title={review.videoTitle}
+      className={`flex min-h-9 w-full min-w-0 cursor-pointer items-center justify-between gap-2 overflow-hidden rounded-xl border px-3 py-2 text-left text-xs font-medium transition ${
+        selected
+          ? 'border-yellow-400/65 bg-yellow-400/12 text-white'
+          : review.videoAvailable
+            ? 'border-white/10 bg-white/[0.025] text-white hover:border-yellow-300/45 hover:bg-yellow-400/10'
+            : 'border-white/10 bg-white/[0.025] text-white/55 hover:border-yellow-300/30 hover:bg-yellow-400/[0.06]'
+      }`}
+    >
       {content}
-    </div>
+    </button>
   );
 }
 
@@ -645,10 +794,12 @@ function BrandedAudioPlayer({ review }: { review: MiniMockReview }) {
     setCurrentTime(0);
     setDuration(0);
     setHasError(false);
-  }, [review.audioUrl]);
+  }, [review.audioSrc]);
 
-  if (!review.audioAvailable || !review.audioUrl) {
-    return <ComingSoonPlayer miniMockNumber={review.miniMockNumber} kind="Audio" />;
+  if (!review.audioAvailable || !review.audioSrc) {
+    return (
+      <ComingSoonPlayer miniMockNumber={review.miniMockNumber} kind="Audio" />
+    );
   }
 
   const togglePlay = async () => {
@@ -692,7 +843,14 @@ function BrandedAudioPlayer({ review }: { review: MiniMockReview }) {
       <audio
         ref={audioRef}
         preload="metadata"
-        onPlay={() => setIsPlaying(true)}
+        onPlay={(event) => {
+          setIsPlaying(true);
+          updateMediaSession({
+            media: event.currentTarget,
+            title: review.audioTitle,
+            album: 'Mini Mock Audio Reviews',
+          });
+        }}
         onPause={() => setIsPlaying(false)}
         onEnded={() => setIsPlaying(false)}
         onError={() => setHasError(true)}
@@ -703,7 +861,7 @@ function BrandedAudioPlayer({ review }: { review: MiniMockReview }) {
         }}
         onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
       >
-        <source src={review.audioUrl} type="audio/mpeg" />
+        <source src={review.audioSrc} type="audio/mpeg" />
       </audio>
 
       <div className="flex items-center gap-4">
@@ -715,7 +873,7 @@ function BrandedAudioPlayer({ review }: { review: MiniMockReview }) {
 
       {hasError ? (
         <div className="mt-4 rounded-xl border border-violet-300/20 bg-black/30 px-4 py-3 text-sm font-medium text-violet-100">
-          Add the audio file at {review.audioUrl} to play this review.
+          Add the audio file at {review.audioSrc} to play this review.
         </div>
       ) : null}
 
@@ -801,8 +959,8 @@ function VideoReviewRow({
             <ClockIcon />
           )}
         </span>
-        <span className="truncate">
-          Video {review.miniMockNumber}: {review.videoTitle}
+        <span className="truncate cursor-inherit" title={review.videoTitle}>
+          {review.videoTitle}
         </span>
       </span>
       <span
@@ -817,34 +975,29 @@ function VideoReviewRow({
     </>
   );
 
-  if (review.videoAvailable) {
-    return (
-      <button
-        type="button"
-        onClick={() => {
-          captureEvent('video_review_item_clicked', {
-            miniMockNumber: review.miniMockNumber,
-            title: review.videoTitle,
-            availability: status,
-            source: 'site',
-          });
-          onSelect(review);
-        }}
-        className={`flex min-h-8 w-full min-w-0 items-center justify-between gap-2 overflow-hidden rounded-xl border px-3 py-1.5 text-left text-xs font-medium text-white transition ${
-          selected
-            ? 'border-yellow-400/65 bg-yellow-400/12'
-            : 'border-white/10 bg-white/[0.025] hover:border-yellow-300/45 hover:bg-yellow-400/10'
-        }`}
-      >
-        {content}
-      </button>
-    );
-  }
-
   return (
-    <div className="flex min-h-8 w-full min-w-0 items-center justify-between gap-2 overflow-hidden rounded-xl border border-white/10 bg-white/[0.025] px-3 py-1.5 text-xs text-white/55">
+    <button
+      type="button"
+      onClick={() => {
+        captureEvent('video_review_item_clicked', {
+          miniMockNumber: review.miniMockNumber,
+          title: review.videoTitle,
+          availability: status,
+          source: 'site',
+        });
+        onSelect(review);
+      }}
+      title={review.videoTitle}
+      className={`flex min-h-8 w-full min-w-0 cursor-pointer items-center justify-between gap-2 overflow-hidden rounded-xl border px-3 py-1.5 text-left text-xs font-medium transition ${
+        selected
+          ? 'border-yellow-400/65 bg-yellow-400/12 text-white'
+          : review.videoAvailable
+            ? 'border-white/10 bg-white/[0.025] text-white hover:border-yellow-300/45 hover:bg-yellow-400/10'
+            : 'border-white/10 bg-white/[0.025] text-white/55 hover:border-yellow-300/30 hover:bg-yellow-400/[0.06]'
+      }`}
+    >
       {content}
-    </div>
+    </button>
   );
 }
 
@@ -864,8 +1017,8 @@ function AudioReviewRow({
         <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-white/[0.04] text-violet-300">
           <HeadphonesIcon className="h-3.5 w-3.5" />
         </span>
-        <span className="truncate">
-          Audio {review.miniMockNumber}: {review.audioTitle}
+        <span className="truncate cursor-inherit" title={review.audioTitle}>
+          {review.audioTitle}
         </span>
       </span>
       <span
@@ -880,34 +1033,29 @@ function AudioReviewRow({
     </>
   );
 
-  if (review.audioAvailable) {
-    return (
-      <button
-        type="button"
-        onClick={() => {
-          captureEvent('audio_review_item_clicked', {
-            miniMockNumber: review.miniMockNumber,
-            title: review.audioTitle,
-            availability: status,
-            source: 'site',
-          });
-          onSelect(review);
-        }}
-        className={`flex min-h-8 w-full min-w-0 items-center justify-between gap-2 overflow-hidden rounded-xl border px-3 py-1.5 text-left text-xs font-medium text-white transition ${
-          selected
-            ? 'border-yellow-400/65 bg-yellow-400/12'
-            : 'border-white/10 bg-white/[0.025] hover:border-yellow-300/45 hover:bg-yellow-400/10'
-        }`}
-      >
-        {content}
-      </button>
-    );
-  }
-
   return (
-    <div className="flex min-h-8 w-full min-w-0 items-center justify-between gap-2 overflow-hidden rounded-xl border border-white/10 bg-white/[0.025] px-3 py-1.5 text-xs text-white/55">
+    <button
+      type="button"
+      onClick={() => {
+        captureEvent('audio_review_item_clicked', {
+          miniMockNumber: review.miniMockNumber,
+          title: review.audioTitle,
+          availability: status,
+          source: 'site',
+        });
+        onSelect(review);
+      }}
+      title={review.audioTitle}
+      className={`flex min-h-8 w-full min-w-0 cursor-pointer items-center justify-between gap-2 overflow-hidden rounded-xl border px-3 py-1.5 text-left text-xs font-medium transition ${
+        selected
+          ? 'border-yellow-400/65 bg-yellow-400/12 text-white'
+          : review.audioAvailable
+            ? 'border-white/10 bg-white/[0.025] text-white hover:border-yellow-300/45 hover:bg-yellow-400/10'
+            : 'border-white/10 bg-white/[0.025] text-white/55 hover:border-yellow-300/30 hover:bg-yellow-400/[0.06]'
+      }`}
+    >
       {content}
-    </div>
+    </button>
   );
 }
 
@@ -922,6 +1070,7 @@ function VideoReviewCard({
 }) {
   const selectedStatus = getReviewStatus(selectedReview.videoAvailable);
   const hasYoutubeLink = Boolean(selectedReview.youtubeUrl);
+  const [comingSoonMessage, setComingSoonMessage] = useState('');
 
   return (
     <section className="w-full overflow-hidden rounded-3xl border border-white/10 bg-black/20 p-5 shadow-[0_18px_70px_rgba(0,0,0,0.2)]">
@@ -953,6 +1102,12 @@ function VideoReviewCard({
             review={selectedReview}
             onOpenModal={() => onOpenReview(selectedReview)}
           />
+
+          {comingSoonMessage ? (
+            <div className="mt-3 rounded-xl border border-yellow-400/20 bg-yellow-400/10 px-3 py-2 text-sm font-medium text-yellow-100">
+              {comingSoonMessage}
+            </div>
+          ) : null}
 
           <p className="mt-3 text-sm leading-6 text-white/62">
             {selectedReview.videoAvailable
@@ -994,6 +1149,14 @@ function VideoReviewCard({
                 review.miniMockNumber === selectedReview.miniMockNumber
               }
               onSelect={(nextReview) => {
+                if (!nextReview.videoAvailable) {
+                  setComingSoonMessage(
+                    `${nextReview.videoTitle} is coming soon.`,
+                  );
+                  return;
+                }
+
+                setComingSoonMessage('');
                 onSelectReview(nextReview);
                 onOpenReview(nextReview);
               }}
@@ -1012,6 +1175,8 @@ function AudioReviewCard({
   selectedReview: MiniMockReview;
   onSelectReview: (review: MiniMockReview) => void;
 }) {
+  const [comingSoonMessage, setComingSoonMessage] = useState('');
+
   return (
     <section className="w-full overflow-hidden rounded-3xl border border-white/10 bg-black/20 p-5 shadow-[0_18px_70px_rgba(0,0,0,0.2)]">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -1043,6 +1208,12 @@ function AudioReviewCard({
 
           <BrandedAudioPlayer review={selectedReview} />
 
+          {comingSoonMessage ? (
+            <div className="mt-3 rounded-xl border border-violet-300/20 bg-violet-400/10 px-3 py-2 text-sm font-medium text-violet-100">
+              {comingSoonMessage}
+            </div>
+          ) : null}
+
           <p className="mt-3 text-sm leading-6 text-white/62">
             {selectedReview.audioAvailable
               ? selectedReview.audioTitle
@@ -1058,7 +1229,17 @@ function AudioReviewCard({
               selected={
                 review.miniMockNumber === selectedReview.miniMockNumber
               }
-              onSelect={onSelectReview}
+              onSelect={(nextReview) => {
+                if (!nextReview.audioAvailable) {
+                  setComingSoonMessage(
+                    `${nextReview.audioTitle} is coming soon.`,
+                  );
+                  return;
+                }
+
+                setComingSoonMessage('');
+                onSelectReview(nextReview);
+              }}
             />
           ))}
         </div>
