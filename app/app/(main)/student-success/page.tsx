@@ -60,6 +60,15 @@ const successScreenshots = [
     width: 1332,
     height: 1268,
   },
+  {
+    id: 'arrt-recommendation-post-loreinnnee',
+    src: '/student-success/arrt-recommendation-post-loreinnnee-blurred.png',
+    alt: 'Redacted student social post recommending The Rad Tech Tutor after passing on the first try.',
+    title: 'ARRT® pass TikTok post',
+    type: 'message',
+    width: 1125,
+    height: 2285,
+  },
 ];
 
 function captureStudentSuccessEvent(
