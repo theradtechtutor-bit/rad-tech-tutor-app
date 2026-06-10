@@ -1067,6 +1067,32 @@ function AudioReviewCard({
   );
 }
 
+export function VideoReviewModalTestLauncher() {
+  const firstAvailableVideo =
+    miniMockReviews.find((review) => review.videoAvailable) ?? miniMockReviews[0];
+  const [modalVideoReview, setModalVideoReview] =
+    useState<MiniMockReview | null>(null);
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setModalVideoReview(firstAvailableVideo)}
+        className="inline-flex rounded-full bg-yellow-400 px-4 py-2 text-sm font-bold text-black transition hover:bg-yellow-300"
+      >
+        Open Video Review Modal
+      </button>
+
+      {modalVideoReview ? (
+        <VideoReviewModal
+          review={modalVideoReview}
+          onClose={() => setModalVideoReview(null)}
+        />
+      ) : null}
+    </>
+  );
+}
+
 export default function VideoReviewSection() {
   const firstAvailableVideo = useMemo(
     () =>
