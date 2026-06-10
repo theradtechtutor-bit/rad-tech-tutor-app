@@ -444,7 +444,7 @@ function BrandedVideoPlayer({
             ? 'min-h-0 flex-1'
             : isPreview
               ? 'aspect-video'
-              : 'aspect-video [@media_(orientation:landscape)]:flex [@media_(orientation:landscape)]:min-h-0 [@media_(orientation:landscape)]:basis-0 [@media_(orientation:landscape)]:flex-1 [@media_(orientation:landscape)]:items-center [@media_(orientation:landscape)]:justify-center [@media_(orientation:landscape)]:aspect-auto'
+              : 'aspect-video [@media_(orientation:landscape)]:flex [@media_(orientation:landscape)]:min-h-[clamp(150px,42dvh,420px)] [@media_(orientation:landscape)]:basis-0 [@media_(orientation:landscape)]:flex-1 [@media_(orientation:landscape)]:items-center [@media_(orientation:landscape)]:justify-center [@media_(orientation:landscape)]:aspect-auto'
         }`}
         onClick={isPreview ? onOpenModal : togglePlay}
       >
@@ -676,7 +676,7 @@ function VideoReviewModal({
           </button>
         </div>
 
-        <div className="mt-2 grid min-h-0 flex-1 overflow-hidden gap-2 xl:grid-cols-[minmax(0,78fr)_minmax(220px,22fr)] [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:mt-1.5 [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:grid-cols-[minmax(0,1fr)_minmax(178px,218px)] [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:gap-1.5">
+        <div className="mt-2 grid min-h-0 flex-1 overflow-hidden gap-2 xl:grid-cols-[minmax(0,78fr)_minmax(220px,22fr)] [@media_(orientation:landscape)_and_(max-width:1199px)]:grid-cols-[minmax(0,1fr)_minmax(200px,260px)] [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:mt-1.5 [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:grid-cols-[minmax(0,1fr)_minmax(178px,218px)] [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:gap-1.5">
           <div className="min-h-0 min-w-0 overflow-hidden [@media_(orientation:landscape)]:h-full">
             <BrandedVideoPlayer review={selectedReview} variant="modal" />
           </div>
@@ -690,7 +690,7 @@ function VideoReviewModal({
                 {comingSoonMessage}
               </div>
             ) : null}
-            <div className="mt-2 grid max-h-[30dvh] min-h-0 gap-1.5 overflow-y-auto pr-1 md:max-h-[18dvh] xl:max-h-none xl:flex-1 [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:max-h-none [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:flex-1 [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:gap-1">
+            <div className="mt-2 grid max-h-[30dvh] min-h-0 gap-1.5 overflow-y-auto pr-1 md:max-h-[18dvh] xl:max-h-none xl:flex-1 [@media_(orientation:landscape)_and_(max-width:1199px)]:max-h-none [@media_(orientation:landscape)_and_(max-width:1199px)]:flex-1 [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:gap-1">
               {miniMockReviews.map((item) => (
                 <VideoModalPlaylistRow
                   key={item.miniMockNumber}
