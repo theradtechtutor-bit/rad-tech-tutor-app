@@ -77,6 +77,11 @@ function clampMediaTime(time: number, duration: number) {
   return Math.max(0, Math.min(time, maxTime));
 }
 
+function clampVolume(volume: number) {
+  if (!Number.isFinite(volume)) return 0;
+  return Math.max(0, Math.min(volume, 1));
+}
+
 function seekMediaBy(media: HTMLMediaElement, seconds: number) {
   media.currentTime = clampMediaTime(media.currentTime + seconds, media.duration);
 }
@@ -391,10 +396,11 @@ function BrandedVideoPlayer({
   };
 
   const handleVolume = (event: ChangeEvent<HTMLInputElement>) => {
-    const nextVolume = Number(event.target.value);
+    const nextVolume = clampVolume(Number(event.target.value));
     const video = videoRef.current;
     if (!video) return;
     video.volume = nextVolume;
+    video.muted = nextVolume === 0;
     setVolume(nextVolume);
   };
 
@@ -484,10 +490,12 @@ function BrandedVideoPlayer({
             onEnded={() => setIsPlaying(false)}
             onError={() => setHasError(true)}
             onLoadedMetadata={(event) => {
-              setDuration(event.currentTarget.duration || 0);
-              event.currentTarget.volume = volume;
-              event.currentTarget.playbackRate = playbackRate;
-            }}
+            setDuration(event.currentTarget.duration || 0);
+            const nextVolume = clampVolume(volume);
+            event.currentTarget.volume = nextVolume;
+            event.currentTarget.muted = isPreview || nextVolume === 0;
+            event.currentTarget.playbackRate = playbackRate;
+          }}
             onTimeUpdate={(event) =>
               setCurrentTime(event.currentTarget.currentTime)
             }
@@ -823,10 +831,11 @@ function BrandedAudioPlayer({ review }: { review: MiniMockReview }) {
   };
 
   const handleVolume = (event: ChangeEvent<HTMLInputElement>) => {
-    const nextVolume = Number(event.target.value);
+    const nextVolume = clampVolume(Number(event.target.value));
     const audio = audioRef.current;
     if (!audio) return;
     audio.volume = nextVolume;
+    audio.muted = nextVolume === 0;
     setVolume(nextVolume);
   };
 
@@ -863,7 +872,9 @@ function BrandedAudioPlayer({ review }: { review: MiniMockReview }) {
         onError={() => setHasError(true)}
         onLoadedMetadata={(event) => {
           setDuration(event.currentTarget.duration || 0);
-          event.currentTarget.volume = volume;
+          const nextVolume = clampVolume(volume);
+          event.currentTarget.volume = nextVolume;
+          event.currentTarget.muted = nextVolume === 0;
           event.currentTarget.playbackRate = playbackRate;
         }}
         onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
