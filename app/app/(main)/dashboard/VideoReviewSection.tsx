@@ -838,6 +838,13 @@ function BrandedAudioPlayer({ review }: { review: MiniMockReview }) {
     setPlaybackRate(nextRate);
   };
 
+  const handleSkip = (seconds: number) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    seekMediaBy(audio, seconds);
+    setCurrentTime(audio.currentTime);
+  };
+
   return (
     <div className="mt-4 w-full max-w-[420px] rounded-2xl border border-violet-300/25 bg-[radial-gradient(circle_at_25%_20%,rgba(139,92,246,0.22),transparent_38%),rgba(0,0,0,0.48)] p-5 shadow-[inset_0_0_36px_rgba(139,92,246,0.08)]">
       <audio
@@ -895,18 +902,38 @@ function BrandedAudioPlayer({ review }: { review: MiniMockReview }) {
       </div>
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-        <button
-          type="button"
-          onClick={togglePlay}
-          className="inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-2 text-xs font-bold text-black transition hover:bg-yellow-300"
-        >
-          {isPlaying ? (
-            <PauseIcon className="h-4 w-4" />
-          ) : (
-            <PlayIcon className="h-4 w-4" />
-          )}
-          {isPlaying ? 'Pause' : 'Play'}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => handleSkip(-MEDIA_SEEK_SECONDS)}
+            className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-full border border-violet-300/25 bg-white/[0.04] px-3 text-xs font-bold text-violet-100 transition hover:border-violet-200/45 hover:bg-violet-300/10"
+            aria-label="Skip audio back 5 seconds"
+          >
+            -5
+          </button>
+
+          <button
+            type="button"
+            onClick={togglePlay}
+            className="inline-flex min-h-9 items-center gap-2 rounded-full bg-yellow-400 px-4 py-2 text-xs font-bold text-black transition hover:bg-yellow-300"
+          >
+            {isPlaying ? (
+              <PauseIcon className="h-4 w-4" />
+            ) : (
+              <PlayIcon className="h-4 w-4" />
+            )}
+            {isPlaying ? 'Pause' : 'Play'}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleSkip(MEDIA_SEEK_SECONDS)}
+            className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-full border border-violet-300/25 bg-white/[0.04] px-3 text-xs font-bold text-violet-100 transition hover:border-violet-200/45 hover:bg-violet-300/10"
+            aria-label="Skip audio forward 5 seconds"
+          >
+            +5
+          </button>
+        </div>
 
         <div className="flex items-center gap-2 text-white/60">
           <VolumeIcon className="h-4 w-4" />
