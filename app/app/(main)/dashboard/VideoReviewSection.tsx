@@ -77,11 +77,6 @@ function clampMediaTime(time: number, duration: number) {
   return Math.max(0, Math.min(time, maxTime));
 }
 
-function clampVolume(volume: number) {
-  if (!Number.isFinite(volume)) return 0;
-  return Math.max(0, Math.min(volume, 1));
-}
-
 function seekMediaBy(media: HTMLMediaElement, seconds: number) {
   media.currentTime = clampMediaTime(media.currentTime + seconds, media.duration);
 }
@@ -212,25 +207,6 @@ function CloseIcon({ className = '' }: { className?: string }) {
   );
 }
 
-function VolumeIcon({ className = '' }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M11 5 6 9H3v6h3l5 4V5Z" />
-      <path d="M15.5 8.5a5 5 0 0 1 0 7" />
-      <path d="M18.5 5.5a9 9 0 0 1 0 13" />
-    </svg>
-  );
-}
-
 function HeadphonesIcon({ className = '' }: { className?: string }) {
   return (
     <svg
@@ -306,7 +282,6 @@ function BrandedVideoPlayer({
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(0.9);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -393,15 +368,6 @@ function BrandedVideoPlayer({
     if (!video) return;
     video.currentTime = nextTime;
     setCurrentTime(nextTime);
-  };
-
-  const handleVolume = (event: ChangeEvent<HTMLInputElement>) => {
-    const nextVolume = clampVolume(Number(event.target.value));
-    const video = videoRef.current;
-    if (!video) return;
-    video.volume = nextVolume;
-    video.muted = nextVolume === 0;
-    setVolume(nextVolume);
   };
 
   const handlePlaybackRate = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -491,9 +457,7 @@ function BrandedVideoPlayer({
             onError={() => setHasError(true)}
             onLoadedMetadata={(event) => {
             setDuration(event.currentTarget.duration || 0);
-            const nextVolume = clampVolume(volume);
-            event.currentTarget.volume = nextVolume;
-            event.currentTarget.muted = isPreview || nextVolume === 0;
+            event.currentTarget.muted = isPreview;
             event.currentTarget.playbackRate = playbackRate;
           }}
             onTimeUpdate={(event) =>
@@ -578,20 +542,6 @@ function BrandedVideoPlayer({
               )}
               {isPlaying ? 'Pause' : 'Play'}
             </button>
-
-            <div className="flex items-center gap-2 text-white/60">
-              <VolumeIcon className="h-4 w-4" />
-              <input
-                type="range"
-                min={0}
-                max={1}
-                step={0.05}
-                value={volume}
-                onChange={handleVolume}
-                className="h-1.5 w-20 accent-yellow-400"
-                aria-label="Video volume"
-              />
-            </div>
 
             <select
               value={playbackRate}
@@ -793,7 +743,6 @@ function BrandedAudioPlayer({ review }: { review: MiniMockReview }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(0.9);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [hasError, setHasError] = useState(false);
 
@@ -830,15 +779,6 @@ function BrandedAudioPlayer({ review }: { review: MiniMockReview }) {
     setCurrentTime(nextTime);
   };
 
-  const handleVolume = (event: ChangeEvent<HTMLInputElement>) => {
-    const nextVolume = clampVolume(Number(event.target.value));
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.volume = nextVolume;
-    audio.muted = nextVolume === 0;
-    setVolume(nextVolume);
-  };
-
   const handlePlaybackRate = (event: ChangeEvent<HTMLSelectElement>) => {
     const nextRate = Number(event.target.value);
     const audio = audioRef.current;
@@ -872,9 +812,6 @@ function BrandedAudioPlayer({ review }: { review: MiniMockReview }) {
         onError={() => setHasError(true)}
         onLoadedMetadata={(event) => {
           setDuration(event.currentTarget.duration || 0);
-          const nextVolume = clampVolume(volume);
-          event.currentTarget.volume = nextVolume;
-          event.currentTarget.muted = nextVolume === 0;
           event.currentTarget.playbackRate = playbackRate;
         }}
         onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
@@ -944,20 +881,6 @@ function BrandedAudioPlayer({ review }: { review: MiniMockReview }) {
           >
             +5
           </button>
-        </div>
-
-        <div className="flex items-center gap-2 text-white/60">
-          <VolumeIcon className="h-4 w-4" />
-          <input
-            type="range"
-            min={0}
-            max={1}
-            step={0.05}
-            value={volume}
-            onChange={handleVolume}
-            className="h-1.5 w-24 accent-yellow-400"
-            aria-label="Audio volume"
-          />
         </div>
 
         <select
