@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import './globals.css';
 import MarketingNav from './_components/MarketingNav';
 import PostHogProvider from './posthog-provider';
@@ -19,18 +18,6 @@ export default function RootLayout({
     <html lang="en">
       {/* <body className="min-h-screen bg-black text-white antialiased"> */}
       <body className="flex min-h-screen flex-col bg-black text-white antialiased">
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-18211644799"
-          strategy="afterInteractive"
-        />
-        <Script id="google-ads-tag" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'AW-18211644799');
-          `}
-        </Script>
         <PostHogProvider />
         <MarketingNav />
         {/* <main>{children}</main> */}

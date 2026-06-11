@@ -16,6 +16,7 @@ const MINI_MOCK_1_AUDIO_URL = '/review-audio/mini-mock-1-review.mp3';
 const MINI_MOCK_1_POSTER_URL =
   '/review-videos/mini-mock-1-review-poster.jpg';
 const MEDIA_SEEK_SECONDS = 5;
+const MEDIA_PROGRESS_THRESHOLDS = [25, 50, 75, 90] as const;
 
 type ReviewStatus = 'Now Available' | 'Coming Soon';
 
@@ -75,6 +76,109 @@ function formatTime(seconds: number) {
 function clampMediaTime(time: number, duration: number) {
   const maxTime = Number.isFinite(duration) && duration > 0 ? duration : time;
   return Math.max(0, Math.min(time, maxTime));
+}
+
+function slugifyContentId(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+}
+
+function getMediaContentId(
+  review: MiniMockReview,
+  contentType: 'video' | 'audio',
+) {
+  return slugifyContentId(
+    `${review.qbankLabel} ${review.miniMockLabel} ${contentType} review`,
+  );
+}
+
+function getMediaEventProps({
+  review,
+  contentType,
+  media,
+  progressPercent,
+}: {
+  review: MiniMockReview;
+  contentType: 'video' | 'audio';
+  media: HTMLMediaElement;
+  progressPercent?: number;
+}) {
+  const duration = Number.isFinite(media.duration) ? media.duration : undefined;
+  const currentTime = Number.isFinite(media.currentTime)
+    ? media.currentTime
+    : undefined;
+
+  return {
+    content_type: contentType,
+    content_id: getMediaContentId(review, contentType),
+    title: contentType === 'video' ? review.videoTitle : review.audioTitle,
+    category: 'Mini Mock Reviews',
+    section:
+      contentType === 'video'
+        ? 'Mini Mock Video Reviews'
+        : 'Mini Mock Audio Reviews',
+    qbankLabel: review.qbankLabel,
+    miniMockLabel: review.miniMockLabel,
+    miniMockNumber: review.miniMockNumber,
+    page_path:
+      typeof window === 'undefined' ? undefined : window.location.pathname,
+    duration_seconds:
+      typeof duration === 'number' ? Math.round(duration) : undefined,
+    current_time_seconds:
+      typeof currentTime === 'number' ? Math.round(currentTime) : undefined,
+    progress_percent: progressPercent,
+  };
+}
+
+function captureMediaEvent({
+  eventName,
+  review,
+  contentType,
+  media,
+  progressPercent,
+}: {
+  eventName: string;
+  review: MiniMockReview;
+  contentType: 'video' | 'audio';
+  media: HTMLMediaElement;
+  progressPercent?: number;
+}) {
+  captureEvent(
+    eventName,
+    getMediaEventProps({ review, contentType, media, progressPercent }),
+  );
+}
+
+function captureMediaProgress({
+  media,
+  review,
+  contentType,
+  capturedThresholds,
+}: {
+  media: HTMLMediaElement;
+  review: MiniMockReview;
+  contentType: 'video' | 'audio';
+  capturedThresholds: Set<number>;
+}) {
+  if (!Number.isFinite(media.duration) || media.duration <= 0) return;
+
+  const percent = (media.currentTime / media.duration) * 100;
+  const threshold = MEDIA_PROGRESS_THRESHOLDS.find(
+    (item) => percent >= item && !capturedThresholds.has(item),
+  );
+
+  if (!threshold) return;
+
+  capturedThresholds.add(threshold);
+  captureMediaEvent({
+    eventName: `${contentType}_progress`,
+    review,
+    contentType,
+    media,
+    progressPercent: threshold,
+  });
 }
 
 function seekMediaBy(media: HTMLMediaElement, seconds: number) {
@@ -278,6 +382,7 @@ function BrandedVideoPlayer({
 }) {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const capturedProgressRef = useRef<Set<number>>(new Set());
   const isPreview = variant === 'preview';
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -291,6 +396,7 @@ function BrandedVideoPlayer({
     setCurrentTime(0);
     setDuration(0);
     setHasError(false);
+    capturedProgressRef.current = new Set();
   }, [review.videoSrc]);
 
   useEffect(() => {
@@ -444,7 +550,15 @@ function BrandedVideoPlayer({
               }
               void togglePlay();
             }}
-            onPlay={() => setIsPlaying(true)}
+            onPlay={(event) => {
+              setIsPlaying(true);
+              captureMediaEvent({
+                eventName: 'video_played',
+                review,
+                contentType: 'video',
+                media: event.currentTarget,
+              });
+            }}
             onPlaying={(event) => {
               updateMediaSession({
                 media: event.currentTarget,
@@ -452,17 +566,40 @@ function BrandedVideoPlayer({
                 album: 'Mini Mock Video Reviews',
               });
             }}
-            onPause={() => setIsPlaying(false)}
-            onEnded={() => setIsPlaying(false)}
+            onPause={(event) => {
+              setIsPlaying(false);
+              if (event.currentTarget.ended) return;
+              captureMediaEvent({
+                eventName: 'video_paused',
+                review,
+                contentType: 'video',
+                media: event.currentTarget,
+              });
+            }}
+            onEnded={(event) => {
+              setIsPlaying(false);
+              captureMediaEvent({
+                eventName: 'video_completed',
+                review,
+                contentType: 'video',
+                media: event.currentTarget,
+              });
+            }}
             onError={() => setHasError(true)}
             onLoadedMetadata={(event) => {
-            setDuration(event.currentTarget.duration || 0);
-            event.currentTarget.muted = isPreview;
-            event.currentTarget.playbackRate = playbackRate;
-          }}
-            onTimeUpdate={(event) =>
-              setCurrentTime(event.currentTarget.currentTime)
-            }
+              setDuration(event.currentTarget.duration || 0);
+              event.currentTarget.muted = isPreview;
+              event.currentTarget.playbackRate = playbackRate;
+            }}
+            onTimeUpdate={(event) => {
+              setCurrentTime(event.currentTarget.currentTime);
+              captureMediaProgress({
+                media: event.currentTarget,
+                review,
+                contentType: 'video',
+                capturedThresholds: capturedProgressRef.current,
+              });
+            }}
           >
             <source src={review.videoSrc} type="video/mp4" />
           </video>
@@ -740,6 +877,7 @@ function VideoModalPlaylistRow({
 
 function BrandedAudioPlayer({ review }: { review: MiniMockReview }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const capturedProgressRef = useRef<Set<number>>(new Set());
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -751,6 +889,7 @@ function BrandedAudioPlayer({ review }: { review: MiniMockReview }) {
     setCurrentTime(0);
     setDuration(0);
     setHasError(false);
+    capturedProgressRef.current = new Set();
   }, [review.audioSrc]);
 
   if (!review.audioAvailable || !review.audioSrc) {
@@ -801,20 +940,51 @@ function BrandedAudioPlayer({ review }: { review: MiniMockReview }) {
         preload="metadata"
         onPlay={(event) => {
           setIsPlaying(true);
+          captureMediaEvent({
+            eventName: 'audio_played',
+            review,
+            contentType: 'audio',
+            media: event.currentTarget,
+          });
           updateMediaSession({
             media: event.currentTarget,
             title: review.audioTitle,
             album: 'Mini Mock Audio Reviews',
           });
         }}
-        onPause={() => setIsPlaying(false)}
-        onEnded={() => setIsPlaying(false)}
+        onPause={(event) => {
+          setIsPlaying(false);
+          if (event.currentTarget.ended) return;
+          captureMediaEvent({
+            eventName: 'audio_paused',
+            review,
+            contentType: 'audio',
+            media: event.currentTarget,
+          });
+        }}
+        onEnded={(event) => {
+          setIsPlaying(false);
+          captureMediaEvent({
+            eventName: 'audio_completed',
+            review,
+            contentType: 'audio',
+            media: event.currentTarget,
+          });
+        }}
         onError={() => setHasError(true)}
         onLoadedMetadata={(event) => {
           setDuration(event.currentTarget.duration || 0);
           event.currentTarget.playbackRate = playbackRate;
         }}
-        onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
+        onTimeUpdate={(event) => {
+          setCurrentTime(event.currentTarget.currentTime);
+          captureMediaProgress({
+            media: event.currentTarget,
+            review,
+            contentType: 'audio',
+            capturedThresholds: capturedProgressRef.current,
+          });
+        }}
       >
         <source src={review.audioSrc} type="audio/mpeg" />
       </audio>
