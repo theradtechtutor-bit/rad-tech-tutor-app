@@ -17,8 +17,30 @@ const MINI_MOCK_1_POSTER_URL =
   '/review-videos/mini-mock-1-review-poster.jpg';
 const MEDIA_SEEK_SECONDS = 5;
 const MEDIA_PROGRESS_THRESHOLDS = [25, 50, 75, 90] as const;
+const MEDIA_BANK_IDS = ['qbank1', 'qbank2', 'qbank3', 'qbank4', 'qbank5'] as const;
 
 type ReviewStatus = 'Now Available' | 'Coming Soon';
+type MediaBankId = (typeof MEDIA_BANK_IDS)[number];
+type MediaByBank = Record<
+  MediaBankId,
+  {
+    qbankLabel: string;
+    videos: Record<
+      number,
+      {
+        videoSrc?: string;
+        youtubeUrl?: string;
+        posterSrc?: string;
+      }
+    >;
+    audios: Record<
+      number,
+      {
+        audioSrc?: string;
+      }
+    >;
+  }
+>;
 
 type MiniMockReview = {
   qbankLabel: string;
@@ -39,26 +61,78 @@ type WebkitFullscreenVideoElement = HTMLVideoElement & {
   webkitEnterFullScreen?: () => void;
 };
 
-const miniMockReviews: MiniMockReview[] = Array.from({ length: 10 }, (_, idx) => {
-  const miniMockNumber = idx + 1;
-  const isMiniMockOne = miniMockNumber === 1;
-  const qbankLabel = 'QBank 1';
-  const miniMockLabel = `Mini Mock ${miniMockNumber}`;
+const MEDIA_BY_BANK: MediaByBank = {
+  qbank1: {
+    qbankLabel: 'QBank 1',
+    videos: {
+      1: {
+        videoSrc: MINI_MOCK_1_VIDEO_URL,
+        youtubeUrl: MINI_MOCK_1_YOUTUBE_URL,
+        posterSrc: MINI_MOCK_1_POSTER_URL,
+      },
+    },
+    audios: {
+      1: {
+        audioSrc: MINI_MOCK_1_AUDIO_URL,
+      },
+    },
+  },
+  qbank2: {
+    qbankLabel: 'QBank 2',
+    videos: {},
+    audios: {},
+  },
+  qbank3: {
+    qbankLabel: 'QBank 3',
+    videos: {},
+    audios: {},
+  },
+  qbank4: {
+    qbankLabel: 'QBank 4',
+    videos: {},
+    audios: {},
+  },
+  qbank5: {
+    qbankLabel: 'QBank 5',
+    videos: {},
+    audios: {},
+  },
+};
 
-  return {
-    qbankLabel,
-    miniMockLabel,
-    miniMockNumber,
-    videoTitle: `${qbankLabel} ${miniMockLabel} Video Review`,
-    audioTitle: `${qbankLabel} ${miniMockLabel} Audio Review`,
-    videoSrc: isMiniMockOne ? MINI_MOCK_1_VIDEO_URL : '',
-    audioSrc: isMiniMockOne ? MINI_MOCK_1_AUDIO_URL : '',
-    youtubeUrl: isMiniMockOne ? MINI_MOCK_1_YOUTUBE_URL : '',
-    posterSrc: isMiniMockOne ? MINI_MOCK_1_POSTER_URL : '',
-    videoAvailable: isMiniMockOne,
-    audioAvailable: isMiniMockOne,
-  };
-});
+function parseMediaBankId(value: string | null | undefined): MediaBankId {
+  const normalized = String(value || '').toLowerCase();
+  return MEDIA_BANK_IDS.includes(normalized as MediaBankId)
+    ? (normalized as MediaBankId)
+    : 'qbank1';
+}
+
+function createMiniMockReviewsForBank(bankId: string): MiniMockReview[] {
+  const parsedBankId = parseMediaBankId(bankId);
+  const bankMedia = MEDIA_BY_BANK[parsedBankId];
+
+  return Array.from({ length: 10 }, (_, idx) => {
+    const miniMockNumber = idx + 1;
+    const miniMockLabel = `Mini Mock ${miniMockNumber}`;
+    const video = bankMedia.videos[miniMockNumber] ?? {};
+    const audio = bankMedia.audios[miniMockNumber] ?? {};
+    const videoSrc = video.videoSrc ?? '';
+    const audioSrc = audio.audioSrc ?? '';
+
+    return {
+      qbankLabel: bankMedia.qbankLabel,
+      miniMockLabel,
+      miniMockNumber,
+      videoTitle: `${bankMedia.qbankLabel} ${miniMockLabel} Video Review`,
+      audioTitle: `${bankMedia.qbankLabel} ${miniMockLabel} Audio Review`,
+      videoSrc,
+      audioSrc,
+      youtubeUrl: video.youtubeUrl ?? '',
+      posterSrc: video.posterSrc ?? '',
+      videoAvailable: Boolean(videoSrc),
+      audioAvailable: Boolean(audioSrc),
+    };
+  });
+}
 
 function getReviewStatus(available: boolean): ReviewStatus {
   return available ? 'Now Available' : 'Coming Soon';
@@ -352,9 +426,11 @@ function AudioWaveform() {
 function ComingSoonPlayer({
   miniMockNumber,
   kind,
+  title,
 }: {
   miniMockNumber: number;
   kind: 'Video' | 'Audio';
+  title?: string;
 }) {
   return (
     <div className="mt-4 flex aspect-video w-full max-w-[420px] flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/[0.025] p-5 text-center shadow-[inset_0_0_36px_rgba(255,255,255,0.03)]">
@@ -364,6 +440,11 @@ function ComingSoonPlayer({
       <div className="mt-3 text-xl font-semibold uppercase tracking-[0.14em] text-white/55">
         {kind} Review
       </div>
+      {title ? (
+        <div className="mt-2 max-w-full truncate text-sm font-medium text-white/55">
+          {title}
+        </div>
+      ) : null}
       <div className="mt-2 rounded-full border border-yellow-400/20 bg-yellow-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-yellow-200/80">
         Coming Soon
       </div>
@@ -447,7 +528,11 @@ function BrandedVideoPlayer({
 
   if (!review.videoAvailable || !review.videoSrc) {
     return (
-      <ComingSoonPlayer miniMockNumber={review.miniMockNumber} kind="Video" />
+      <ComingSoonPlayer
+        miniMockNumber={review.miniMockNumber}
+        kind="Video"
+        title={review.videoTitle}
+      />
     );
   }
 
@@ -712,9 +797,11 @@ function BrandedVideoPlayer({
 
 function VideoReviewModal({
   review,
+  reviews,
   onClose,
 }: {
   review: MiniMockReview;
+  reviews: MiniMockReview[];
   onClose: () => void;
 }) {
   const [selectedReview, setSelectedReview] = useState(review);
@@ -786,7 +873,7 @@ function VideoReviewModal({
               </div>
             ) : null}
             <div className="mt-2 grid max-h-[30dvh] min-h-0 gap-1.5 overflow-y-auto pr-1 md:max-h-[18dvh] xl:max-h-none xl:flex-1 [@media_(orientation:landscape)_and_(max-width:1199px)]:max-h-none [@media_(orientation:landscape)_and_(max-width:1199px)]:flex-1 [@media_(orientation:landscape)_and_(max-height:600px)_and_(max-width:1024px)]:gap-1">
-              {miniMockReviews.map((item) => (
+              {reviews.map((item) => (
                 <VideoModalPlaylistRow
                   key={item.miniMockNumber}
                   review={item}
@@ -894,7 +981,23 @@ function BrandedAudioPlayer({ review }: { review: MiniMockReview }) {
 
   if (!review.audioAvailable || !review.audioSrc) {
     return (
-      <ComingSoonPlayer miniMockNumber={review.miniMockNumber} kind="Audio" />
+      <div className="mt-4 w-full max-w-[420px] rounded-2xl border border-violet-300/25 bg-[radial-gradient(circle_at_25%_20%,rgba(139,92,246,0.22),transparent_38%),rgba(0,0,0,0.48)] p-5 shadow-[inset_0_0_36px_rgba(139,92,246,0.08)]">
+        <div className="flex items-center gap-4">
+          <div className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl border border-violet-300/25 bg-violet-400/10 text-violet-300 shadow-[0_0_28px_rgba(139,92,246,0.18)]">
+            <HeadphonesIcon className="h-10 w-10" />
+          </div>
+          <AudioWaveform />
+        </div>
+
+        <div className="mt-4 rounded-xl border border-violet-300/20 bg-violet-400/10 px-4 py-3 text-center">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-violet-200/80">
+            Coming Soon
+          </div>
+          <div className="mt-1 text-sm font-medium text-white/70">
+            {review.audioTitle}
+          </div>
+        </div>
+      </div>
     );
   }
 
@@ -1192,16 +1295,20 @@ function AudioReviewRow({
 
 function VideoReviewCard({
   selectedReview,
+  reviews,
   onSelectReview,
   onOpenReview,
 }: {
   selectedReview: MiniMockReview;
+  reviews: MiniMockReview[];
   onSelectReview: (review: MiniMockReview) => void;
   onOpenReview: (review: MiniMockReview) => void;
 }) {
   const selectedStatus = getReviewStatus(selectedReview.videoAvailable);
   const hasYoutubeLink = Boolean(selectedReview.youtubeUrl);
-  const [comingSoonMessage, setComingSoonMessage] = useState('');
+  const comingSoonMessage = selectedReview.videoAvailable
+    ? ''
+    : `${selectedReview.videoTitle} is coming soon.`;
 
   return (
     <section className="w-full overflow-hidden rounded-3xl border border-white/10 bg-black/20 p-5 shadow-[0_18px_70px_rgba(0,0,0,0.2)]">
@@ -1263,8 +1370,9 @@ function VideoReviewCard({
                     source: 'youtube',
                   });
                 }}
-                className="inline-flex items-center gap-2 rounded-full border border-yellow-400/35 bg-yellow-400/10 px-4 py-2.5 text-sm font-bold text-yellow-100 transition hover:border-yellow-300/60 hover:bg-yellow-400/15"
+                className="inline-flex items-center gap-2 rounded-full border border-red-400/45 bg-red-500/10 px-4 py-2.5 text-sm font-bold text-white transition hover:border-red-300/70 hover:bg-red-500/15 hover:shadow-[0_10px_28px_rgba(220,38,38,0.16)]"
               >
+                <PlayIcon className="h-4 w-4 text-red-300" />
                 Watch on YouTube
               </TrackedYoutubeLink>
             </div>
@@ -1272,7 +1380,7 @@ function VideoReviewCard({
         </div>
 
         <div className="grid w-full min-w-0 gap-1.5 overflow-hidden">
-          {miniMockReviews.map((review) => (
+          {reviews.map((review) => (
             <VideoReviewRow
               key={review.miniMockNumber}
               review={review}
@@ -1280,15 +1388,12 @@ function VideoReviewCard({
                 review.miniMockNumber === selectedReview.miniMockNumber
               }
               onSelect={(nextReview) => {
+                onSelectReview(nextReview);
+
                 if (!nextReview.videoAvailable) {
-                  setComingSoonMessage(
-                    `${nextReview.videoTitle} is coming soon.`,
-                  );
                   return;
                 }
 
-                setComingSoonMessage('');
-                onSelectReview(nextReview);
                 onOpenReview(nextReview);
               }}
             />
@@ -1301,12 +1406,16 @@ function VideoReviewCard({
 
 function AudioReviewCard({
   selectedReview,
+  reviews,
   onSelectReview,
 }: {
   selectedReview: MiniMockReview;
+  reviews: MiniMockReview[];
   onSelectReview: (review: MiniMockReview) => void;
 }) {
-  const [comingSoonMessage, setComingSoonMessage] = useState('');
+  const comingSoonMessage = selectedReview.audioAvailable
+    ? ''
+    : `${selectedReview.audioTitle} is coming soon.`;
 
   return (
     <section className="w-full overflow-hidden rounded-3xl border border-white/10 bg-black/20 p-5 shadow-[0_18px_70px_rgba(0,0,0,0.2)]">
@@ -1353,7 +1462,7 @@ function AudioReviewCard({
         </div>
 
         <div className="grid w-full min-w-0 gap-1.5 overflow-hidden">
-          {miniMockReviews.map((review) => (
+          {reviews.map((review) => (
             <AudioReviewRow
               key={review.miniMockNumber}
               review={review}
@@ -1361,14 +1470,6 @@ function AudioReviewCard({
                 review.miniMockNumber === selectedReview.miniMockNumber
               }
               onSelect={(nextReview) => {
-                if (!nextReview.audioAvailable) {
-                  setComingSoonMessage(
-                    `${nextReview.audioTitle} is coming soon.`,
-                  );
-                  return;
-                }
-
-                setComingSoonMessage('');
                 onSelectReview(nextReview);
               }}
             />
@@ -1380,6 +1481,10 @@ function AudioReviewCard({
 }
 
 export function VideoReviewModalTestLauncher() {
+  const miniMockReviews = useMemo(
+    () => createMiniMockReviewsForBank('qbank1'),
+    [],
+  );
   const firstAvailableVideo =
     miniMockReviews.find((review) => review.videoAvailable) ?? miniMockReviews[0];
   const [modalVideoReview, setModalVideoReview] =
@@ -1398,6 +1503,7 @@ export function VideoReviewModalTestLauncher() {
       {modalVideoReview ? (
         <VideoReviewModal
           review={modalVideoReview}
+          reviews={miniMockReviews}
           onClose={() => setModalVideoReview(null)}
         />
       ) : null}
@@ -1405,18 +1511,26 @@ export function VideoReviewModalTestLauncher() {
   );
 }
 
-export default function VideoReviewSection() {
+export default function VideoReviewSection({
+  selectedBank = 'qbank1',
+}: {
+  selectedBank?: string;
+}) {
+  const miniMockReviews = useMemo(
+    () => createMiniMockReviewsForBank(selectedBank),
+    [selectedBank],
+  );
   const firstAvailableVideo = useMemo(
     () =>
       miniMockReviews.find((review) => review.videoAvailable) ??
       miniMockReviews[0],
-    [],
+    [miniMockReviews],
   );
   const firstAvailableAudio = useMemo(
     () =>
       miniMockReviews.find((review) => review.audioAvailable) ??
       miniMockReviews[0],
-    [],
+    [miniMockReviews],
   );
   const [selectedVideoReview, setSelectedVideoReview] =
     useState<MiniMockReview>(firstAvailableVideo);
@@ -1425,16 +1539,24 @@ export default function VideoReviewSection() {
   const [modalVideoReview, setModalVideoReview] =
     useState<MiniMockReview | null>(null);
 
+  useEffect(() => {
+    setSelectedVideoReview(firstAvailableVideo);
+    setSelectedAudioReview(firstAvailableAudio);
+    setModalVideoReview(null);
+  }, [firstAvailableAudio, firstAvailableVideo]);
+
   return (
     <>
       <div className="grid w-full gap-5 lg:grid-cols-2">
         <VideoReviewCard
           selectedReview={selectedVideoReview}
+          reviews={miniMockReviews}
           onSelectReview={setSelectedVideoReview}
           onOpenReview={setModalVideoReview}
         />
         <AudioReviewCard
           selectedReview={selectedAudioReview}
+          reviews={miniMockReviews}
           onSelectReview={setSelectedAudioReview}
         />
       </div>
@@ -1442,6 +1564,7 @@ export default function VideoReviewSection() {
       {modalVideoReview ? (
         <VideoReviewModal
           review={modalVideoReview}
+          reviews={miniMockReviews}
           onClose={() => setModalVideoReview(null)}
         />
       ) : null}

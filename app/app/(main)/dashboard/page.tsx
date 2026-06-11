@@ -3230,7 +3230,7 @@ const readiness = useMemo(() => {
                   </div> */}
                 </div>
 
-                <VideoReviewSection />
+                <VideoReviewSection selectedBank={selectedBank} />
               </div>
             </div>
           </section>
