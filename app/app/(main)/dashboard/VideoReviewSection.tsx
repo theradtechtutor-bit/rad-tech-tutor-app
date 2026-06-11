@@ -427,11 +427,9 @@ function AudioWaveform() {
 function ComingSoonPlayer({
   miniMockNumber,
   kind,
-  title,
 }: {
   miniMockNumber: number;
   kind: 'Video' | 'Audio';
-  title?: string;
 }) {
   return (
     <div className="mt-4 flex aspect-video w-full max-w-[420px] flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/[0.025] p-5 text-center shadow-[inset_0_0_36px_rgba(255,255,255,0.03)]">
@@ -441,11 +439,6 @@ function ComingSoonPlayer({
       <div className="mt-3 text-xl font-semibold uppercase tracking-[0.14em] text-white/55">
         {kind} Review
       </div>
-      {title ? (
-        <div className="mt-2 max-w-full truncate text-sm font-medium text-white/55">
-          {title}
-        </div>
-      ) : null}
       <div className="mt-2 rounded-full border border-yellow-400/20 bg-yellow-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-yellow-200/80">
         Coming Soon
       </div>
@@ -532,7 +525,6 @@ function BrandedVideoPlayer({
       <ComingSoonPlayer
         miniMockNumber={review.miniMockNumber}
         kind="Video"
-        title={review.videoTitle}
       />
     );
   }
@@ -996,9 +988,6 @@ function BrandedAudioPlayer({ review }: { review: MiniMockReview }) {
           <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-violet-200/80">
             Coming Soon
           </div>
-          <div className="mt-1 text-sm font-medium text-white/70">
-            {review.audioTitle}
-          </div>
         </div>
       </div>
     );
@@ -1350,11 +1339,11 @@ function VideoReviewCard({
             </div>
           ) : null}
 
-          <p className="mt-3 text-sm leading-6 text-white/62">
-            {selectedReview.videoAvailable
-              ? selectedReview.videoTitle
-              : `${selectedReview.videoTitle} is coming soon.`}
-          </p>
+          {selectedReview.videoAvailable ? (
+            <p className="mt-3 text-sm leading-6 text-white/62">
+              {selectedReview.videoTitle}
+            </p>
+          ) : null}
 
           {hasYoutubeLink ? (
             <div className="mt-4 flex flex-wrap items-center gap-2">
@@ -1462,11 +1451,11 @@ function AudioReviewCard({
             </div>
           ) : null}
 
-          <p className="mt-3 text-sm leading-6 text-white/62">
-            {selectedReview.audioAvailable
-              ? selectedReview.audioTitle
-              : `${selectedReview.audioTitle} audio is coming soon.`}
-          </p>
+          {selectedReview.audioAvailable ? (
+            <p className="mt-3 text-sm leading-6 text-white/62">
+              {selectedReview.audioTitle}
+            </p>
+          ) : null}
         </div>
 
         <div className="grid w-full min-w-0 gap-1.5 overflow-hidden">
