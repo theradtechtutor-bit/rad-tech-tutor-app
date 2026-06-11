@@ -7,6 +7,7 @@ import {
   useState,
   type ChangeEvent,
 } from 'react';
+import Image from 'next/image';
 import TrackedYoutubeLink from '@/app/app/_components/TrackedYoutubeLink';
 import { captureEvent } from '@/lib/analytics';
 
@@ -612,11 +613,13 @@ function BrandedVideoPlayer({
         onClick={isPreview ? onOpenModal : togglePlay}
       >
         {isPreview && review.posterSrc ? (
-          <div
-            className="h-full w-full bg-contain bg-center bg-no-repeat"
-            style={{ backgroundImage: `url(${review.posterSrc})` }}
-            role="img"
-            aria-label={review.videoTitle}
+          <Image
+            src={review.posterSrc}
+            alt={review.videoTitle}
+            fill
+            sizes="(min-width: 1536px) 420px, 100vw"
+            className="object-contain object-center"
+            priority={false}
           />
         ) : (
           <video
@@ -949,7 +952,7 @@ function VideoModalPlaylistRow({
       type="button"
       onClick={() => onSelect(review)}
       title={review.videoTitle}
-      className={`flex min-h-9 w-full min-w-0 cursor-pointer items-center justify-between gap-2 overflow-hidden rounded-xl border px-3 py-2 text-left text-xs font-medium transition ${
+      className={`flex min-h-9 w-full min-w-0 cursor-pointer items-center justify-between gap-2 overflow-hidden rounded-xl border px-3 py-2 text-left text-xs font-medium outline-none transition focus-visible:border-yellow-300/70 focus-visible:ring-2 focus-visible:ring-yellow-300/35 ${
         selected
           ? 'border-yellow-400/65 bg-yellow-400/12 text-white'
           : review.videoAvailable
@@ -1222,7 +1225,7 @@ function VideoReviewRow({
         onSelect(review);
       }}
       title={review.videoTitle}
-      className={`flex min-h-8 w-full min-w-0 cursor-pointer items-center justify-between gap-2 overflow-hidden rounded-xl border px-3 py-1.5 text-left text-xs font-medium transition ${
+      className={`flex min-h-8 w-full min-w-0 cursor-pointer items-center justify-between gap-2 overflow-hidden rounded-xl border px-3 py-1.5 text-left text-xs font-medium outline-none transition focus-visible:border-yellow-300/70 focus-visible:ring-2 focus-visible:ring-yellow-300/35 ${
         selected
           ? 'border-yellow-400/65 bg-yellow-400/12 text-white'
           : review.videoAvailable
@@ -1280,7 +1283,7 @@ function AudioReviewRow({
         onSelect(review);
       }}
       title={review.audioTitle}
-      className={`flex min-h-8 w-full min-w-0 cursor-pointer items-center justify-between gap-2 overflow-hidden rounded-xl border px-3 py-1.5 text-left text-xs font-medium transition ${
+      className={`flex min-h-8 w-full min-w-0 cursor-pointer items-center justify-between gap-2 overflow-hidden rounded-xl border px-3 py-1.5 text-left text-xs font-medium outline-none transition focus-visible:border-yellow-300/70 focus-visible:ring-2 focus-visible:ring-yellow-300/35 ${
         selected
           ? 'border-yellow-400/65 bg-yellow-400/12 text-white'
           : review.audioAvailable
@@ -1388,13 +1391,18 @@ function VideoReviewCard({
                 review.miniMockNumber === selectedReview.miniMockNumber
               }
               onSelect={(nextReview) => {
+                const isAlreadySelected =
+                  nextReview.miniMockNumber === selectedReview.miniMockNumber;
+
                 onSelectReview(nextReview);
 
                 if (!nextReview.videoAvailable) {
                   return;
                 }
 
-                onOpenReview(nextReview);
+                if (isAlreadySelected) {
+                  onOpenReview(nextReview);
+                }
               }}
             />
           ))}
