@@ -5,7 +5,33 @@ import Link from 'next/link';
 import posthog from 'posthog-js';
 import { useCallback, useEffect, useState } from 'react';
 
-const successScreenshots = [
+type SuccessScreenshot = {
+  id: string;
+  src: string;
+  alt: string;
+  title: string;
+  type: 'email' | 'message';
+  width: number;
+  height: number;
+  externalUrl?: string;
+  externalLabel?: string;
+};
+
+const loreinnneeTikTokUrl =
+  'https://www.tiktok.com/@loreinnnee._/photo/7636538802353261855?is_from_webapp=1&sender_device=pc&web_id=7634784942032094751';
+
+const successScreenshots: SuccessScreenshot[] = [
+  {
+    id: 'arrt-recommendation-post-loreinnnee',
+    src: '/student-success/loreinnnee-arrt-pass-tiktok-post-v2.png',
+    alt: 'Redacted student social post recommending The Rad Tech Tutor after passing on the first try.',
+    title: 'ARRT® pass TikTok post',
+    type: 'message',
+    width: 1125,
+    height: 2285,
+    externalUrl: loreinnneeTikTokUrl,
+    externalLabel: 'View original TikTok post by @loreinnnee._',
+  },
   {
     id: 'rene-arellano-arrt-pass-85',
     src: '/student-success/rene-arellano-arrt-pass-85-name-blurred.png',
@@ -17,12 +43,21 @@ const successScreenshots = [
   },
   {
     id: 'stephanie-arrt-pass-92',
-    src: '/student-success/stephanie-arrt-pass-92-name-email-blurred.png',
+    src: '/student-success/stephanie-arrt-pass-92-name-blurred-v2.png',
     alt: 'Redacted student email sharing that they passed the ARRT exam with a 92 score.',
     title: 'ARRT® exam follow-up',
     type: 'email',
     width: 1194,
     height: 1060,
+  },
+  {
+    id: 'arrt-pass-93-email',
+    src: '/student-success/arrt-pass-93-email-name-avatar-covered-v3.png',
+    alt: 'Redacted student email sharing that they passed the ARRT exam with a 93 score.',
+    title: 'ARRT® exam follow-up',
+    type: 'email',
+    width: 826,
+    height: 1254,
   },
   {
     id: 'sanaa-palmer-pass',
@@ -59,15 +94,6 @@ const successScreenshots = [
     type: 'message',
     width: 1332,
     height: 1268,
-  },
-  {
-    id: 'arrt-recommendation-post-loreinnnee',
-    src: '/student-success/arrt-recommendation-post-loreinnnee-blurred.png',
-    alt: 'Redacted student social post recommending The Rad Tech Tutor after passing on the first try.',
-    title: 'ARRT® pass TikTok post',
-    type: 'message',
-    width: 1125,
-    height: 2285,
   },
 ];
 
@@ -188,13 +214,11 @@ export default function StudentSuccessPage() {
       </section>
 
       <section className="relative mt-10">
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div className="columns-1 gap-5 md:columns-2 xl:columns-3">
           {successScreenshots.map((item, index) => (
-            <button
-              type="button"
+            <div
               key={item.id}
-              onClick={() => openScreenshot(item)}
-              className="group w-full cursor-pointer overflow-hidden rounded-[24px] border border-emerald-400/35 bg-emerald-500/10 text-left shadow-[0_0_0_1px_rgba(45,212,191,0.16),0_0_24px_rgba(16,185,129,0.12),0_18px_70px_rgba(0,0,0,0.24)] transition hover:-translate-y-0.5 hover:border-emerald-300/45 hover:bg-emerald-500/12"
+              className="group mb-5 inline-block w-full break-inside-avoid overflow-hidden rounded-[24px] border border-emerald-400/35 bg-emerald-500/10 align-top shadow-[0_0_0_1px_rgba(45,212,191,0.16),0_0_24px_rgba(16,185,129,0.12),0_18px_70px_rgba(0,0,0,0.24)] transition hover:-translate-y-0.5 hover:border-emerald-300/45 hover:bg-emerald-500/12"
             >
               <div className="border-b border-white/10 px-4 py-3">
                 <div className="min-w-0">
@@ -206,21 +230,37 @@ export default function StudentSuccessPage() {
                       ? 'Real student email screenshot · Click to enlarge'
                       : 'Real student message screenshot · Click to enlarge'}
                   </p>
+                  {item.externalUrl && item.externalLabel && (
+                    <a
+                      href={item.externalUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2 inline-flex text-xs font-semibold text-emerald-200 transition hover:text-yellow-300"
+                    >
+                      {item.externalLabel}
+                    </a>
+                  )}
                 </div>
               </div>
 
-              <div className="bg-white p-2">
-                <Image
-                  src={item.src}
-                  alt={item.alt}
-                  width={item.width}
-                  height={item.height}
-                  sizes="(min-width: 768px) 50vw, 100vw"
-                  className="h-auto w-full rounded-[18px]"
-                  priority={index === 0}
-                />
-              </div>
-            </button>
+              <button
+                type="button"
+                onClick={() => openScreenshot(item)}
+                className="block w-full cursor-pointer text-left"
+              >
+                <div className="bg-white p-2">
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    width={item.width}
+                    height={item.height}
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                    className="h-auto w-full rounded-[18px]"
+                    priority={index === 0}
+                  />
+                </div>
+              </button>
+            </div>
           ))}
         </div>
       </section>
