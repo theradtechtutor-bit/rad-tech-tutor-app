@@ -20,6 +20,7 @@ import {
   getCategoryCumulative,
   getMasterySummary,
   readAttempts,
+  readLatestPracticeMissedIds,
   saveFullQbankStep,
   getMiniMockChallengeStats,
 } from '@/lib/progressStore';
@@ -131,16 +132,29 @@ function getSavedMiniMockSessionMeta(setId: string, mini: number) {
 
   try {
     const storageSources = [window.localStorage, window.sessionStorage];
-    const prefixes = [
-      `rtt_mock_session_mastery_${setId}_mini_${mini}_`,
-      `rtt_mock_session_${setId}_mini_${mini}`,
-    ];
+    const isMatchingMiniMockSession = (key: string) => {
+      if (key.startsWith(`rtt_mock_session_mastery_${setId}_mini_`)) {
+        const parts = key
+          .slice(`rtt_mock_session_mastery_${setId}_mini_`.length)
+          .split('_');
+        return Number(parts[0]) === mini;
+      }
+
+      if (key.startsWith(`rtt_mock_session_${setId}_mini_`)) {
+        const parts = key
+          .slice(`rtt_mock_session_${setId}_mini_`.length)
+          .split('_');
+        return Number(parts[0]) === mini;
+      }
+
+      return false;
+    };
 
     for (const storage of storageSources) {
       for (let i = 0; i < storage.length; i++) {
         const key = storage.key(i);
         if (!key) continue;
-        if (!prefixes.some((prefix) => key.startsWith(prefix))) continue;
+        if (!isMatchingMiniMockSession(key)) continue;
 
         const raw = storage.getItem(key);
         if (!raw) continue;
@@ -275,17 +289,28 @@ function getLatestPracticeAttemptForMini(
   mini: number,
 ) {
   const bankNumber = Number(bank.setId.replace('qbank', ''));
+  const latestMissedIds = readLatestPracticeMissedIds(bank.setId, mini);
 
   for (let idx = attempts.length - 1; idx >= 0; idx -= 1) {
     const item = attempts[idx];
     const probe = `${item.label || ''} ${item.category || ''}`.toLowerCase();
-    const matchesMini = probe.includes(`mini mock ${mini}`);
+    const matchesMini =
+      item.miniId === mini ||
+      new RegExp(`\\bmini mock ${mini}\\b`).test(probe);
+
+    const hasConsistentMissedIds =
+      latestMissedIds == null ||
+      typeof item.correct !== 'number' ||
+      typeof item.total !== 'number' ||
+      item.total <= 0 ||
+      item.correct === item.total - new Set(latestMissedIds).size;
 
     if (
       item.type === 'practice' &&
       item.bankId === bankNumber &&
       matchesMini &&
-      typeof item.score === 'number'
+      typeof item.score === 'number' &&
+      hasConsistentMissedIds
     ) {
       return item;
     }
@@ -296,16 +321,24 @@ function getLatestPracticeAttemptForMini(
 
 function getLatestFullPracticeAttempt(attempts: Attempts, bank: BankSummary) {
   const bankNumber = Number(bank.setId.replace('qbank', ''));
+  const latestMissedIds = readLatestPracticeMissedIds(bank.setId, 'full');
 
   for (let idx = attempts.length - 1; idx >= 0; idx -= 1) {
     const item = attempts[idx];
     const probe = `${item.label || ''} ${item.category || ''}`.toLowerCase();
+    const hasConsistentMissedIds =
+      latestMissedIds == null ||
+      typeof item.correct !== 'number' ||
+      typeof item.total !== 'number' ||
+      item.total <= 0 ||
+      item.correct === item.total - new Set(latestMissedIds).size;
 
     if (
       item.type === 'practice' &&
       item.bankId === bankNumber &&
       probe.includes('full qbank practice test') &&
-      typeof item.score === 'number'
+      typeof item.score === 'number' &&
+      hasConsistentMissedIds
     ) {
       return item;
     }
@@ -405,13 +438,15 @@ function getSavedFlashcardsMeta(setId: string, mini: number) {
     }
 
     const storageSources = [window.localStorage, window.sessionStorage];
-    const prefix = `rtt_flash_session_${setId}__missed__all__${mini}`;
+    const prefix = `rtt_flash_session_${setId}__missed__all__`;
 
     for (const storage of storageSources) {
       for (let i = 0; i < storage.length; i++) {
         const key = storage.key(i);
         if (!key) continue;
         if (!key.startsWith(prefix)) continue;
+        const parsedMini = Number(key.slice(prefix.length).split('__')[0]);
+        if (parsedMini !== mini) continue;
 
         const raw = storage.getItem(key);
         if (!raw) continue;
@@ -743,13 +778,13 @@ const flashcardsSkipped = miniState.flashcardsSkipped;
   const practiceAnswered = Number(practiceMeta?.answeredCount || 0);
   const practiceTotal = Number(practiceMeta?.total || 0);
   const practicePct =
-    practiceMeta && practiceTotal > 0
-      ? Math.max(
+    practiceComplete
+      ? 100
+      : practiceMeta && practiceTotal > 0
+        ? Math.max(
           0,
           Math.min(100, Math.round((practiceAnswered / practiceTotal) * 100)),
         )
-      : practiceComplete
-        ? 100
         : 0;
 
   const flashRemaining = Number(flashMeta?.remaining || 0);
@@ -992,12 +1027,12 @@ const flashcardsSkipped = miniState.flashcardsSkipped;
               </div>
             ) : (
               <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-white/55">
-                {practiceMeta ? (
+                {practiceComplete ? (
+                  <span>Practice: Done</span>
+                ) : practiceMeta ? (
                   <span>
                     Practice {practiceAnswered}/{practiceTotal}
                   </span>
-                ) : practiceComplete ? (
-                  <span>Practice: Done</span>
                 ) : null}
                 {flashMeta ? (
                   <span>
@@ -1100,13 +1135,13 @@ const activeStep: StepKey = completed
       : 'practice';
 
   const practicePct =
-    practiceMeta && practiceTotal > 0
-      ? Math.max(
+    practiceComplete
+      ? 100
+      : practiceMeta && practiceTotal > 0
+        ? Math.max(
           0,
           Math.min(100, Math.round((practiceAnswered / practiceTotal) * 100)),
         )
-      : practiceComplete
-        ? 100
         : 0;
 
   const flashPct = flashcardsComplete ? 100 : 0;
@@ -1393,12 +1428,20 @@ function hasSavedPracticeSession(setId: string, mini?: number) {
     return keys.some((key) => {
       if (!key.startsWith('rtt_practice_session_')) return false;
       if (!key.includes(setId)) return false;
-      if (mini && !key.includes(`__${mini}`)) return false;
 
       const raw = localStorage.getItem(key);
       if (!raw) return false;
 
       const parsed = JSON.parse(raw);
+      const keyParts = key.split('__');
+      const keyMini = keyParts[keyParts.length - 1];
+      if (
+        typeof mini === 'number' &&
+        Number(parsed?.mini ?? keyMini) !== mini
+      ) {
+        return false;
+      }
+
       return parsed?.queueIds?.length > 0;
     });
   } catch {

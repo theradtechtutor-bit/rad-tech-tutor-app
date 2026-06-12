@@ -21,10 +21,14 @@ import {
   clearFlashSession,
   clearPracticeSession,
   saveLatestPracticeMissedIds,
+  readLatestPracticeMissedIds,
   saveMasteryMiniStep,
+  readMasteryMiniStep,
   saveFullQbankStep,
+  readFullQbankMastery,
   recordFullQbankPracticeDone,
   readProgress,
+  readAttempts,
 } from '@/lib/progressStore';
 
 import { buildRationale } from '@/lib/masteryContent';
@@ -103,6 +107,46 @@ function shuffle<T>(arr: T[]): T[] {
 
 function uniqueQuestionIds(ids: string[]) {
   return Array.from(new Set(ids.map(String).filter(Boolean)));
+}
+
+function bankNumberFromSetId(setId: string) {
+  return Number((setId.match(/qbank(\d+)/i) || [])[1] || 1);
+}
+
+function getLatestCompletedPracticeAttempt(
+  setId: string,
+  scope: number | 'full',
+) {
+  const bankId = bankNumberFromSetId(setId);
+  const attempts = readAttempts();
+  const latestMissedIds = readLatestPracticeMissedIds(setId, scope);
+
+  for (let idx = attempts.length - 1; idx >= 0; idx -= 1) {
+    const item = attempts[idx];
+    if (item.type !== 'practice') continue;
+    if (item.bankId !== bankId) continue;
+    if (typeof item.score !== 'number') continue;
+
+    const probe = `${item.label || ''} ${item.category || ''}`.toLowerCase();
+    const matchesScope =
+      scope === 'full'
+        ? probe.includes('full qbank practice test')
+        : item.miniId === scope ||
+          new RegExp(`\\bmini mock ${scope}\\b`).test(probe);
+
+    if (!matchesScope) continue;
+
+    const hasConsistentMissedIds =
+      latestMissedIds == null ||
+      typeof item.correct !== 'number' ||
+      typeof item.total !== 'number' ||
+      item.total <= 0 ||
+      item.correct === item.total - new Set(latestMissedIds).size;
+
+    if (hasConsistentMissedIds) return item;
+  }
+
+  return null;
 }
 
 function mapToArrtMajorCategory(raw: string): string {
@@ -511,6 +555,73 @@ const practiceSessionScopeKey = isFullQBank
       const originalIds = [...ids];
       attemptQuestionIdsRef.current = uniqueQuestionIds(originalIds);
       setTotalCount(originalIds.length);
+
+      let completedPracticeScope: number | 'full' | null = null;
+      if (isFullQBank) {
+        completedPracticeScope = 'full';
+      } else if (typeof mini === 'number') {
+        completedPracticeScope = mini;
+      }
+      const completedPracticeAttempt =
+        masteryMode && completedPracticeScope
+          ? getLatestCompletedPracticeAttempt(setId, completedPracticeScope)
+          : null;
+      const masteryStep =
+        masteryMode && !isFullQBank && typeof mini === 'number'
+          ? readMasteryMiniStep(setId, mini)
+          : null;
+      const fullQbankMastery = masteryMode && isFullQBank
+        ? readFullQbankMastery(setId)
+        : null;
+      const practiceAlreadyCompleted =
+        masteryMode &&
+        !!completedPracticeAttempt &&
+        (isFullQBank
+          ? fullQbankMastery?.practice.completed === true
+          : masteryStep === 'flashcards' || masteryStep === 'exam');
+
+      if (practiceAlreadyCompleted && completedPracticeAttempt) {
+        const missedIds =
+          completedPracticeScope != null
+            ? readLatestPracticeMissedIds(setId, completedPracticeScope)
+            : null;
+        const missedSet = new Set(missedIds || []);
+        const restoredResultById =
+          missedIds == null
+            ? {}
+            : Object.fromEntries(
+                originalIds.map((id) => [id, !missedSet.has(id)]),
+              );
+        const restoredTotal =
+          typeof completedPracticeAttempt.total === 'number' &&
+          completedPracticeAttempt.total > 0
+            ? completedPracticeAttempt.total
+            : originalIds.length;
+        const restoredCorrect =
+          typeof completedPracticeAttempt.correct === 'number'
+            ? completedPracticeAttempt.correct
+            : Math.round((Number(completedPracticeAttempt.score || 0) / 100) * restoredTotal);
+        const restoredMissed =
+          missedIds != null
+            ? missedSet.size
+            : Math.max(0, restoredTotal - restoredCorrect);
+
+        clearPracticeSession(practiceSessionScopeKey);
+        skipNextAutosaveRef.current = true;
+        setQueueIds([]);
+        setCurrentId(null);
+        setPicked(null);
+        setRevealed(false);
+        setTotalCount(restoredTotal);
+        setAnsweredCount(restoredTotal);
+        setCorrectCount(restoredCorrect);
+        setMissedCount(restoredMissed);
+        setPracticeCorrectById(restoredResultById);
+        setFreeAnsweredIds([]);
+        setFreeCorrectIds([]);
+        setFreeMissedIds([]);
+        return;
+      }
 
       const aggregate =
         flow === 'free'

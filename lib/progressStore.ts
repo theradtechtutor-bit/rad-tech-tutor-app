@@ -403,6 +403,34 @@ export function appendAttempt(
   writeJson(ATTEMPTS_KEY, [...prev, next]);
 }
 
+function parseBankNumber(setId: string) {
+  return Number((String(setId).match(/qbank(\d+)/i) || [])[1] || 1);
+}
+
+function attemptBelongsToMini(
+  attempt: ExamAttempt,
+  setId: string,
+  miniId: number,
+) {
+  if (attempt.bankId !== parseBankNumber(setId)) return false;
+
+  if (attempt.miniId === miniId) return true;
+
+  const probe = `${attempt.label || ''} ${attempt.category || ''}`.toLowerCase();
+  const match = probe.match(/\bmini mock\s+(\d+)\b/);
+
+  return match ? Number(match[1]) === miniId : false;
+}
+
+function removeAttemptsForMini(setId: string, miniId: number) {
+  const prev = readAttempts();
+  const next = prev.filter((attempt) => !attemptBelongsToMini(attempt, setId, miniId));
+
+  if (next.length !== prev.length) {
+    writeJson(ATTEMPTS_KEY, next);
+  }
+}
+
 export function readExamDate(): string {
   if (typeof window === 'undefined') return '';
 
@@ -875,15 +903,18 @@ export function resetMiniMockFull(setId: string, miniId: number) {
 
   const stepKey = `rtt_mastery_step_${setId}_${miniId}`;
   const normalizedSetId = String(setId).toLowerCase();
-  const miniSegment = String(miniId);
+  const targetMiniId = Number(miniId);
 
   const scopedMiniSessionMatches = (key: string, prefix: string) => {
     if (!key.startsWith(prefix)) return false;
 
     const scope = key.slice(prefix.length).toLowerCase();
     const parts = scope.split('__');
+    const setIndex = parts.indexOf(normalizedSetId);
+    const miniPart = parts[parts.length - 1];
+    const parsedMiniId = /^\d+$/.test(miniPart) ? Number(miniPart) : null;
 
-    return parts.includes(normalizedSetId) && parts[parts.length - 1] === miniSegment;
+    return setIndex >= 0 && parsedMiniId === targetMiniId;
   };
 
   const scopedMiniMockMatches = (key: string, prefix: string) => {
@@ -892,11 +923,13 @@ export function resetMiniMockFull(setId: string, miniId: number) {
     const parts = key.slice(prefix.length).toLowerCase().split('_');
     const setIndex = parts.indexOf(normalizedSetId);
     const miniIndex = parts.indexOf('mini');
+    const miniPart = miniIndex >= 0 ? parts[miniIndex + 1] : '';
+    const parsedMiniId = /^\d+$/.test(miniPart) ? Number(miniPart) : null;
 
     return (
       setIndex >= 0 &&
       miniIndex >= 0 &&
-      parts[miniIndex + 1] === miniSegment
+      parsedMiniId === targetMiniId
     );
   };
 
@@ -937,6 +970,7 @@ export function resetMiniMockFull(setId: string, miniId: number) {
   }
 
   clearLatestPracticeMissedIds(setId, miniId);
+  removeAttemptsForMini(setId, miniId);
 
   const mastery = readBankMastery(setId);
 
