@@ -314,6 +314,75 @@ function getLatestFullPracticeAttempt(attempts: Attempts, bank: BankSummary) {
   return null;
 }
 
+function getLatestMiniMockAttempt(
+  attempts: Attempts,
+  bank: BankSummary,
+  mini: number,
+) {
+  const bankNumber = Number(bank.setId.replace('qbank', ''));
+
+  for (let idx = attempts.length - 1; idx >= 0; idx -= 1) {
+    const item = attempts[idx];
+
+    if (
+      item.type === 'mini' &&
+      item.bankId === bankNumber &&
+      item.miniId === mini &&
+      typeof item.score === 'number'
+    ) {
+      return item;
+    }
+  }
+
+  return null;
+}
+
+function getLatestFullMockAttempt(attempts: Attempts, bank: BankSummary) {
+  const bankNumber = Number(bank.setId.replace('qbank', ''));
+
+  for (let idx = attempts.length - 1; idx >= 0; idx -= 1) {
+    const item = attempts[idx];
+
+    if (
+      item.type === 'full' &&
+      item.bankId === bankNumber &&
+      typeof item.score === 'number'
+    ) {
+      return item;
+    }
+  }
+
+  return null;
+}
+
+function formatPracticeScore(attempt: Attempts[number] | null | undefined) {
+  if (!attempt || typeof attempt.score !== 'number') return null;
+
+  if (
+    typeof attempt.correct === 'number' &&
+    typeof attempt.total === 'number' &&
+    attempt.total > 0
+  ) {
+    return `Scored: ${attempt.correct} / ${attempt.total} • ${attempt.score}%`;
+  }
+
+  return `Scored: ${attempt.score}%`;
+}
+
+function formatExamScore(attempt: Attempts[number] | null | undefined) {
+  if (!attempt || typeof attempt.score !== 'number') return null;
+
+  if (
+    typeof attempt.correct === 'number' &&
+    typeof attempt.total === 'number' &&
+    attempt.total > 0
+  ) {
+    return `Scored: ${attempt.correct} / ${attempt.total} • ${attempt.score}%`;
+  }
+
+  return `Scored: ${attempt.score}%`;
+}
+
 function getSavedFlashcardsMeta(setId: string, mini: number) {
   if (typeof window === 'undefined') return null;
 
@@ -471,6 +540,7 @@ function getMiniState(bank: BankSummary, attempts: Attempts, mini: number) {
     examMeta,
     savedStep,
     practiceComplete,
+    practiceAttempt,
     practiceScore,
     flashcardsComplete,
     practiceSkipped,
@@ -524,6 +594,26 @@ function getAverageMiniMockCategoryBreakdown(attempts: any[]) {
       ),
     };
   });
+}
+
+function getAttemptCategoryBreakdown(
+  attempt: Attempts[number] | null | undefined,
+) {
+  const breakdown = attempt?.categoryBreakdown;
+  const hasBreakdown =
+    !!breakdown &&
+    ARRT_CATEGORY_ORDER.some((category) => typeof breakdown[category] === 'number');
+
+  return {
+    hasBreakdown,
+    rows: ARRT_CATEGORY_ORDER.map((category) => ({
+      category,
+      score:
+        breakdown && typeof breakdown[category] === 'number'
+          ? Number(breakdown[category])
+          : null,
+    })),
+  };
 }
 
 function getChallengeDeadline() {
@@ -643,6 +733,9 @@ const examMeta = miniState.examMeta;
 const savedStep = miniState.savedStep;
 const practiceComplete = miniState.practiceComplete;
 const practiceScore = miniState.practiceScore;
+const practiceScoreLabel = formatPracticeScore(miniState.practiceAttempt);
+const examAttempt = getLatestMiniMockAttempt(attempts, bank, mini);
+const examScoreLabel = formatExamScore(examAttempt);
 const flashcardsComplete = miniState.flashcardsComplete;
 const practiceSkipped = miniState.practiceSkipped;
 const flashcardsSkipped = miniState.flashcardsSkipped;
@@ -813,15 +906,16 @@ const flashcardsSkipped = miniState.flashcardsSkipped;
                 <div>
                   <div className="mb-1 flex items-center justify-between gap-2">
                     <span>Practice Test</span>
-                    {practiceMeta ? (
+                    {practiceComplete ? (
                       <span className="font-semibold text-emerald-300">
-                        {practiceAnswered} / {practiceTotal}
+                        {practiceScoreLabel ??
+                          (practiceScore != null
+                            ? `Scored: ${practiceScore}%`
+                            : 'Complete')}
                       </span>
-                    ) : practiceComplete ? (
+                    ) : practiceMeta ? (
                       <span className="font-semibold text-emerald-300">
-                        {practiceScore != null
-                          ? `Complete • ${practiceScore}%`
-                          : 'Complete'}
+                        {practiceAnswered} / {practiceTotal} completed
                       </span>
                     ) : practiceSkipped ? (
                       <span className="font-semibold text-yellow-300">
@@ -871,15 +965,18 @@ const flashcardsSkipped = miniState.flashcardsSkipped;
                     <span>Mini Mock Exam</span>
                     {completed ? (
                       <span className="font-semibold text-emerald-300">
-                        Complete • {status?.lastScore ?? 0}%
+                        {examScoreLabel ??
+                          (status?.lastScore != null
+                            ? `Scored: ${status.lastScore}%`
+                            : 'Complete')}
                       </span>
                     ) : examMeta ? (
                       <span className="font-semibold text-blue-300">
-                        {examAnswered} / {examTotal}
+                        {examAnswered} / {examTotal} completed
                       </span>
                     ) : status?.attempts ? (
                       <span className="font-semibold text-emerald-300">
-                        Score: {status.lastScore}%
+                        Scored: {status.lastScore}%
                       </span>
                     ) : (
                       <span className="text-white/40">Not started</span>
@@ -911,14 +1008,17 @@ const flashcardsSkipped = miniState.flashcardsSkipped;
                 ) : null}
                 {completed ? (
                   <span className="font-semibold text-emerald-300">
-                    Complete
+                    {examScoreLabel ??
+                      (status?.lastScore != null
+                        ? `Scored: ${status.lastScore}%`
+                        : 'Complete')}
                   </span>
                 ) : examMeta ? (
                   <span>
-                    Exam: {examAnswered} / {examTotal}
+                    Exam: {examAnswered} / {examTotal} completed
                   </span>
                 ) : status?.attempts ? (
-                  <span>Score: {status.lastScore}%</span>
+                  <span>Scored: {status.lastScore}%</span>
                 ) : null}
               </div>
             )}
@@ -953,10 +1053,14 @@ function SidebarFullQbank({
   const isLocked = !isPro;
   const savedStep = readFullQbankStep(bank.setId);
   const practiceMeta = getSavedFullPracticeMeta(bank.setId);
-  const practiceScore = getLatestFullPracticeAttempt(attempts, bank)?.score ?? null;
+  const practiceAttempt = getLatestFullPracticeAttempt(attempts, bank);
+  const practiceScore = practiceAttempt?.score ?? null;
+  const practiceScoreLabel = formatPracticeScore(practiceAttempt);
 
   const flashMeta = readFlashSession(`${bank.setId}__missed__all__full`);
   const examMeta = getSavedFullMockSessionMeta(bank.setId);
+  const examAttempt = getLatestFullMockAttempt(attempts, bank);
+  const examScoreLabel = formatExamScore(examAttempt);
   const examAnswered = Number(examMeta?.answeredCount || 0);
   const examTotal = Number(examMeta?.total || 0);
   const examInProgress = savedStep === 'exam';
@@ -1144,15 +1248,16 @@ const activeStep: StepKey = completed
                 <div>
                   <div className="mb-1 flex items-center justify-between gap-2">
                     <span>Practice Test</span>
-                    {practiceMeta ? (
+                    {practiceComplete ? (
                       <span className="font-semibold text-yellow-300">
-                        {practiceAnswered} / {practiceTotal}
+                        {practiceScoreLabel ??
+                          (practiceScore != null
+                            ? `Scored: ${practiceScore}%`
+                            : 'Complete')}
                       </span>
-                    ) : practiceComplete ? (
+                    ) : practiceMeta ? (
                       <span className="font-semibold text-yellow-300">
-                        {practiceScore != null
-                          ? `Complete • ${practiceScore}%`
-                          : 'Complete'}
+                        {practiceAnswered} / {practiceTotal} completed
                       </span>
                     ) : practiceSkipped ? (
                       <span className="font-semibold text-yellow-300">
@@ -1212,17 +1317,17 @@ const activeStep: StepKey = completed
                             : 'text-yellow-300',
                         )}
                       >
-                        Complete
-                        {full.exam.lastScore != null
-                          ? ` • ${full.exam.lastScore}%`
-                          : ''}
+                        {examScoreLabel ??
+                          (full.exam.lastScore != null
+                            ? `Scored: ${full.exam.lastScore}%`
+                            : 'Complete')}
                         {Number(full.exam.lastScore || 0) < 90
                           ? ' • Retake needed'
                           : ''}
                       </span>
                     ) : examMeta ? (
                       <span className="font-semibold text-yellow-300">
-                        {examAnswered} / {examTotal}
+                        {examAnswered} / {examTotal} completed
                       </span>
                     ) : savedStep === 'exam' ? (
                       <span className="font-semibold text-yellow-300">
@@ -1262,10 +1367,10 @@ const activeStep: StepKey = completed
                         : 'text-yellow-300',
                     )}
                   >
-                    Complete
-                    {full.exam.lastScore != null
-                      ? ` • ${full.exam.lastScore}%`
-                      : ''}
+                    {examScoreLabel ??
+                      (full.exam.lastScore != null
+                        ? `Scored: ${full.exam.lastScore}%`
+                        : 'Complete')}
                     {Number(full.exam.lastScore || 0) < 90
                       ? ' • Retake needed'
                       : ''}
@@ -1651,6 +1756,16 @@ if (savedStep === 'exam' || full.exam.completed) {
       completed: full.exam.completed === true,
     };
   }, [currentBank]);
+
+  const latestFullMockAttempt = useMemo(
+    () => (currentBank ? getLatestFullMockAttempt(attempts, currentBank) : null),
+    [attempts, currentBank],
+  );
+
+  const fullMockCategoryBreakdown = useMemo(
+    () => getAttemptCategoryBreakdown(latestFullMockAttempt),
+    [latestFullMockAttempt],
+  );
 
   const averageMiniScore = useMemo(() => {
     const values = miniScores
@@ -2695,6 +2810,11 @@ const readiness = useMemo(() => {
                           )
                         : null;
 
+                    const fullExamMeta =
+                      isFullLesson && currentBank
+                        ? getSavedFullMockSessionMeta(currentBank.setId)
+                        : null;
+
                     const isFullExamFlow =
                       fullStateForCard?.savedStep === 'exam';
 
@@ -2748,6 +2868,49 @@ const readiness = useMemo(() => {
                         if (isFullLesson && step.key === 'practice')
                           return 'active';
                         return 'locked';
+                      }
+
+                      if (isFullLesson) {
+                        if (
+                          step.key === 'practice' &&
+                          fullStateForCard?.full.practice.completed
+                        ) {
+                          return 'completed';
+                        }
+
+                        if (
+                          step.key === 'flashcards' &&
+                          fullStateForCard?.full.flashcards.completed
+                        ) {
+                          return 'completed';
+                        }
+
+                        if (
+                          step.key === 'exam' &&
+                          fullStateForCard?.full.exam.completed
+                        ) {
+                          return 'completed';
+                        }
+                      }
+
+                      if (isMiniLesson) {
+                        if (step.key === 'practice') {
+                          if (miniStateForCard?.practiceComplete)
+                            return 'completed';
+                          if (miniStateForCard?.practiceSkipped)
+                            return 'skipped';
+                        }
+
+                        if (step.key === 'flashcards') {
+                          if (miniStateForCard?.flashcardsComplete)
+                            return 'completed';
+                          if (miniStateForCard?.flashcardsSkipped)
+                            return 'skipped';
+                        }
+
+                        if (step.key === 'exam' && miniStateForCard?.completed) {
+                          return 'completed';
+                        }
                       }
 
                       if (step.key === activeStepKey) return 'active';
@@ -2861,15 +3024,11 @@ const readiness = useMemo(() => {
                     const shouldUseSkipExamModal =
                       step.key === 'exam' &&
                       stepState !== 'active' &&
+                      stepState !== 'completed' &&
                       (isMiniLesson || isFullLesson);
 
-                    const canOpenStep = isFullLesson
-                      ? stepState === 'active' ||
-                        stepState === 'completed' ||
-                        shouldUseSkipExamModal
-                      : stepState === 'active' ||
-                        step.key === 'exam' ||
-                        (!isSkippedFlow && stepState === 'completed');
+                    const canOpenStep =
+                      stepState === 'active' || shouldUseSkipExamModal;
 
                     const className = cx(
                       'group relative rounded-3xl border p-5 transition focus:outline-none',
@@ -2899,6 +3058,71 @@ const readiness = useMemo(() => {
                             : 'Mini Mock Exam';
 
                     const displayKicker = `Step ${idx + 1}`;
+
+                    const practiceInProgress =
+                      step.key === 'practice' &&
+                      stepState === 'active' &&
+                      ((isMiniLesson &&
+                        !!miniStateForCard?.practiceMeta &&
+                        !miniStateForCard?.practiceComplete) ||
+                        (isFullLesson &&
+                          !!fullPracticeMeta &&
+                          !fullStateForCard?.full.practice.completed));
+
+                    const flashcardsInProgress =
+                      step.key === 'flashcards' &&
+                      stepState === 'active' &&
+                      ((isMiniLesson &&
+                        !!miniStateForCard?.flashMeta &&
+                        !miniStateForCard?.flashcardsComplete) ||
+                        (isFullLesson &&
+                          !!fullFlashMeta &&
+                          !fullStateForCard?.full.flashcards.completed));
+
+                    const examInProgress =
+                      step.key === 'exam' &&
+                      stepState === 'active' &&
+                      ((isMiniLesson &&
+                        !!miniStateForCard?.examMeta &&
+                        !miniStateForCard?.completed) ||
+                        (isFullLesson &&
+                          !!fullExamMeta &&
+                          !fullStateForCard?.full.exam.completed));
+
+                    const activeStepMessage =
+                      step.badge === 'Complete'
+                        ? 'Restart this step if you want to do it again.'
+                        : step.key === 'practice'
+                          ? practiceInProgress
+                            ? 'Continue your Practice Test.'
+                            : 'Start with the Practice Test.'
+                          : step.key === 'flashcards'
+                            ? flashcardsInProgress
+                              ? 'Continue reviewing your missed flashcards.'
+                              : 'Continue with Missed Flashcards.'
+                            : step.key === 'exam'
+                              ? examInProgress
+                                ? isFullLesson
+                                  ? 'Continue your Full Mock Exam.'
+                                  : 'Continue your Mini Mock Exam.'
+                                : isFullLesson
+                                  ? 'Ready to take Full Mock Exam.'
+                                  : 'Ready to take Mini Mock Exam.'
+                              : 'Start with the Practice Test.';
+
+                    const activeStepBadge =
+                      practiceInProgress || examInProgress
+                        ? 'Resume'
+                        : flashcardsInProgress
+                          ? 'Continue'
+                          : step.badge;
+
+                    const displayStepBadge =
+                      stepState === 'completed'
+                        ? 'Completed'
+                        : stepState === 'active'
+                          ? activeStepBadge
+                          : step.badge;
 
                     const content = (
                       <>
@@ -2944,15 +3168,7 @@ const readiness = useMemo(() => {
                           <div className="mt-4 text-xs font-medium">
                             {stepState === 'active' ? (
                               <div className="text-emerald-200/90">
-                                {step.badge === 'Complete'
-                                  ? 'Restart this step if you want to do it again.'
-                                  : step.key === 'exam'
-                                    ? isFullLesson
-                                      ? 'Ready to take Full Mock Exam.'
-                                      : 'Ready to take Mini Mock Exam.'
-                                    : step.key === 'flashcards'
-                                      ? 'Continue with Missed Flashcards.'
-                                      : 'Start with the Practice Test.'}
+                                {activeStepMessage}
                               </div>
                             ) : stepState === 'completed' ? (
                               <div className="text-yellow-300/78">
@@ -2964,7 +3180,9 @@ const readiness = useMemo(() => {
                                     ? isFullLesson
                                       ? 'Completed. Restart Full QBank to review again.'
                                       : 'Completed. Restart Mini Mock to review again.'
-                                    : 'Complete Practice Test and Flashcards first.'}
+                                    : isFullLesson
+                                      ? 'Completed. Restart Full QBank to retake.'
+                                      : 'Completed. Restart Mini Mock to retake.'}
                               </div>
                             ) : (
                               <div className="text-yellow-300/78">
@@ -2990,14 +3208,15 @@ const readiness = useMemo(() => {
                             <div
                               className={cx(
                                 'inline-flex rounded-full border px-3 py-1.5 text-xs font-semibold',
-                                step.badge === 'Complete'
+                                stepState === 'completed' ||
+                                  step.badge === 'Complete'
                                   ? 'border-emerald-300/30 bg-emerald-400/10 text-emerald-200'
                                   : isHighlighted
                                     ? 'border-emerald-300/30 bg-emerald-400/10 text-emerald-200'
                                     : 'border-white/10 bg-white/5 text-white/70',
                               )}
                             >
-                              {step.badge}
+                              {displayStepBadge}
                             </div>
                           </div>
                         </div>
@@ -3010,6 +3229,19 @@ const readiness = useMemo(() => {
                         : selectedLesson === 'full-qbank'
                           ? `full-step-${step.key}`
                           : undefined;
+
+                    if (stepState === 'completed') {
+                      return (
+                        <div
+                          key={step.title}
+                          id={isHighlighted ? 'current-step-card' : undefined}
+                          data-step-id={stepCardId}
+                          className={`${className} text-left`}
+                        >
+                          {content}
+                        </div>
+                      );
+                    }
 
                     if (!canOpenStep) {
                       return (
@@ -3205,6 +3437,47 @@ const readiness = useMemo(() => {
                         ? 'Based on your completed Full Mock Exam.'
                         : 'Take the Full Mock Exam to calculate your score.'}
                     </div>
+
+                    {fullMockScore.score != null ? (
+                      fullMockCategoryBreakdown.hasBreakdown ? (
+                        <div className="mt-5 overflow-hidden rounded-2xl border border-yellow-400/20">
+                          <table className="w-full border-collapse text-sm">
+                            <thead>
+                              <tr className="border-b border-yellow-400/15 bg-yellow-400/[0.08] text-left text-[11px] font-semibold uppercase tracking-[0.14em] text-yellow-100/60">
+                                <th className="px-3 py-2">Content Category</th>
+                                <th className="px-3 py-2 text-right">
+                                  Score
+                                </th>
+                              </tr>
+                            </thead>
+
+                            <tbody>
+                              {fullMockCategoryBreakdown.rows.map((row) => (
+                                <tr
+                                  key={row.category}
+                                  className="border-b border-yellow-400/15 bg-black/15 last:border-b-0"
+                                >
+                                  <td className="px-3 py-2 font-medium text-yellow-50/85">
+                                    {row.category}
+                                  </td>
+
+                                  <td className="px-3 py-2 text-right font-semibold text-yellow-200">
+                                    {row.score != null
+                                      ? `${row.score}%`
+                                      : '—'}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      ) : (
+                        <div className="mt-5 rounded-2xl border border-yellow-400/15 bg-black/15 px-4 py-3 text-sm leading-6 text-yellow-100/65">
+                          Category breakdown is not available for this older
+                          Full Mock attempt.
+                        </div>
+                      )
+                    ) : null}
                   </div>
 
                   {/* <div className="rounded-3xl border border-white/10 bg-black/20 p-6">

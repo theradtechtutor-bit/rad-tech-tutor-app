@@ -307,6 +307,7 @@ export type FlashSession = {
   cat: string;
   mini?: number | 'all' | 'full';
   cursor: number;
+  currentCardId?: string | null;
   deck: any[];
   mastered: any[];
   savedAt: number;
@@ -873,31 +874,56 @@ export function resetMiniMockFull(setId: string, miniId: number) {
   if (typeof window === 'undefined') return;
 
   const stepKey = `rtt_mastery_step_${setId}_${miniId}`;
+  const normalizedSetId = String(setId).toLowerCase();
+  const miniSegment = String(miniId);
+
+  const scopedMiniSessionMatches = (key: string, prefix: string) => {
+    if (!key.startsWith(prefix)) return false;
+
+    const scope = key.slice(prefix.length).toLowerCase();
+    const parts = scope.split('__');
+
+    return parts.includes(normalizedSetId) && parts[parts.length - 1] === miniSegment;
+  };
+
+  const scopedMiniMockMatches = (key: string, prefix: string) => {
+    if (!key.startsWith(prefix)) return false;
+
+    const parts = key.slice(prefix.length).toLowerCase().split('_');
+    const setIndex = parts.indexOf(normalizedSetId);
+    const miniIndex = parts.indexOf('mini');
+
+    return (
+      setIndex >= 0 &&
+      miniIndex >= 0 &&
+      parts[miniIndex + 1] === miniSegment
+    );
+  };
 
   for (const store of [window.localStorage, window.sessionStorage]) {
     try {
       const keys = Object.keys(store);
 
       for (const key of keys) {
-        const isPracticeKey =
-          key.startsWith('rtt_practice_session_') &&
-          key.includes(setId) &&
-          key.includes(`__${miniId}`);
+        const isPracticeKey = scopedMiniSessionMatches(
+          key,
+          'rtt_practice_session_',
+        );
 
-        const isFlashKey =
-          key.startsWith('rtt_flash_session_') &&
-          key.includes(setId) &&
-          key.includes(`__${miniId}`);
+        const isFlashKey = scopedMiniSessionMatches(
+          key,
+          'rtt_flash_session_',
+        );
 
-        const isMockKey =
-          key.startsWith('rtt_mock_session_') &&
-          key.includes(setId) &&
-          (key.includes(`_mini_${miniId}_`) || key.includes(`_${miniId}_`));
+        const isMockKey = scopedMiniMockMatches(
+          key,
+          'rtt_mock_session_',
+        );
 
-        const isMockResultsKey =
-          key.startsWith('rtt_mock_results_') &&
-          key.includes(setId) &&
-          (key.includes(`_mini_${miniId}_`) || key.includes(`_${miniId}_`));
+        const isMockResultsKey = scopedMiniMockMatches(
+          key,
+          'rtt_mock_results_',
+        );
 
         if (isPracticeKey || isFlashKey || isMockKey || isMockResultsKey) {
           store.removeItem(key);

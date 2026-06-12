@@ -111,6 +111,23 @@ function bankIdFromSet(setId: string) {
   return m ? Number(m[1]) : 1;
 }
 
+function shouldIgnoreMockKeyboardShortcut(e: KeyboardEvent) {
+  if (e.repeat || e.isComposing || e.metaKey || e.ctrlKey || e.altKey) {
+    return true;
+  }
+
+  const target = e.target as HTMLElement | null;
+  const tag = target?.tagName?.toLowerCase();
+
+  return (
+    tag === 'input' ||
+    tag === 'textarea' ||
+    tag === 'select' ||
+    target?.isContentEditable === true ||
+    !!target?.closest?.('[contenteditable="true"]')
+  );
+}
+
 function sessionKey(
   flow: 'mastery' | 'free',
   setId: string,
@@ -361,6 +378,7 @@ function MockExamPageInner() {
 
   const examAnchorRef = useRef<HTMLDivElement | null>(null);
   const isPausingRef = useRef(false);
+  const submitRef = useRef<() => void>(() => {});
 
   const q = useMemo(
     () => (questions ? questions[idx] || null : null),
@@ -1039,6 +1057,51 @@ useEffect(() => {
 
     setIdx((n) => n + 1);
   }
+
+  useEffect(() => {
+    submitRef.current = submit;
+  });
+
+  useEffect(() => {
+    if (done || !q || !questions?.length) return;
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (shouldIgnoreMockKeyboardShortcut(e)) return;
+
+      const key = e.key.toLowerCase();
+      const choiceKey =
+        key === 'a' || key === '1'
+          ? 'A'
+          : key === 'b' || key === '2'
+            ? 'B'
+            : key === 'c' || key === '3'
+              ? 'C'
+              : key === 'd' || key === '4'
+                ? 'D'
+                : null;
+
+      if (choiceKey) {
+        const matchingChoice = normalizeChoices((q as any).choices).find(
+          (choice) => choice.key.toUpperCase() === choiceKey,
+        );
+
+        if (matchingChoice) {
+          e.preventDefault();
+          setSelected(matchingChoice.key);
+        }
+
+        return;
+      }
+
+      if (key === 'enter' && selected != null) {
+        e.preventDefault();
+        submitRef.current();
+      }
+    }
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [done, q, questions?.length, selected]);
 
   useEffect(() => {
     // 🚫 DO NOT autostart if user has not explicitly chosen a mini

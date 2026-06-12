@@ -118,6 +118,12 @@ function stackTileClass(kind: 'missed' | 'yellow' | 'green' | 'gold') {
   return 'border-violet-400/40 bg-violet-400/10 text-violet-100';
 }
 
+function clampCursor(cursor: number, deckLength: number) {
+  if (deckLength <= 0) return 0;
+  if (!Number.isFinite(cursor)) return 0;
+  return Math.max(0, Math.min(cursor, deckLength - 1));
+}
+
 function FlashcardsPageInner() {
   const sp = useSearchParams();
   const idsFromSession = (sp?.get('ids') || '')
@@ -362,26 +368,31 @@ function FlashcardsPageInner() {
           allowedIds.has(card.id),
         );
 
-        const savedLooksFresh = false;
-        // const savedLooksFresh =
-        //   idsFromSession.length === 0 &&
-        //   !!saved &&
-        //   saved.setId === setId &&
-        //   saved.mode === mode &&
-        //   saved.cat === filterValue &&
-        //   String(saved.mini ?? 'all') === String(effectiveMiniSessionKey) &&
-        //   savedDeck.length + savedMastered.length > 0;
+        const savedLooksFresh =
+          idsFromSession.length === 0 &&
+          !!saved &&
+          saved.setId === setId &&
+          saved.mode === mode &&
+          saved.cat === filterValue &&
+          String(saved.mini ?? 'all') === String(effectiveMiniSessionKey) &&
+          savedDeck.length + savedMastered.length > 0;
 
         if (idsFromSession.length > 0) {
           clearFlashSession(flashSessionScopeKey);
         }
         if (savedLooksFresh) {
+          const savedCursorFromId = saved?.currentCardId
+            ? savedDeck.findIndex((card) => card.id === saved.currentCardId)
+            : -1;
+          const restoredCursor = clampCursor(
+            savedCursorFromId >= 0 ? savedCursorFromId : saved?.cursor || 0,
+            savedDeck.length,
+          );
+
           setHasSavedSession(true);
           setDeck(savedDeck);
           setMastered(savedMastered);
-          setCursor(
-            Math.min(saved?.cursor || 0, Math.max(0, savedDeck.length - 1)),
-          );
+          setCursor(restoredCursor);
           setFlipped(false);
           return;
         }
@@ -417,6 +428,7 @@ function FlashcardsPageInner() {
             cat: filterValue,
             mini: effectiveMiniSessionKey,
             cursor: 0,
+            currentCardId: initialDeck[0]?.id ?? null,
             deck: initialDeck,
             mastered: [],
             savedAt: Date.now(),
@@ -458,13 +470,14 @@ function FlashcardsPageInner() {
     saveFlashSession(flashSessionScopeKey, {
       setId,
       mode,
-                        cat: filterValue,
-                        mini: effectiveMiniSessionKey,
-                        cursor,
-                        deck,
-                        mastered,
-                        savedAt: Date.now(),
-                      });
+      cat: filterValue,
+      mini: effectiveMiniSessionKey,
+      cursor: clampCursor(cursor, deck.length),
+      currentCardId: deck[clampCursor(cursor, deck.length)]?.id ?? null,
+      deck,
+      mastered,
+      savedAt: Date.now(),
+    });
   }, [
     loading,
     flashSessionScopeKey,
@@ -512,6 +525,26 @@ function FlashcardsPageInner() {
 
   const card = deck[cursor] || null;
 
+  function persistFlashSession(
+    nextDeck: FlashcardState[],
+    nextMastered: FlashcardState[],
+    nextCursor: number,
+  ) {
+    const safeCursor = clampCursor(nextCursor, nextDeck.length);
+
+    saveFlashSession(flashSessionScopeKey, {
+      setId,
+      mode,
+      cat: filterValue,
+      mini: effectiveMiniSessionKey,
+      cursor: safeCursor,
+      currentCardId: nextDeck[safeCursor]?.id ?? null,
+      deck: nextDeck,
+      mastered: nextMastered,
+      savedAt: Date.now(),
+    });
+  }
+
   function handleGrade(correct: boolean) {
     if (!card) return;
 
@@ -520,8 +553,13 @@ function FlashcardsPageInner() {
 
     if (outcome.mastered) {
       const masteredCard = { ...card, stage: 3 as const };
+      const nextMastered = [...mastered, masteredCard];
+      const nextCursor = clampCursor(cursor, remaining.length);
+
+      persistFlashSession(remaining, nextMastered, nextCursor);
       setDeck(remaining);
-      setMastered((prev) => [...prev, masteredCard]);
+      setMastered(nextMastered);
+      setCursor(nextCursor);
       if (mode === 'missed' || masteryMode) {
         markFlashcardCleared(setId, card.id);
       }
@@ -535,7 +573,12 @@ function FlashcardsPageInner() {
       return;
     }
 
-    setDeck([...remaining, { ...card, stage: outcome.stage as any }]);
+    const nextDeck = [...remaining, { ...card, stage: outcome.stage as any }];
+    const nextCursor = clampCursor(cursor, nextDeck.length);
+
+    persistFlashSession(nextDeck, mastered, nextCursor);
+    setDeck(nextDeck);
+    setCursor(nextCursor);
     setFlipped(false);
   }
 
@@ -570,7 +613,21 @@ function FlashcardsPageInner() {
     setMastered([]);
     setCursor(0);
     setFlipped(false);
-    clearFlashSession(flashSessionScopeKey);
+    if (cards.length) {
+      saveFlashSession(flashSessionScopeKey, {
+        setId,
+        mode,
+        cat: filterValue,
+        mini: effectiveMiniSessionKey,
+        cursor: 0,
+        currentCardId: cards[0]?.id ?? null,
+        deck: cards,
+        mastered: [],
+        savedAt: Date.now(),
+      });
+    } else {
+      clearFlashSession(flashSessionScopeKey);
+    }
   }
 
   const emptyText = masteryMode
@@ -916,15 +973,17 @@ function FlashcardsPageInner() {
                 <div className="flex flex-col items-stretch gap-2 md:min-w-[140px] md:justify-self-center">
                   <button
                     onClick={() => {
+                      const safeCursor = clampCursor(cursor, deck.length);
                       saveFlashSession(flashSessionScopeKey, {
                         setId,
                         mode,
                         cat: filterValue,
                         mini: effectiveMiniSessionKey,
-                        cursor,
-	                        deck,
-	                        mastered,
-	                        savedAt: Date.now(),
+                        cursor: safeCursor,
+                        currentCardId: deck[safeCursor]?.id ?? null,
+                        deck,
+                        mastered,
+                        savedAt: Date.now(),
                       });
                       router.push(
                         masteryMode
